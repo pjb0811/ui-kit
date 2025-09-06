@@ -99,9 +99,9 @@ const Marquees = ({
             width: throttledWidth,
           }}
         >
-          {items?.map(({ children, ...item }: ItemProps, key) => (
+          {items?.map(({ children, key: itemKey, ...item }: ItemProps, key) => (
             <Item
-              key={item?.key || key}
+              key={itemKey || key}
               width={throttledWidth}
               pause={pause}
               speed={speed}

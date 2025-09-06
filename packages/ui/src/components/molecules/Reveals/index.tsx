@@ -10,6 +10,7 @@ interface Props extends React.HTMLAttributes<HTMLDivElement>, ItemProps {
     root?: string;
     item?: string;
   };
+  once?: boolean;
   items?: ItemProps[];
 }
 
