@@ -2,7 +2,7 @@ import { cn } from '@repo/ui/utils';
 
 import { Progress as Core } from '../../../core/progress';
 
-interface Props extends React.HTMLAttributes<HTMLElement> {
+export interface Props extends React.HTMLAttributes<HTMLElement> {
   value: number;
   direction?: 'horizontal' | 'vertical';
   classNames?: {
@@ -26,12 +26,12 @@ const Progress = ({
     <Core
       value={value}
       className={cn(
-        isHorizontal ? 'h-4 w-full' : 'h-full w-4 flex-col justify-end',
+        isHorizontal ? 'h-4 w-full' : 'flex h-full w-4 flex-col justify-end',
         className,
         classNames?.background,
         //
       )}
-      barClassName={classNames?.bar}
+      barClassName={cn('flex-none', classNames?.bar)}
       barStyle={{
         transform: 'none',
         [dimension]: `${percent}%`,
