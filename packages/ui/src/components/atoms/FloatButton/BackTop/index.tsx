@@ -1,7 +1,6 @@
 import { MouseEvent } from 'react';
 
 import { useWindowScroll } from '@uidotdev/usehooks';
-// import Icon from '../../Icon';
 import { ArrowUp } from 'lucide-react';
 
 import { cn } from '@repo/ui/utils';
