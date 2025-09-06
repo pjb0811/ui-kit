@@ -12,11 +12,9 @@ const meta: Meta<typeof Spin> = {
   argTypes: {
     spinning: {
       control: { type: 'boolean' },
-      description: '스피너 표시 여부',
     },
     className: {
       control: { type: 'text' },
-      description: '스피너 아이콘에 적용할 추가 CSS 클래스',
     },
   },
   render: props => (
