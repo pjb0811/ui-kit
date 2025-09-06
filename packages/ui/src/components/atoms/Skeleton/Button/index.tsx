@@ -6,7 +6,7 @@ const Button = ({ className, ...props }: SkeletonProps) => {
   return (
     <Skeleton
       className={cn(
-        'h-10 w-16',
+        'h-9 w-15',
         'rounded-2xl',
         className,
         //

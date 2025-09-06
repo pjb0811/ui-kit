@@ -5,13 +5,14 @@ import Skeleton, { type Props as SkeletonProps } from '..';
 const Node = ({ className, ...props }: SkeletonProps) => {
   return (
     <Skeleton
+      {...props}
+      avatar={false}
       className={cn(
-        'h-50 w-full',
+        'h-50 w-full min-w-80',
         'rounded-3xl',
         className,
         //
       )}
-      {...props}
     />
   );
 };
