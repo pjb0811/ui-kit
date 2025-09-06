@@ -5,7 +5,7 @@ import Button from './Button';
 import Node from './Node';
 
 const getValueAtIndex = <T,>(value: T | T[], index: number) => {
-  return Array.isArray(value) ? (value[index] ?? value[0]) : value;
+  return Number(Array.isArray(value) ? (value[index] ?? value[0]) : value);
 };
 
 export interface Props extends React.HTMLAttributes<HTMLDivElement> {
@@ -26,9 +26,9 @@ export interface Props extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const SIZES = {
-  small: 'w-16 h-4',
-  default: 'w-20 h-6',
-  large: 'w-24 h-8',
+  small: 'w-48 h-4',
+  default: 'w-60 h-6',
+  large: 'w-72 h-8',
 };
 
 const Skeleton = ({
