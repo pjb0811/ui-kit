@@ -394,7 +394,7 @@ const Item = ({
                   ? [
                       'h-auto',
                       'flex flex-nowrap gap-y-4',
-                      'p-[60px]',
+                      'p-8',
                       //
                     ]
                   : MENU_CLASSNAMES,
@@ -467,7 +467,7 @@ const Menu = ({
     <ul
       className={cn(
         MENU_CLASSNAMES,
-        mode === 'horizontal' ? 'flex' : 'block',
+        mode === 'horizontal' ? 'flex' : 'inline-block',
         className,
       )}
       {...props}

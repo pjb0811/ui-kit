@@ -5,7 +5,7 @@ import Button from './Button';
 import Node from './Node';
 
 const getValueAtIndex = <T,>(value: T | T[], index: number) => {
-  return Number(Array.isArray(value) ? (value[index] ?? value[0]) : value);
+  return Array.isArray(value) ? (value[index] ?? value[0]) : value;
 };
 
 export interface Props extends React.HTMLAttributes<HTMLDivElement> {
