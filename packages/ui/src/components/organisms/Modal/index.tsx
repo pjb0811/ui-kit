@@ -4,6 +4,13 @@ import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Root, createRoot } from 'react-dom/client';
 
+import {
+  Check,
+  CircleQuestionMark,
+  Info,
+  OctagonAlert,
+  OctagonX,
+} from 'lucide-react';
 import { v4 as uuid } from 'uuid';
 
 import { cn } from '@repo/ui/utils';
@@ -50,6 +57,7 @@ interface Props {
 interface StaticProps extends Props {
   type?: 'info' | 'success' | 'error' | 'warning' | 'confirm';
   id?: string;
+  icon?: React.ReactNode;
 }
 
 const isBrowser =
@@ -149,7 +157,9 @@ const Modal = ({
             {footer || (
               <>
                 <Button onClick={onOk}>{okText}</Button>
-                <Button onClick={onCancel}>{cancelText}</Button>
+                <Button variant="outline" onClick={onCancel}>
+                  {cancelText}
+                </Button>
               </>
             )}
           </DialogFooter>
@@ -159,6 +169,14 @@ const Modal = ({
   );
 };
 
+const STATIC_ICONS = {
+  info: <Info className="text-blue-400" />,
+  success: <Check className="text-green-400" />,
+  error: <OctagonX className="text-red-400" />,
+  warning: <OctagonAlert className="text-yellow-400" />,
+  confirm: <CircleQuestionMark />,
+};
+
 const StaticModal = ({
   type,
   title,
@@ -166,6 +184,7 @@ const StaticModal = ({
   okText = '확인',
   cancelText = '취소',
   id,
+  icon,
   onOk,
   onCancel,
   ...props
@@ -185,7 +204,7 @@ const StaticModal = ({
       <div className="grid w-full grid-cols-5 gap-x-2">
         <Button
           size="lg"
-          variant="secondary"
+          variant="outline"
           className="col-span-2"
           onClick={() => closeModal(onCancel)}
         >
@@ -238,9 +257,11 @@ const StaticModal = ({
         <p
           className={cn(
             'text-center text-lg leading-normal whitespace-pre-wrap',
+            'flex items-center justify-center gap-x-2',
             //
           )}
         >
+          {icon || (type && STATIC_ICONS[type])}
           {title}
         </p>
       }

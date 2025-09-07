@@ -28,14 +28,14 @@ export const initialOptions: SwiperOptions = {
   },
 };
 
-const initialStyle = { overflow: 'hidden' };
+const initialStyle = { overflow: 'hidden', width: '100%', maxWidth: 480 };
 
 interface Props<T> extends SwiperProps {
   loading?: boolean;
   loader?: ReactNode;
   loadingClassName?: string;
   options?: SwiperOptions;
-  dataSource: T[];
+  data: T[];
   style?: CSSProperties;
   renderItem(item: T, key: number): ReactNode;
 }
@@ -44,7 +44,7 @@ const Swiper = <T,>({
   loading,
   loader,
   options = {},
-  dataSource = [],
+  data = [],
   style,
   renderItem,
   loadingClassName,
@@ -66,7 +66,7 @@ const Swiper = <T,>({
       style={{ ...initialStyle, ...style }}
       {...props}
     >
-      {dataSource.map((item: T, i) => (
+      {data.map((item: T, i) => (
         <Fragment key={i}>{renderItem(item, i)}</Fragment>
       ))}
     </SwiperCore>

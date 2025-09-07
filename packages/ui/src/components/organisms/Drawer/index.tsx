@@ -28,7 +28,6 @@ interface Props {
   draggable?: boolean;
   rounded?: boolean;
   mask?: boolean;
-  maxHeight?: string | number;
   className?: string;
   style?: React.CSSProperties;
   classNames?: {
@@ -104,7 +103,7 @@ const Drawer = ({
       <DrawerContent
         className={cn(
           'border-none outline-none',
-          rounded ? '!rounded-3xl' : '!rounded-none',
+          rounded ? '!rounded-t-3xl' : '!rounded-none',
           classNames?.content,
           className,
           //
