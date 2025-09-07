@@ -34,6 +34,10 @@
       "bash -c 'cd ./apps/web && npm run lint'",
       "bash -c 'cd ./apps/web && npm run check-types'"
     ],
+    "./apps/docs/**/*.{js,jsx,ts,tsx}": [
+      "bash -c 'cd ./apps/docs && npm run lint'",
+      "bash -c 'cd ./apps/docs && npm run check-types'"
+    ],
     "./packages/ui/**/*.{js,jsx,ts,tsx}": [
       "bash -c 'cd ./packages/ui && npm run lint'",
       "bash -c 'cd ./packages/ui && npm run check-types'"
