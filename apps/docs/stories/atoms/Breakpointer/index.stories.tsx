@@ -16,10 +16,10 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    children: breakpoint => (
+    children: info => (
       <div className="p-5">
         <strong>현재 breakpoint:</strong>
-        <pre>{JSON.stringify(breakpoint, null, 2)}</pre>
+        <pre>{JSON.stringify(info, null, 2)}</pre>
       </div>
     ),
   },
