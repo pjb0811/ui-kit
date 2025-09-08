@@ -4,14 +4,16 @@ import { useElementSize } from '@repo/ui/hooks';
 import { cn } from '@repo/ui/utils';
 
 export type BreakpointInfo = ReturnType<typeof useElementSize>['breakpoint'];
+type SizeInfo = ReturnType<typeof useElementSize>['size'];
+type RenderInfo = { size: SizeInfo; breakpoint: BreakpointInfo };
 
 export interface Props {
   className?: string;
-  children: (breakpoint: BreakpointInfo) => React.ReactNode;
+  children: (info: RenderInfo) => React.ReactNode;
 }
 
 const Breakpointer = ({ className, children }: Props) => {
-  const { breakpoint, elementRef } = useElementSize<HTMLDivElement>();
+  const { breakpoint, size, elementRef } = useElementSize<HTMLDivElement>();
 
   return (
     <div
@@ -22,7 +24,7 @@ const Breakpointer = ({ className, children }: Props) => {
         //
       )}
     >
-      {children(breakpoint)}
+      {children({ size, breakpoint })}
     </div>
   );
 };

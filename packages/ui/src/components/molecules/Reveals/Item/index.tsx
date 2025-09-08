@@ -1,3 +1,5 @@
+'use client';
+
 import { type MotionProps, motion } from 'motion/react';
 
 import { cn } from '@repo/ui/utils';
