@@ -45,7 +45,7 @@ npm install
 
 ```bash
 # 루트에서 실행 (권장)
-npm run dev -- --filter=apps/docs
+npm run dev -- --filter=docs
 
 # 또는 docs 디렉토리에서 직접 실행
 cd apps/docs
@@ -59,7 +59,7 @@ npm run dev
 
 ```bash
 # 루트에서 실행 (권장)
-npm run storybook -- --filter=apps/docs
+npm run storybook -- --filter=docs
 
 # 또는 docs 디렉토리에서 직접 실행
 cd apps/docs

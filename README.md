@@ -106,8 +106,8 @@ npm install
 npm run dev
 
 # 특정 앱만 실행
-npm run dev -- --filter=apps/web      # 웹 앱 (포트: 3000)
-npm run dev -- --filter=apps/docs     # 문서 사이트 (포트: 3001)
+npm run dev -- --filter=web      # 웹 앱 (포트: 3000)
+npm run dev -- --filter=docs     # 문서 사이트 (포트: 3001)
 ```
 
 ### 빌드
@@ -117,7 +117,7 @@ npm run dev -- --filter=apps/docs     # 문서 사이트 (포트: 3001)
 npm run build
 
 # 특정 앱만 빌드
-npm run build -- --filter=apps/web
+npm run build -- --filter=web
 ```
 
 ### 코드 품질 관리
@@ -141,10 +141,10 @@ npm run format
 
 ```bash
 # Storybook 개발 서버 실행 (포트: 6006)
-npm run storybook -- --filter=apps/docs
+npm run storybook -- --filter=docs
 
 # Storybook 빌드
-npm run build-storybook -- --filter=apps/docs
+npm run build-storybook -- --filter=docs
 ```
 
 ## 📦 패키지 정보

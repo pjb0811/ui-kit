@@ -3,7 +3,7 @@
 import { CSSProperties, Fragment, ReactNode } from 'react';
 
 import { Autoplay, EffectCards, Navigation, Scrollbar } from 'swiper/modules';
-import { Swiper as SwiperCore, SwiperProps } from 'swiper/react';
+import { Swiper as SwiperCore, SwiperProps, SwiperRef } from 'swiper/react';
 import { SwiperOptions } from 'swiper/types';
 
 import { cn } from '@repo/ui/utils';
@@ -31,6 +31,7 @@ export const initialOptions: SwiperOptions = {
 const initialStyle = { overflow: 'hidden', width: '100%', maxWidth: 480 };
 
 interface Props<T> extends SwiperProps {
+  ref?: React.Ref<SwiperRef>;
   loading?: boolean;
   loader?: ReactNode;
   loadingClassName?: string;
@@ -48,6 +49,8 @@ const Swiper = <T,>({
   style,
   renderItem,
   loadingClassName,
+  ref,
+  children,
   ...props
 }: Props<T>) => {
   if (loading) {
@@ -60,6 +63,7 @@ const Swiper = <T,>({
 
   return (
     <SwiperCore
+      ref={ref}
       modules={[Navigation, Scrollbar, Autoplay, EffectCards]}
       {...initialOptions}
       {...options}
@@ -69,6 +73,7 @@ const Swiper = <T,>({
       {data.map((item: T, i) => (
         <Fragment key={i}>{renderItem(item, i)}</Fragment>
       ))}
+      {children}
     </SwiperCore>
   );
 };
