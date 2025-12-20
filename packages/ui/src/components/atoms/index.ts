@@ -1,4 +1,3 @@
-export { default as Breakpointer } from './Breakpointer';
 export { default as Button } from './Button';
 export { default as Checkbox } from './Checkbox';
 export { default as FloatButton } from './FloatButton';
