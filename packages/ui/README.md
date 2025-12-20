@@ -97,7 +97,6 @@ Radix UI 기반의 접근성 우선 핵심 컴포넌트들:
 
 - **`cn()`** - 클래스명 병합 유틸리티 (clsx + tailwind-merge)
 - **`TEXT_LEVELS`** - 타이포그래피 레벨 상수
-- **`useElementSize`** - 엘리먼트 크기 감지 훅
 
 ## 🚀 설치 및 사용법
 
@@ -146,7 +145,6 @@ import { Typography } from '@repo/ui/Typography';
 ```tsx
 import { Button as CoreButton } from '@repo/ui/core';
 import { TEXT_LEVELS } from '@repo/ui/enums';
-import { useElementSize } from '@repo/ui/hooks';
 import { cn } from '@repo/ui/utils';
 ```
 
