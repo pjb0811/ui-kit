@@ -123,6 +123,21 @@ const Item = ({
     );
   }, [autoFill]);
 
+  useEffect(() => {
+    const onResize = () => {
+      if (!tweenRef.current || !containerRef.current) {
+        return;
+      }
+      tweenRef.current.pause();
+    };
+
+    window.addEventListener('resize', onResize);
+
+    return () => {
+      window.removeEventListener('resize', onResize);
+    };
+  }, []);
+
   return (
     <div className="flex overflow-hidden" {...hoverEvents}>
       <div ref={containerRef} className="flex flex-nowrap">

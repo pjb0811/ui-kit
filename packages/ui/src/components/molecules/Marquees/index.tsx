@@ -1,9 +1,10 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useThrottle } from 'react-use';
 
-import { useElementSize } from '@repo/ui/hooks';
+import { useThrottle } from '@uidotdev/usehooks';
+import { useElementSize } from 'use-hooks';
+
 import { cn } from '@repo/ui/utils';
 
 import Item, { type ItemProps } from './Item';
@@ -29,7 +30,7 @@ const Marquees = ({
   );
   const [pause, setPause] = useState(false);
 
-  const throttledWidth = useThrottle(width);
+  const throttledWidth = useThrottle(width, 200);
 
   const { size, elementRef, connect, disconnect } =
     useElementSize<HTMLDivElement>();
