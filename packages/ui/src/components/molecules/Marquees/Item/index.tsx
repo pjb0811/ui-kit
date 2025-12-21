@@ -30,7 +30,9 @@ const Item = ({
 
   const [width, setWidth] = useState<string | number>(_width);
   const [pause, setPause] = useState(false);
-  const [repeatCount, setRepeatCount] = useState(0);
+  const [repeatCount, setRepeatCount] = useState(
+    autoFill ? (typeof autoFill === 'boolean' ? 100 : autoFill) : 0,
+  );
 
   const isPaused = _pause || pause;
 

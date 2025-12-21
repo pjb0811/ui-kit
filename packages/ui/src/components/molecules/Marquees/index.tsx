@@ -32,8 +32,11 @@ const Marquees = ({
 
   const throttledWidth = useThrottle(width, 200);
 
-  const { size, elementRef, connect, disconnect } =
-    useElementSize<HTMLDivElement>();
+  const {
+    size,
+    elementRef,
+    //
+  } = useElementSize<HTMLDivElement>();
 
   const hoverEvents = pauseOnHover
     ? {
@@ -52,24 +55,19 @@ const Marquees = ({
     }
 
     setWidth(size.width);
+  }, [size]);
 
-    const onResize = () => {
-      connect();
-    };
-
+  useEffect(() => {
     const onScroll = () => {
       setWidth(document.body.scrollWidth);
     };
 
-    window.addEventListener('resize', onResize);
     window.addEventListener('scroll', onScroll);
 
     return () => {
-      window.removeEventListener('resize', onResize);
       window.removeEventListener('scroll', onScroll);
-      disconnect();
     };
-  }, [size, connect, disconnect]);
+  }, []);
 
   return (
     <>
