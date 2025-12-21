@@ -48,7 +48,12 @@ const Item = ({
     : {};
 
   useEffect(() => {
-    if (!autoFill || !itemRefs.current[0] || typeof width === 'string') {
+    if (
+      !autoFill ||
+      !children ||
+      !itemRefs.current[0] ||
+      typeof width === 'string'
+    ) {
       return;
     }
 
@@ -70,7 +75,7 @@ const Item = ({
 
     setWidth(totalWidth);
     setRepeatCount(repeatCount - 1);
-  }, [autoFill, width]);
+  }, [autoFill, width, children]);
 
   useEffect(() => {
     setWidth(_width);
