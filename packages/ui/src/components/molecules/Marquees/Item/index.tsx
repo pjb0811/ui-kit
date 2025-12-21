@@ -141,7 +141,11 @@ const Item = ({
   }, []);
 
   return (
-    <div className="flex overflow-hidden" {...hoverEvents}>
+    <div
+      className="flex overflow-hidden"
+      {...hoverEvents}
+      //
+    >
       <div ref={containerRef} className="flex flex-nowrap">
         {[...Array(2)].map((_, index) => (
           <div

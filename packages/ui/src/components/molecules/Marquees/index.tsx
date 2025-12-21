@@ -32,11 +32,7 @@ const Marquees = ({
 
   const throttledWidth = useThrottle(width, 200);
 
-  const {
-    size,
-    elementRef,
-    //
-  } = useElementSize<HTMLDivElement>();
+  const { size } = useElementSize<HTMLDivElement>();
 
   const hoverEvents = pauseOnHover
     ? {
@@ -70,49 +66,40 @@ const Marquees = ({
   }, []);
 
   return (
-    <>
+    <div
+      className={cn(
+        className,
+        //
+      )}
+      {...hoverEvents}
+      {...props}
+    >
       <div
-        ref={elementRef}
         className={cn(
-          'fixed w-full',
+          'flex flex-col gap-y-5',
+          'overflow-hidden',
+          'whitespace-nowrap',
+          'bg-inherit',
           //
         )}
-      />
-      <div
-        className={cn(
-          className,
-          //
-        )}
-        {...hoverEvents}
-        {...props}
+        style={{
+          width: throttledWidth,
+        }}
       >
-        <div
-          className={cn(
-            'flex flex-col gap-y-5',
-            'overflow-hidden',
-            'whitespace-nowrap',
-            'bg-inherit',
-            //
-          )}
-          style={{
-            width: throttledWidth,
-          }}
-        >
-          {items?.map(({ children, key: itemKey, ...item }: ItemProps, key) => (
-            <Item
-              key={itemKey || key}
-              width={throttledWidth}
-              pause={pause}
-              speed={speed}
-              autoFill={autoFill}
-              {...item}
-            >
-              {children}
-            </Item>
-          ))}
-        </div>
+        {items?.map(({ children, key: itemKey, ...item }: ItemProps, key) => (
+          <Item
+            key={itemKey || key}
+            width={throttledWidth}
+            pause={pause}
+            speed={speed}
+            autoFill={autoFill}
+            {...item}
+          >
+            {children}
+          </Item>
+        ))}
       </div>
-    </>
+    </div>
   );
 };
 
