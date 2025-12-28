@@ -12,7 +12,7 @@ export interface ItemProps {
   children?: React.ReactNode;
 }
 
-interface Props extends React.HTMLAttributes<HTMLDivElement>, ItemProps {
+export interface Props extends React.HTMLAttributes<HTMLDivElement>, ItemProps {
   width: string | number;
 }
 

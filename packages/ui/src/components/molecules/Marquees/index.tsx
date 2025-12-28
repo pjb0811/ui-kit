@@ -9,7 +9,7 @@ import { cn } from '@repo/ui/utils';
 
 import Item, { type ItemProps } from './Item';
 
-interface Props extends React.HTMLAttributes<HTMLDivElement> {
+export interface Props extends React.HTMLAttributes<HTMLDivElement> {
   speed?: number;
   autoFill?: boolean | number;
   pauseOnHover?: boolean;

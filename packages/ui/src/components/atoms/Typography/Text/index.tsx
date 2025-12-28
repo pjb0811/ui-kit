@@ -1,11 +1,9 @@
 import { TEXT_LEVELS } from '@repo/ui/enums';
 import { cn } from '@repo/ui/utils';
 
-interface TypographyProps extends React.HTMLAttributes<HTMLElement> {
-  level?: 1 | 2 | 3 | 4 | 5 | 6;
-}
+import { TypographyProps } from '..';
 
-interface Props extends TypographyProps {
+export interface Props extends TypographyProps {
   underline?: boolean;
   strong?: boolean;
 }

@@ -3,7 +3,7 @@ import { cn } from '@repo/ui/utils';
 
 import { TypographyProps } from '..';
 
-interface Props extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
+export interface Props extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   level?: TypographyProps['level'];
 }
 

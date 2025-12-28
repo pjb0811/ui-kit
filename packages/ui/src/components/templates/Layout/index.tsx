@@ -5,7 +5,7 @@ import Footer from './Footer';
 import Header from './Header';
 import Sider from './Sider';
 
-interface Props extends React.HTMLAttributes<HTMLDivElement> {}
+export interface Props extends React.HTMLAttributes<HTMLDivElement> {}
 
 const Layout = ({ children, className, ...props }: Props) => {
   return (

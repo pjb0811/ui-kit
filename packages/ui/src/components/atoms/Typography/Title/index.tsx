@@ -2,7 +2,7 @@ import { cn } from '@repo/ui/utils';
 
 import { TypographyProps } from '..';
 
-interface Props extends TypographyProps {}
+export interface Props extends TypographyProps {}
 
 type ElementType = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
 

@@ -1,6 +1,6 @@
 import { cn } from '@repo/ui/utils';
 
-interface Props extends React.HTMLAttributes<HTMLDivElement> {}
+export interface Props extends React.HTMLAttributes<HTMLDivElement> {}
 
 const Header = ({ children, className, ...props }: Props) => {
   return (
