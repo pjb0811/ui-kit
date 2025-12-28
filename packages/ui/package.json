@@ -1,19 +1,58 @@
 {
-  "name": "@repo/ui",
+  "name": "@jax/ui-kit",
   "version": "0.0.0",
-  "private": true,
+  "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist"
+  ],
   "exports": {
-    ".": "./src/index.ts",
-    "./Icon": "./src/components/atoms/Icon/index.tsx",
-    "./Typography": "./src/components/atoms/Typography/index.tsx",
-    "./Menu": "./src/components/molecules/Menu/index.tsx",
-    "./Reveals": "./src/components/molecules/Reveals/index.tsx",
-    "./core": "./src/core/index.ts",
-    "./utils": "./src/lib/utils/index.ts",
-    "./enums": "./src/lib/enums/index.ts",
-    "./style.css": "./src/globals.css"
+    ".": {
+      "default": "./src/index.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs",
+      "types": "./dist/index.d.ts"
+    },
+    "./Typography": {
+      "default": "./src/components/atoms/Typography/index.tsx",
+      "import": "./dist/Typography.mjs",
+      "require": "./dist/Typography.cjs",
+      "types": "./dist/Typography.d.ts"
+    },
+    "./Menu": {
+      "default": "./src/components/molecules/Menu/index.tsx",
+      "import": "./dist/Menu.mjs",
+      "require": "./dist/Menu.cjs",
+      "types": "./dist/Menu.d.ts"
+    },
+    "./Reveals": {
+      "default": "./src/components/molecules/Reveals/index.tsx",
+      "import": "./dist/Reveals.mjs",
+      "require": "./dist/Reveals.cjs",
+      "types": "./dist/Reveals.d.ts"
+    },
+    "./utils": {
+      "default": "./src/lib/utils/index.ts",
+      "import": "./dist/utils.mjs",
+      "require": "./dist/utils.cjs",
+      "types": "./dist/utils.d.ts"
+    },
+    "./enums": {
+      "default": "./src/lib/enums/index.ts",
+      "import": "./dist/enums.mjs",
+      "require": "./dist/enums.cjs",
+      "types": "./dist/enums.d.ts"
+    },
+    "./style.css": {
+      "default": "./src/globals.css",
+      "import": "./dist/globals.css",
+      "require": "./dist/globals.css"
+    }
   },
   "scripts": {
+    "build": "tsdown",
     "lint": "eslint . --max-warnings 0",
     "generate:component": "turbo gen react-component",
     "check-types": "tsc --noEmit"
@@ -25,6 +64,7 @@
     "@types/react": "19.1.0",
     "@types/react-dom": "19.1.1",
     "eslint": "^9.34.0",
+    "tsdown": "^0.18.2",
     "typescript": "5.9.2"
   },
   "dependencies": {
@@ -41,8 +81,6 @@
     "lucide-react": "^0.542.0",
     "motion": "^12.23.12",
     "postcss": "^8.4.31",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0",
     "react-use": "^17.6.0",
     "swiper": "^11.2.10",
     "tailwind-merge": "^3.3.1",
@@ -51,5 +89,9 @@
     "use-hooks": "github:pjb0811/use-hooks",
     "uuid": "^11.1.0",
     "vaul": "^1.1.2"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0"
   }
 }
