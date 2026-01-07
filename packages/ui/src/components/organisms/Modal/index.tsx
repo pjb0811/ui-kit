@@ -58,6 +58,7 @@ interface StaticProps extends Props {
   type?: 'info' | 'success' | 'error' | 'warning' | 'confirm';
   id?: string;
   icon?: React.ReactNode;
+  container?: HTMLElement;
 }
 
 const isBrowser =
@@ -67,12 +68,15 @@ let modalRoot: Root | null = null;
 let modalStack: StaticProps[] = [];
 let updateStack: (() => void) | null = null;
 
-const createModalRoot = () => {
+const createModalRoot = (container?: HTMLElement) => {
   if (!isBrowser) {
     return null;
   }
 
-  let rootEl = document.getElementById('modal-root');
+  const targetContainer = container || document.body;
+  let rootEl = targetContainer.querySelector(
+    '#modal-root',
+  ) as HTMLElement | null;
 
   if (!rootEl) {
     rootEl = document.createElement('div');
@@ -81,7 +85,7 @@ const createModalRoot = () => {
     rootEl.setAttribute('aria-modal', 'true');
     rootEl.style.zIndex = '10000';
     rootEl.style.position = 'absolute';
-    document.body.appendChild(rootEl);
+    targetContainer.appendChild(rootEl);
   }
 
   return rootEl;
@@ -184,6 +188,7 @@ const StaticModal = ({
   okText = '확인',
   cancelText = '취소',
   id,
+  container,
   icon,
   onOk,
   onCancel,
@@ -265,12 +270,13 @@ const StaticModal = ({
           {title}
         </p>
       }
+      container={container}
       onCancel={() => closeModal(onOk)}
       {...props}
     >
       {content}
     </Modal>,
-    document.getElementById('modal-root')!,
+    createModalRoot(container)!,
   );
 };
 
@@ -293,14 +299,20 @@ const ModalStackRenderer = () => {
   );
 };
 
+const modalRoots = new Map<HTMLElement, Root>();
+
 const renderModal = (props: StaticProps) => {
   if (!isBrowser) {
     return;
   }
 
-  if (!modalRoot) {
-    modalRoot = createRoot(createModalRoot()!);
-    modalRoot.render(<ModalStackRenderer />);
+  const targetContainer = props.container || document.body;
+  const rootElement = createModalRoot(targetContainer)!;
+
+  if (!modalRoots.has(targetContainer)) {
+    const root = createRoot(rootElement);
+    modalRoots.set(targetContainer, root);
+    root.render(<ModalStackRenderer />);
   }
 
   const id = props.id || uuid();

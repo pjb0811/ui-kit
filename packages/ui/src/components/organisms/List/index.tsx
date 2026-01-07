@@ -1,6 +1,6 @@
 'use client';
 
-import React, { Fragment, useEffect } from 'react';
+import React, { useEffect } from 'react';
 
 import { useIntersectionObserver } from '@uidotdev/usehooks';
 
@@ -94,9 +94,7 @@ const List = <T,>({
       <div className={cn(classNames?.title)}>{title}</div>
       <div className={cn(classNames?.header)}>{header}</div>
       <div className={cn('space-y-2', classNames?.body)}>
-        {data?.map((item, i) => (
-          <Fragment key={i}>{renderItem(item, i)}</Fragment>
-        ))}
+        {data?.map((item, i) => renderItem(item, i))}
         {scroll?.loading &&
           (scroll?.loader ?? (
             <Skeleton.Node count={10} gap={10} {...loaderProps} />

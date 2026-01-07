@@ -1,9 +1,7 @@
 'use client';
 
-import { CSSProperties, Fragment, ReactNode } from 'react';
-
 import { Autoplay, EffectCards, Navigation, Scrollbar } from 'swiper/modules';
-import { Swiper as SwiperCore, SwiperProps, SwiperRef } from 'swiper/react';
+import { Swiper as SwiperCore, SwiperProps } from 'swiper/react';
 import { SwiperOptions } from 'swiper/types';
 
 import { cn } from '@repo/ui/utils';
@@ -19,7 +17,7 @@ import Slide from './Slide';
 
 export const initialOptions: SwiperOptions = {
   loop: false,
-  spaceBetween: '8',
+  spaceBetween: 8,
   slidesPerView: 'auto',
   navigation: false,
   autoplay: {
@@ -28,17 +26,15 @@ export const initialOptions: SwiperOptions = {
   },
 };
 
-const initialStyle = { overflow: 'hidden', width: '100%', maxWidth: 480 };
+const initialStyle = { width: '100%', maxWidth: '100vw', overflow: 'hidden' };
 
 interface Props<T> extends SwiperProps {
-  ref?: React.Ref<SwiperRef>;
   loading?: boolean;
-  loader?: ReactNode;
+  loader?: React.ReactNode;
   loadingClassName?: string;
   options?: SwiperOptions;
   data: T[];
-  style?: CSSProperties;
-  renderItem(item: T, key: number): ReactNode;
+  renderItem(item: T, key: number): React.ReactNode;
 }
 
 const Swiper = <T,>({
@@ -49,8 +45,6 @@ const Swiper = <T,>({
   style,
   renderItem,
   loadingClassName,
-  ref,
-  children,
   ...props
 }: Props<T>) => {
   if (loading) {
@@ -63,17 +57,13 @@ const Swiper = <T,>({
 
   return (
     <SwiperCore
-      ref={ref}
       modules={[Navigation, Scrollbar, Autoplay, EffectCards]}
       {...initialOptions}
       {...options}
       style={{ ...initialStyle, ...style }}
       {...props}
     >
-      {data.map((item: T, i) => (
-        <Fragment key={i}>{renderItem(item, i)}</Fragment>
-      ))}
-      {children}
+      {data.map((item: T, i) => renderItem(item, i))}
     </SwiperCore>
   );
 };

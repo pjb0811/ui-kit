@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react';
 
+import { useElementSize } from '@jbpark/use-hooks';
 import { useThrottle } from '@uidotdev/usehooks';
-import { useElementSize } from 'use-hooks';
 
 import { cn } from '@repo/ui/utils';
 
