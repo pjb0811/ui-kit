@@ -16,18 +16,21 @@ ui-kit/
 └── README.md
 ```
 
-## 🎨 UI 컴포넌트 라이브러리 (@repo/ui)
+## 🎨 UI 컴포넌트 라이브러리
 
 Atomic Design 패턴을 따라 구성된 React 컴포넌트 라이브러리입니다.
+
+- **로컬 개발**: `@repo/ui` (워크스페이스 패키지)
+- **npm 배포**: `@jbpark/ui-kit` ([npm 패키지](https://www.npmjs.com/package/@jbpark/ui-kit))
 
 ### Atoms (원자)
 
 기본적인 UI 구성 요소들
 
-- **Breakpointer**: 반응형 브레이크포인트 컴포넌트
 - **Button**: 다양한 스타일의 버튼 컴포넌트
 - **Checkbox**: 체크박스 및 그룹 체크박스
 - **FloatButton**: 플로팅 버튼 (BackTop 포함)
+- **Input**: 입력 필드 컴포넌트 (Search, TextArea 포함)
 - **Progress**: 진행률 표시 컴포넌트
 - **Skeleton**: 로딩 스켈레톤 (Button, Node 포함)
 - **Spin**: 로딩 스피너
@@ -133,6 +136,21 @@ npm run check-types
 npm run format
 ```
 
+### 배포
+
+```bash
+# 변경사항 추가
+npm run changeset
+
+# 버전 업데이트
+npm run version-packages
+
+# 빌드 및 배포
+npm run release
+```
+
+> **참고**: 배포 시 `@repo/ui`는 자동으로 `@jbpark/ui-kit`로 배포됩니다.
+
 ## 📚 문서화
 
 ### Storybook
@@ -156,16 +174,21 @@ npm run build-storybook -- --filter=docs
 
 ### Packages
 
-- **`@repo/ui`**: 메인 UI 컴포넌트 라이브러리
+- **`@repo/ui`**: 메인 UI 컴포넌트 라이브러리 (로컬 개발용)
+  - npm 배포명: `@jbpark/ui-kit`
+  - 자세한 내용은 [`packages/ui/README.md`](./packages/ui/README.md) 참조
 - **`@repo/eslint-config`**: ESLint 설정 (base, next-js, react-internal)
 - **`@repo/typescript-config`**: TypeScript 설정 (base, nextjs, react-library)
 
 ## 🔧 사용법
 
-### UI 컴포넌트 사용
+### 모노레포 내부에서 사용 (로컬 개발)
+
+모노레포 내부의 앱에서는 워크스페이스 패키지로 사용합니다:
 
 ```tsx
 import { Button, Layout, Typography } from '@repo/ui';
+import '@repo/ui/style.css';
 
 function App() {
   return (
@@ -177,12 +200,30 @@ function App() {
 }
 ```
 
-### 개별 컴포넌트 import
+### 외부 프로젝트에서 사용 (npm 패키지)
+
+외부 프로젝트에서는 npm 패키지로 설치하여 사용합니다:
+
+```bash
+npm install @jbpark/ui-kit
+```
 
 ```tsx
-import { Button } from '@repo/ui/Button';
-import { Typography } from '@repo/ui/Typography';
+import { Button, Layout, Typography } from '@jbpark/ui-kit';
+
+import '@jbpark/ui-kit/style.css';
+
+function App() {
+  return (
+    <Layout>
+      <Typography.Title>안녕하세요!</Typography.Title>
+      <Button variant="primary">클릭하세요</Button>
+    </Layout>
+  );
+}
 ```
+
+자세한 사용법은 [`packages/ui/README.md`](./packages/ui/README.md)를 참조하세요.
 
 ## 🤝 기여하기
 

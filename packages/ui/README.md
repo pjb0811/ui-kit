@@ -1,13 +1,14 @@
-# @repo/ui
+# @jbpark/ui-kit
 
 현대적이고 재사용 가능한 React UI 컴포넌트 라이브러리입니다. Atomic Design 패턴을 따라 체계적으로 구성되어 있으며, TypeScript와 Tailwind CSS를 기반으로 구축되었습니다.
 
 ## 📦 패키지 정보
 
-- **버전**: 0.0.0
+- **패키지명**: `@jbpark/ui-kit`
 - **라이선스**: MIT
 - **패키지 매니저**: npm
 - **Node.js 요구사항**: >= 18
+- **React 요구사항**: ^18.0.0 || ^19.0.0
 
 ## 🏗 아키텍처
 
@@ -35,17 +36,17 @@ src/
 
 기본적인 UI 구성 요소들
 
-| 컴포넌트         | 설명                           | 하위 컴포넌트                        |
-| ---------------- | ------------------------------ | ------------------------------------ |
-| **Breakpointer** | 반응형 브레이크포인트 컴포넌트 | -                                    |
-| **Button**       | 다양한 스타일의 버튼           | -                                    |
-| **Checkbox**     | 체크박스 및 그룹 체크박스      | `Group`                              |
-| **FloatButton**  | 플로팅 버튼                    | `BackTop`                            |
-| **Progress**     | 진행률 표시 컴포넌트           | -                                    |
-| **Skeleton**     | 로딩 스켈레톤                  | `Button`, `Node`                     |
-| **Spin**         | 로딩 스피너                    | -                                    |
-| **Switch**       | 토글 스위치                    | -                                    |
-| **Typography**   | 텍스트 컴포넌트                | `Link`, `Paragraph`, `Text`, `Title` |
+| 컴포넌트        | 설명                      | 하위 컴포넌트                        |
+| --------------- | ------------------------- | ------------------------------------ |
+| **Button**      | 다양한 스타일의 버튼      | -                                    |
+| **Checkbox**    | 체크박스 및 그룹 체크박스 | `Group`                              |
+| **FloatButton** | 플로팅 버튼               | `BackTop`                            |
+| **Input**       | 입력 필드 컴포넌트        | `Search`, `TextArea`                 |
+| **Progress**    | 진행률 표시 컴포넌트      | -                                    |
+| **Skeleton**    | 로딩 스켈레톤             | `Button`, `Node`                     |
+| **Spin**        | 로딩 스피너               | -                                    |
+| **Switch**      | 토글 스위치               | -                                    |
+| **Typography**  | 텍스트 컴포넌트           | `Link`, `Paragraph`, `Text`, `Title` |
 
 ## 🔬 Molecules (분자)
 
@@ -104,19 +105,21 @@ Radix UI 기반의 접근성 우선 핵심 컴포넌트들:
 
 ```bash
 # npm
-npm install @repo/ui
+npm install @jbpark/ui-kit
 
 # yarn
-yarn add @repo/ui
+yarn add @jbpark/ui-kit
 
 # pnpm
-pnpm add @repo/ui
+pnpm add @jbpark/ui-kit
 ```
 
 ### 기본 사용법
 
 ```tsx
-import { Button, Layout, Typography } from '@repo/ui';
+import { Button, Layout, Typography } from '@jbpark/ui-kit';
+
+import '@jbpark/ui-kit/style.css';
 
 function App() {
   return (
@@ -131,27 +134,28 @@ function App() {
 ### 개별 컴포넌트 import
 
 ```tsx
-import { Breakpointer } from '@repo/ui/Breakpointer';
-import { Button } from '@repo/ui/Button';
-import { Icon } from '@repo/ui/Icon';
-import { Layout } from '@repo/ui/Layout';
-import { Menu } from '@repo/ui/Menu';
-import { Reveals } from '@repo/ui/Reveals';
-import { Typography } from '@repo/ui/Typography';
+// Typography 컴포넌트
+// Menu 컴포넌트
+import { Menu } from '@jbpark/ui-kit/Menu';
+// Reveals 컴포넌트
+import { Reveals } from '@jbpark/ui-kit/Reveals';
+import { Typography } from '@jbpark/ui-kit/Typography';
 ```
 
-### 유틸리티 및 훅 import
+### 유틸리티 및 열거형 import
 
 ```tsx
-import { Button as CoreButton } from '@repo/ui/core';
-import { TEXT_LEVELS } from '@repo/ui/enums';
-import { cn } from '@repo/ui/utils';
+// 유틸리티 함수
+// 열거형 상수
+import { TEXT_LEVELS } from '@jbpark/ui-kit/enums';
+import { cn } from '@jbpark/ui-kit/utils';
 ```
 
 ### 스타일 import
 
 ```tsx
-import '@repo/ui/style.css';
+// 전역 스타일 (필수)
+import '@jbpark/ui-kit/style.css';
 ```
 
 ## 🎨 스타일링
@@ -166,13 +170,11 @@ import '@repo/ui/style.css';
 ### 커스터마이징
 
 ```tsx
-// globals.css에서 전역 스타일 관리
-import '@repo/ui/style.css';
+// 전역 스타일 import (필수)
+import '@jbpark/ui-kit/style.css';
 
 // tailwind.config.js에서 테마 커스터마이징
-module.exports = {
-  // 커스텀 설정
-};
+// Tailwind CSS 4를 사용하는 경우 PostCSS 설정 필요
 ```
 
 ## 📚 주요 의존성
@@ -209,6 +211,8 @@ module.exports = {
 
 ## 🔧 개발
 
+이 패키지는 모노레포(Turborepo) 환경에서 개발됩니다.
+
 ### 타입 체크
 
 ```bash
@@ -221,6 +225,12 @@ npm run check-types
 npm run lint
 ```
 
+### 빌드
+
+```bash
+npm run build
+```
+
 ### 컴포넌트 생성
 
 ```bash
@@ -231,17 +241,13 @@ npm run generate:component
 
 이 패키지는 다음과 같은 모듈들을 export합니다:
 
-- `@repo/ui` - 메인 패키지 (모든 컴포넌트)
-- `@repo/ui/Breakpointer` - Breakpointer 컴포넌트
-- `@repo/ui/Icon` - Icon 컴포넌트
-- `@repo/ui/Typography` - Typography 컴포넌트
-- `@repo/ui/Menu` - Menu 컴포넌트
-- `@repo/ui/Reveals` - Reveals 컴포넌트
-- `@repo/ui/core` - 핵심 UI 로직
-- `@repo/ui/utils` - 유틸리티 함수
-- `@repo/ui/enums` - 열거형 상수
-- `@repo/ui/hooks` - 커스텀 훅
-- `@repo/ui/style.css` - 전역 스타일
+- `@jbpark/ui-kit` - 메인 패키지 (모든 컴포넌트)
+- `@jbpark/ui-kit/Typography` - Typography 컴포넌트
+- `@jbpark/ui-kit/Menu` - Menu 컴포넌트
+- `@jbpark/ui-kit/Reveals` - Reveals 컴포넌트
+- `@jbpark/ui-kit/utils` - 유틸리티 함수 (`cn` 등)
+- `@jbpark/ui-kit/enums` - 열거형 상수 (`TEXT_LEVELS` 등)
+- `@jbpark/ui-kit/style.css` - 전역 스타일 (필수)
 
 ## 🤝 기여하기
 
