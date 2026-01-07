@@ -37,6 +37,7 @@ export const Default: Story = {
     accordion: false,
     expandIcon: <ChevronDown className="h-4 w-4" />,
     defaultActiveKey: ['0'],
+    className: 'w-100 rounded-md border border-gray-200 p-4',
     items: [
       {
         key: '0',

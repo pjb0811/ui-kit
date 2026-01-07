@@ -10,7 +10,7 @@
     "prepare": "husky",
     "changeset": "changeset",
     "version-packages": "changeset version",
-    "release": "turbo run build --filter=@jax/ui-kit && changeset publish"
+    "release": "turbo run build --filter=@repo/ui && changeset publish"
   },
   "devDependencies": {
     "@changesets/cli": "^2.29.8",
