@@ -9,49 +9,16 @@
     "dist"
   ],
   "exports": {
-    ".": {
-      "default": "./src/index.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs",
-      "types": "./dist/index.d.ts"
-    },
-    "./Typography": {
-      "default": "./src/components/atoms/Typography/index.tsx",
-      "import": "./dist/Typography.mjs",
-      "require": "./dist/Typography.cjs",
-      "types": "./dist/Typography.d.ts"
-    },
-    "./Menu": {
-      "default": "./src/components/molecules/Menu/index.tsx",
-      "import": "./dist/Menu.mjs",
-      "require": "./dist/Menu.cjs",
-      "types": "./dist/Menu.d.ts"
-    },
-    "./Reveals": {
-      "default": "./src/components/molecules/Reveals/index.tsx",
-      "import": "./dist/Reveals.mjs",
-      "require": "./dist/Reveals.cjs",
-      "types": "./dist/Reveals.d.ts"
-    },
-    "./utils": {
-      "default": "./src/lib/utils/index.ts",
-      "import": "./dist/utils.mjs",
-      "require": "./dist/utils.cjs",
-      "types": "./dist/utils.d.ts"
-    },
-    "./enums": {
-      "default": "./src/lib/enums/index.ts",
-      "import": "./dist/enums.mjs",
-      "require": "./dist/enums.cjs",
-      "types": "./dist/enums.d.ts"
-    },
-    "./style.css": {
-      "default": "./src/globals.css",
-      "import": "./dist/globals.css",
-      "require": "./dist/globals.css"
-    }
+    ".": "./src/index.ts",
+    "./Typography": "./src/components/atoms/Typography/index.tsx",
+    "./Menu": "./src/components/molecules/Menu/index.tsx",
+    "./Reveals": "./src/components/molecules/Reveals/index.tsx",
+    "./utils": "./src/lib/utils/index.ts",
+    "./enums": "./src/lib/enums/index.ts",
+    "./style.css": "./src/globals.css"
   },
   "scripts": {
+    "prebuild": "npx @tailwindcss/cli -i ./src/globals.css -o ./src/output.css",
     "build": "tsdown",
     "lint": "eslint . --max-warnings 0",
     "generate:component": "turbo gen react-component",

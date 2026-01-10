@@ -38,3 +38,10 @@ yarn-error.log*
 *.pem
 .history
 .vscode
+
+# Package backups
+package.json.backup
+*.tgz
+
+# puplish style
+output.css

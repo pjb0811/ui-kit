@@ -14,5 +14,5 @@ export default defineConfig({
   dts: true,
   clean: true,
   external: ['react', 'react-dom', 'tailwindcss'],
-  copy: ['src/globals.css'],
+  copy: ['src/output.css'],
 });

@@ -1,0 +1,49 @@
+{
+  "name": "@jbpark/ui-kit",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs",
+      "default": "./dist/index.mjs"
+    },
+    "./Typography": {
+      "types": "./dist/Typography.d.mts",
+      "import": "./dist/Typography.mjs",
+      "require": "./dist/Typography.cjs",
+      "default": "./dist/Typography.mjs"
+    },
+    "./Menu": {
+      "types": "./dist/Menu.d.mts",
+      "import": "./dist/Menu.mjs",
+      "require": "./dist/Menu.cjs",
+      "default": "./dist/Menu.mjs"
+    },
+    "./Reveals": {
+      "types": "./dist/Reveals.d.mts",
+      "import": "./dist/Reveals.mjs",
+      "require": "./dist/Reveals.cjs",
+      "default": "./dist/Reveals.mjs"
+    },
+    "./utils": {
+      "types": "./dist/utils.d.mts",
+      "import": "./dist/utils.mjs",
+      "require": "./dist/utils.cjs",
+      "default": "./dist/utils.mjs"
+    },
+    "./enums": {
+      "types": "./dist/enums.d.mts",
+      "import": "./dist/enums.mjs",
+      "require": "./dist/enums.cjs",
+      "default": "./dist/enums.mjs"
+    },
+    "./style.css": {
+      "import": "./dist/output.css",
+      "require": "./dist/output.css",
+      "default": "./dist/output.css"
+    }
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.mts"
+}
