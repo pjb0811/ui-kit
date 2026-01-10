@@ -1,15 +1,27 @@
 const fs = require('fs');
 const path = require('path');
 
-const packageJsonPath = path.join(__dirname, '../package.json');
-const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
+const packageJsonPath = path.join(__dirname, '..', 'package.json');
+const backupPath = path.join(__dirname, '..', 'package.json.backup');
 
-// 로컬 개발용 이름으로 복원
-if (packageJson.name === '@jbpark/ui-kit') {
-  packageJson.name = '@repo/ui';
-  fs.writeFileSync(
-    packageJsonPath,
-    JSON.stringify(packageJson, null, 2) + '\n',
-  );
-  console.log('✅ 패키지 이름을 @repo/ui로 복원했습니다.');
+console.log('🔄 Restoring original package.json...\n');
+
+try {
+  if (fs.existsSync(backupPath)) {
+    const backup = fs.readFileSync(backupPath, 'utf8');
+    fs.writeFileSync(packageJsonPath, backup);
+    fs.unlinkSync(backupPath);
+    console.log('✓ Restored original package.json');
+    console.log('✓ Removed backup file');
+    console.log('');
+    console.log('🎉 Package restored to development state!');
+  } else {
+    console.warn('⚠️  No backup found, skipping restore');
+    console.log(
+      '   This might be normal if publish failed before backup was created.',
+    );
+  }
+} catch (error) {
+  console.error('❌ Error restoring package:', error.message);
+  process.exit(1);
 }
