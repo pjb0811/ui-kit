@@ -27,8 +27,8 @@
     "postpublish": "node scripts/restore-package.js"
   },
   "devDependencies": {
-    "@repo/eslint-config": "*",
-    "@repo/typescript-config": "*",
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
     "@tailwindcss/cli": "^4.1.18",
     "@types/node": "^22.15.3",
     "@types/react": "19.1.0",
