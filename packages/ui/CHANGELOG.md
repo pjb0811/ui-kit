@@ -1,5 +1,11 @@
 # @repo/ui
 
+## 1.1.0
+
+### Minor Changes
+
+- e4053d1: Add Card and Label components, enhance Button and Checkbox
+
 ## 1.0.1
 
 ### Patch Changes
