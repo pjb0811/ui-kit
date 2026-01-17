@@ -1,5 +1,11 @@
 # @repo/ui
 
+## 1.1.3
+
+### Patch Changes
+
+- 9b84114: 🔧 chore(ci): restrict CI to main branch only
+
 ## 1.1.2
 
 ### Patch Changes
