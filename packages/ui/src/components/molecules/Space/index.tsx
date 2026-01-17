@@ -7,7 +7,7 @@ import Skeleton from '../../atoms/Skeleton';
 interface Props extends HTMLAttributes<HTMLDivElement> {
   loading?: boolean;
   loader?: React.ReactNode;
-  direction?: 'horizontal' | 'vertical';
+  orientation?: 'horizontal' | 'vertical';
   size?: 'small' | 'middle' | 'large' | number | number[];
   align?: 'start' | 'end' | 'center' | 'baseline';
   wrap?: boolean;
@@ -36,7 +36,7 @@ const Space = ({
   loader,
   children,
   size = 'middle',
-  direction = 'horizontal',
+  orientation = 'horizontal',
   align = 'center',
   wrap = false,
   split,
@@ -62,7 +62,7 @@ const Space = ({
     <div
       className={cn(
         'flex flex-nowrap',
-        direction === 'horizontal' ? 'flex-row' : 'flex-col',
+        orientation === 'horizontal' ? 'flex-row' : 'flex-col',
         wrap && 'flex-wrap',
         aligns[align],
         grid && 'grid',
