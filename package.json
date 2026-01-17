@@ -10,7 +10,7 @@
     "prepare": "husky",
     "changeset": "changeset",
     "version-packages": "changeset version",
-    "release": "turbo run build --filter=@repo/ui && changeset publish"
+    "release": "turbo run build --filter=@repo/ui && pnpm publish"
   },
   "devDependencies": {
     "@changesets/cli": "^2.29.8",
@@ -25,9 +25,10 @@
     "typescript": "5.9.2"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=18",
+    "pnpm": ">=9"
   },
-  "packageManager": "npm@11.3.0",
+  "packageManager": "pnpm@10.28.0",
   "workspaces": [
     "apps/*",
     "packages/*"
@@ -35,16 +36,16 @@
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx,css,scss,md}": "prettier --write",
     "./apps/web/**/*.{js,jsx,ts,tsx}": [
-      "bash -c 'cd ./apps/web && npm run lint'",
-      "bash -c 'cd ./apps/web && npm run check-types'"
+      "bash -c 'cd ./apps/web && pnpm lint'",
+      "bash -c 'cd ./apps/web && pnpm check-types'"
     ],
     "./apps/docs/**/*.{js,jsx,ts,tsx}": [
-      "bash -c 'cd ./apps/docs && npm run lint'",
-      "bash -c 'cd ./apps/docs && npm run check-types'"
+      "bash -c 'cd ./apps/docs && pnpm lint'",
+      "bash -c 'cd ./apps/docs && pnpm check-types'"
     ],
     "./packages/ui/**/*.{js,jsx,ts,tsx}": [
-      "bash -c 'cd ./packages/ui && npm run lint'",
-      "bash -c 'cd ./packages/ui && npm run check-types'"
+      "bash -c 'cd ./packages/ui && pnpm lint'",
+      "bash -c 'cd ./packages/ui && pnpm check-types'"
     ]
   }
 }
