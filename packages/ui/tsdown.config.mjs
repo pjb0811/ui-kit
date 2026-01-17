@@ -10,9 +10,19 @@ export default defineConfig({
     enums: 'src/lib/enums/index.ts',
   },
   outDir: 'dist',
-  format: ['esm', 'cjs'],
+  format: ['esm'],
   dts: true,
   clean: true,
-  external: ['react', 'react-dom', 'tailwindcss'],
+  external: [
+    'react',
+    'react-dom',
+    'tailwindcss',
+    '@repo/ui',
+    '@repo/ui/utils',
+    '@repo/ui/enums',
+  ],
   copy: ['src/output.css'],
+  output: {
+    exports: 'named',
+  },
 });
