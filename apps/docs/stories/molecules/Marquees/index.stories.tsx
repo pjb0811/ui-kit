@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
 import { Marquees } from '@repo/ui';
 import { cn } from '@repo/ui/utils';

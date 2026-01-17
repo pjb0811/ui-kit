@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { Settings } from 'lucide-react';
 
 import { FloatButton } from '@repo/ui';

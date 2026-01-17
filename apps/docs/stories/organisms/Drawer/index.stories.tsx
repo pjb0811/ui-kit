@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
 import { Button, Drawer } from '@repo/ui';
 
@@ -52,7 +52,7 @@ const meta: Meta<typeof Drawer> = {
       table: { disable: true },
     },
   },
-  render: props => {
+  render: function Render(props) {
     const [open, setOpen] = useState(false);
 
     return (

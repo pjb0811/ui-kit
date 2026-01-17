@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { ChevronDown, Plus } from 'lucide-react';
 
 import { Collapse } from '@repo/ui';

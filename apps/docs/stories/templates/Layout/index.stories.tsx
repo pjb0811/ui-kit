@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
 import { Layout, Typography } from '@repo/ui';
 import { cn } from '@repo/ui/utils';
