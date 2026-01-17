@@ -123,3 +123,66 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer components {
+  [data-slot='button'][data-color] {
+    --btn-fg: white;
+    --btn-bg-hover: color-mix(in oklch, var(--btn-bg), black 12%);
+    --btn-bg-active: color-mix(in oklch, var(--btn-bg), black 22%);
+  }
+
+  [data-slot='button'][data-color='yellow'],
+  [data-slot='button'][data-color='lime'],
+  [data-slot='button'][data-color='gold'] {
+    --btn-fg: black;
+  }
+
+  [data-slot='button'][data-color='primary'] {
+    --btn-bg: var(--primary);
+    --btn-fg: var(--primary-foreground);
+  }
+  [data-slot='button'][data-color='danger'] {
+    --btn-bg: var(--destructive);
+    --btn-fg: white;
+  }
+
+  [data-slot='button'][data-color='blue'] {
+    --btn-bg: #3b82f6;
+  } /* blue-500 */
+  [data-slot='button'][data-color='purple'] {
+    --btn-bg: #a855f7;
+  } /* purple-500 */
+  [data-slot='button'][data-color='cyan'] {
+    --btn-bg: #06b6d4;
+  } /* cyan-500 */
+  [data-slot='button'][data-color='green'] {
+    --btn-bg: #22c55e;
+  } /* green-500 */
+  [data-slot='button'][data-color='magenta'] {
+    --btn-bg: #d946ef;
+  } /* fuchsia-500 */
+  [data-slot='button'][data-color='pink'] {
+    --btn-bg: #ec4899;
+  } /* pink-500 */
+  [data-slot='button'][data-color='red'] {
+    --btn-bg: #ef4444;
+  } /* red-500 */
+  [data-slot='button'][data-color='orange'] {
+    --btn-bg: #f97316;
+  } /* orange-500 */
+  [data-slot='button'][data-color='yellow'] {
+    --btn-bg: #eab308;
+  } /* yellow-500 */
+  [data-slot='button'][data-color='volcano'] {
+    --btn-bg: #ea580c;
+  } /* orange-600 느낌 */
+  [data-slot='button'][data-color='geekblue'] {
+    --btn-bg: #6366f1;
+  } /* indigo-500 */
+  [data-slot='button'][data-color='lime'] {
+    --btn-bg: #84cc16;
+  } /* lime-500 */
+  [data-slot='button'][data-color='gold'] {
+    --btn-bg: #f59e0b;
+  } /* amber-500 */
+}
