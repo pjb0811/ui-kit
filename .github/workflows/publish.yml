@@ -39,7 +39,14 @@ jobs:
         id: changesets
         uses: changesets/action@v1
         with:
-          publish: pnpm --filter @repo/ui exec changeset publish
+          version: true
+          commit: 'chore: version packages'
+          title: 'Version Packages'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish to npm
+        if: steps.changesets.outputs.published == 'true'
+        run: cd packages/ui && npm publish
+        env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
