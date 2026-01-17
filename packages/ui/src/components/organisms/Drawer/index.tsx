@@ -103,7 +103,7 @@ const Drawer = ({
       <DrawerContent
         className={cn(
           'border-none outline-none',
-          rounded ? '!rounded-t-3xl' : '!rounded-none',
+          rounded ? 'rounded-t-[30px]!' : 'rounded-none!',
           classNames?.content,
           className,
           //
@@ -140,7 +140,7 @@ const Drawer = ({
             {closable && (
               <span
                 className={cn(
-                  'absolute top-3 right-5 cursor-pointer',
+                  'absolute right-5 top-3 cursor-pointer',
                   classNames?.close,
                   //
                 )}

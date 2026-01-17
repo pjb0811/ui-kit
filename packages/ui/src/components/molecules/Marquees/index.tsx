@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 
-import { useElementSize } from '@jbpark/use-hooks';
+import { useResponsiveSize } from '@jbpark/use-hooks';
 import { useThrottle } from '@uidotdev/usehooks';
 
 import { cn } from '@repo/ui/utils';
@@ -32,7 +32,7 @@ const Marquees = ({
 
   const throttledWidth = useThrottle(width, 200);
 
-  const { size } = useElementSize<HTMLDivElement>();
+  const { size } = useResponsiveSize<HTMLDivElement>();
 
   const hoverEvents = pauseOnHover
     ? {

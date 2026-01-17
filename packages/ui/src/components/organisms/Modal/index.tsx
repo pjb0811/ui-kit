@@ -208,18 +208,13 @@ const StaticModal = ({
     type === 'confirm' ? (
       <div className="grid w-full grid-cols-5 gap-x-2">
         <Button
-          size="lg"
           variant="outline"
           className="col-span-2"
           onClick={() => closeModal(onCancel)}
         >
           {cancelText}
         </Button>
-        <Button
-          size="lg"
-          className="col-span-3"
-          onClick={() => closeModal(onOk)}
-        >
+        <Button className="col-span-3" onClick={() => closeModal(onOk)}>
           {okText}
         </Button>
       </div>
@@ -229,7 +224,6 @@ const StaticModal = ({
           'grow',
           //
         )}
-        size="lg"
         onClick={() => closeModal(onOk)}
       >
         {okText}
@@ -245,13 +239,13 @@ const StaticModal = ({
       open={open}
       footer={footer}
       className={cn(
-        'z-[10000]',
+        'z-10000',
         'box-content w-100',
         'rounded-3xl p-4',
         'gap-y-0',
       )}
       classNames={{
-        mask: 'z-[10000] bg-black/[.6]',
+        mask: 'z-10000 bg-black/[.6]',
         body: cn(
           'text-black-70 whitespace-pre-wrap text-center',
           content && 'mt-3',

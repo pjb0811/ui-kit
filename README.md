@@ -1,190 +1,193 @@
 # UI-Kit Monorepo
 
-이 프로젝트는 Turborepo 기반의 현대적인 UI 컴포넌트 라이브러리와 웹/문서 앱을 포함한 모노레포입니다. Atomic Design 패턴을 따라 체계적으로 구성된 React 컴포넌트들을 제공합니다.
+[한글](./README.ko.md) | **English**
 
-## 📁 프로젝트 구조
+A modern monorepo containing a comprehensive React UI component library and web/documentation apps built with Turborepo. Systematically organized following the Atomic Design pattern and featuring React 19, TypeScript, Next.js 16, and Tailwind CSS 4.
+
+## 📁 Project Structure
 
 ```
 ui-kit/
-├── apps/                    # 애플리케이션들
-│   ├── docs/               # Storybook 기반 문서 사이트 (포트: 3001)
-│   └── web/                # Next.js 웹 데모/서비스 (포트: 3000)
-├── packages/               # 공유 패키지들
-│   ├── ui/                 # 메인 UI 컴포넌트 라이브러리
-│   ├── eslint-config/      # ESLint 설정
-│   └── typescript-config/  # TypeScript 설정
+├── apps/                    # Applications
+│   ├── docs/               # Storybook documentation site (port: 3001)
+│   └── web/                # Next.js demo/service app (port: 3000)
+├── packages/               # Shared packages
+│   ├── ui/                 # Main UI component library
+│   ├── eslint-config/      # ESLint configuration
+│   └── typescript-config/  # TypeScript configuration
 └── README.md
 ```
 
-## 🎨 UI 컴포넌트 라이브러리
+## 🎨 UI Component Library
 
-Atomic Design 패턴을 따라 구성된 React 컴포넌트 라이브러리입니다.
+A React component library organized following the Atomic Design pattern.
 
-- **로컬 개발**: `@repo/ui` (워크스페이스 패키지)
-- **npm 배포**: `@jbpark/ui-kit` ([npm 패키지](https://www.npmjs.com/package/@jbpark/ui-kit))
+- **Local Development**: `@repo/ui` (workspace package)
+- **npm Publishing**: `@jbpark/ui-kit` ([npm package](https://www.npmjs.com/package/@jbpark/ui-kit))
 
-### Atoms (원자)
+### Atoms
 
-기본적인 UI 구성 요소들
+Basic UI building blocks
 
-- **Button**: 다양한 스타일의 버튼 컴포넌트
-- **Checkbox**: 체크박스 및 그룹 체크박스
-- **FloatButton**: 플로팅 버튼 (BackTop 포함)
-- **Input**: 입력 필드 컴포넌트 (Search, TextArea 포함)
-- **Progress**: 진행률 표시 컴포넌트
-- **Skeleton**: 로딩 스켈레톤 (Button, Node 포함)
-- **Spin**: 로딩 스피너
-- **Switch**: 토글 스위치
-- **Typography**: 텍스트 컴포넌트 (Link, Paragraph, Text, Title 포함)
+- **Button**: Various button styles
+- **Checkbox**: Checkbox and checkbox groups
+- **FloatButton**: Floating action button (includes BackTop)
+- **Input**: Input field component (includes Search, TextArea)
+- **Progress**: Progress indicator component
+- **Skeleton**: Loading skeleton (includes Button, Node)
+- **Spin**: Loading spinner
+- **Switch**: Toggle switch
+- **Typography**: Text components (includes Link, Paragraph, Text, Title)
 
-### Molecules (분자)
+### Molecules
 
-여러 원자들이 결합된 복합 컴포넌트들
+Composite components combining multiple atoms
 
-- **Collapse**: 접을 수 있는 컨텐츠 영역
-- **Dropdown**: 드롭다운 메뉴
-- **Marquees**: 무한 스크롤 마키 컴포넌트
-- **Menu**: 네비게이션 메뉴
-- **Reveals**: 애니메이션 리빌 컴포넌트
-- **Space**: 간격 조정 컴포넌트
+- **Collapse**: Collapsible content area
+- **Dropdown**: Dropdown menu
+- **Marquees**: Infinite scrolling marquee component
+- **Menu**: Navigation menu
+- **Reveals**: Animation reveal component
+- **Space**: Spacing adjustment component
 
-### Organisms (유기체)
+### Organisms
 
-복잡한 UI 섹션들
+Complex UI sections
 
-- **Drawer**: 사이드 드로어
-- **List**: 리스트 및 리스트 아이템
-- **Modal**: 모달 다이얼로그
-- **Swiper**: 슬라이더 컴포넌트
+- **Drawer**: Side drawer panel
+- **List**: List and list items
+- **Modal**: Modal dialog
+- **Swiper**: Slider component
 
-### Templates (템플릿)
+### Templates
 
-페이지 레이아웃 템플릿
+Page layout templates
 
-- **Layout**: 전체 페이지 레이아웃 (Header, Sider, Content, Footer 포함)
+- **Layout**: Full page layout (includes Header, Sider, Content, Footer)
 
-## 🛠 기술 스택
+## 🛠 Tech Stack
 
-### 핵심 기술
+### Core Technologies
 
-- **[React 19](https://react.dev/)** - UI 라이브러리
-- **[TypeScript 5.9](https://www.typescriptlang.org/)** - 정적 타입 체크
-- **[Next.js 15](https://nextjs.org/)** - React 프레임워크
-- **[Tailwind CSS 4](https://tailwindcss.com/)** - 유틸리티 CSS 프레임워크
+- **[React 19](https://react.dev/)** - UI library
+- **[TypeScript 5.9](https://www.typescriptlang.org/)** - Static type checking
+- **[Next.js 16](https://nextjs.org/)** - React framework
+- **[Tailwind CSS 4](https://tailwindcss.com/)** - Utility-first CSS framework
 
-### UI 라이브러리
+### UI Libraries
 
-- **[Radix UI](https://www.radix-ui.com/)** - 접근성 우선 헤드리스 UI 컴포넌트
-- **[Lucide React](https://lucide.dev/)** - 아이콘 라이브러리
-- **[Motion](https://motion.dev/)** - 애니메이션 라이브러리
-- **[Swiper](https://swiperjs.com/)** - 터치 슬라이더
-- **[Vaul](https://vaul.dev/)** - 드로어 컴포넌트
+- **[Radix UI](https://www.radix-ui.com/)** - Accessible headless UI components
+- **[Lucide React](https://lucide.dev/)** - Icon library
+- **[Motion](https://motion.dev/)** - Animation library
+- **[Swiper](https://swiperjs.com/)** - Touch slider
+- **[Vaul](https://vaul.dev/)** - Drawer component
 
-### 개발 도구
+### Development Tools
 
-- **[Turborepo](https://turborepo.com/)** - 모노레포 빌드 시스템
-- **[ESLint](https://eslint.org/)** - 코드 린팅
-- **[Prettier](https://prettier.io/)** - 코드 포매팅
-- **[Storybook](https://storybook.js.org/)** - 컴포넌트 문서화
-- **[Husky](https://typicode.github.io/husky/)** - Git 훅 관리
+- **[Turborepo](https://turborepo.com/)** - Monorepo build system
+- **[pnpm](https://pnpm.io/)** - Package manager (v9.0.0)
+- **[ESLint](https://eslint.org/)** - Code linting
+- **[Prettier](https://prettier.io/)** - Code formatting
+- **[Storybook](https://storybook.js.org/)** - Component documentation
+- **[Husky](https://typicode.github.io/husky/)** - Git hooks
 
-## 🚀 시작하기
+## 🚀 Getting Started
 
-### 필수 요구사항
+### Requirements
 
 - Node.js >= 18
-- npm 11.3.0
+- pnpm 9.0.0
 
-### 설치
-
-```bash
-# 의존성 설치
-npm install
-```
-
-### 개발 서버 실행
+### Installation
 
 ```bash
-# 모든 앱/패키지 개발 모드 실행
-npm run dev
-
-# 특정 앱만 실행
-npm run dev -- --filter=web      # 웹 앱 (포트: 3000)
-npm run dev -- --filter=docs     # 문서 사이트 (포트: 3001)
+# Install dependencies
+pnpm install
 ```
 
-### 빌드
+### Running Development Servers
 
 ```bash
-# 모든 앱/패키지 빌드
-npm run build
+# Run all apps/packages in development mode
+pnpm dev
 
-# 특정 앱만 빌드
-npm run build -- --filter=web
+# Run specific app only
+pnpm dev --filter=web      # Web app (port: 3000)
+pnpm dev --filter=docs     # Documentation site (port: 3001)
 ```
 
-### 코드 품질 관리
+### Build
 
 ```bash
-# 린팅
-npm run lint
+# Build all apps/packages
+pnpm run build
 
-# 타입 체크
-npm run check-types
-
-# 코드 포매팅
-npm run format
+# Build specific app only
+pnpm run build --filter=web
 ```
 
-### 배포
+### Code Quality
 
 ```bash
-# 변경사항 추가
-npm run changeset
+# Linting
+pnpm run lint
 
-# 버전 업데이트
-npm run version-packages
+# Type checking
+pnpm run check-types
 
-# 빌드 및 배포
-npm run release
+# Code formatting
+pnpm run format
 ```
 
-> **참고**: 배포 시 `@repo/ui`는 자동으로 `@jbpark/ui-kit`로 배포됩니다.
+### Deployment
 
-## 📚 문서화
+```bash
+# Add changes
+pnpm run changeset
+
+# Update versions
+pnpm run version-packages
+
+# Build and publish
+pnpm run release
+```
+
+> **Note**: When publishing, `@repo/ui` is automatically deployed as `@jbpark/ui-kit`.
+
+## 📚 Documentation
 
 ### Storybook
 
-컴포넌트 문서화 및 테스트를 위해 Storybook을 사용합니다.
+Component documentation and testing using Storybook.
 
 ```bash
-# Storybook 개발 서버 실행 (포트: 6006)
-npm run storybook -- --filter=docs
+# Run Storybook dev server (port: 6006)
+pnpm storybook --filter=docs
 
-# Storybook 빌드
-npm run build-storybook -- --filter=docs
+# Build Storybook static site
+pnpm run build-storybook --filter=docs
 ```
 
-## 📦 패키지 정보
+## 📦 Package Information
 
 ### Apps
 
-- **`apps/web`**: Next.js 기반 웹 데모/서비스
-- **`apps/docs`**: Storybook 기반 컴포넌트 문서 사이트
+- **`apps/web`**: Next.js based web demo/service
+- **`apps/docs`**: Storybook based component documentation site
 
 ### Packages
 
-- **`@repo/ui`**: 메인 UI 컴포넌트 라이브러리 (로컬 개발용)
-  - npm 배포명: `@jbpark/ui-kit`
-  - 자세한 내용은 [`packages/ui/README.md`](./packages/ui/README.md) 참조
-- **`@repo/eslint-config`**: ESLint 설정 (base, next-js, react-internal)
-- **`@repo/typescript-config`**: TypeScript 설정 (base, nextjs, react-library)
+- **`@repo/ui`**: Main UI component library (for local development)
+  - Published as: `@jbpark/ui-kit` on npm
+  - See [`packages/ui/README.md`](./packages/ui/README.md) for details
+- **`@repo/eslint-config`**: ESLint configuration (base, next-js, react-internal)
+- **`@repo/typescript-config`**: TypeScript configuration (base, nextjs, react-library)
 
-## 🔧 사용법
+## 🔧 Usage
 
-### 모노레포 내부에서 사용 (로컬 개발)
+### Within Monorepo (Local Development)
 
-모노레포 내부의 앱에서는 워크스페이스 패키지로 사용합니다:
+Use as a workspace package within the monorepo apps:
 
 ```tsx
 import { Button, Layout, Typography } from '@repo/ui';
@@ -193,16 +196,16 @@ import '@repo/ui/style.css';
 function App() {
   return (
     <Layout>
-      <Typography.Title>안녕하세요!</Typography.Title>
-      <Button variant="primary">클릭하세요</Button>
+      <Typography.Title>Hello!</Typography.Title>
+      <Button variant="primary">Click me</Button>
     </Layout>
   );
 }
 ```
 
-### 외부 프로젝트에서 사용 (npm 패키지)
+### External Projects (npm Package)
 
-외부 프로젝트에서는 npm 패키지로 설치하여 사용합니다:
+Install from npm for use in external projects:
 
 ```bash
 npm install @jbpark/ui-kit
@@ -216,33 +219,34 @@ import '@jbpark/ui-kit/style.css';
 function App() {
   return (
     <Layout>
-      <Typography.Title>안녕하세요!</Typography.Title>
-      <Button variant="primary">클릭하세요</Button>
+      <Typography.Title>Hello!</Typography.Title>
+      <Button variant="primary">Click me</Button>
     </Layout>
   );
 }
 ```
 
-자세한 사용법은 [`packages/ui/README.md`](./packages/ui/README.md)를 참조하세요.
+See [`packages/ui/README.md`](./packages/ui/README.md) for detailed usage.
 
-## 🤝 기여하기
+## 🤝 Contributing
 
-1. 이 저장소를 포크합니다
-2. 새로운 기능 브랜치를 생성합니다 (`git checkout -b feature/amazing-feature`)
-3. 변경사항을 커밋합니다 (`git commit -m 'Add some amazing feature'`)
-4. 브랜치에 푸시합니다 (`git push origin feature/amazing-feature`)
-5. Pull Request를 생성합니다
+1. Fork this repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Create a Pull Request
 
-## 📄 라이선스
+## 📄 License
 
-이 프로젝트는 MIT 라이선스 하에 있습니다.
+This project is licensed under the MIT License.
 
-## 🔗 참고 링크
+## 🔗 Resources
 
-- [Turborepo 공식 문서](https://turborepo.com/docs)
-- [Next.js 공식 문서](https://nextjs.org/docs)
-- [Tailwind CSS 문서](https://tailwindcss.com/docs)
-- [Radix UI 문서](https://www.radix-ui.com/docs)
-- [Storybook 문서](https://storybook.js.org/docs)
+- [Turborepo Documentation](https://turborepo.com/docs)
+- [Next.js Documentation](https://nextjs.org/docs)
+- [Tailwind CSS Docs](https://tailwindcss.com/docs)
+- [Radix UI Documentation](https://www.radix-ui.com/docs)
+- [Storybook Documentation](https://storybook.js.org/docs)
+- [pnpm Documentation](https://pnpm.io/)
 
 ---

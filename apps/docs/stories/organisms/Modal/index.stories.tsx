@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
 import { Button, Modal } from '@repo/ui';
 
@@ -33,7 +33,7 @@ const meta: Meta<typeof Modal> = {
       action: 'onCancel',
     },
   },
-  render: props => {
+  render: function Render(props) {
     const [open, setOpen] = useState(false);
 
     return (

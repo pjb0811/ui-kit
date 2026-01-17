@@ -1,5 +1,5 @@
 // apps/docs/stories/molecules/Space/index.stories.tsx
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
 import { Button, Space } from '@repo/ui';
 
@@ -14,7 +14,7 @@ const meta: Meta<typeof Space> = {
       control: { type: 'select' },
       options: ['small', 'middle', 'large'],
     },
-    direction: {
+    orientation: {
       control: { type: 'select' },
       options: ['horizontal', 'vertical'],
     },
@@ -52,7 +52,7 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     size: 'middle',
-    direction: 'horizontal',
+    orientation: 'horizontal',
     wrap: false,
     align: 'center',
     loading: false,

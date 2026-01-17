@@ -1,21 +1,26 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useId, useState } from 'react';
 
 import { Square, SquareCheck } from 'lucide-react';
-import { v4 as uuidv4 } from 'uuid';
 
 import { cn } from '@repo/ui/utils';
 
+import { Checkbox as CoreCheckbox } from '../../../core/checkbox';
+import { Label as CoreLabel } from '../../../core/label';
 import Group from './Group';
 
 export type OptionValue = string | number | boolean;
 
-export interface Props
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'> {
+export interface Props extends Omit<
+  React.HTMLAttributes<HTMLDivElement>,
+  'onChange'
+> {
   placement?: string;
   checked?: boolean;
   value?: OptionValue;
+  icons?: { checked: React.ReactNode; unchecked: React.ReactNode };
+  children?: React.ReactNode;
   onChange?: (checked: boolean) => void;
 }
 
@@ -24,40 +29,64 @@ const Checkbox = ({
   value = '',
   children,
   className,
+  icons,
   checked: _checked,
   onChange: _onChange = () => {},
   ...props
 }: Props) => {
   const [checked, setChecked] = useState(false);
 
-  const id = typeof value === 'boolean' ? uuidv4() : value;
+  const reactId = useId();
 
-  const icon = (
-    <span
-      onClick={() => {
-        _onChange(!checked);
-        setChecked(!checked);
-      }}
-    >
-      {checked ? <SquareCheck /> : <Square />}
-    </span>
-  );
+  const id = typeof value === 'boolean' || !value ? reactId : String(value);
 
-  const label = (
-    <label
-      className="w-full cursor-pointer"
-      {...(id && {
-        htmlFor: `${id}`,
-      })}
-    >
-      {children}
-    </label>
-  );
-
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    _onChange(e.target.checked);
-    setChecked(e.target.checked);
+  const onChange = (next: boolean) => {
+    setChecked(next);
+    _onChange(next);
   };
+
+  const renderContent = icons ? (
+    <>
+      <input
+        id={id}
+        hidden
+        type="checkbox"
+        checked={checked}
+        onChange={e => {
+          onChange(e.target.checked);
+        }}
+      />
+      <span
+        className="cursor-pointer"
+        onClick={() => {
+          document.getElementById(id)?.click();
+        }}
+      >
+        {checked
+          ? (icons.checked ?? <SquareCheck />)
+          : (icons.unchecked ?? <Square />)}
+      </span>
+      {children && (
+        <label className="cursor-pointer" htmlFor={id}>
+          {children}
+        </label>
+      )}
+    </>
+  ) : (
+    <>
+      <CoreCheckbox
+        id={id}
+        checked={checked}
+        className="cursor-pointer"
+        onCheckedChange={onChange}
+      />
+      {children && (
+        <CoreLabel htmlFor={id} className="cursor-pointer text-left">
+          {children}
+        </CoreLabel>
+      )}
+    </>
+  );
 
   useEffect(() => {
     setChecked(!!_checked);
@@ -66,30 +95,14 @@ const Checkbox = ({
   return (
     <div
       className={cn(
-        'flex cursor-pointer items-center gap-x-2',
+        'flex items-center gap-x-2',
+        placement === 'right' && 'flex-row-reverse',
         className,
         //
       )}
       {...props}
     >
-      <input
-        id={`${id}`}
-        hidden
-        type="checkbox"
-        checked={checked}
-        onChange={onChange}
-      />
-      {placement === 'left' ? (
-        <>
-          {icon}
-          {label}
-        </>
-      ) : (
-        <>
-          {label}
-          {icon}
-        </>
-      )}
+      {renderContent}
     </div>
   );
 };
