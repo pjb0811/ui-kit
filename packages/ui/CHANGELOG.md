@@ -1,5 +1,11 @@
 # @repo/ui
 
+## 1.1.1
+
+### Patch Changes
+
+- b41abee: chore: add changeset for @repo/ui minor version bump
+
 ## 1.1.0
 
 ### Minor Changes
