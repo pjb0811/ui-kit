@@ -23,7 +23,6 @@ const BackTop = ({
 
   return (
     <FloatButton
-      size="icon"
       icon={<ArrowUp />}
       className={cn(
         className,

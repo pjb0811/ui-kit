@@ -13,10 +13,6 @@ const TextArea = ({
     <Core
       ref={ref}
       className={cn(
-        'w-full',
-        'overflow-hidden outline-none',
-        'border-none p-0 shadow-none ring-0',
-        'focus-visible:ring-0',
         className,
         //
       )}
