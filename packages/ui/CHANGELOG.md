@@ -1,5 +1,11 @@
 # @repo/ui
 
+## 1.1.2
+
+### Patch Changes
+
+- 7a8117d: 🔧 chore(publish): update publish workflow and scripts
+
 ## 1.1.1
 
 ### Patch Changes
