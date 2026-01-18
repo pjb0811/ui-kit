@@ -175,7 +175,7 @@
   } /* yellow-500 */
   [data-slot='button'][data-color='volcano'] {
     --btn-bg: #ea580c;
-  } /* orange-600 느낌 */
+  } /* orange-600 */
   [data-slot='button'][data-color='geekblue'] {
     --btn-bg: #6366f1;
   } /* indigo-500 */
