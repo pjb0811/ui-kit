@@ -1,5 +1,11 @@
 # @repo/ui
 
+## 1.1.6
+
+### Patch Changes
+
+- 1029930: ✨ feat(components): add Input component export
+
 ## 1.1.5
 
 ### Patch Changes
