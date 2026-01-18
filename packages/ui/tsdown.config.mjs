@@ -13,14 +13,7 @@ export default defineConfig({
   format: ['esm'],
   dts: true,
   clean: true,
-  external: [
-    'react',
-    'react-dom',
-    'tailwindcss',
-    '@repo/ui',
-    '@repo/ui/utils',
-    '@repo/ui/enums',
-  ],
+  external: ['react', 'react-dom', 'tailwindcss'],
   copy: ['src/output.css'],
   output: {
     exports: 'named',
