@@ -1,6 +1,6 @@
 # UI-Kit Monorepo
 
-[한글](./README.ko.md) | **English**
+[English](./README.md) | [한국어](./README.ko.md)
 
 A modern monorepo containing a comprehensive React UI component library and web/documentation apps built with Turborepo. Systematically organized following the Atomic Design pattern and featuring React 19, TypeScript, Next.js 16, and Tailwind CSS 4.
 

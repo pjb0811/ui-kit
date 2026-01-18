@@ -1,6 +1,6 @@
 # UI-Kit 모노레포
 
-[English](./README.md) | **한글**
+[English](./README.md) | [한국어](./README.ko.md)
 
 Turborepo 기반의 현대적인 UI 컴포넌트 라이브러리와 웹/문서 앱을 포함한 모노레포입니다. React 19, TypeScript, Next.js 16, Tailwind CSS 4를 활용하여 Atomic Design 패턴을 따라 체계적으로 구성했습니다.
 

@@ -1,6 +1,6 @@
 # @jbpark/ui-kit
 
-[한글](./README.ko.md) | **English**
+[English](./README.md) | [한국어](./README.ko.md)
 
 A modern and reusable React UI component library built with TypeScript and Tailwind CSS, following the Atomic Design pattern for systematic organization and scalability.
 

@@ -1,6 +1,6 @@
 # Documentation Site
 
-[한글 README](./README.ko.md) | **English**
+[English](./README.md) | [한국어](./README.ko.md)
 
 This is the documentation site for the UI-Kit component library. Built with Next.js and Storybook, it provides interactive documentation and examples for React components organized following the Atomic Design pattern.
 
