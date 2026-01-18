@@ -1,5 +1,11 @@
 # @repo/ui
 
+## 1.1.4
+
+### Patch Changes
+
+- 661cd76: 📝 docs: update language links in README files
+
 ## 1.1.3
 
 ### Patch Changes
