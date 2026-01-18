@@ -1,6 +1,6 @@
 # @jbpark/ui-kit
 
-[English](./README.md) | **한글**
+[English](./README.md) | [한국어](./README.ko.md)
 
 TypeScript와 Tailwind CSS를 기반으로 구축된 현대적이고 재사용 가능한 React UI 컴포넌트 라이브러리입니다. Atomic Design 패턴을 따라 체계적으로 조직되어 있으며 확장성을 고려하여 설계되었습니다.
 

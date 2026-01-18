@@ -1,6 +1,6 @@
 # 문서 사이트
 
-[English](./README.md) | **한글**
+[English](./README.md) | [한국어](./README.ko.md)
 
 이 프로젝트는 UI-Kit 컴포넌트 라이브러리의 문서 사이트입니다. Next.js와 Storybook을 기반으로 구축되어 있으며, Atomic Design 패턴을 따라 구성된 React 컴포넌트들의 사용법과 예제를 인터랙티브하게 제공합니다.
 
