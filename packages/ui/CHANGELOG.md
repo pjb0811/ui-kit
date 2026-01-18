@@ -1,5 +1,11 @@
 # @repo/ui
 
+## 1.1.5
+
+### Patch Changes
+
+- 3ba1911: 🔧 chore(tsdown.config): remove unused external dependencies
+
 ## 1.1.4
 
 ### Patch Changes
