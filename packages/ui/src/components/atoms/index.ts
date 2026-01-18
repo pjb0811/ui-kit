@@ -1,6 +1,7 @@
 export { default as Button } from './Button';
 export { default as Checkbox } from './Checkbox';
 export { default as FloatButton } from './FloatButton';
+export { default as Input } from './Input';
 export { default as Progress } from './Progress';
 export { default as Skeleton } from './Skeleton';
 export { default as Spin } from './Spin';
