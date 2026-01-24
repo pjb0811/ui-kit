@@ -37,9 +37,9 @@ const meta: Meta<typeof Space> = {
       <div className="w-full max-w-2xl">
         <Space {...props}>
           <Button>첫 번째</Button>
-          <Button variant="secondary">두 번째</Button>
-          <Button variant="outline">세 번째</Button>
-          <Button variant="ghost">네 번째</Button>
+          <Button variant="outlined">두 번째</Button>
+          <Button variant="dashed">세 번째</Button>
+          <Button variant="filled">네 번째</Button>
         </Space>
       </div>
     );

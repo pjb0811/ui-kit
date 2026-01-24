@@ -24,20 +24,36 @@ type PresetColors =
   | 'lime'
   | 'gold';
 
-export interface Props extends Omit<ButtonProps, 'size'> {
+export interface Props extends Omit<ButtonProps, 'size' | 'variant'> {
   icon?: React.ReactNode;
   block?: boolean;
   danger?: boolean;
   disabled?: boolean;
   size?: 'small' | 'medium' | 'large';
+  variant?: 'solid' | 'outlined' | 'dashed' | 'filled' | 'text' | 'link';
   color?: PresetColors | 'default' | 'primary' | 'danger';
   loading?: boolean | { icon: React.ReactNode };
 }
 
 const variantClasses: Record<string, string> = {
-  default: '',
-  secondary: '',
-  ghost: '',
+  solid: '',
+  outlined: cn(
+    'border border-[rgb(var(--btn-border)/0.5)]',
+    'bg-background text-foreground',
+    'hover:bg-accent',
+  ),
+  dashed: cn(
+    'border border-dashed border-[rgb(var(--btn-border)/0.5)]',
+    'bg-background text-foreground',
+    'hover:bg-accent',
+  ),
+  filled: cn('bg-muted text-foreground', 'hover:bg-muted/80'),
+  text: cn('bg-transparent text-foreground', 'hover:bg-accent'),
+  link: cn(
+    'bg-transparent text-primary',
+    'underline-offset-4 hover:underline',
+    'hover:bg-primary/10',
+  ),
 };
 
 const sizesClasses: Record<string, string> = {
@@ -55,7 +71,7 @@ const iconSizes: Record<string, string> = {
 const Button = ({
   icon,
   className,
-  variant = 'default',
+  variant = 'solid',
   size = 'medium',
   color = 'default',
   block = false,
@@ -72,24 +88,33 @@ const Button = ({
 
   return (
     <CoreButton
-      variant={variant}
       disabled={disabled}
-      data-color={colored ? computedColor : undefined}
+      variant="default"
+      data-color={computedColor}
       className={cn(
-        variantClasses[variant || 'default'],
         'inline-flex items-center justify-center gap-x-2',
         'rounded-lg',
         'cursor-pointer',
         'h-auto py-0',
+        'transition-all',
+        variantClasses[variant || 'solid'],
         sizesClasses[size || 'medium'],
         iconOnly && iconSizes[size || 'medium'],
         block && 'w-full',
-        colored && [
-          'bg-(--btn-bg)',
-          'hover:bg-(--btn-bg-hover)',
-          'active:bg-(--btn-bg-active)',
-          'text-(--btn-fg)',
-        ],
+        colored &&
+          (variant === 'solid'
+            ? [
+                'bg-(--btn-bg)',
+                'hover:bg-(--btn-bg-hover)',
+                'active:bg-(--btn-bg-active)',
+                'text-(--btn-fg)',
+                'border-(--btn-border)',
+              ]
+            : [
+                'text-(--btn-bg)',
+                'border-[rgb(var(--btn-border)/0.5)]',
+                //
+              ]),
         className,
         //
       )}
