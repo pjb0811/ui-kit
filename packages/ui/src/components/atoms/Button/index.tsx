@@ -24,20 +24,42 @@ type PresetColors =
   | 'lime'
   | 'gold';
 
-export interface Props extends Omit<ButtonProps, 'size'> {
+export interface Props extends Omit<ButtonProps, 'size' | 'variant'> {
   icon?: React.ReactNode;
   block?: boolean;
   danger?: boolean;
   disabled?: boolean;
   size?: 'small' | 'medium' | 'large';
-  color?: PresetColors | 'default' | 'primary' | 'danger';
+  variant?: 'solid' | 'outlined' | 'dashed' | 'filled' | 'text' | 'link';
+  color?: PresetColors | 'default';
   loading?: boolean | { icon: React.ReactNode };
 }
 
 const variantClasses: Record<string, string> = {
-  default: '',
-  secondary: '',
-  ghost: '',
+  solid: '',
+  outlined: cn(
+    'border border-[rgb(var(--btn-border)/0.5)]',
+    'bg-background text-foreground',
+    'hover:bg-accent hover:text-[rgb(var(--btn-border)/0.5)]',
+  ),
+  dashed: cn(
+    'border border-dashed border-[rgb(var(--btn-border)/0.5)]',
+    'bg-background text-foreground',
+    'hover:bg-accent hover:text-[rgb(var(--btn-border)/0.5)]',
+  ),
+  filled: cn(
+    'bg-muted text-foreground',
+    'hover:bg-muted/80 hover:text-[rgb(var(--btn-border)/0.5)]',
+  ),
+  text: cn(
+    'bg-transparent text-foreground',
+    'hover:bg-accent hover:text-[rgb(var(--btn-border)/0.5)]',
+  ),
+  link: cn(
+    'bg-transparent text-primary',
+    'underline-offset-4 hover:underline',
+    'hover:bg-primary/10 hover:text-[rgb(var(--btn-border)/0.5)]',
+  ),
 };
 
 const sizesClasses: Record<string, string> = {
@@ -55,7 +77,7 @@ const iconSizes: Record<string, string> = {
 const Button = ({
   icon,
   className,
-  variant = 'default',
+  variant = 'solid',
   size = 'medium',
   color = 'default',
   block = false,
@@ -72,24 +94,32 @@ const Button = ({
 
   return (
     <CoreButton
-      variant={variant}
       disabled={disabled}
+      variant="default"
       data-color={colored ? computedColor : undefined}
       className={cn(
-        variantClasses[variant || 'default'],
         'inline-flex items-center justify-center gap-x-2',
         'rounded-lg',
         'cursor-pointer',
         'h-auto py-0',
+        'transition-all',
+        variantClasses[variant || 'solid'],
         sizesClasses[size || 'medium'],
         iconOnly && iconSizes[size || 'medium'],
         block && 'w-full',
-        colored && [
-          'bg-(--btn-bg)',
-          'hover:bg-(--btn-bg-hover)',
-          'active:bg-(--btn-bg-active)',
-          'text-(--btn-fg)',
-        ],
+        colored &&
+          (variant === 'solid'
+            ? [
+                'bg-(--btn-bg)',
+                'hover:bg-(--btn-bg-hover)',
+                'active:bg-(--btn-bg-active)',
+                'text-(--btn-fg)',
+                'border-(--btn-border)',
+              ]
+            : [
+                'text-(--btn-bg) hover:text-[rgb(var(--btn-border)/0.8)]',
+                'border-[rgb(var(--btn-border)/0.5)]',
+              ]),
         className,
         //
       )}
