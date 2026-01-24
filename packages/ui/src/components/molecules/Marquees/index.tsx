@@ -33,6 +33,8 @@ const Marquees = ({
   const throttledWidth = useThrottle(width, 200);
 
   const { size } = useResponsiveSize<HTMLDivElement>();
+  const { size: innerSize, ref: innerRef } =
+    useResponsiveSize<HTMLDivElement>();
 
   const hoverEvents = pauseOnHover
     ? {
@@ -44,6 +46,11 @@ const Marquees = ({
         },
       }
     : {};
+
+  const maxWidth =
+    typeof throttledWidth === 'string'
+      ? '100%'
+      : Math.min(throttledWidth as number, innerSize.width);
 
   useEffect(() => {
     if (!size.width) {
@@ -67,6 +74,7 @@ const Marquees = ({
 
   return (
     <div
+      ref={innerRef}
       className={cn(
         className,
         //
@@ -83,7 +91,7 @@ const Marquees = ({
           //
         )}
         style={{
-          width: throttledWidth,
+          width: maxWidth,
         }}
       >
         {items?.map(({ children, key: itemKey, ...item }: ItemProps, key) => (
