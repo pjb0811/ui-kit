@@ -31,7 +31,7 @@ export interface Props extends Omit<ButtonProps, 'size' | 'variant'> {
   disabled?: boolean;
   size?: 'small' | 'medium' | 'large';
   variant?: 'solid' | 'outlined' | 'dashed' | 'filled' | 'text' | 'link';
-  color?: PresetColors | 'default';
+  color?: PresetColors | 'default' | 'primary' | 'danger';
   loading?: boolean | { icon: React.ReactNode };
 }
 
@@ -40,25 +40,19 @@ const variantClasses: Record<string, string> = {
   outlined: cn(
     'border border-[rgb(var(--btn-border)/0.5)]',
     'bg-background text-foreground',
-    'hover:bg-accent hover:text-[rgb(var(--btn-border)/0.5)]',
+    'hover:bg-accent',
   ),
   dashed: cn(
     'border border-dashed border-[rgb(var(--btn-border)/0.5)]',
     'bg-background text-foreground',
-    'hover:bg-accent hover:text-[rgb(var(--btn-border)/0.5)]',
+    'hover:bg-accent',
   ),
-  filled: cn(
-    'bg-muted text-foreground',
-    'hover:bg-muted/80 hover:text-[rgb(var(--btn-border)/0.5)]',
-  ),
-  text: cn(
-    'bg-transparent text-foreground',
-    'hover:bg-accent hover:text-[rgb(var(--btn-border)/0.5)]',
-  ),
+  filled: cn('bg-muted text-foreground', 'hover:bg-muted/80'),
+  text: cn('bg-transparent text-foreground', 'hover:bg-accent'),
   link: cn(
     'bg-transparent text-primary',
     'underline-offset-4 hover:underline',
-    'hover:bg-primary/10 hover:text-[rgb(var(--btn-border)/0.5)]',
+    'hover:bg-primary/10',
   ),
 };
 
@@ -96,7 +90,7 @@ const Button = ({
     <CoreButton
       disabled={disabled}
       variant="default"
-      data-color={colored ? computedColor : undefined}
+      data-color={computedColor}
       className={cn(
         'inline-flex items-center justify-center gap-x-2',
         'rounded-lg',
@@ -117,8 +111,9 @@ const Button = ({
                 'border-(--btn-border)',
               ]
             : [
-                'text-(--btn-bg) hover:text-[rgb(var(--btn-border)/0.8)]',
+                'text-(--btn-bg)',
                 'border-[rgb(var(--btn-border)/0.5)]',
+                //
               ]),
         className,
         //

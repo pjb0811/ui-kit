@@ -15,7 +15,7 @@ const FloatButton = ({ className, children, ...props }: Props) => {
         'shadow-md',
         className,
       )}
-      variant="outline"
+      variant="outlined"
       {...props}
     >
       {children}

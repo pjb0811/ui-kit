@@ -161,7 +161,7 @@ const Modal = ({
             {footer || (
               <>
                 <Button onClick={onOk}>{okText}</Button>
-                <Button variant="outline" onClick={onCancel}>
+                <Button variant="outlined" onClick={onCancel}>
                   {cancelText}
                 </Button>
               </>
@@ -208,7 +208,7 @@ const StaticModal = ({
     type === 'confirm' ? (
       <div className="grid w-full grid-cols-5 gap-x-2">
         <Button
-          variant="outline"
+          variant="outlined"
           className="col-span-2"
           onClick={() => closeModal(onCancel)}
         >
