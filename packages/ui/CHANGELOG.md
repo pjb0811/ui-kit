@@ -1,5 +1,11 @@
 # @repo/ui
 
+## 2.0.0
+
+### Major Changes
+
+- 21f313a: ✨ feat(Button): enhance button variant and color handling
+
 ## 1.1.7
 
 ### Patch Changes
