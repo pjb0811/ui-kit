@@ -4,7 +4,37 @@ import { Search } from 'lucide-react';
 import { Button } from '@repo/ui';
 import { cn } from '@repo/ui/utils';
 
+type ButtonProps = React.ComponentProps<typeof Button>;
+type VariantType = NonNullable<ButtonProps['variant']>;
+type ColorType = NonNullable<ButtonProps['color']>;
+
 const icons = { None: '', Search: <Search /> };
+const variantOptions: VariantType[] = [
+  'solid',
+  'outlined',
+  'dashed',
+  'filled',
+  'text',
+  'link',
+];
+const colorOptions: ColorType[] = [
+  'default',
+  'primary',
+  'danger',
+  'blue',
+  'purple',
+  'cyan',
+  'green',
+  'magenta',
+  'pink',
+  'red',
+  'orange',
+  'yellow',
+  'volcano',
+  'geekblue',
+  'lime',
+  'gold',
+];
 
 const meta: Meta<typeof Button> = {
   title: 'UI/Button',
@@ -27,14 +57,11 @@ const meta: Meta<typeof Button> = {
     },
     variant: {
       control: { type: 'select' },
-      options: [
-        'default',
-        'secondary',
-        'ghost',
-        'destructive',
-        'outline',
-        'link',
-      ],
+      options: variantOptions,
+    },
+    color: {
+      control: { type: 'select' },
+      options: colorOptions,
     },
     loading: {
       control: { type: 'boolean' },

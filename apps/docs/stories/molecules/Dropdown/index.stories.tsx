@@ -72,7 +72,7 @@ export const Default: Story = {
           },
         }}
       >
-        <Button variant="outline">
+        <Button variant="outlined">
           메뉴
           <ChevronDown className="h-4 w-4" />
         </Button>

@@ -106,19 +106,19 @@ export const StaticModal: Story = {
 
     return (
       <div className="flex flex-wrap gap-2">
-        <Button onClick={showInfo} variant="outline">
+        <Button onClick={showInfo} variant="outlined">
           Info
         </Button>
-        <Button onClick={showSuccess} variant="outline">
+        <Button onClick={showSuccess} variant="outlined">
           Success
         </Button>
-        <Button onClick={showError} variant="outline">
+        <Button onClick={showError} variant="outlined">
           Error
         </Button>
-        <Button onClick={showWarning} variant="outline">
+        <Button onClick={showWarning} variant="outlined">
           Warning
         </Button>
-        <Button onClick={showConfirm} variant="outline">
+        <Button onClick={showConfirm} variant="outlined">
           Confirm
         </Button>
       </div>
