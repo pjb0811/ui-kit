@@ -13,7 +13,9 @@ import {
 } from 'lucide-react';
 import { v4 as uuid } from 'uuid';
 
-import { Button } from '@repo/ui';
+import { cn } from '@repo/ui/utils';
+
+import { Button } from '../../../components/atoms';
 import {
   Dialog,
   DialogContent,
@@ -21,8 +23,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@repo/ui/core/dialog';
-import { cn } from '@repo/ui/utils';
+} from '../../../core/dialog';
 
 interface Props {
   open?: boolean;

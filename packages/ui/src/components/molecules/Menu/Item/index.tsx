@@ -75,7 +75,7 @@ const Item = ({
 
   const [left, top] = offset;
 
-  const selected = selectionMap?.get(itemKey) ?? false;
+  const isItemSelected = selectionMap?.get(itemKey) ?? false;
 
   const item = {
     ...props,
@@ -135,13 +135,9 @@ const Item = ({
       }}
     >
       <div
-        role="menuitem"
-        aria-expanded={children?.length ? open : undefined}
-        aria-haspopup={children?.length ? 'menu' : undefined}
-        aria-selected={selected}
         className={cn(
           itemClassNames,
-          ...(selected
+          ...(isItemSelected
             ? root
               ? ['border-current']
               : [...STYLES.open.classes, ...STYLES.hover.classes]
@@ -167,7 +163,7 @@ const Item = ({
 
           onClick?.(params);
 
-          if (!selected) {
+          if (!isItemSelected) {
             onSelect?.(params);
           }
         }}

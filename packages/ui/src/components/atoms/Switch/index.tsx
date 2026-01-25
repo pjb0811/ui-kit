@@ -1,10 +1,9 @@
-import { Switch as Core } from '@repo/ui/core/switch';
 import { cn } from '@repo/ui/utils';
 
-export interface Props extends Omit<
-  React.HTMLAttributes<HTMLElement>,
-  'onChange'
-> {
+import { Switch as Core } from '../../../core/switch';
+
+export interface Props
+  extends Omit<React.HTMLAttributes<HTMLElement>, 'onChange'> {
   classNames?: {
     track?: string;
     handle?: string;

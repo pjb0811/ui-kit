@@ -147,7 +147,6 @@ const Menu = ({
 
   return (
     <ul
-      role="menu"
       className={cn(
         MENU_CLASSNAMES,
         mode === 'horizontal' ? 'flex' : 'inline-block',
