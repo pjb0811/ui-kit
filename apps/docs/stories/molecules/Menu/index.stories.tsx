@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
 import { Menu } from '@repo/ui';
@@ -104,5 +106,68 @@ export const Default: Story = {
     defaultSelectedKeys: [],
     offset: [0, 0],
     inlineOffset: 0,
+  },
+};
+
+export const Uncontrolled: Story = {
+  args: {
+    mode: 'vertical',
+    fullSize: false,
+    items: defaultItems,
+    defaultSelectedKeys: ['2'],
+    offset: [0, 0],
+    inlineOffset: 0,
+  },
+  render: args => (
+    <div className="p-4">
+      <p className="mb-4 text-sm text-gray-600">
+        비제어 모드: 내부 상태 관리, defaultSelectedKeys로 초기값 설정
+      </p>
+      <Menu {...args} />
+    </div>
+  ),
+};
+
+export const Controlled: Story = {
+  args: {
+    mode: 'vertical',
+    fullSize: false,
+    items: defaultItems,
+    offset: [0, 0],
+    inlineOffset: 0,
+  },
+  render: args => {
+    function ControlledMenuDemo() {
+      const [selected, setSelected] = useState<React.Key[]>(['3']);
+
+      return (
+        <div className="p-4">
+          <div className="mb-4">
+            <p className="mb-2 text-sm font-semibold">
+              제어 모드: 외부 상태 관리
+            </p>
+            <p className="mb-3 text-sm text-gray-600">
+              선택된 항목: {selected.length > 0 ? selected.join(', ') : '없음'}
+            </p>
+            <button
+              onClick={() => setSelected([])}
+              className="mb-4 rounded bg-blue-500 px-3 py-1 text-sm text-white
+                hover:bg-blue-600"
+            >
+              초기화
+            </button>
+          </div>
+          <Menu
+            {...args}
+            selectedKeys={selected}
+            onSelect={params => {
+              setSelected([params.key]);
+            }}
+          />
+        </div>
+      );
+    }
+
+    return <ControlledMenuDemo />;
   },
 };
