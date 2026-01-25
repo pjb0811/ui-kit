@@ -1,7 +1,6 @@
 import { InputHTMLAttributes } from 'react';
 
-import { Input as Core } from '@repo/ui/core/input';
-
+import { Input as Core } from '../../../core/input';
 import Search from './Search';
 import TextArea from './TextArea';
 

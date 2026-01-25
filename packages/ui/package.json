@@ -41,8 +41,7 @@
     "./Reveals": "./src/components/molecules/Reveals/index.tsx",
     "./utils": "./src/lib/utils/index.ts",
     "./enums": "./src/lib/enums/index.ts",
-    "./style.css": "./src/globals.css",
-    "./core/*": "./src/core/*"
+    "./style.css": "./src/globals.css"
   },
   "scripts": {
     "prebuild": "npx @tailwindcss/cli -i ./src/globals.css -o ./src/output.css",

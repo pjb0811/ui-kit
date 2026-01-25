@@ -2,8 +2,7 @@ import {
   Popover as CorePopover,
   PopoverContent,
   PopoverTrigger,
-} from '@repo/ui/core/popover';
-
+} from '../../../core/popover';
 import Typography from '../Typography';
 
 interface Props {
