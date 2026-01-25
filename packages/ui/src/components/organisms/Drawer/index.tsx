@@ -4,8 +4,6 @@ import { useEffect } from 'react';
 
 import { X } from 'lucide-react';
 
-import { cn } from '@repo/ui/utils';
-
 import {
   DrawerContent,
   Drawer as DrawerCore,
@@ -13,7 +11,8 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
-} from '../../../core/drawer';
+} from '@repo/ui/core/drawer';
+import { cn } from '@repo/ui/utils';
 
 interface Props {
   open: boolean;
@@ -140,7 +139,7 @@ const Drawer = ({
             {closable && (
               <span
                 className={cn(
-                  'absolute right-5 top-3 cursor-pointer',
+                  'absolute top-3 right-5 cursor-pointer',
                   classNames?.close,
                   //
                 )}

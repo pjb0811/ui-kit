@@ -5,9 +5,8 @@ import type { ChangeEvent, InputHTMLAttributes } from 'react';
 
 import { CircleX, Search as SearchOutlined } from 'lucide-react';
 
+import { Input as Core } from '@repo/ui/core/input';
 import { cn } from '@repo/ui/utils';
-
-import { Input as Core } from '../../../../core/input';
 
 export interface Props extends InputHTMLAttributes<HTMLInputElement> {
   allowClear?: boolean;

@@ -1,6 +1,6 @@
+import { Skeleton as Core } from '@repo/ui/core/skeleton';
 import { cn } from '@repo/ui/utils';
 
-import { Skeleton as Core } from '../../../core/skeleton';
 import Button from './Button';
 import Node from './Node';
 
