@@ -15,7 +15,6 @@ export interface MenuItem {
 }
 
 export interface Props {
-  fullSize?: boolean;
   mode?: 'horizontal' | 'vertical' | 'inline';
   selectedKeys?: React.Key[];
   defaultSelectedKeys?: React.Key[];
@@ -104,7 +103,6 @@ export function findKey(
 const Menu = ({
   items,
   mode = 'vertical',
-  fullSize = false,
   defaultSelectedKeys = [],
   selectedKeys: _selectedKeys,
   className,
@@ -166,7 +164,6 @@ const Menu = ({
           selectedKeys={selectedKeys}
           selectionMap={selectionMap}
           mode={mode}
-          fullSize={fullSize}
           classNames={classNames}
           styles={styles}
           offset={offset}

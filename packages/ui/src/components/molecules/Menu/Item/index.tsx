@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 
 import { ChevronDown } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
@@ -15,14 +15,39 @@ interface ItemProps extends Props, MenuItem {
 }
 const OFFSET: [number, number] = [8, 8];
 const INLINE_OFFSET = 16;
-const HOVER_CLASSNAMES = ['hover:underline', 'hover:underline-offset-8'];
-const OPEN_CLASSNAMES = [
-  'underline',
-  'underline-offset-8',
-  // 'bg-gray-100',
-  // 'bg-inherit',
-  //
-];
+
+const STYLES = {
+  hover: {
+    classes: ['hover:underline', 'hover:underline-offset-8'],
+  },
+  open: {
+    classes: ['underline', 'underline-offset-8'],
+  },
+} as const;
+
+const getItemClasses = (
+  root: boolean,
+  isHorizontal: boolean,
+  isInline: boolean,
+  hasChildren: boolean,
+  customClasses?: string,
+) =>
+  cn(
+    'px-4 py-2',
+    'cursor-pointer',
+    'whitespace-nowrap',
+    root && isHorizontal ? 'inline-flex' : 'flex',
+    ...(root
+      ? [
+          'h-full',
+          'rounded-none border-transparent',
+          hasChildren && 'hover:border-current',
+          isHorizontal ? 'border-b-2' : 'border-r-2',
+          isInline && 'border-none',
+        ]
+      : ['rounded-md', ...STYLES.hover.classes]),
+    customClasses,
+  );
 
 const Item = ({
   itemKey,
@@ -33,7 +58,6 @@ const Item = ({
   children,
   selectedKeys = [],
   selectionMap,
-  fullSize,
   classNames,
   styles,
   offset = OFFSET,
@@ -43,7 +67,6 @@ const Item = ({
   ...props
 }: ItemProps) => {
   const [open, setOpen] = useState<boolean>(false);
-  const [position, setPosition] = useState({ top: 0, left: 0 });
 
   const itemRef = useRef<HTMLLIElement | null>(null);
 
@@ -61,21 +84,12 @@ const Item = ({
     children,
   };
 
-  const itemClassNames = cn(
-    'px-4 py-2',
-    'cursor-pointer',
-    'whitespace-nowrap',
-    root && isHorizontal ? 'inline-flex' : 'flex',
-    ...(root
-      ? [
-          'h-full',
-          'rounded-none border-transparent',
-          !!children?.length && 'hover:border-current',
-          isHorizontal ? 'border-b-2' : 'border-r-2',
-          isInline && 'border-none',
-          classNames?.rootItem,
-        ]
-      : ['rounded-md', ...HOVER_CLASSNAMES, classNames?.item]),
+  const itemClassNames = getItemClasses(
+    root,
+    isHorizontal,
+    isInline,
+    !!children?.length,
+    root ? classNames?.rootItem : classNames?.item,
   );
 
   const childrenContainerClassNames = cn(
@@ -85,134 +99,19 @@ const Item = ({
       : !isInline
         ? 'left-full top-0 pl-2 pt-0'
         : 'pl-4',
-    ...(fullSize
-      ? [
-          ...MENU_CLASSNAMES,
-          'fixed flex justify-center items-start',
-          isHorizontal ? 'inset-x-0 w-screen' : 'inset-y-0 h-screen',
-        ]
-      : []),
   );
 
-  const childrenContainerStyle = fullSize
-    ? isHorizontal
+  const childrenContainerStyle = isInline
+    ? {
+        paddingLeft: inlineOffset,
+      }
+    : root && isHorizontal
       ? {
-          top: position.top,
-          marginTop: top,
+          paddingTop: top,
         }
       : {
-          left: position.left,
-          marginLeft: left,
-        }
-    : isInline
-      ? {
-          paddingLeft: inlineOffset,
-        }
-      : root && isHorizontal
-        ? {
-            paddingTop: top,
-          }
-        : {
-            paddingLeft: left,
-          };
-
-  useEffect(() => {
-    if (!itemRef.current) {
-      return;
-    }
-
-    const $item = itemRef.current;
-
-    const onResize = () => {
-      setPosition({
-        top: $item.offsetTop + $item.offsetHeight,
-        left: $item.offsetLeft + $item.offsetWidth,
-      });
-    };
-
-    onResize();
-
-    window.addEventListener('resize', onResize);
-
-    return () => window.removeEventListener('resize', onResize);
-  }, []);
-
-  if (!root && fullSize) {
-    return (
-      <li
-        className={cn(
-          'basis-1/6',
-          'min-w-45',
-          //
-        )}
-      >
-        <div
-          className={cn(
-            itemClassNames,
-            'justify-center',
-            //
-          )}
-          onClick={e => {
-            e.stopPropagation();
-
-            const params = {
-              domEvent: e,
-              key: itemKey,
-              keyPath,
-              item,
-            };
-
-            onClick?.(params);
-
-            if (!isItemSelected) {
-              onSelect?.(params);
-            }
-          }}
-        >
-          <Label className="font-semibold">{label}</Label>
-        </div>
-        <ul>
-          {children?.map(child => (
-            <li
-              key={child.key}
-              className={cn(
-                itemClassNames,
-                'justify-center',
-                ...(children?.some(child => selectionMap?.get(child.key))
-                  ? [
-                      ...OPEN_CLASSNAMES,
-                      ...HOVER_CLASSNAMES,
-                      //
-                    ]
-                  : []),
-              )}
-              onClick={e => {
-                e.stopPropagation();
-                const params = {
-                  domEvent: e,
-                  key: child.key,
-                  keyPath: [...keyPath, child.key],
-                  item: child,
-                };
-
-                onClick?.(params);
-
-                const childIsSelected = selectionMap?.get(child.key) ?? false;
-
-                if (!childIsSelected) {
-                  onSelect?.(params);
-                }
-              }}
-            >
-              <Label level={5} className="text-center text-wrap">
-                {child.label}
-              </Label>
-            </li>
-          ))}
-        </ul>
-      </li>
-    );
-  }
+          paddingLeft: left,
+        };
 
   return (
     <li
@@ -241,11 +140,7 @@ const Item = ({
           ...(isItemSelected
             ? root
               ? ['border-current']
-              : [
-                  ...OPEN_CLASSNAMES,
-                  ...HOVER_CLASSNAMES,
-                  //
-                ]
+              : [...STYLES.open.classes, ...STYLES.hover.classes]
             : root && !!children?.length
               ? ['group-hover:border-current']
               : []),
@@ -280,23 +175,7 @@ const Item = ({
             //
           )}
         >
-          <Label
-            className={cn(
-              classNames?.label,
-              root && classNames?.rootItem,
-              ...(isItemSelected
-                ? root
-                  ? []
-                  : [
-                      ...OPEN_CLASSNAMES,
-                      ...HOVER_CLASSNAMES,
-                      //
-                    ]
-                : []),
-              //
-            )}
-            style={styles?.label}
-          >
+          <Label className={cn(classNames?.label)} style={styles?.label}>
             {label}
           </Label>
           {!root && !isInline && !!children?.length && (
@@ -327,14 +206,7 @@ const Item = ({
           >
             <ul
               className={cn(
-                fullSize
-                  ? [
-                      'h-auto',
-                      'flex flex-nowrap gap-y-4',
-                      'p-8',
-                      //
-                    ]
-                  : MENU_CLASSNAMES,
+                MENU_CLASSNAMES,
                 isInline && 'shadow-none',
                 classNames?.subMenu,
                 //
@@ -350,7 +222,6 @@ const Item = ({
                   selectionMap={selectionMap}
                   mode={mode}
                   selectedKeys={selectedKeys}
-                  fullSize={fullSize}
                   classNames={classNames}
                   styles={styles}
                   offset={offset}

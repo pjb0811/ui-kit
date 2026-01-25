@@ -76,9 +76,6 @@ const meta: Meta<typeof Menu> = {
       control: { type: 'select' },
       options: ['horizontal', 'vertical', 'inline'],
     },
-    fullSize: {
-      control: { type: 'boolean' },
-    },
     selectedKeys: {
       control: { type: 'object' },
     },
@@ -100,7 +97,6 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     mode: 'horizontal',
-    fullSize: false,
     items: defaultItems,
     selectedKeys: [],
     defaultSelectedKeys: [],
@@ -112,7 +108,6 @@ export const Default: Story = {
 export const Uncontrolled: Story = {
   args: {
     mode: 'vertical',
-    fullSize: false,
     items: defaultItems,
     defaultSelectedKeys: ['2'],
     offset: [0, 0],
@@ -131,7 +126,6 @@ export const Uncontrolled: Story = {
 export const Controlled: Story = {
   args: {
     mode: 'vertical',
-    fullSize: false,
     items: defaultItems,
     offset: [0, 0],
     inlineOffset: 0,
