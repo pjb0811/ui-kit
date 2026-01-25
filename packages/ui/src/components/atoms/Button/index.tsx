@@ -2,12 +2,11 @@
 
 import { LoaderCircle } from 'lucide-react';
 
-import { cn } from '@repo/ui/utils';
-
 import {
   type Props as ButtonProps,
   Button as CoreButton,
-} from '../../../core/button';
+} from '@repo/ui/core/button';
+import { cn } from '@repo/ui/utils';
 
 type PresetColors =
   | 'blue'

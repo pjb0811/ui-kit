@@ -1,6 +1,5 @@
+import { Progress as Core } from '@repo/ui/core/progress';
 import { cn } from '@repo/ui/utils';
-
-import { Progress as Core } from '../../../core/progress';
 
 export interface Props extends React.HTMLAttributes<HTMLElement> {
   value: number;
