@@ -1,5 +1,11 @@
 # @repo/ui
 
+## 2.0.1
+
+### Patch Changes
+
+- 1ef2f59: chore: version bump
+
 ## 2.0.0
 
 ### Major Changes
