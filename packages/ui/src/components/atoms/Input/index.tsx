@@ -1,8 +1,11 @@
 import { InputHTMLAttributes } from 'react';
 
-import { Input as Core } from '../../../core/input';
+import { input } from '@repo/ui/core';
+
 import Search from './Search';
 import TextArea from './TextArea';
+
+const { Input: Core } = input;
 
 const Input = ({ ...props }: InputHTMLAttributes<HTMLInputElement>) => {
   return <Core {...props} />;

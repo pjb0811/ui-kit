@@ -1,9 +1,12 @@
+import { switchComponent } from '@repo/ui/core';
 import { cn } from '@repo/ui/utils';
 
-import { Switch as Core } from '../../../core/switch';
+const { Switch: Core } = switchComponent;
 
-export interface Props
-  extends Omit<React.HTMLAttributes<HTMLElement>, 'onChange'> {
+export interface Props extends Omit<
+  React.HTMLAttributes<HTMLElement>,
+  'onChange'
+> {
   classNames?: {
     track?: string;
     handle?: string;
