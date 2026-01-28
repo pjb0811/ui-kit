@@ -4,11 +4,13 @@ import { useEffect, useId, useState } from 'react';
 
 import { Square, SquareCheck } from 'lucide-react';
 
+import { checkbox, label } from '@repo/ui/core';
 import { cn } from '@repo/ui/utils';
 
-import { Checkbox as CoreCheckbox } from '../../../core/checkbox';
-import { Label as CoreLabel } from '../../../core/label';
 import Group from './Group';
+
+const { Checkbox: CoreCheckbox } = checkbox;
+const { Label: CoreLabel } = label;
 
 export type OptionValue = string | number | boolean;
 

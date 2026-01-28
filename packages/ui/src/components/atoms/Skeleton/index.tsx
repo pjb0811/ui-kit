@@ -1,8 +1,10 @@
+import { skeleton } from '@repo/ui/core';
 import { cn } from '@repo/ui/utils';
 
-import { Skeleton as Core } from '../../../core/skeleton';
 import Button from './Button';
 import Node from './Node';
+
+const { Skeleton: Core } = skeleton;
 
 const getValueAtIndex = <T,>(value: T | T[], index: number) => {
   return Array.isArray(value) ? (value[index] ?? value[0]) : value;

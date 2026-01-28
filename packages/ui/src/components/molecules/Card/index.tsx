@@ -1,4 +1,4 @@
-import { cn } from '@repo/ui/utils';
+import { cn, renderConditional } from '@repo/ui/utils';
 
 interface Props extends Omit<React.HTMLProps<HTMLDivElement>, 'title'> {
   title?: React.ReactNode;
@@ -29,7 +29,7 @@ const Card = ({
       )}
       {...props}
     >
-      {title && (
+      {renderConditional(title, v => (
         <div
           className={cn(
             'mb-4 font-bold',
@@ -37,9 +37,9 @@ const Card = ({
             //
           )}
         >
-          {title}
+          {v}
         </div>
-      )}
+      ))}
       <div
         className={cn(
           classNames?.body,

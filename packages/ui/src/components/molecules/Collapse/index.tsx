@@ -2,14 +2,11 @@
 
 import React, { useEffect, useState } from 'react';
 
+import { accordion } from '@repo/ui/core';
 import { cn } from '@repo/ui/utils';
 
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '../../../core/accordion';
+const { Accordion, AccordionItem, AccordionTrigger, AccordionContent } =
+  accordion;
 
 interface Item {
   key: React.Key;

@@ -4,16 +4,17 @@ import { useEffect } from 'react';
 
 import { X } from 'lucide-react';
 
-import { cn } from '@repo/ui/utils';
+import { drawer } from '@repo/ui/core';
+import { cn, renderConditional } from '@repo/ui/utils';
 
-import {
+const {
   DrawerContent,
-  Drawer as DrawerCore,
+  Drawer: DrawerCore,
   DrawerDescription,
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
-} from '../../../core/drawer';
+} = drawer;
 
 interface Props {
   open: boolean;
@@ -137,18 +138,18 @@ const Drawer = ({
             )}
           >
             <span>{title}</span>
-            {closable && (
+            {renderConditional(closable ? closeIcon || <X /> : null, v => (
               <span
                 className={cn(
-                  'absolute right-5 top-3 cursor-pointer',
+                  'absolute top-3 right-5 cursor-pointer',
                   classNames?.close,
                   //
                 )}
                 onClick={onClose}
               >
-                {closeIcon || <X />}
+                {v}
               </span>
-            )}
+            ))}
           </DrawerTitle>
           <DrawerDescription className="hidden" />
         </DrawerHeader>
@@ -161,11 +162,9 @@ const Drawer = ({
         >
           {children}
         </div>
-        {footer && (
-          <DrawerFooter className={cn(classNames?.footer)}>
-            {footer}
-          </DrawerFooter>
-        )}
+        {renderConditional(footer, v => (
+          <DrawerFooter className={cn(classNames?.footer)}>{v}</DrawerFooter>
+        ))}
       </DrawerContent>
     </DrawerCore>
   );

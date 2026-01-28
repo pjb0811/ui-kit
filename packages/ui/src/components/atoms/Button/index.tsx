@@ -2,12 +2,11 @@
 
 import { LoaderCircle } from 'lucide-react';
 
+import { button } from '@repo/ui/core';
 import { cn } from '@repo/ui/utils';
 
-import {
-  type Props as ButtonProps,
-  Button as CoreButton,
-} from '../../../core/button';
+const Core = button.Button;
+type ButtonProps = button.Props;
 
 type PresetColors =
   | 'blue'
@@ -86,8 +85,18 @@ const Button = ({
   const computedColor = danger ? 'danger' : color;
   const colored = computedColor && computedColor !== 'default';
 
+  const displayIcon = loading ? (
+    typeof loading === 'object' ? (
+      loading.icon
+    ) : (
+      <LoaderCircle className="animate-spin" />
+    )
+  ) : (
+    icon
+  );
+
   return (
-    <CoreButton
+    <Core
       disabled={disabled}
       variant="default"
       data-color={computedColor}
@@ -124,17 +133,9 @@ const Button = ({
       }}
       {...props}
     >
-      {loading ? (
-        typeof loading === 'object' ? (
-          loading.icon
-        ) : (
-          <LoaderCircle className="animate-spin" />
-        )
-      ) : (
-        icon
-      )}
+      {displayIcon}
       {children}
-    </CoreButton>
+    </Core>
   );
 };
 
