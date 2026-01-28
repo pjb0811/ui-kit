@@ -1,5 +1,11 @@
 # @repo/ui
 
+## 2.1.0
+
+### Minor Changes
+
+- f115fdc: Refactor component architecture with centralized core exports and improve component APIs. Add Popover placement options, enhance conditional rendering patterns across Card and Drawer, and update multiple components (Button, Checkbox, Input, Progress, Skeleton, Switch) to use new core import structure.
+
 ## 2.0.1
 
 ### Patch Changes
