@@ -16,6 +16,25 @@ const meta: Meta<typeof Popover> = {
     content: {
       control: { type: 'text' },
     },
+    placement: {
+      control: {
+        type: 'select',
+        options: [
+          'top',
+          'left',
+          'right',
+          'bottom',
+          'topLeft',
+          'topRight',
+          'bottomLeft',
+          'bottomRight',
+          'leftTop',
+          'leftBottom',
+          'rightTop',
+          'rightBottom',
+        ],
+      },
+    },
   },
   render: props => (
     <div
