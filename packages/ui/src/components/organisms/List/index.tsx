@@ -4,9 +4,9 @@ import React, { useEffect } from 'react';
 
 import { useIntersectionObserver } from '@uidotdev/usehooks';
 
-import { cn } from '@repo/ui/utils';
+import { Skeleton } from '@repo/ui';
+import { cn, renderConditional } from '@repo/ui/utils';
 
-import { Skeleton } from '../../atoms';
 import Item from './Item';
 
 interface Props<T> extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
@@ -91,7 +91,17 @@ const List = <T,>({
       )}
       {...props}
     >
-      <div className={cn(classNames?.title)}>{title}</div>
+      {renderConditional(title, v => (
+        <h2
+          className={cn(
+            'px-1.5 py-4',
+            'text-black-90 text-lg leading-5.75 font-bold',
+            //
+          )}
+        >
+          {v}
+        </h2>
+      ))}
       <div className={cn(classNames?.header)}>{header}</div>
       <div className={cn('space-y-2', classNames?.body)}>
         {data?.map((item, i) => renderItem(item, i))}
