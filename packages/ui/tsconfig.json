@@ -5,6 +5,7 @@
     "rootDir": ".",
     "baseUrl": ".",
     "paths": {
+      "@repo/ui/utils": ["./src/lib/utils/index.ts"],
       "@repo/ui/*": ["./src/*"]
     },
     "declaration": false,
