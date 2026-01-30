@@ -1,82 +1,171 @@
 ## Commit Message Generation Guide
 
-### Basic Rules
+This document is a guide for writing commit messages.
+Please write it accurately as it will be used for actual commits.
 
-**Format**: `<emoji> <type>(<scope>): <subject>`
+### Basic Format
 
-**Writing Language**: English
+```
+<emoji> <type>(<scope>): <short summary>
+│       │        │            │
+│       │        │            └─⫸ Imperative, present tense. No capitalization. No period at the end.
+│       │        │
+│       │        └─⫸ Use branch name first. Otherwise, specify the area of change (optional)
+│       │
+│       └─⫸ feat|fix|docs|style|refactor|test|chore|perf|ci|build
+│
+└─⫸ Select only one gitmoji most appropriate for the change
+```
 
-**Subject Line Rules**:
+**Language**: Korean
 
-- Use imperative mood and present tense (e.g., "add" not "added" or "adds")
-- Start with lowercase letter
-- No period (.) at the end
-- Keep it within 50 characters (English)
+### Commit Types
 
-**Body Rules** (if needed):
+| Type       | Description                                 |
+| ---------- | ------------------------------------------- |
+| `feat`     | Add new feature                             |
+| `fix`      | Fix bug                                     |
+| `docs`     | Add/update documentation                    |
+| `style`    | Code style changes (formatting, semicolons) |
+| `refactor` | Code structure improvements                 |
+| `perf`     | Performance optimization                    |
+| `test`     | Add/update tests                            |
+| `chore`    | Build, dependencies, and other changes      |
+| `ci`       | CI/CD configuration changes                 |
+| `build`    | Build system changes                        |
 
-- Add `-` before each bullet point
-- Wrap at 72 characters (English) for readability
-- Describe changes in detail
+### Scope Writing Rules
 
-### Commit Type Selection
+**Priority**:
 
-Choose the type that matches your changes:
-
-- `feat`: Add a new feature
-- `fix`: Fix a bug
-- `docs`: Add or update documentation
-- `style`: Change code style (formatting, semicolons, etc.)
-- `refactor`: Improve code structure
-- `perf`: Optimize performance
-- `test`: Add or update tests
-- `chore`: Other changes (build, dependencies, etc.)
-- `ci`: Change CI/CD settings
-- `build`: Change build system
-
-### Scope Selection (Optional)
-
-Use branch name if available, otherwise can be omitted:
-
-- For hooks: `useBodyScrollLock`, `useDebounce`, `useLocalStorage`, etc.
-- For UI: `components`, `styles`
-- For configuration: `config`, `build`
+1. **Use branch name if available** (`$(git rev-parse --abbrev-ref HEAD)`)
+2. If no branch name, specify the area of change
+   - hooks: `useBodyScrollLock`, `useDebounce`, `useLocalStorage`, etc.
+   - UI: `components`, `styles`
+   - config: `config`, `build`
 
 ### Gitmoji Selection
 
-Choose the most appropriate emoji and add one space after it
+**Rules**:
 
-**Main gitmoji**:
-| emoji | Description |
-|-------|-------------|
-| ✨ | Add a new feature |
-| 🐛 | Fix a bug |
-| 📝 | Add or update documentation |
-| 🎨 | Improve code structure/formatting |
-| ♻️ | Refactor code |
-| ⚡️ | Optimize performance |
-| ✅ | Add or update tests |
-| 🔧 | Change configuration files |
-| 🚀 | Deploy |
-| 🔥 | Delete code or files |
-| ⬆️ | Upgrade dependencies |
-| ⬇️ | Downgrade dependencies |
-| 💚 | Fix CI build |
-| 🚨 | Fix linter/compiler warnings |
-| ✏️ | Fix typos |
-| 💬 | Add or update text and literals |
-| 💡 | Add or update source code comments |
-| 🏗️ | Change architecture |
-| 📱 | Work on responsive design |
-| ♿️ | Improve accessibility |
-| 💫 | Add or update animations/transitions |
+- Select **only one** gitmoji from https://gitmoji.dev/
+- Add **one space** after gitmoji
+- Place before type
 
-**Example**:
+**Complete Gitmoji List**:
+
+| Emoji | Description                                      |
+| ----- | ------------------------------------------------ |
+| 🎨    | Improve structure/format of code                 |
+| ⚡️    | Improve performance                              |
+| 🔥    | Remove code or files                             |
+| 🐛    | Fix a bug                                        |
+| 🚑️    | Critical hotfix                                  |
+| ✨    | Introduce new features                           |
+| 📝    | Add or update documentation                      |
+| 🚀    | Deploy stuff                                     |
+| 💄    | Add or update UI and style files                 |
+| 🎉    | Begin a project                                  |
+| ✅    | Add, update, or pass tests                       |
+| 🔒️    | Fix security or privacy issues                   |
+| 🔐    | Add or update secrets                            |
+| 🔖    | Release / Version tags                           |
+| 🚨    | Fix compiler / linter warnings                   |
+| 🚧    | Work in progress                                 |
+| 💚    | Fix CI Build                                     |
+| ⬇️    | Downgrade dependencies                           |
+| ⬆️    | Upgrade dependencies                             |
+| 📌    | Pin dependencies to specific versions            |
+| 👷    | Add or update CI build system                    |
+| 📈    | Add or update analytics or track code            |
+| ♻️    | Refactor code                                    |
+| ➕    | Add a dependency                                 |
+| ➖    | Remove a dependency                              |
+| 🔧    | Add or update configuration files                |
+| 🔨    | Add or update development scripts                |
+| 🌐    | Internationalization and localization            |
+| ✏️    | Fix typos                                        |
+| 💩    | Write bad code that needs to be improved         |
+| ⏪️    | Revert changes                                   |
+| 🔀    | Merge branches                                   |
+| 📦️    | Add or update compiled files or packages         |
+| 👽️    | Update code due to external API changes          |
+| 🚚    | Move or rename resources (files, paths, routes)  |
+| 📄    | Add or update license                            |
+| 💥    | Introduce breaking changes                       |
+| 🍱    | Add or update assets                             |
+| ♿️    | Improve accessibility                            |
+| 💡    | Add or update comments in source code            |
+| 🍻    | Write code drunkenly                             |
+| 💬    | Add or update text and literals                  |
+| 🗃️    | Perform database related changes                 |
+| 🔊    | Add or update logs                               |
+| 🔇    | Remove logs                                      |
+| 👥    | Add or update contributor(s)                     |
+| 🚸    | Improve user experience / usability              |
+| 🏗️    | Make architectural changes                       |
+| 📱    | Work on responsive design                        |
+| 🤡    | Mock things                                      |
+| 🥚    | Add or update an easter egg                      |
+| 🙈    | Add or update a .gitignore file                  |
+| 📸    | Add or update snapshots                          |
+| ⚗️    | Perform experiments                              |
+| 🔍️    | Improve SEO                                      |
+| 🏷️    | Add or update types                              |
+| 🌱    | Add or update seed files                         |
+| 🚩    | Add, update, or remove feature flags             |
+| 🥅    | Catch errors                                     |
+| 💫    | Add or update animations and transitions         |
+| 🗑️    | Deprecate code that needs to be cleaned up       |
+| 🛂    | Work on code related to authorization, roles     |
+| 🩹    | Simple fix for a non-critical issue              |
+| 🧐    | Data exploration/inspection                      |
+| ⚰️    | Remove dead code                                 |
+| 🧪    | Add a failing test                               |
+| 👔    | Add or update business logic                     |
+| 🩺    | Add or update healthcheck                        |
+| 🧱    | Infrastructure related changes                   |
+| 🧑‍💻    | Improve developer experience                     |
+| 💸    | Add sponsorships or money related infrastructure |
+| 🧵    | Add or update code related to multithreading     |
+| 🦺    | Add or update code related to validation         |
+| ✈️    | Improve offline support                          |
+| 🦖    | Add backward compatibility                       |
+
+### Message Body Writing
+
+- **Summarize the main title in one line**
+- **List message body in bullet point format**
+- Add `-` before each item
+- Describe detailed changes in list format
+
+### Notes
+
+- **Exclude lock file changes from interpretation**: Lock file changes like `package-lock.json`, `pnpm-lock.yaml` are often auto-generated, so please exclude them when interpreting commit messages.
+- **Check based on staged files**: When writing/interpreting commit messages, only consider files that are staged for commit.
+
+### Examples
 
 ```
-✨ feat(useLocalStorage): add new local storage hook
+✨ feat(feat/auth): add user authentication feature
 
-- Implement custom hook wrapping LocalStorage API
-- Include auto-sync and error handling features
-- Provide TypeScript type safety
+- Implement JWT-based login/logout
+- Add automatic token refresh logic
+- Configure global authentication state management
+```
+
+```
+🐛 fix(fix/use-query): fix metaform type error
+
+- Change any type to specific type in useMutation
+- Improve error handling logic in useQuery
+- Resolve circular reference warning
+```
+
+```
+♻️ refactor(events): improve event directory structure
+
+- Reorganize component folders
+- Improve naming consistency
+- Remove unnecessary files
 ```
