@@ -4,7 +4,7 @@ const Item = ({
   children,
   className,
   ...props
-}: React.HTMLAttributes<HTMLDivElement>) => {
+}: React.ComponentPropsWithoutRef<'div'>) => {
   return (
     <div className={cn(className)} {...props}>
       {children}
