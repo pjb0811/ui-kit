@@ -6,10 +6,21 @@ import { Drawer as DrawerPrimitive } from 'vaul';
 
 import { cn } from '@repo/ui/utils';
 
+interface CustomProps {
+  draggable?: boolean;
+}
+
 function Drawer({
+  draggable,
   ...props
-}: React.ComponentProps<typeof DrawerPrimitive.Root>) {
-  return <DrawerPrimitive.Root data-slot="drawer" {...props} />;
+}: React.ComponentProps<typeof DrawerPrimitive.Root> & CustomProps) {
+  return (
+    <DrawerPrimitive.Root
+      data-slot="drawer"
+      handleOnly={!draggable}
+      {...props}
+    />
+  );
 }
 
 function DrawerTrigger({
@@ -48,23 +59,25 @@ function DrawerOverlay({
   );
 }
 
-function DrawerContent({
-  className,
-  classNames = {},
-  handlebar,
-  mask,
-  children,
-  ...props
-}: React.ComponentProps<typeof DrawerPrimitive.Content> & {
+interface CustomContentProps {
   classNames?: Record<string, string>;
   handlebar?: boolean;
   mask?: boolean;
-}) {
+}
+
+function DrawerContent({
+  className,
+  children,
+  classNames = {},
+  handlebar,
+  mask,
+  ...props
+}: React.ComponentProps<typeof DrawerPrimitive.Content> & CustomContentProps) {
   return (
     <DrawerPortal data-slot="drawer-portal">
       <DrawerOverlay
         className={cn(
-          classNames?.mask,
+          classNames?.mask || '',
           !mask && 'hidden',
           //
         )}
@@ -99,14 +112,19 @@ function DrawerContent({
         )}
         {...props}
       >
-        <div
-          className={cn(
-            `bg-muted mx-auto mt-4 hidden h-2 w-25 shrink-0 rounded-full
-            group-data-[vaul-drawer-direction=bottom]/drawer-content:block`,
-            classNames?.handlebar,
-            !handlebar && 'hidden',
-          )}
-        />
+        {handlebar && (
+          <div
+            className={cn(
+              `bg-muted mx-auto mt-4 hidden h-2 w-25 shrink-0 rounded-full
+              group-data-[vaul-drawer-direction=bottom]/drawer-content:block`,
+              classNames?.handlebar,
+            )}
+          />
+        )}
+        {/* <div
+          className="bg-muted mx-auto mt-4 hidden h-2 w-[100px] shrink-0 rounded-full
+            group-data-[vaul-drawer-direction=bottom]/drawer-content:block"
+        /> */}
         {children}
       </DrawerPrimitive.Content>
     </DrawerPortal>
