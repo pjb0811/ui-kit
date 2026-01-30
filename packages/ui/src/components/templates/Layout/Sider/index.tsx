@@ -4,12 +4,12 @@ const Sider = ({
   children,
   className,
   ...props
-}: React.HTMLAttributes<HTMLDivElement>) => {
+}: React.ComponentPropsWithoutRef<'div'>) => {
   return (
     <div
       className={cn(
-        'z-[100]',
-        'w-[200px]',
+        'z-100',
+        'w-50',
         className,
         //
       )}

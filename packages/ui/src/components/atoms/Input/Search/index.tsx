@@ -1,74 +1,112 @@
 'use client';
 
-import { forwardRef } from 'react';
-import type { ChangeEvent, InputHTMLAttributes } from 'react';
+import { useRef } from 'react';
 
 import { CircleX, Search as SearchOutlined } from 'lucide-react';
 
 import { input } from '@repo/ui/core';
 import { cn } from '@repo/ui/utils';
 
+import Button from '../../Button';
+
 const { Input: Core } = input;
 
-export interface Props extends InputHTMLAttributes<HTMLInputElement> {
+export interface Props extends React.ComponentPropsWithRef<'input'> {
   allowClear?: boolean;
-  onChange: (
-    e: ChangeEvent<HTMLInputElement> | { target: { value: string } },
+  onChange?: (
+    e: React.ChangeEvent<HTMLInputElement> | { target: { value: string } },
   ) => void;
-  onPressEnter: () => void;
+  onSearch?: (value: string) => void;
 }
 
-const Search = forwardRef<HTMLInputElement, Props>(
-  (
-    {
-      className,
-      value,
-      allowClear = true,
-      onChange = () => {},
-      onPressEnter,
-      ...props
-    },
-    ref,
-  ) => {
-    return (
+const Search = ({
+  ref,
+  className,
+  defaultValue,
+  value,
+  allowClear = true,
+  onChange,
+  onSearch: _onSearch,
+  ...props
+}: Props) => {
+  const internalRef = useRef<HTMLInputElement>(null);
+  const inputRef = (ref as React.RefObject<HTMLInputElement>) || internalRef;
+
+  const onClear = () => {
+    if (inputRef.current) {
+      inputRef.current.value = '';
+
+      const event = {
+        target: { value: '' },
+      } as React.ChangeEvent<HTMLInputElement>;
+      onChange?.(event);
+    }
+  };
+
+  const onSearch = () => {
+    if (inputRef.current) {
+      _onSearch?.(inputRef.current.value);
+    }
+  };
+
+  return (
+    <div
+      className={cn(
+        'flex items-center',
+        'rounded-md',
+        className,
+        //
+      )}
+    >
       <div
         className={cn(
-          'relative flex items-center gap-x-2',
-          'rounded-md',
-          'p-3',
-          className,
+          'relative grow',
+          'inline-flex items-center',
+          //
         )}
       >
-        <SearchOutlined className="absolute size-5" />
         <Core
-          ref={ref}
+          ref={inputRef}
           inputMode="search"
           type="search"
           enterKeyHint="search"
           className={cn(
-            'w-full',
+            'rounded-r-none',
+            '[&::-webkit-search-cancel-button]:hidden',
+            '[&::-webkit-search-decoration]:hidden',
             //
           )}
           value={value}
+          defaultValue={defaultValue}
           onChange={onChange}
           onKeyDown={e => {
             if (e.key === 'Enter') {
-              onPressEnter();
+              onSearch();
             }
           }}
           {...props}
         />
         <CircleX
           className={cn(
-            'absolute size-4 shrink-0 cursor-pointer',
-            (!allowClear || !value) && 'hidden',
+            'absolute right-2 size-4',
+            'shrink-0 cursor-pointer',
+            (!allowClear || (value !== undefined && !value)) && 'hidden',
           )}
-          onClick={() => onChange({ target: { value: '' } })}
+          onClick={onClear}
         />
       </div>
-    );
-  },
-);
+      <Button
+        icon={<SearchOutlined />}
+        className={cn(
+          'rounded-l-none',
+          'size-9',
+          //
+        )}
+        onClick={onSearch}
+      />
+    </div>
+  );
+};
 
 Search.displayName = 'Search';
 

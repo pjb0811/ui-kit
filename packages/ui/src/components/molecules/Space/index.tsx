@@ -1,10 +1,10 @@
-import { Children, HTMLAttributes } from 'react';
+import { Children } from 'react';
 
 import { cn } from '@repo/ui/utils';
 
 import Skeleton from '../../atoms/Skeleton';
 
-interface Props extends HTMLAttributes<HTMLDivElement> {
+interface Props extends React.ComponentPropsWithRef<'div'> {
   loading?: boolean;
   loader?: React.ReactNode;
   orientation?: 'horizontal' | 'vertical';

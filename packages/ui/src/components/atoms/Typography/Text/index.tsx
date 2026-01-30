@@ -1,26 +1,15 @@
-import { TEXT_LEVELS } from '@repo/ui/enums';
 import { cn } from '@repo/ui/utils';
 
-import { TypographyProps } from '..';
-
-export interface Props extends TypographyProps {
+export interface Props extends React.ComponentPropsWithoutRef<'span'> {
   underline?: boolean;
   strong?: boolean;
 }
 
-const Text = ({
-  children,
-  underline,
-  strong,
-  className,
-  level,
-  ...props
-}: Props) => {
+const Text = ({ children, underline, strong, className, ...props }: Props) => {
   return (
     <span
       className={cn(
         'text-nowrap',
-        level ? TEXT_LEVELS[level] : '',
         underline && 'underline',
         strong && 'font-bold',
         className,

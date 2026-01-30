@@ -3,11 +3,9 @@ import Paragraph from './Paragraph';
 import Text from './Text';
 import Title from './Title';
 
-export interface TypographyProps extends React.HTMLAttributes<HTMLElement> {
-  level?: 1 | 2 | 3 | 4 | 5 | 6;
-}
+export interface Props extends React.ComponentPropsWithoutRef<'article'> {}
 
-const Typography = ({ children, ...props }: TypographyProps) => {
+const Typography = ({ children, ...props }: Props) => {
   return <article {...props}>{children}</article>;
 };
 

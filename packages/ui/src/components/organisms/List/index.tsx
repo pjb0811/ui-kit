@@ -9,7 +9,10 @@ import { cn, renderConditional } from '@repo/ui/utils';
 
 import Item from './Item';
 
-interface Props<T> extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
+interface Props<T> extends Omit<
+  React.ComponentPropsWithoutRef<'div'>,
+  'title'
+> {
   loading?: boolean;
   loaderProps?: React.ComponentProps<typeof Skeleton>;
   loader?: React.ReactNode;

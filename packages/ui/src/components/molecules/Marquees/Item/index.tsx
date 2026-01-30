@@ -12,7 +12,8 @@ export interface ItemProps {
   children?: React.ReactNode;
 }
 
-export interface Props extends React.HTMLAttributes<HTMLDivElement>, ItemProps {
+export interface Props
+  extends Omit<React.ComponentPropsWithoutRef<'div'>, 'key'>, ItemProps {
   width: string | number;
 }
 

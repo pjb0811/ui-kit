@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useId, useState } from 'react';
+import { useId, useState } from 'react';
 
 import { Square, SquareCheck } from 'lucide-react';
 
@@ -15,10 +15,11 @@ const { Label: CoreLabel } = label;
 export type OptionValue = string | number | boolean;
 
 export interface Props extends Omit<
-  React.HTMLAttributes<HTMLDivElement>,
+  React.ComponentPropsWithRef<'div'>,
   'onChange'
 > {
   placement?: string;
+  defaultChecked?: boolean;
   checked?: boolean;
   value?: OptionValue;
   icons?: { checked: React.ReactNode; unchecked: React.ReactNode };
@@ -32,18 +33,25 @@ const Checkbox = ({
   children,
   className,
   icons,
+  defaultChecked,
   checked: _checked,
   onChange: _onChange = () => {},
   ...props
 }: Props) => {
-  const [checked, setChecked] = useState(false);
+  const [uncontrolledChecked, setUncontrolledChecked] = useState<boolean>(
+    defaultChecked || false,
+  );
 
   const reactId = useId();
 
   const id = typeof value === 'boolean' || !value ? reactId : String(value);
+  const controlled = _checked !== undefined;
+  const checked = controlled ? _checked : uncontrolledChecked;
 
   const onChange = (next: boolean) => {
-    setChecked(next);
+    if (!controlled) {
+      setUncontrolledChecked(next);
+    }
     _onChange(next);
   };
 
@@ -89,10 +97,6 @@ const Checkbox = ({
       )}
     </>
   );
-
-  useEffect(() => {
-    setChecked(!!_checked);
-  }, [_checked]);
 
   return (
     <div

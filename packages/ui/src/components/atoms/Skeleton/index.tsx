@@ -10,7 +10,7 @@ const getValueAtIndex = <T,>(value: T | T[], index: number) => {
   return Array.isArray(value) ? (value[index] ?? value[0]) : value;
 };
 
-export interface Props extends React.HTMLAttributes<HTMLDivElement> {
+export interface Props extends React.ComponentPropsWithoutRef<'div'> {
   active?: boolean;
   loading?: boolean;
   avatar?: boolean;

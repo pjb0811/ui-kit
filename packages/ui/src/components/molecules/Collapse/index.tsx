@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import { accordion } from '@repo/ui/core';
 import { cn } from '@repo/ui/utils';
@@ -15,7 +15,10 @@ interface Item {
   children: React.ReactNode;
 }
 
-interface Props extends React.HTMLAttributes<HTMLElement> {
+interface Props extends Omit<
+  React.ComponentPropsWithoutRef<'div'>,
+  'onChange'
+> {
   items?: Item[];
   accordion?: boolean;
   expandIcon?: React.ReactNode;
@@ -25,36 +28,50 @@ interface Props extends React.HTMLAttributes<HTMLElement> {
     body?: string;
   };
   defaultActiveKey?: string[] | number[];
+  activeKey?: string[] | number[];
+  onChange?: (keys: string[]) => void;
 }
 
 const Collapse = ({
   expandIcon,
   accordion = false,
-  items: _items = [],
+  items = [],
   className,
   classNames,
   defaultActiveKey,
+  activeKey: _activeKey,
+  onChange: _onChange,
 }: Props) => {
-  const [items, setItems] = useState<Item[]>([]);
+  const controlled = _activeKey !== undefined;
 
-  useEffect(() => {
-    setItems(_items);
-  }, [_items]);
+  const accordionProps = accordion
+    ? controlled
+      ? {
+          type: 'single' as const,
+          value: `${_activeKey?.[0] ?? ''}`,
+          onValueChange: (value: string) => {
+            _onChange?.(value ? [value] : []);
+          },
+        }
+      : {
+          type: 'single' as const,
+          defaultValue: `${defaultActiveKey?.[0] ?? ''}`,
+        }
+    : controlled
+      ? {
+          type: 'multiple' as const,
+          value: _activeKey?.map(key => `${key}`),
+          onValueChange: (values: string[]) => {
+            _onChange?.(values);
+          },
+        }
+      : {
+          type: 'multiple' as const,
+          defaultValue: defaultActiveKey?.map(key => `${key}`),
+        };
 
   return (
-    <Accordion
-      className={className}
-      {...(accordion
-        ? {
-            type: 'single',
-            defaultValue: `${defaultActiveKey?.[0]}`,
-          }
-        : {
-            type: 'multiple',
-            defaultValue: defaultActiveKey?.map(key => `${key}`),
-          })}
-      //
-    >
+    <Accordion className={className} {...accordionProps}>
       {items.map(({ label, children, disabled }, key) => (
         <AccordionItem
           key={key}

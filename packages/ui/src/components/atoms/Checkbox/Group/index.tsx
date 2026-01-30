@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { cn } from '@repo/ui/utils';
 
@@ -7,17 +7,20 @@ import Checkbox, { type OptionValue } from '..';
 type Option = {
   label: string;
   value: OptionValue;
-  checked?: boolean;
 };
 
 type Options = string[] | number[] | boolean[] | Option[];
 
-export interface Props
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'> {
+export interface Props extends Omit<
+  React.ComponentPropsWithoutRef<'div'>,
+  'onChange' | 'defaultValue' | 'value'
+> {
   options?: Options;
-  direction?: string;
-  placement?: string;
+  direction?: 'vertical' | 'horizontal';
+  placement?: 'left' | 'right';
   classNames?: Record<string, string>;
+  defaultValue?: OptionValue[];
+  value?: OptionValue[];
   onChange?: (values: OptionValue[]) => void;
 }
 
@@ -26,33 +29,37 @@ const Group = ({
   placement = 'left',
   className,
   classNames = {},
-  options: _options,
-  onChange = () => {},
+  options: _options = [],
+  defaultValue,
+  value: _value,
+  onChange: _onChange = () => {},
 }: Props) => {
-  const [options, setOptions] = useState<Option[]>([]);
+  const [uncontrolledValue, setUncontrolledValue] = useState<OptionValue[]>(
+    defaultValue || [],
+  );
 
-  const updateOptions = (checked: boolean, value: OptionValue) => {
-    const nextOptions = options.map(item => ({
-      ...item,
-      checked: item.value === value ? checked : item.checked,
-    }));
-    setOptions(nextOptions);
-    onChange(nextOptions.filter(item => item.checked).map(item => item.value));
+  const controlled = _value !== undefined;
+  const value = controlled ? _value : uncontrolledValue;
+
+  const options: Option[] = _options.map(item =>
+    typeof item === 'object'
+      ? item
+      : {
+          label: `${item}`,
+          value: item,
+        },
+  );
+
+  const onChange = (checked: boolean, optionValue: OptionValue) => {
+    const nextValue = checked
+      ? [...value, optionValue]
+      : value.filter(v => v !== optionValue);
+
+    if (!controlled) {
+      setUncontrolledValue(nextValue);
+    }
+    _onChange(nextValue);
   };
-
-  useEffect(() => {
-    setOptions(
-      _options?.map(item =>
-        typeof item === 'object'
-          ? item
-          : {
-              label: `${item}`,
-              value: item,
-              checked: false,
-            },
-      ) || [],
-    );
-  }, [_options]);
 
   return (
     <ul
@@ -61,18 +68,23 @@ const Group = ({
         className,
       )}
     >
-      {options.map((item: Option, i: number) => (
-        <li key={i} className={cn('flex', classNames?.wrapper)}>
-          <Checkbox
-            placement={placement}
-            className={cn(classNames?.item)}
-            value={item.value}
-            onChange={checked => updateOptions(checked, item.value)}
-          >
-            {item.label}
-          </Checkbox>
-        </li>
-      ))}
+      {options.map((item: Option, i: number) => {
+        const checked = value.includes(item.value);
+
+        return (
+          <li key={i} className={cn('flex', classNames?.wrapper)}>
+            <Checkbox
+              placement={placement}
+              className={cn(classNames?.item)}
+              value={item.value}
+              checked={checked}
+              onChange={checked => onChange(checked, item.value)}
+            >
+              {item.label}
+            </Checkbox>
+          </li>
+        );
+      })}
     </ul>
   );
 };
