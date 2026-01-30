@@ -1,6 +1,6 @@
 import { cn, renderConditional } from '@repo/ui/utils';
 
-interface Props extends Omit<React.HTMLProps<HTMLDivElement>, 'title'> {
+interface Props extends Omit<React.ComponentPropsWithRef<'div'>, 'title'> {
   title?: React.ReactNode;
   variant?: 'outlined' | 'borderless';
   classNames?: {

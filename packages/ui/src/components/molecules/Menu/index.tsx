@@ -42,7 +42,7 @@ export interface Props {
 export interface MenuProps
   extends
     Props,
-    Omit<React.HTMLAttributes<HTMLElement>, 'onClick' | 'onSelect'> {
+    Omit<React.ComponentPropsWithoutRef<'ul'>, 'onClick' | 'onSelect'> {
   items?: MenuItem[];
 }
 
@@ -114,12 +114,12 @@ const Menu = ({
   onSelect: _onSelect,
   ...props
 }: MenuProps) => {
-  const isControlled = _selectedKeys !== undefined;
+  const controlled = _selectedKeys !== undefined;
   const [uncontrolledSelectedKeys, setUncontrolledSelectedKeys] = useState<
     React.Key[]
   >(defaultSelectedKeys ?? []);
 
-  const selectedKeys = isControlled
+  const selectedKeys = controlled
     ? (_selectedKeys as React.Key[])
     : uncontrolledSelectedKeys;
 
@@ -139,7 +139,7 @@ const Menu = ({
     keyPath: React.Key[];
     item: MenuItem;
   }) => {
-    if (!isControlled) {
+    if (!controlled) {
       setUncontrolledSelectedKeys([params.key]);
     }
     _onSelect?.(params);

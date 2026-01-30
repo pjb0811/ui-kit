@@ -4,7 +4,7 @@ import { cn } from '@repo/ui/utils';
 
 import Item, { type ItemProps } from './Item';
 
-interface Props extends React.HTMLAttributes<HTMLDivElement>, ItemProps {
+interface Props extends React.ComponentPropsWithoutRef<'div'>, ItemProps {
   cascade?: number;
   classNames?: {
     root?: string;

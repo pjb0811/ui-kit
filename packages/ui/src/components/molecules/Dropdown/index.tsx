@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { AnimatePresence, motion } from 'motion/react';
 
@@ -10,7 +10,7 @@ import Menu, { MenuProps } from '../Menu';
 
 type ChangeEventHandler = (open: boolean) => void;
 
-interface Props extends React.HTMLAttributes<HTMLElement> {
+interface Props extends React.ComponentPropsWithoutRef<'div'> {
   open?: boolean;
   trigger?: string;
   menu?: MenuProps;
@@ -22,17 +22,23 @@ const Dropdown = ({
   children,
   menu,
   trigger = 'hover',
-  open: _open = false,
-  onOpenChange = () => {},
+  open: _open,
+  onOpenChange: _onOpenChange = () => {},
   ...props
 }: Props) => {
-  const [open, setOpen] = useState(false);
+  const [uncontrolledOpen, setUncontrolledOpen] = useState<boolean>(false);
+
+  const controlled = _open !== undefined;
+  const open = controlled ? _open : uncontrolledOpen;
 
   const isClickTrigger = trigger === 'click';
 
-  useEffect(() => {
-    setOpen(_open);
-  }, [_open]);
+  const onOpenChange = (nextOpen: boolean) => {
+    if (!controlled) {
+      setUncontrolledOpen(nextOpen);
+    }
+    _onOpenChange(nextOpen);
+  };
 
   return (
     <div
@@ -42,13 +48,13 @@ const Dropdown = ({
         if (isClickTrigger) {
           return;
         }
-        setOpen(true);
+        onOpenChange(true);
       }}
       onMouseLeave={() => {
         if (isClickTrigger) {
           return;
         }
-        setOpen(false);
+        onOpenChange(false);
       }}
     >
       <div
@@ -56,11 +62,9 @@ const Dropdown = ({
           if (!isClickTrigger) {
             return;
           }
-          setOpen(!open);
           onOpenChange(!open);
         }}
         onBlur={() => {
-          setOpen(false);
           onOpenChange(false);
         }}
       >
