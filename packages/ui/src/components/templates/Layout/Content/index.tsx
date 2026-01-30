@@ -4,9 +4,9 @@ const Content = ({
   children,
   className,
   ...props
-}: React.HTMLAttributes<HTMLDivElement>) => {
+}: React.ComponentPropsWithoutRef<'div'>) => {
   return (
-    <div className={cn('shrink flex-grow basis-0', className)} {...props}>
+    <div className={cn('shrink grow basis-0', className)} {...props}>
       {children}
     </div>
   );
