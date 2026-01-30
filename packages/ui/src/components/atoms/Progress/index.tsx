@@ -3,7 +3,7 @@ import { cn } from '@repo/ui/utils';
 
 const { Progress: Core } = progress;
 
-export interface Props extends React.HTMLAttributes<HTMLElement> {
+export interface Props extends React.ComponentPropsWithoutRef<'div'> {
   value: number;
   direction?: 'horizontal' | 'vertical';
   classNames?: {

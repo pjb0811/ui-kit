@@ -2,7 +2,7 @@ import { Loader2 } from 'lucide-react';
 
 import { cn } from '@repo/ui/utils';
 
-export interface Props extends React.HTMLAttributes<HTMLDivElement> {
+export interface Props extends React.ComponentPropsWithoutRef<'div'> {
   spinning?: boolean;
 }
 

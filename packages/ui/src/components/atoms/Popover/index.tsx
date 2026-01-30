@@ -79,80 +79,125 @@ const placementMap = {
   },
 } as const;
 
-const arrowBase = 'absolute h-0 w-0 drop-shadow-md';
+const arrowBase = 'absolute pointer-events-none z-10';
+const beforeBase = 'before:content-[""] before:absolute before:h-0 before:w-0';
+const afterBase = 'after:content-[""] after:absolute after:h-0 after:w-0';
 
-const arrowShape = {
-  vertical: 'border-l-8 border-r-8 border-l-transparent border-r-transparent',
-  horizontal: 'border-t-8 border-b-8 border-t-transparent border-b-transparent',
+const borderShape = {
+  vertical:
+    'before:border-l-[9px] before:border-r-[9px] before:border-l-transparent before:border-r-transparent',
+  horizontal:
+    'before:border-t-[9px] before:border-b-[9px] before:border-t-transparent before:border-b-transparent',
 } as const;
 
-const arrowAlign = {
-  center: { x: 'left-1/2 -translate-x-1/2', y: 'top-1/2 -translate-y-1/2' },
-  start: { x: 'left-4', y: 'top-4' },
-  end: { x: 'right-4', y: 'bottom-4' },
+const fillShape = {
+  vertical:
+    'after:border-l-8 after:border-r-8 after:border-l-transparent after:border-r-transparent',
+  horizontal:
+    'after:border-t-8 after:border-b-8 after:border-t-transparent after:border-b-transparent',
 } as const;
+
+const createArrowStyle = (
+  side: 'top' | 'bottom' | 'left' | 'right',
+  align: 'center' | 'start' | 'end',
+) => {
+  const isVertical = side === 'top' || side === 'bottom';
+
+  const alignPos = {
+    center: isVertical
+      ? 'left-1/2 -translate-x-1/2'
+      : 'top-1/2 -translate-y-1/2',
+    start: isVertical ? 'left-4' : 'top-4',
+    end: isVertical ? 'right-4' : 'bottom-4',
+  }[align];
+
+  const beforePos = {
+    top: {
+      center: 'before:top-0 before:left-1/2 before:-translate-x-1/2',
+      start: 'before:top-0 before:left-0',
+      end: 'before:top-0 before:right-0',
+    },
+    bottom: {
+      center: 'before:bottom-0 before:left-1/2 before:-translate-x-1/2',
+      start: 'before:bottom-0 before:left-0',
+      end: 'before:bottom-0 before:right-0',
+    },
+    left: {
+      center: 'before:left-0 before:top-1/2 before:-translate-y-1/2',
+      start: 'before:left-0 before:top-0',
+      end: 'before:left-0 before:bottom-0',
+    },
+    right: {
+      center: 'before:right-0 before:top-1/2 before:-translate-y-1/2',
+      start: 'before:right-0 before:top-0',
+      end: 'before:right-0 before:bottom-0',
+    },
+  }[side][align];
+
+  const afterPos = {
+    top: {
+      center: 'after:-top-px after:left-1/2 after:-translate-x-1/2',
+      start: 'after:-top-px after:left-px',
+      end: 'after:-top-px after:right-px',
+    },
+    bottom: {
+      center: 'after:-bottom-px after:left-1/2 after:-translate-x-1/2',
+      start: 'after:-bottom-px after:left-px',
+      end: 'after:-bottom-px after:right-px',
+    },
+    left: {
+      center: 'after:-left-px after:top-1/2 after:-translate-y-1/2',
+      start: 'after:-left-px after:top-px',
+      end: 'after:-left-px after:bottom-px',
+    },
+    right: {
+      center: 'after:-right-px after:top-1/2 after:-translate-y-1/2',
+      start: 'after:-right-px after:top-px',
+      end: 'after:-right-px after:bottom-px',
+    },
+  }[side][align];
+
+  const borderDir = {
+    top: 'before:border-t-[9px] before:border-t-border',
+    bottom: 'before:border-b-[9px] before:border-b-border',
+    left: 'before:border-l-[9px] before:border-l-border',
+    right: 'before:border-r-[9px] before:border-r-border',
+  }[side];
+
+  const fillDir = {
+    top: 'after:border-t-8 after:border-t-popover',
+    bottom: 'after:border-b-8 after:border-b-popover',
+    left: 'after:border-l-8 after:border-l-popover',
+    right: 'after:border-r-8 after:border-r-popover',
+  }[side];
+
+  return cn(
+    alignPos,
+    `${side}-full`,
+    beforeBase,
+    beforePos,
+    isVertical ? borderShape.vertical : borderShape.horizontal,
+    borderDir,
+    afterBase,
+    afterPos,
+    isVertical ? fillShape.vertical : fillShape.horizontal,
+    fillDir,
+  );
+};
 
 const arrowStyles: Record<Placement, string> = {
-  top: cn(
-    arrowShape.vertical,
-    arrowAlign.center.x,
-    'top-full border-t-8 border-t-white',
-  ),
-  topLeft: cn(
-    arrowShape.vertical,
-    arrowAlign.start.x,
-    'top-full border-t-8 border-t-white',
-  ),
-  topRight: cn(
-    arrowShape.vertical,
-    arrowAlign.end.x,
-    'top-full border-t-8 border-t-white',
-  ),
-  bottom: cn(
-    arrowShape.vertical,
-    arrowAlign.center.x,
-    'bottom-full border-b-8 border-b-white',
-  ),
-  bottomLeft: cn(
-    arrowShape.vertical,
-    arrowAlign.start.x,
-    'bottom-full border-b-8 border-b-white',
-  ),
-  bottomRight: cn(
-    arrowShape.vertical,
-    arrowAlign.end.x,
-    'bottom-full border-b-8 border-b-white',
-  ),
-  left: cn(
-    arrowShape.horizontal,
-    arrowAlign.center.y,
-    'left-full border-l-8 border-l-white',
-  ),
-  leftTop: cn(
-    arrowShape.horizontal,
-    arrowAlign.start.y,
-    'left-full border-l-8 border-l-white',
-  ),
-  leftBottom: cn(
-    arrowShape.horizontal,
-    arrowAlign.end.y,
-    'left-full border-l-8 border-l-white',
-  ),
-  right: cn(
-    arrowShape.horizontal,
-    arrowAlign.center.y,
-    'right-full border-r-8 border-r-white',
-  ),
-  rightTop: cn(
-    arrowShape.horizontal,
-    arrowAlign.start.y,
-    'right-full border-r-8 border-r-white',
-  ),
-  rightBottom: cn(
-    arrowShape.horizontal,
-    arrowAlign.end.y,
-    'right-full border-r-8 border-r-white',
-  ),
+  top: createArrowStyle('top', 'center'),
+  topLeft: createArrowStyle('top', 'start'),
+  topRight: createArrowStyle('top', 'end'),
+  bottom: createArrowStyle('bottom', 'center'),
+  bottomLeft: createArrowStyle('bottom', 'start'),
+  bottomRight: createArrowStyle('bottom', 'end'),
+  left: createArrowStyle('left', 'center'),
+  leftTop: createArrowStyle('left', 'start'),
+  leftBottom: createArrowStyle('left', 'end'),
+  right: createArrowStyle('right', 'center'),
+  rightTop: createArrowStyle('right', 'start'),
+  rightBottom: createArrowStyle('right', 'end'),
 };
 
 const Popover = ({
@@ -169,7 +214,7 @@ const Popover = ({
         align={placementMap[placement].align}
         side={placementMap[placement].side}
         sideOffset={16}
-        className={cn('relative w-auto', className)}
+        className={cn('relative w-auto overflow-visible', className)}
       >
         {renderConditional(title, v => (
           <Typography.Title level={6}>{v}</Typography.Title>

@@ -1,8 +1,10 @@
 import { cn } from '@repo/ui/utils';
 
-import { TypographyProps } from '..';
-
-export interface Props extends TypographyProps {}
+export interface Props extends React.ComponentPropsWithoutRef<
+  'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
+> {
+  level?: 1 | 2 | 3 | 4 | 5 | 6;
+}
 
 type ElementType = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
 
