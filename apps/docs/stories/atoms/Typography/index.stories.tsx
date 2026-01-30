@@ -8,11 +8,6 @@ const meta: Meta<typeof Typography> = {
   parameters: {
     layout: 'centered',
   },
-  argTypes: {
-    level: {
-      table: { disable: true },
-    },
-  },
 };
 
 export default meta;

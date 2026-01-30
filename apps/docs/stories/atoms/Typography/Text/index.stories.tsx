@@ -9,10 +9,6 @@ const meta: Meta<typeof Typography.Text> = {
     layout: 'centered',
   },
   argTypes: {
-    level: {
-      control: { type: 'select' },
-      options: [1, 2, 3, 4, 5, 6],
-    },
     underline: {
       control: { type: 'boolean' },
     },
@@ -28,7 +24,6 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     children: '텍스트입니다',
-    level: 4,
     underline: false,
     strong: false,
   },

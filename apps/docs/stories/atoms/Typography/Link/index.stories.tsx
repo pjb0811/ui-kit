@@ -9,10 +9,6 @@ const meta: Meta<typeof Typography.Link> = {
     layout: 'centered',
   },
   argTypes: {
-    level: {
-      control: { type: 'select' },
-      options: [1, 2, 3, 4, 5, 6],
-    },
     href: {
       control: { type: 'text' },
     },
@@ -26,6 +22,5 @@ export const Default: Story = {
   args: {
     children: '링크 텍스트',
     href: '#',
-    level: 4,
   },
 };
