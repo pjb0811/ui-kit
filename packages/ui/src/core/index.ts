@@ -7,6 +7,8 @@ export * as input from './input';
 export * as label from './label';
 export * as popover from './popover';
 export * as progress from './progress';
+export * as radio from './radio-group';
+export * as select from './select';
 export * as skeleton from './skeleton';
 export * as switchComponent from './switch';
 export * as textarea from './textarea';
