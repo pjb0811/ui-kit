@@ -31,9 +31,13 @@ Atomic Design 패턴을 따라 구성된 React 컴포넌트 라이브러리입�
 
 - **Button**: 다양한 스타일의 버튼 컴포넌트
 - **Checkbox**: 체크박스 및 그룹 체크박스
+- **ColorPicker**: 색상 선택 컴포넌트
 - **FloatButton**: 플로팅 버튼 (BackTop 포함)
 - **Input**: 입력 필드 컴포넌트 (Search, TextArea 포함)
+- **Popover**: 팝오버 툴팁 컴포넌트
 - **Progress**: 진행률 표시 컴포넌트
+- **Radio**: 라디오 버튼 컴포넌트
+- **Select**: 드롭다운 선택 컴포넌트
 - **Skeleton**: 로딩 스켈레톤 (Button, Node 포함)
 - **Spin**: 로딩 스피너
 - **Switch**: 토글 스위치

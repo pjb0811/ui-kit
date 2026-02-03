@@ -31,9 +31,13 @@ Basic UI building blocks
 
 - **Button**: Various button styles
 - **Checkbox**: Checkbox and checkbox groups
+- **ColorPicker**: Color selection component
 - **FloatButton**: Floating action button (includes BackTop)
 - **Input**: Input field component (includes Search, TextArea)
+- **Popover**: Popover tooltip component
 - **Progress**: Progress indicator component
+- **Radio**: Radio button component
+- **Select**: Select dropdown component
 - **Skeleton**: Loading skeleton (includes Button, Node)
 - **Spin**: Loading spinner
 - **Switch**: Toggle switch
