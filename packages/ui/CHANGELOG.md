@@ -1,5 +1,12 @@
 # @repo/ui
 
+## 2.2.0
+
+### Minor Changes
+
+- 85b738f: - Add new UI components: Radio, Select, and ColorPicker
+  - Improve styles and options across Popover, Progress, Switch, and Textarea
+
 ## 2.1.0
 
 ### Minor Changes
