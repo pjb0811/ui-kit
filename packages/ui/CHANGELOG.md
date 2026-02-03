@@ -1,5 +1,11 @@
 # @repo/ui
 
+## 2.2.2
+
+### Patch Changes
+
+- f2bd519: Bump version for current updates
+
 ## 2.2.1
 
 ### Patch Changes
