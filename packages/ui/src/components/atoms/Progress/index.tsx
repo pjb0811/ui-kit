@@ -21,11 +21,13 @@ const Progress = ({
 }: Props) => {
   const isHorizontal = direction === 'horizontal';
   const dimension = isHorizontal ? 'width' : 'height';
-  const percent = isNaN(value) ? 0 : value;
+  const normalizedValue = Number.isFinite(value)
+    ? Math.min(100, Math.max(0, value))
+    : 0;
 
   return (
     <Core
-      value={value}
+      value={normalizedValue}
       className={cn(
         isHorizontal ? 'h-4 w-full' : 'flex h-full w-4 flex-col justify-end',
         className,
@@ -35,7 +37,7 @@ const Progress = ({
       barClassName={cn('flex-none', classNames?.bar)}
       barStyle={{
         transform: 'none',
-        [dimension]: `${percent}%`,
+        [dimension]: `${normalizedValue}%`,
         //
       }}
     />
