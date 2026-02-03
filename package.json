@@ -8,7 +8,8 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "turbo run check-types",
     "prepare": "husky",
-    "changeset": "changeset"
+    "changeset": "changeset",
+    "publish-ui": "cd packages/ui && pnpm publish --no-git-checks"
   },
   "devDependencies": {
     "@changesets/cli": "^2.29.8",

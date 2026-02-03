@@ -40,13 +40,7 @@ jobs:
         uses: changesets/action@v1
         with:
           version: pnpm exec changeset version
+          publish: pnpm -w publish-ui
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Publish to npm (if version changed)
-        if: steps.changesets.outputs.published == 'true'
-        run: |
-          cd packages/ui
-          pnpm publish --no-git-checks
-        env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
