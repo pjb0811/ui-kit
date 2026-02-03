@@ -1,5 +1,11 @@
 # @repo/ui
 
+## 2.2.1
+
+### Patch Changes
+
+- ad5e9e0: Clamp progress values to 0–100 to stabilize rendering
+
 ## 2.2.0
 
 ### Minor Changes
