@@ -17,7 +17,7 @@ Please write it accurately as it will be used for actual commits.
 └─⫸ Select only one gitmoji most appropriate for the change
 ```
 
-**Language**: Korean
+**Language**: English
 
 ### Commit Types
 
