@@ -5,6 +5,8 @@ export { default as FloatButton } from './FloatButton';
 export { default as Input } from './Input';
 export { default as Popover } from './Popover';
 export { default as Progress } from './Progress';
+export { default as Radio } from './Radio';
+export { default as Select } from './Select';
 export { default as Skeleton } from './Skeleton';
 export { default as Spin } from './Spin';
 export { default as Switch } from './Switch';
