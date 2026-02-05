@@ -2,11 +2,11 @@ import { useEffect, useState } from 'react';
 
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
-import { Checkbox } from '@repo/ui';
+import { Radio } from '@repo/ui';
 
-const meta: Meta<typeof Checkbox.Group> = {
-  title: 'UI/Checkbox/Group',
-  component: Checkbox.Group,
+const meta: Meta<typeof Radio.Group> = {
+  title: 'UI/Radio/Group',
+  component: Radio.Group,
   parameters: {
     layout: 'centered',
   },
@@ -31,40 +31,40 @@ export const Default: Story = {
     options: ['Option 1', 'Option 2', 'Option 3'],
     orientation: 'vertical',
     placement: 'left',
-    defaultValue: ['Option 2'],
+    defaultValue: 'Option 2',
   },
 };
 
 export const Controlled: Story = {
   args: {
     options: [
-      { label: 'Checkbox A', value: 'A' },
-      { label: 'Checkbox B', value: 'B' },
-      { label: 'Checkbox C', value: 'C' },
+      { label: 'Radio A', value: 'A' },
+      { label: 'Radio B', value: 'B' },
+      { label: 'Radio C', value: 'C' },
     ],
     orientation: 'horizontal',
     placement: 'right',
-    value: ['A', 'C'],
+    value: 'A',
   },
   render: function Render({ value: _value, ...props }) {
-    const [value, setValue] = useState<string[]>(['A', 'C']);
+    const [value, setValue] = useState<string>('A');
 
     useEffect(() => {
-      setValue(_value as string[]);
+      setValue(_value as string);
     }, [_value]);
 
     return (
-      <Checkbox.Group
+      <Radio.Group
         options={[
-          { label: 'Checkbox A', value: 'A' },
-          { label: 'Checkbox B', value: 'B' },
-          { label: 'Checkbox C', value: 'C' },
+          { label: 'Radio A', value: 'A' },
+          { label: 'Radio B', value: 'B' },
+          { label: 'Radio C', value: 'C' },
         ]}
         orientation="horizontal"
         placement="right"
         value={value}
         {...props}
-        onChange={value => setValue(value as string[])}
+        onChange={value => setValue(value as string)}
       />
     );
   },
