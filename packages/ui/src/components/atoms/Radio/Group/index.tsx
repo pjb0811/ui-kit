@@ -11,7 +11,7 @@ type Option = {
 
 type Options = string[] | number[] | boolean[] | Option[];
 
-interface Props extends Omit<
+export interface Props extends Omit<
   React.ComponentPropsWithoutRef<'div'>,
   'onChange' | 'defaultValue' | 'value'
 > {
