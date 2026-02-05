@@ -1,5 +1,11 @@
 # @repo/ui
 
+## 2.3.2
+
+### Patch Changes
+
+- 958564b: 🔧 Support both namespace and direct imports for core primitives
+
 ## 2.3.1
 
 ### Patch Changes
