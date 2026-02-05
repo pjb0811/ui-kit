@@ -1,5 +1,11 @@
 # @repo/ui
 
+## 2.3.0
+
+### Minor Changes
+
+- 79985b2: Add new components and improve component APIs
+
 ## 2.2.2
 
 ### Patch Changes
