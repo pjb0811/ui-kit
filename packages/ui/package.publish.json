@@ -31,6 +31,11 @@
       "import": "./dist/enums.mjs",
       "default": "./dist/enums.mjs"
     },
+    "./core": {
+      "types": "./dist/core.d.mts",
+      "import": "./dist/core.mjs",
+      "default": "./dist/core.mjs"
+    },
     "./style.css": {
       "import": "./dist/output.css",
       "default": "./dist/output.css"
