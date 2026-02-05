@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { useResponsiveSize } from '@jbpark/use-hooks';
 import { useThrottle } from '@uidotdev/usehooks';
@@ -28,14 +28,13 @@ const Marquees = ({
     '100vw',
     //
   );
+  const [padding, setPadding] = useState(0);
   const [pause, setPause] = useState(false);
 
   const throttledWidth = useThrottle(width, 200);
 
   const { size } = useResponsiveSize<HTMLDivElement>();
-  const { size: innerSize, ref: innerRef } =
-    useResponsiveSize<HTMLDivElement>();
-
+  const containerRef = useRef<HTMLDivElement | null>(null);
   const hoverEvents = pauseOnHover
     ? {
         onMouseEnter: () => {
@@ -47,15 +46,16 @@ const Marquees = ({
       }
     : {};
 
-  const maxWidth =
-    typeof throttledWidth === 'string'
-      ? '100%'
-      : Math.min(throttledWidth as number, innerSize.width);
-
   useEffect(() => {
-    if (!size.width) {
+    if (!size.width || !containerRef.current) {
       return;
     }
+
+    const computedStyle = getComputedStyle(containerRef.current);
+    const paddingLeft = parseFloat(computedStyle.paddingLeft) || 0;
+    const paddingRight = parseFloat(computedStyle.paddingRight) || 0;
+
+    setPadding(paddingLeft + paddingRight);
 
     setWidth(size.width);
   }, [size]);
@@ -74,7 +74,7 @@ const Marquees = ({
 
   return (
     <div
-      ref={innerRef}
+      ref={containerRef}
       className={cn(
         className,
         //
@@ -91,7 +91,10 @@ const Marquees = ({
           //
         )}
         style={{
-          width: maxWidth,
+          width:
+            typeof throttledWidth === 'number'
+              ? throttledWidth - padding
+              : throttledWidth,
         }}
       >
         {items?.map(({ children, key: itemKey, ...item }: ItemProps, key) => (

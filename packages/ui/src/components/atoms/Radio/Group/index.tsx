@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import { cn } from '@repo/ui/utils';
 
-import Checkbox, { type OptionValue } from '..';
+import Radio, { OptionValue } from '..';
 
 type Option = {
   label: string;
@@ -11,7 +11,7 @@ type Option = {
 
 type Options = string[] | number[] | boolean[] | Option[];
 
-export interface Props extends Omit<
+interface Props extends Omit<
   React.ComponentPropsWithoutRef<'div'>,
   'onChange' | 'defaultValue' | 'value'
 > {
@@ -19,12 +19,12 @@ export interface Props extends Omit<
   orientation?: 'vertical' | 'horizontal';
   placement?: 'left' | 'right';
   classNames?: Record<string, string>;
-  defaultValue?: OptionValue[];
-  value?: OptionValue[];
-  onChange?: (values: OptionValue[]) => void;
+  defaultValue?: OptionValue;
+  value?: OptionValue;
+  onChange?: (value: OptionValue) => void;
 }
 
-const Group = ({
+const RadioGroup = ({
   orientation = 'vertical',
   placement = 'left',
   className,
@@ -34,9 +34,9 @@ const Group = ({
   value: _value,
   onChange: _onChange = () => {},
 }: Props) => {
-  const [uncontrolledValue, setUncontrolledValue] = useState<OptionValue[]>(
-    defaultValue || [],
-  );
+  const [uncontrolledValue, setUncontrolledValue] = useState<
+    OptionValue | undefined
+  >(defaultValue);
 
   const controlled = _value !== undefined;
   const value = controlled ? _value : uncontrolledValue;
@@ -51,14 +51,13 @@ const Group = ({
   );
 
   const onChange = (checked: boolean, optionValue: OptionValue) => {
-    const nextValue = checked
-      ? [...value, optionValue]
-      : value.filter(v => v !== optionValue);
-
-    if (!controlled) {
-      setUncontrolledValue(nextValue);
+    if (!checked) {
+      return;
     }
-    _onChange(nextValue);
+    if (!controlled) {
+      setUncontrolledValue(optionValue);
+    }
+    _onChange(optionValue);
   };
 
   return (
@@ -69,14 +68,14 @@ const Group = ({
       )}
     >
       {options.map((item: Option) => {
-        const checked = value.includes(item.value);
+        const checked = value === item.value;
 
         return (
           <li
             key={String(item.value)}
             className={cn('flex', classNames?.wrapper)}
           >
-            <Checkbox
+            <Radio
               placement={placement}
               className={cn(classNames?.item)}
               value={item.value}
@@ -84,7 +83,7 @@ const Group = ({
               onChange={checked => onChange(checked, item.value)}
             >
               {item.label}
-            </Checkbox>
+            </Radio>
           </li>
         );
       })}
@@ -92,4 +91,4 @@ const Group = ({
   );
 };
 
-export default Group;
+export default RadioGroup;
