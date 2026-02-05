@@ -1,5 +1,11 @@
 # @repo/ui
 
+## 2.3.1
+
+### Patch Changes
+
+- d72e24d: Expose core primitives through package exports
+
 ## 2.3.0
 
 ### Minor Changes
