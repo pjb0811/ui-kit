@@ -8,6 +8,7 @@ export default defineConfig({
     Reveals: 'src/components/molecules/Reveals/index.tsx',
     utils: 'src/lib/utils/index.ts',
     enums: 'src/lib/enums/index.ts',
+    core: 'src/core/index.ts',
   },
   outDir: 'dist',
   format: ['esm'],
