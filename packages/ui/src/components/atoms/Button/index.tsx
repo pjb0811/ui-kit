@@ -28,7 +28,7 @@ export interface Props extends Omit<ButtonProps, 'size' | 'variant'> {
   block?: boolean;
   danger?: boolean;
   disabled?: boolean;
-  size?: 'small' | 'medium' | 'large';
+  size?: 'small' | 'middle' | 'large';
   variant?: 'solid' | 'outlined' | 'dashed' | 'filled' | 'text' | 'link';
   color?: PresetColors | 'default' | 'primary' | 'danger';
   loading?: boolean | { icon: React.ReactNode };
@@ -57,13 +57,13 @@ const variantClasses: Record<string, string> = {
 
 const sizesClasses: Record<string, string> = {
   small: 'h-6 px-3 text-sm',
-  medium: 'h-8 px-4 text-base',
+  middle: 'h-8 px-4 text-base',
   large: 'h-10 px-5 text-lg',
 };
 
 const iconSizes: Record<string, string> = {
   small: 'size-6',
-  medium: 'size-8',
+  middle: 'size-8',
   large: 'size-10',
 };
 
@@ -71,7 +71,7 @@ const Button = ({
   icon,
   className,
   variant = 'solid',
-  size = 'medium',
+  size = 'middle',
   color = 'default',
   block = false,
   disabled,
@@ -107,8 +107,8 @@ const Button = ({
         'h-auto py-0',
         'transition-all',
         variantClasses[variant || 'solid'],
-        sizesClasses[size || 'medium'],
-        iconOnly && iconSizes[size || 'medium'],
+        sizesClasses[size || 'middle'],
+        iconOnly && iconSizes[size || 'middle'],
         block && 'w-full',
         colored &&
           (variant === 'solid'

@@ -15,13 +15,14 @@ const { Label: CoreLabel } = label;
 export type OptionValue = string | number | boolean;
 
 export interface Props extends Omit<
-  React.ComponentPropsWithRef<'div'>,
+  React.ComponentPropsWithoutRef<'div'>,
   'onChange'
 > {
-  placement?: string;
+  placement?: 'left' | 'right';
   defaultChecked?: boolean;
   checked?: boolean;
   value?: OptionValue;
+  disabled?: boolean;
   icons?: { checked: React.ReactNode; unchecked: React.ReactNode };
   children?: React.ReactNode;
   onChange?: (checked: boolean) => void;
@@ -33,6 +34,7 @@ const Checkbox = ({
   children,
   className,
   icons,
+  disabled,
   defaultChecked,
   checked: _checked,
   onChange: _onChange = () => {},
@@ -48,7 +50,13 @@ const Checkbox = ({
   const controlled = _checked !== undefined;
   const checked = controlled ? _checked : uncontrolledChecked;
 
+  const cursorClassName = disabled ? 'cursor-not-allowed' : 'cursor-pointer';
+
   const onChange = (next: boolean) => {
+    if (disabled) {
+      return;
+    }
+
     if (!controlled) {
       setUncontrolledChecked(next);
     }
@@ -67,7 +75,7 @@ const Checkbox = ({
         }}
       />
       <span
-        className="cursor-pointer"
+        className={cn(cursorClassName, disabled && 'opacity-50')}
         onClick={() => {
           document.getElementById(id)?.click();
         }}
@@ -77,7 +85,10 @@ const Checkbox = ({
           : (icons.unchecked ?? <Square />)}
       </span>
       {children && (
-        <label className="cursor-pointer" htmlFor={id}>
+        <label
+          className={cn(cursorClassName, disabled && 'opacity-50')}
+          htmlFor={id}
+        >
           {children}
         </label>
       )}
@@ -87,11 +98,12 @@ const Checkbox = ({
       <CoreCheckbox
         id={id}
         checked={checked}
-        className="cursor-pointer"
+        disabled={disabled}
+        className={cn(cursorClassName)}
         onCheckedChange={onChange}
       />
       {children && (
-        <CoreLabel htmlFor={id} className="cursor-pointer text-left">
+        <CoreLabel htmlFor={id} className={cn(cursorClassName, 'text-left')}>
           {children}
         </CoreLabel>
       )}
@@ -103,6 +115,7 @@ const Checkbox = ({
       className={cn(
         'flex items-center gap-x-2',
         placement === 'right' && 'flex-row-reverse',
+        cursorClassName,
         className,
         //
       )}
