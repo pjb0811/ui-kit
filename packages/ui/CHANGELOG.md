@@ -1,5 +1,11 @@
 # @repo/ui
 
+## 2.3.3
+
+### Patch Changes
+
+- 92fb2eb: 🔧 Fix core export destructuring error in field component
+
 ## 2.3.2
 
 ### Patch Changes
