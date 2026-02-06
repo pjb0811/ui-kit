@@ -1,6 +1,6 @@
 {
   "name": "@repo/ui",
-  "version": "2.3.1",
+  "version": "2.3.2",
   "description": "Modern React UI component library built with TypeScript, Tailwind CSS, and Radix UI. Featuring atoms, molecules, organisms and layout templates for building beautiful interfaces.",
   "keywords": [
     "react",
