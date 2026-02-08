@@ -26,6 +26,7 @@ coverage
 out/
 build
 dist
+**/*.tsbuildinfo
 
 
 # Debug
@@ -42,6 +43,3 @@ yarn-error.log*
 # Package backups
 package.json.backup
 *.tgz
-
-# puplish style
-output.css
