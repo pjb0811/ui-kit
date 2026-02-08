@@ -20,6 +20,8 @@ export default defineConfig({
   sourcemap: true,
   treeshake: true,
   unbundle: true,
+  external: ['react', 'react-dom', 'tailwindcss'],
+  inlineOnly: ['gsap'],
   /* plugins: [
     postcss({
       extract: 'style.css',
