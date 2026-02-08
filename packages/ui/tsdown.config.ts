@@ -1,7 +1,7 @@
 import { defineConfig } from 'tsdown';
 
-import tailwindcss from '@tailwindcss/postcss';
-import postcss from 'rollup-plugin-postcss';
+// import tailwindcss from '@tailwindcss/postcss';
+// import postcss from 'rollup-plugin-postcss';
 
 export default defineConfig({
   entry: {
@@ -20,11 +20,10 @@ export default defineConfig({
   sourcemap: true,
   treeshake: true,
   unbundle: true,
-  plugins: [
+  /* plugins: [
     postcss({
-      config: false,
       extract: 'style.css',
       plugins: [tailwindcss()],
     }),
-  ],
+  ], */
 });
