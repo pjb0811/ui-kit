@@ -6,8 +6,15 @@
       "@repo/ui/utils": ["./src/lib/utils/index.ts"],
       "@repo/ui/*": ["./src/*"]
     },
-    "noEmit": true
-  },
-  "include": ["src"],
-  "exclude": ["node_modules", "dist"]
+    "target": "ES2022",
+    "useDefineForClassFields": true,
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+    "jsx": "react-jsx"
+  }
 }

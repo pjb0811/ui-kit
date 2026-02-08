@@ -34,6 +34,7 @@
   "files": [
     "dist"
   ],
+  "type": "module",
   "exports": {
     ".": "./src/index.ts",
     "./Typography": "./src/components/atoms/Typography/index.tsx",
