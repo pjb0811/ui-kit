@@ -22,7 +22,6 @@ export default defineConfig({
   unbundle: true,
   plugins: [
     postcss({
-      config: false,
       extract: 'style.css',
       plugins: [tailwindcss()],
     }),
