@@ -100,7 +100,7 @@ pnpm run build-storybook
 ### Code Quality
 
 ```bash
-# Run ESLint (0 warnings allowed)
+# Run ESLint
 pnpm run lint
 
 # Check TypeScript types

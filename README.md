@@ -147,13 +147,14 @@ pnpm run format
 
 ```bash
 # Add changes
-pnpm run changeset
+pnpm changeset
 
 # Update versions
-pnpm run version-packages
+pnpm changeset version
 
-# Build and publish
-pnpm run release
+# Build UI package and publish
+pnpm build --filter=@repo/ui
+pnpm publish-ui
 ```
 
 > **Note**: When publishing, `@repo/ui` is automatically deployed as `@jbpark/ui-kit`.
