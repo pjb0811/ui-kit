@@ -1,7 +1,7 @@
 import { defineConfig } from 'tsdown';
 
-// import tailwindcss from '@tailwindcss/postcss';
-// import postcss from 'rollup-plugin-postcss';
+import tailwindcss from '@tailwindcss/postcss';
+import postcss from 'rollup-plugin-postcss';
 
 export default defineConfig({
   entry: {
@@ -22,10 +22,10 @@ export default defineConfig({
   unbundle: true,
   external: ['react', 'react-dom', 'tailwindcss'],
   inlineOnly: ['gsap'],
-  /* plugins: [
+  plugins: [
     postcss({
       extract: 'style.css',
       plugins: [tailwindcss()],
     }),
-  ], */
+  ],
 });
