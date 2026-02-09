@@ -2,8 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 
-import { useResponsiveSize } from '@jbpark/use-hooks';
-import { useThrottle } from '@uidotdev/usehooks';
+import { useResponsiveSize, useThrottle } from '@jbpark/use-hooks';
 
 import { cn } from '@repo/ui/utils';
 

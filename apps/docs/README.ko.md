@@ -100,7 +100,7 @@ pnpm run build-storybook
 ### 코드 품질
 
 ```bash
-# ESLint 실행 (경고 0개 허용)
+# ESLint 실행
 pnpm run lint
 
 # TypeScript 타입 체크

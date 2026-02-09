@@ -147,13 +147,14 @@ pnpm run format
 
 ```bash
 # 변경사항 추가
-pnpm run changeset
+pnpm changeset
 
 # 버전 업데이트
-pnpm run version-packages
+pnpm changeset version
 
-# 빌드 및 배포
-pnpm run release
+# UI 패키지 빌드 및 배포
+pnpm build --filter=@repo/ui
+pnpm publish-ui
 ```
 
 > **참고**: 배포 시 `@repo/ui`는 자동으로 `@jbpark/ui-kit`로 배포됩니다.

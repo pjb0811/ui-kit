@@ -34,6 +34,7 @@
   "files": [
     "dist"
   ],
+  "type": "module",
   "exports": {
     ".": "./src/index.ts",
     "./Typography": "./src/components/atoms/Typography/index.tsx",
@@ -45,28 +46,28 @@
     "./style.css": "./src/globals.css"
   },
   "scripts": {
-    "prebuild": "npx @tailwindcss/cli -i ./src/globals.css -o ./src/output.css",
     "build": "tsdown",
     "lint": "eslint .",
     "generate:component": "turbo gen react-component",
-    "check-types": "tsc --noEmit",
+    "check-types": "tsc -b",
     "prepublishOnly": "node scripts/prepare-publish.js",
     "postpublish": "node scripts/restore-package.js"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
-    "@tailwindcss/cli": "^4.1.18",
+    "@tailwindcss/postcss": "^4.1.18",
     "@types/node": "^22.15.3",
     "@types/react": "19.1.0",
     "@types/react-dom": "19.1.1",
     "eslint": "^9.34.0",
-    "tsdown": "0.20.0-beta.3",
+    "rollup-plugin-postcss": "^4.0.2",
+    "tsdown": "^0.20.3",
     "typescript": "5.9.2"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
-    "@jbpark/use-hooks": "^2.0.2",
+    "@jbpark/use-hooks": "^2.1.0",
     "@radix-ui/react-accordion": "^1.2.12",
     "@radix-ui/react-checkbox": "^1.3.3",
     "@radix-ui/react-dialog": "^1.1.15",
@@ -75,7 +76,6 @@
     "@radix-ui/react-progress": "^1.1.7",
     "@radix-ui/react-slot": "^1.2.3",
     "@radix-ui/react-switch": "^1.2.6",
-    "@tailwindcss/postcss": "^4.1.12",
     "@uidotdev/usehooks": "^2.4.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -87,8 +87,7 @@
     "react-use": "^17.6.0",
     "swiper": "^11.2.10",
     "tailwind-merge": "^3.3.1",
-    "tailwindcss": "^4.1.12",
-    "tw-animate-css": "^1.3.7",
+    "tailwindcss": "^4.1.18",
     "uuid": "^11.1.0",
     "vaul": "^1.1.2"
   },

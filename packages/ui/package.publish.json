@@ -37,8 +37,8 @@
       "default": "./dist/core.mjs"
     },
     "./style.css": {
-      "import": "./dist/output.css",
-      "default": "./dist/output.css"
+      "import": "./dist/style.css",
+      "default": "./dist/style.css"
     }
   },
   "type": "module"

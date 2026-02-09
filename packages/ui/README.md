@@ -28,7 +28,6 @@ src/
 ├── core/             # ⚙️ Core UI logic (Radix UI based)
 ├── lib/
 │   ├── enums/        # 📋 Enumeration types
-│   ├── hooks/        # 🎣 Custom hooks
 │   └── utils/        # 🛠 Utility functions
 ├── globals.css       # 🎨 Global styles
 └── index.ts          # 📥 Package entry point
