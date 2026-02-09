@@ -12,6 +12,7 @@ export default defineConfig({
     utils: 'src/lib/utils/index.ts',
     enums: 'src/lib/enums/index.ts',
     core: 'src/core/index.ts',
+    style: 'src/globals.css',
   },
   outDir: 'dist',
   format: ['esm'],
@@ -20,7 +21,6 @@ export default defineConfig({
   sourcemap: true,
   treeshake: true,
   unbundle: true,
-  external: ['react', 'react-dom', 'tailwindcss'],
   inlineOnly: ['gsap'],
   plugins: [
     postcss({
