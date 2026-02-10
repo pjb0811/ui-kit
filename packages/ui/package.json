@@ -50,8 +50,8 @@
     "lint": "eslint .",
     "generate:component": "turbo gen react-component",
     "check-types": "tsc -b",
-    "prepublishOnly": "node scripts/prepare-publish.js",
-    "postpublish": "node scripts/restore-package.js"
+    "prepublishOnly": "node scripts/prepare-publish.mjs",
+    "postpublish": "node scripts/restore-package.mjs"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
