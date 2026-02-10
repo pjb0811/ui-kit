@@ -1,5 +1,11 @@
 # @repo/ui
 
+## 2.3.4
+
+### Patch Changes
+
+- 59f10bf: Build pipeline cleanup: move to tsdown config, adjust CSS output name, and update TS build settings.
+
 ## 2.3.3
 
 ### Patch Changes
