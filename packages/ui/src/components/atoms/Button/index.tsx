@@ -23,13 +23,15 @@ type PresetColors =
   | 'lime'
   | 'gold';
 
-export interface Props extends Omit<ButtonProps, 'size' | 'variant'> {
+export interface Props extends Omit<ButtonProps, 'size' | 'variant' | 'type'> {
   icon?: React.ReactNode;
   block?: boolean;
   danger?: boolean;
   disabled?: boolean;
   size?: 'small' | 'middle' | 'large';
+  type?: 'primary' | 'default' | 'dashed' | 'text' | 'link';
   variant?: 'solid' | 'outlined' | 'dashed' | 'filled' | 'text' | 'link';
+  shape?: 'default' | 'circle' | 'round';
   color?: PresetColors | 'default' | 'primary' | 'danger';
   loading?: boolean | { icon: React.ReactNode };
 }
@@ -55,24 +57,40 @@ const variantClasses: Record<string, string> = {
   ),
 };
 
+const typeToVariant: Record<string, string> = {
+  primary: 'solid',
+  default: 'outlined',
+  dashed: 'dashed',
+  text: 'text',
+  link: 'link',
+};
+
 const sizesClasses: Record<string, string> = {
   small: 'h-6 px-3 text-sm',
   middle: 'h-8 px-4 text-base',
   large: 'h-10 px-5 text-lg',
 };
 
-const iconSizes: Record<string, string> = {
-  small: 'size-6',
-  middle: 'size-8',
-  large: 'size-10',
+const iconClasses: Record<string, string> = {
+  small: `size-6 [&_svg:not([class*='size-'])]:size-3`,
+  middle: `size-8 [&_svg:not([class*='size-'])]:size-4`,
+  large: `size-10 [&_svg:not([class*='size-'])]:size-5`,
+};
+
+const shapesClasses = {
+  default: 'rounded-sm',
+  circle: 'rounded-full',
+  round: 'rounded-2xl',
 };
 
 const Button = ({
   icon,
   className,
-  variant = 'solid',
+  type = 'default',
+  variant,
   size = 'middle',
   color = 'default',
+  shape = 'default',
   block = false,
   disabled,
   loading,
@@ -84,6 +102,7 @@ const Button = ({
   const iconOnly = icon && !children;
   const computedColor = danger ? 'danger' : color;
   const colored = computedColor && computedColor !== 'default';
+  const resolvedVariant = variant ?? typeToVariant[type] ?? 'solid';
 
   const displayIcon = loading ? (
     typeof loading === 'object' ? (
@@ -106,12 +125,13 @@ const Button = ({
         'cursor-pointer',
         'h-auto py-0',
         'transition-all',
-        variantClasses[variant || 'solid'],
-        sizesClasses[size || 'middle'],
-        iconOnly && iconSizes[size || 'middle'],
+        variantClasses[resolvedVariant],
+        sizesClasses[size || 'medium'],
+        iconOnly && ['p-0', iconClasses[size || 'medium']],
+        shapesClasses[shape || 'default'],
         block && 'w-full',
         colored &&
-          (variant === 'solid'
+          (resolvedVariant === 'solid'
             ? [
                 'bg-(--btn-bg)',
                 'hover:bg-(--btn-bg-hover)',

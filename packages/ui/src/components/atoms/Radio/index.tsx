@@ -7,12 +7,10 @@ import { Circle, CircleCheck } from 'lucide-react';
 import { field, radio } from '@repo/ui/core';
 import { cn } from '@repo/ui/utils';
 
-import Group from './Group';
+import Group, { type OptionValue } from './Group';
 
 const { RadioGroup: Core, RadioGroupItem: Item } = radio;
 const { Field, FieldLabel } = field;
-
-export type OptionValue = string | number | boolean;
 
 export interface Props extends Omit<
   React.ComponentPropsWithoutRef<typeof Core>,
@@ -95,11 +93,16 @@ const Radio = ({
     <Core value={checked ? id : ''} onValueChange={() => onChange(true)}>
       <Field
         orientation="horizontal"
-        className={cn('flex', placement === 'right' && 'flex-row-reverse')}
+        className={cn(
+          'flex gap-2',
+          placement === 'right' && 'flex-row-reverse',
+        )}
         data-disabled={disabled}
       >
         <Item value={id} id={id} checked={checked} disabled={disabled} />
-        <FieldLabel htmlFor={id}>{children}</FieldLabel>
+        <FieldLabel htmlFor={id} className={cursorClassName}>
+          {children}
+        </FieldLabel>
       </Field>
     </Core>
   );
@@ -107,7 +110,7 @@ const Radio = ({
   return (
     <div
       className={cn(
-        'flex items-center gap-x-2',
+        'flex items-center',
         icons && placement === 'right' && 'flex-row-reverse',
         cursorClassName,
         className,

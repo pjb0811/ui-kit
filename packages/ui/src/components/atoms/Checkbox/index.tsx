@@ -7,12 +7,10 @@ import { Square, SquareCheck } from 'lucide-react';
 import { checkbox, label } from '@repo/ui/core';
 import { cn } from '@repo/ui/utils';
 
-import Group from './Group';
+import Group, { type OptionValue } from './Group';
 
 const { Checkbox: CoreCheckbox } = checkbox;
 const { Label: CoreLabel } = label;
-
-export type OptionValue = string | number | boolean;
 
 export interface Props extends Omit<
   React.ComponentPropsWithoutRef<'div'>,

@@ -10,6 +10,10 @@ const meta: Meta<typeof Switch> = {
     layout: 'centered',
   },
   argTypes: {
+    size: {
+      control: { type: 'select' },
+      options: ['medium', 'small'],
+    },
     disabled: {
       control: { type: 'boolean' },
     },
@@ -18,6 +22,12 @@ const meta: Meta<typeof Switch> = {
     },
     classNames: {
       control: { type: 'object' },
+    },
+    checkedChildren: {
+      control: { type: 'text' },
+    },
+    unCheckedChildren: {
+      control: { type: 'text' },
     },
   },
   render: props => (
@@ -40,5 +50,12 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     disabled: false,
+  },
+};
+
+export const WithChildren: Story = {
+  args: {
+    checkedChildren: 'ON',
+    unCheckedChildren: 'OFF',
   },
 };

@@ -1,12 +1,16 @@
 import { useState } from 'react';
 
+import { Button } from '@repo/ui';
 import { cn } from '@repo/ui/utils';
 
-import Radio, { OptionValue } from '..';
+import Radio from '..';
+
+export type OptionValue = string | number | boolean;
 
 type Option = {
   label: string;
   value: OptionValue;
+  disabled?: boolean;
 };
 
 type Options = string[] | number[] | boolean[] | Option[];
@@ -21,15 +25,23 @@ export interface Props extends Omit<
   classNames?: Record<string, string>;
   defaultValue?: OptionValue;
   value?: OptionValue;
+  optionType?: 'default' | 'button';
+  buttonStyle?: 'solid' | 'outlined';
+  size?: 'small' | 'middle' | 'large';
+  disabled?: boolean;
   onChange?: (value: OptionValue) => void;
 }
 
 const RadioGroup = ({
-  orientation = 'vertical',
+  orientation = 'horizontal',
   placement = 'left',
   className,
   classNames = {},
   options: _options = [],
+  optionType = 'default',
+  buttonStyle = 'solid',
+  size,
+  disabled,
   defaultValue,
   value: _value,
   onChange: _onChange = () => {},
@@ -50,6 +62,8 @@ const RadioGroup = ({
         },
   );
 
+  const isButton = optionType === 'button';
+
   const onChange = (checked: boolean, optionValue: OptionValue) => {
     if (!checked) {
       return;
@@ -63,11 +77,13 @@ const RadioGroup = ({
   return (
     <ul
       className={cn(
-        orientation === 'vertical' ? 'space-y-2' : 'flex gap-2',
+        'flex gap-4',
         className,
+        orientation === 'vertical' && 'flex-col',
+        isButton && 'gap-0',
       )}
     >
-      {options.map((item: Option) => {
+      {options.map((item: Option, index) => {
         const checked = value === item.value;
 
         return (
@@ -75,15 +91,33 @@ const RadioGroup = ({
             key={String(item.value)}
             className={cn('flex', classNames?.wrapper)}
           >
-            <Radio
-              placement={placement}
-              className={cn(classNames?.item)}
-              value={item.value}
-              checked={checked}
-              onChange={checked => onChange(checked, item.value)}
-            >
-              {item.label}
-            </Radio>
+            {isButton ? (
+              <Button
+                variant={checked ? buttonStyle : 'outlined'}
+                size={size}
+                className={cn(
+                  'rounded-none',
+                  index === 0 && 'rounded-l-lg',
+                  index === options.length - 1 && 'rounded-r-lg',
+                  checked && buttonStyle === 'outlined' && 'border-primary',
+                )}
+                disabled={disabled || item.disabled}
+                onClick={() => onChange(true, item.value)}
+              >
+                {item.label}
+              </Button>
+            ) : (
+              <Radio
+                placement={placement}
+                className={cn(classNames?.item)}
+                value={item.value}
+                checked={checked}
+                disabled={item.disabled}
+                onChange={checked => onChange(checked, item.value)}
+              >
+                {item.label}
+              </Radio>
+            )}
           </li>
         );
       })}
