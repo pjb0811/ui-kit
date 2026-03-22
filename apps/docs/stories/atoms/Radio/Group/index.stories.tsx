@@ -19,6 +19,10 @@ const meta: Meta<typeof Radio.Group> = {
       control: { type: 'radio' },
       options: ['left', 'right'],
     },
+    optionType: {
+      control: { type: 'radio' },
+      options: ['default', 'button'],
+    },
     classNames: { table: { disable: true } },
   },
 };

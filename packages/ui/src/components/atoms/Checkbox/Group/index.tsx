@@ -2,7 +2,9 @@ import { useState } from 'react';
 
 import { cn } from '@repo/ui/utils';
 
-import Checkbox, { type OptionValue } from '..';
+import Checkbox from '..';
+
+export type OptionValue = string | number | boolean;
 
 type Option = {
   label: string;

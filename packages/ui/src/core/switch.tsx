@@ -8,12 +8,14 @@ import { cn } from '@repo/ui/utils';
 
 interface CustomProps {
   handleClassName?: string;
+  children?: React.ReactNode;
 }
 
 function Switch({
   className,
   size = 'default',
   handleClassName,
+  children,
   ...props
 }: React.ComponentProps<typeof SwitchPrimitive.Root> & {
   size?: 'sm' | 'default';
@@ -48,6 +50,7 @@ function Switch({
           handleClassName,
         )}
       />
+      {children}
     </SwitchPrimitive.Root>
   );
 }
