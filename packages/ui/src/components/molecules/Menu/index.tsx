@@ -63,10 +63,10 @@ export const MENU_CLASSNAMES = [
 
 export type SelectionMap = ReadonlyMap<React.Key, boolean>;
 
-export function buildSelectionMap(
+export const buildSelectionMap = (
   items: MenuItem[],
   selectedKeysSet: ReadonlySet<React.Key>,
-): SelectionMap {
+): SelectionMap => {
   const map = new Map<React.Key, boolean>();
 
   const dfs = (node: MenuItem): boolean => {
@@ -79,12 +79,12 @@ export function buildSelectionMap(
 
   items.forEach(dfs);
   return map;
-}
+};
 
-export function findKey(
+export const findKey = (
   menu: MenuItem,
   targetKeys: ReadonlySet<React.Key>,
-): boolean {
+): boolean => {
   if (targetKeys.has(menu.key)) {
     return true;
   }
@@ -98,7 +98,7 @@ export function findKey(
   }
 
   return false;
-}
+};
 
 const Menu = ({
   items,

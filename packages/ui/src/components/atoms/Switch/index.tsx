@@ -10,19 +10,23 @@ const { Switch: Core } = switchComponent;
 const sizeConfig = {
   medium: {
     core: 'default' as const,
+    track: 'h-8! w-12!',
+    handle: 'size-6!',
     handleChecked:
-      'data-[state=unchecked]:left-0 data-[state=checked]:left-[calc(100%-16px)]',
-    fontSize: 'text-[9px]',
-    marginChecked: 'mr-4.5 ml-1',
-    marginUnchecked: 'mr-1 ml-4.5',
+      'data-[state=unchecked]:left-0.5 data-[state=checked]:left-[calc(100%-26px)]',
+    fontSize: 'text-xs',
+    marginChecked: 'mr-7 ml-2',
+    marginUnchecked: 'mr-2 ml-7',
   },
   small: {
     core: 'sm' as const,
+    track: 'h-6! w-10!',
+    handle: 'size-5!',
     handleChecked:
-      'data-[state=unchecked]:left-0 data-[state=checked]:left-[calc(100%-12px)]',
-    fontSize: 'text-[7px]',
-    marginChecked: 'mr-3.5 ml-0.5',
-    marginUnchecked: 'mr-0.5 ml-3.5',
+      'data-[state=unchecked]:left-0.5 data-[state=checked]:left-[calc(100%-22px)]',
+    fontSize: 'text-[10px]',
+    marginChecked: 'mr-6 ml-1.5',
+    marginUnchecked: 'mr-1.5 ml-6',
   },
 };
 
@@ -77,17 +81,17 @@ const Switch = ({
       size={config.core}
       className={cn(
         'relative',
+        config.track,
         hasChildren && 'w-auto! overflow-hidden',
         className,
         classNames?.track,
         //
       )}
       handleClassName={cn(
-        hasChildren && [
-          '!absolute top-1/2 !-translate-y-1/2 !translate-x-0',
-          'transition-[left] duration-200',
-          config.handleChecked,
-        ],
+        config.handle,
+        '!absolute top-1/2 !-translate-y-1/2 !translate-x-0',
+        'transition-[left] duration-200 will-change-[left]',
+        config.handleChecked,
         classNames?.handle,
         //
       )}
@@ -99,7 +103,8 @@ const Switch = ({
       {hasChildren && (
         <span
           className={cn(
-            'grid leading-none text-white transition-[margin] duration-200',
+            `grid leading-none text-white transition-[margin] duration-200
+            will-change-[margin]`,
             config.fontSize,
             checked ? config.marginChecked : config.marginUnchecked,
             //
