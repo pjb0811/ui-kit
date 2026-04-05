@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@import 'tw-animate-css';
 
 @config "../tailwind.config.mjs";
 
@@ -141,71 +142,55 @@
 
   [data-slot='button'][data-color='default'] {
     --btn-bg: var(--muted);
-    --btn-border: 107 114 128;
+    --btn-border: var(--muted-foreground);
   }
 
   [data-slot='button'][data-color='primary'] {
     --btn-bg: var(--primary);
-    --btn-border: var(--primary);
     --btn-fg: var(--primary-foreground);
   }
 
   [data-slot='button'][data-color='danger'] {
     --btn-bg: var(--destructive);
-    --btn-border: 239 68 68;
-    --btn-fg: white;
   }
 
   [data-slot='button'][data-color='blue'] {
     --btn-bg: #3b82f6;
-    --btn-border: 59 130 246;
   }
   [data-slot='button'][data-color='purple'] {
     --btn-bg: #a855f7;
-    --btn-border: 168 85 247;
   }
   [data-slot='button'][data-color='cyan'] {
     --btn-bg: #06b6d4;
-    --btn-border: 6 182 212;
   }
   [data-slot='button'][data-color='green'] {
     --btn-bg: #22c55e;
-    --btn-border: 34 197 94;
   }
   [data-slot='button'][data-color='magenta'] {
     --btn-bg: #d946ef;
-    --btn-border: 217 70 239;
   }
   [data-slot='button'][data-color='pink'] {
     --btn-bg: #ec4899;
-    --btn-border: 236 72 153;
   }
   [data-slot='button'][data-color='red'] {
     --btn-bg: #ef4444;
-    --btn-border: 239 68 68;
   }
   [data-slot='button'][data-color='orange'] {
     --btn-bg: #f97316;
-    --btn-border: 249 115 22;
   }
   [data-slot='button'][data-color='yellow'] {
     --btn-bg: #eab308;
-    --btn-border: 234 179 8;
   }
   [data-slot='button'][data-color='volcano'] {
     --btn-bg: #ea580c;
-    --btn-border: 234 88 12;
   }
   [data-slot='button'][data-color='geekblue'] {
     --btn-bg: #6366f1;
-    --btn-border: 99 102 241;
   }
   [data-slot='button'][data-color='lime'] {
     --btn-bg: #84cc16;
-    --btn-border: 132 204 22;
   }
   [data-slot='button'][data-color='gold'] {
     --btn-bg: #f59e0b;
-    --btn-border: 245 158 11;
   }
 }

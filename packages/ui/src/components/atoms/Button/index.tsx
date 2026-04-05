@@ -39,12 +39,12 @@ export interface Props extends Omit<ButtonProps, 'size' | 'variant' | 'type'> {
 const variantClasses: Record<string, string> = {
   solid: '',
   outlined: cn(
-    'border border-[rgb(var(--btn-border)/0.5)]',
+    'border border-[color-mix(in_oklch,var(--btn-border),transparent_50%)]',
     'bg-background text-foreground',
     'hover:bg-accent',
   ),
   dashed: cn(
-    'border border-dashed border-[rgb(var(--btn-border)/0.5)]',
+    'border border-dashed border-[color-mix(in_oklch,var(--btn-border),transparent_50%)]',
     'bg-background text-foreground',
     'hover:bg-accent',
   ),
@@ -141,7 +141,7 @@ const Button = ({
               ]
             : [
                 'text-(--btn-bg)',
-                'border-[rgb(var(--btn-border)/0.5)]',
+                'border-[color-mix(in_oklch,var(--btn-border),transparent_50%)]',
                 //
               ]),
         className,

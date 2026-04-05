@@ -3,14 +3,14 @@ import * as React from 'react';
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
-export function cn(...inputs: ClassValue[]) {
+export const cn = (...inputs: ClassValue[]) => {
   return twMerge(clsx(inputs));
-}
+};
 
-export function renderConditional<T extends React.ReactNode>(
+export const renderConditional = <T extends React.ReactNode>(
   value: T,
   wrapper?: (value: NonNullable<T>) => React.ReactNode,
-): React.ReactNode {
+): React.ReactNode => {
   if (value === null || value === undefined) {
     return null;
   }
@@ -20,4 +20,4 @@ export function renderConditional<T extends React.ReactNode>(
   }
 
   return wrapper ? wrapper(value as NonNullable<T>) : value;
-}
+};
