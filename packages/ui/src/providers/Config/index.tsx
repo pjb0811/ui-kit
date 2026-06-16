@@ -4,7 +4,7 @@ import { useMemo } from 'react';
 
 import { cn } from '@repo/ui/utils';
 
-import { ConfigContext, useConfig } from './ConfigContext';
+import { Context, useConfig } from './context';
 import type { ThemeConfig, ThemeToken } from './types';
 
 const tokenToCssVar: Record<keyof ThemeToken, string> = {
@@ -55,7 +55,7 @@ interface Props {
   children: React.ReactNode;
 }
 
-const ConfigProvider = ({ theme = {}, className, children }: Props) => {
+const Config = ({ theme = {}, className, children }: Props) => {
   const parent = useConfig();
 
   const mergedTheme = useMemo<ThemeConfig>(
@@ -82,7 +82,7 @@ const ConfigProvider = ({ theme = {}, className, children }: Props) => {
   const needsWrapper = hasCssVars || hasDarkMode || className;
 
   return (
-    <ConfigContext.Provider value={contextValue}>
+    <Context.Provider value={contextValue}>
       {needsWrapper ? (
         <div
           className={cn(mergedTheme.dark && 'dark', className)}
@@ -93,10 +93,10 @@ const ConfigProvider = ({ theme = {}, className, children }: Props) => {
       ) : (
         children
       )}
-    </ConfigContext.Provider>
+    </Context.Provider>
   );
 };
 
-export default ConfigProvider;
+export default Config;
 export { useConfig };
 export type { Props, ThemeConfig, ThemeToken };
