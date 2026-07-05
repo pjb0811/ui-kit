@@ -7,6 +7,18 @@
 
 ## [Unreleased]
 
+## [2.6.0] - 2026-07-05
+
+### 추가
+
+- Splitter 컴포넌트 추가
+- AGENTS.md 문서 추가
+- react-resizable-panels 의존성 추가
+
+### 변경
+
+- Content 컴포넌트를 div에서 main으로 변경
+
 ## [2.5.0] - 2026-04-05
 
 ### 추가
