@@ -15,7 +15,6 @@ concurrency: ${{ github.workflow }}-${{ github.ref }}
 permissions:
   contents: write
   pull-requests: write
-  models: read
 
 jobs:
   changelog:
@@ -34,7 +33,10 @@ jobs:
       - name: Update package versions and changelogs via GitHub Models
         id: github-models
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # 개인 PAT 사용 — GITHUB_TOKEN(봇 계정)은 개인 Copilot 구독의
+          # rate limit 혜택을 받지 못하므로, models: read 권한의 PAT를
+          # GH_MODELS_PAT 시크릿으로 등록해서 사용한다.
+          GITHUB_TOKEN: ${{ secrets.GH_MODELS_PAT }}
           BEFORE_SHA: ${{ github.event.inputs.since || github.event.before }}
           AFTER_SHA: ${{ github.sha }}
         run: node .github/scripts/update-changelog.mjs
