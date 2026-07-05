@@ -3,6 +3,12 @@ name: Changelog (develop)
 on:
   push:
     branches: [develop]
+  workflow_dispatch:
+    inputs:
+      since:
+        description: '(선택) diff 시작 커밋 SHA — 비우면 바로 이전 커밋 기준. 실패한 자동 실행을 복구하거나 특정 구간을 다시 처리할 때 사용'
+        required: false
+        type: string
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
@@ -13,7 +19,7 @@ permissions:
 
 jobs:
   changelog:
-    if: "${{ !startsWith(github.event.head_commit.message, '🔧 chore: changelog 자동 업데이트') }}"
+    if: "${{ github.event_name == 'workflow_dispatch' || !startsWith(github.event.head_commit.message, '🔧 chore: changelog 자동 업데이트') }}"
     runs-on: ubuntu-latest
 
     steps:
@@ -29,8 +35,8 @@ jobs:
         id: github-models
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          BEFORE_SHA: ${{ github.event.before }}
-          AFTER_SHA: ${{ github.event.after }}
+          BEFORE_SHA: ${{ github.event.inputs.since || github.event.before }}
+          AFTER_SHA: ${{ github.sha }}
         run: node .github/scripts/update-changelog.mjs
 
       - name: Check for changelog changes
