@@ -47,12 +47,14 @@ Basic UI building blocks
 
 Composite components combining multiple atoms
 
+- **Card**: Container card with outlined/borderless variants
 - **Collapse**: Collapsible content area
 - **Dropdown**: Dropdown menu
 - **Marquees**: Infinite scrolling marquee component
 - **Menu**: Navigation menu
 - **Reveals**: Animation reveal component
 - **Space**: Spacing adjustment component
+- **Splitter**: Resizable panel splitter
 
 ### Organisms
 
@@ -67,7 +69,13 @@ Complex UI sections
 
 Page layout templates
 
-- **Layout**: Full page layout (includes Header, Sider, Content, Footer)
+- **Layout**: Full page layout (includes Header, collapsible Sider, Content, Footer)
+
+### Providers
+
+Theme and configuration providers
+
+- **Config**: Theme token overrides and dark mode configuration via CSS variables
 
 ## 🛠 Tech Stack
 
