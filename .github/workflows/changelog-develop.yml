@@ -27,63 +27,11 @@ jobs:
 
       - name: Update package versions and changelogs via GitHub Models
         id: github-models
-        continue-on-error: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BEFORE_SHA: ${{ github.event.before }}
           AFTER_SHA: ${{ github.event.after }}
         run: node .github/scripts/update-changelog.mjs
-
-      - name: Update package versions and changelogs via Claude (fallback)
-        if: steps.github-models.outcome == 'failure'
-        uses: anthropics/claude-code-action@v1
-        with:
-          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
-          prompt: |
-            A pull request was just merged into the `develop` branch of this
-            pnpm/turborepo monorepo. Your job is to update version numbers and
-            changelogs for any publicly published package affected by this merge.
-
-            Steps:
-            1. Run `git diff ${{ github.event.before }} ${{ github.event.after }}`
-               to see exactly what changed in this merge (not the full history).
-            2. For each package under `packages/*`, check its `package.json`.
-               Skip any package where `"private": true` (currently
-               `packages/eslint-config` and `packages/typescript-config`).
-               Only `packages/ui` (`@repo/ui`) is publicly published today, but
-               do not hardcode this — always check the `private` field.
-            3. For each non-private package that has relevant changes in the
-               diff (changes under its `src/`, or otherwise affecting its public
-               API/behavior — ignore story/doc-only or test-only changes with no
-               package impact), decide a semver bump:
-               - major: breaking API change
-               - minor: new backward-compatible feature/prop/export
-               - patch: bug fix, internal refactor, docs, or other non-breaking change
-            4. Bump that package's `package.json` `version` field accordingly.
-            5. Prepend a new section to that package's `CHANGELOG.md`, directly
-               under the top-level `# @repo/ui`-style heading, following the
-               exact same structural style as the existing entries in that file
-               (a `## x.y.z` version heading followed by `### Major 변경사항` /
-               `### Minor 변경사항` / `### Patch 변경사항` with a bullet list).
-               Write the bullet list content in Korean (한국어), regardless of
-               what language older entries in the file happen to be in.
-            6. Also check for changes to repo-root / tooling files — anything
-               changed in this diff that is NOT under `packages/*` or `apps/*`
-               (e.g. `.github/workflows`, root config files, root `package.json`
-               itself). If there are meaningful changes there, add a dated entry
-               to the root `CHANGELOG.md` (create it if missing, with a `# Changelog`
-               title): add a `## YYYY-MM-DD` heading (today's date; append to it
-               instead of creating a duplicate if a section for today already
-               exists) followed by a bullet list written in Korean (한국어). The
-               root has no version number — never touch the root `package.json`'s
-               content for this.
-            7. Do not touch packages (or the root) with no relevant changes in
-               this diff.
-            8. Do not modify any file other than a changed package's
-               `package.json`/`CHANGELOG.md`, or the root `CHANGELOG.md`.
-          claude_args: |
-            --max-turns 20
-            --allowedTools "Read,Edit,Write,Bash(git diff:*),Bash(git log:*),Bash(git show:*)"
 
       - name: Check for changelog changes
         id: changes
@@ -111,8 +59,8 @@ jobs:
           title: 'chore: update changelog (automated)'
           body: |
             Automatically generated from the diff merged into `develop` at
-            ${{ github.sha }} (via GitHub Models, falling back to Claude if
-            that request failed). Auto-merged — see the diff for what changed.
+            ${{ github.sha }} via GitHub Models. Auto-merged — see the diff
+            for what changed.
           branch: 'chore/changelog-update-${{ github.run_id }}'
           base: develop
           delete-branch: true

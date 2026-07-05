@@ -1,9 +1,9 @@
 #!/usr/bin/env node
-// Primary changelog-automation path for .github/workflows/changelog-develop.yml.
+// Changelog automation for .github/workflows/changelog-develop.yml.
 // Asks a GitHub Models chat completion for a semver bump + changelog entry per
-// changed public package, then applies that JSON directly to package.json /
-// CHANGELOG.md. Exits non-zero on any failure so the workflow can fall back
-// to the Claude Code Action step instead.
+// changed public package (plus a dated entry for repo-root/tooling changes),
+// then applies that JSON directly to package.json / CHANGELOG.md. Exits
+// non-zero on failure, which fails the workflow run (no changelog PR that time).
 
 import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
