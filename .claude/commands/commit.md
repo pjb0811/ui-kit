@@ -1,5 +1,5 @@
 스테이징된 변경사항을 분석해 커밋 메시지를 작성하고 커밋합니다.
-인자: `$ARGUMENTS`로 메시지 언어 지정 가능 (`ko` 또는 `en`). 미지정 시 기본값은 `en`이다.
+인자: `$ARGUMENTS`로 메시지 언어 지정 가능 (`ko` 또는 `en`). 미지정 시 기본값은 `ko`이다.
 
 - `en` → `.github/COMMIT_CONVENTION.en.md` 규칙에 맞춰 영어로 작성
 - `ko` → `.github/COMMIT_CONVENTION.ko.md` 규칙에 맞춰 한국어로 작성
@@ -53,7 +53,7 @@ git rev-parse --abbrev-ref HEAD
 - 세부 변경사항 2
 ```
 
-요약과 세부 변경사항의 언어는 지정된 언어 옵션(`ko`/`en`, 기본값 `en`)을 따른다.
+요약과 세부 변경사항의 언어는 지정된 언어 옵션(`ko`/`en`, 기본값 `ko`)을 따른다.
 
 **타입 선택 기준**:
 | Type | 상황 |

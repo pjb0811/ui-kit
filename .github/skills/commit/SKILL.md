@@ -20,7 +20,7 @@ disable-model-invocation: false
 ## Source Convention
 
 - 저장소 기준 문서는 `.github/COMMIT_CONVENTION.md`, `.github/COMMIT_CONVENTION.en.md`, `.github/COMMIT_CONVENTION.ko.md` 이다.
-- 한국어 요청이면 한국어 메시지를 우선 사용하고, 영어 요청이면 영어 메시지를 사용한다.
+- 언어를 명시하지 않으면 기본값은 한국어(`ko`)이다. 영어로 요청하면 영어 메시지를 사용한다.
 - 언어와 무관하게 형식은 반드시 아래 형태를 따른다.
 
 ```text
