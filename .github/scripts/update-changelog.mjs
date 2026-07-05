@@ -11,9 +11,20 @@ import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 
-const MODEL = process.env.GITHUB_MODELS_MODEL || 'openai/gpt-4o';
+// GitHub Models' free tier caps request size per model (observed: gpt-4o
+// rejects requests over 8000 tokens with a 413). gpt-4o-mini tends to get a
+// more generous free-tier allowance, and this task doesn't need heavy
+// reasoning, so default to it — but keep the diff budget conservative
+// regardless, since a large merge can easily blow past either limit.
+const MODEL = process.env.GITHUB_MODELS_MODEL || 'openai/gpt-4o-mini';
 const API_URL = 'https://models.github.ai/inference/chat/completions';
 const MAX_DIFF_CHARS = 20000;
+// Total budget for diff content across all changed packages combined, shared
+// out per package below — keeps the whole request comfortably under an
+// 8000-token cap even in mixed Korean/English content (worse chars-per-token
+// ratio than plain English).
+const MAX_TOTAL_DIFF_CHARS = 10000;
+const MAX_STYLE_EXAMPLE_CHARS = 600;
 
 const CATEGORY_ORDER = [
   ['added', '추가'],
@@ -203,13 +214,21 @@ async function main() {
     return;
   }
 
+  // Share the total diff budget across however many packages changed this
+  // time, so a merge touching several packages at once doesn't blow past the
+  // model's request-size cap.
+  const perPackageDiffBudget = Math.max(1000, Math.floor(MAX_TOTAL_DIFF_CHARS / changed.length));
+
+  const truncate = (text, max) => (text.length > max ? `${text.slice(0, max)}\n... (truncated)` : text);
+
   const styleExample = pkg => {
     const examplePath = path.posix.join(pkg.dir, 'CHANGELOG.md');
     if (!fs.existsSync(examplePath)) {
       return '(파일 없음 — Keep a Changelog 형식 사용: "## [Unreleased]" 아래에 ' +
         '"## [x.y.z] - YYYY-MM-DD" 헤딩과 "### 추가/변경/사용 중단/제거/수정/보안" 하위 섹션)';
     }
-    return fs.readFileSync(examplePath, 'utf8').split('\n').slice(0, 20).join('\n');
+    const example = fs.readFileSync(examplePath, 'utf8').split('\n').slice(0, 10).join('\n');
+    return truncate(example, MAX_STYLE_EXAMPLE_CHARS);
   };
 
   const sections = changed
@@ -217,7 +236,8 @@ async function main() {
       const label = pkg.isRoot
         ? `## 저장소 루트 / 공통 설정 변경 (identifier: "${ROOT_ID}", name: ${pkg.pkgName}, current version: ${pkg.version})`
         : `## Package: ${pkg.dir} (identifier: "${pkg.dir}", name: ${pkg.pkgName}, current version: ${pkg.version})`;
-      return `${label}\n\n\`\`\`diff\n${diff}\n\`\`\`\n\nCHANGELOG.md style example for this entry:\n\`\`\`\n${styleExample(pkg)}\n\`\`\``;
+      const trimmedDiff = truncate(diff, perPackageDiffBudget);
+      return `${label}\n\n\`\`\`diff\n${trimmedDiff}\n\`\`\`\n\nCHANGELOG.md style example for this entry:\n\`\`\`\n${styleExample(pkg)}\n\`\`\``;
     })
     .join('\n\n');
 
