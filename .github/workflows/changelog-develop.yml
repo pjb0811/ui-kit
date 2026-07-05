@@ -66,9 +66,19 @@ jobs:
                `## x.y.z` version heading followed by `### Major Changes` /
                `### Minor Changes` / `### Patch Changes` with a bullet list
                describing the actual change in clear language).
-            6. Do not touch packages with no relevant changes in this diff.
-            7. Do not modify any file other than a changed package's
-               `package.json` and `CHANGELOG.md`.
+            6. Also check for changes to repo-root / tooling files — anything
+               changed in this diff that is NOT under `packages/*` or `apps/*`
+               (e.g. `.github/workflows`, root config files, root `package.json`
+               itself). If there are meaningful changes there, add a dated entry
+               to the root `CHANGELOG.md` (create it if missing, with a `# Changelog`
+               title): add a `## YYYY-MM-DD` heading (today's date; append to it
+               instead of creating a duplicate if a section for today already
+               exists) followed by a bullet list. The root has no version number —
+               never touch the root `package.json`'s content for this.
+            7. Do not touch packages (or the root) with no relevant changes in
+               this diff.
+            8. Do not modify any file other than a changed package's
+               `package.json`/`CHANGELOG.md`, or the root `CHANGELOG.md`.
           claude_args: |
             --max-turns 20
             --allowedTools "Read,Edit,Write,Bash(git diff:*),Bash(git log:*),Bash(git show:*)"
@@ -76,7 +86,7 @@ jobs:
       - name: Check for changelog changes
         id: changes
         run: |
-          if git status --porcelain -- 'packages/*/CHANGELOG.md' 'packages/*/package.json' | grep -q .; then
+          if git status --porcelain -- 'packages/*/CHANGELOG.md' 'packages/*/package.json' 'CHANGELOG.md' | grep -q .; then
             echo "changed=true" >> "$GITHUB_OUTPUT"
           else
             echo "changed=false" >> "$GITHUB_OUTPUT"
@@ -87,7 +97,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add -- 'packages/*/CHANGELOG.md' 'packages/*/package.json'
+          git add -- 'packages/*/CHANGELOG.md' 'packages/*/package.json' 'CHANGELOG.md'
           git commit -m "chore: update changelog (automated)"
 
       - name: Open changelog PR
