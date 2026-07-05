@@ -32,31 +32,54 @@ function git(args) {
   return execFileSync('git', args, { encoding: 'utf8', maxBuffer: 10 * 1024 * 1024 });
 }
 
+const ROOT_ID = '.';
+
 function listCandidatePackages() {
   const root = 'packages';
-  return fs
+  const packages = fs
     .readdirSync(root)
-    .map(name => ({ name, dir: path.join(root, name) }))
-    .filter(({ dir }) => fs.existsSync(path.join(dir, 'package.json')))
+    .map(name => ({ name, dir: path.posix.join(root, name) }))
+    .filter(({ dir }) => fs.existsSync(path.posix.join(dir, 'package.json')))
     .map(({ name, dir }) => {
-      const pkgJsonPath = path.join(dir, 'package.json');
+      const pkgJsonPath = path.posix.join(dir, 'package.json');
       const pkg = JSON.parse(fs.readFileSync(pkgJsonPath, 'utf8'));
-      return { name, dir, pkgJsonPath, pkgName: pkg.name, version: pkg.version, private: pkg.private === true };
+      return {
+        name,
+        dir,
+        pkgJsonPath,
+        pkgName: pkg.name,
+        version: pkg.version,
+        private: pkg.private === true,
+        isRoot: false,
+      };
     })
     .filter(pkg => !pkg.private);
+
+  // Repo-root / tooling changes (CI workflows, root config, etc.) that don't
+  // belong to any individual package — tracked in a dated root CHANGELOG.md
+  // instead of a semver-versioned one, since the root package.json has no
+  // version field (it isn't published).
+  const rootEntry = {
+    name: 'root',
+    dir: ROOT_ID,
+    pkgJsonPath: null,
+    pkgName: 'ui-kit',
+    version: null,
+    private: false,
+    isRoot: true,
+  };
+
+  return [...packages, rootEntry];
 }
 
 function diffFor(pkg) {
+  const pathspec = pkg.isRoot
+    ? [ROOT_ID, ':(exclude)packages', ':(exclude)apps', ':(exclude)CHANGELOG.md', ':(exclude)pnpm-lock.yaml']
+    : [pkg.dir, `:(exclude)${pkg.dir}/CHANGELOG.md`];
+
   let diff;
   try {
-    diff = git([
-      'diff',
-      beforeSha,
-      afterSha,
-      '--',
-      pkg.dir,
-      `:(exclude)${pkg.dir}/CHANGELOG.md`,
-    ]);
+    diff = git(['diff', beforeSha, afterSha, '--', ...pathspec]);
   } catch {
     return '';
   }
@@ -86,7 +109,7 @@ function applyVersionBump(pkg, newVersion) {
 }
 
 function applyChangelogEntry(pkg, newVersion, bump, entry) {
-  const changelogPath = path.join(pkg.dir, 'CHANGELOG.md');
+  const changelogPath = path.posix.join(pkg.dir, 'CHANGELOG.md');
   const section = `## ${newVersion}\n\n### ${bumpHeading(bump)}\n\n${entry.trim()}\n`;
 
   if (!fs.existsSync(changelogPath)) {
@@ -101,6 +124,28 @@ function applyChangelogEntry(pkg, newVersion, bump, entry) {
   fs.writeFileSync(changelogPath, lines.join('\n'));
 }
 
+function applyRootChangelogEntry(pkg, entry) {
+  const changelogPath = path.posix.join(pkg.dir, 'CHANGELOG.md');
+  const today = new Date().toISOString().slice(0, 10);
+  const todayHeading = `## ${today}`;
+  const bullets = entry.trim();
+
+  const content = fs.existsSync(changelogPath) ? fs.readFileSync(changelogPath, 'utf8') : '# Changelog\n';
+
+  if (content.includes(`${todayHeading}\n`)) {
+    const updated = content.replace(`${todayHeading}\n\n`, `${todayHeading}\n\n${bullets}\n`);
+    fs.writeFileSync(changelogPath, updated);
+    return;
+  }
+
+  const lines = content.split('\n');
+  const headingIdx = lines.findIndex(l => l.startsWith('## '));
+  const section = [todayHeading, '', bullets, ''];
+  const insertAt = headingIdx === -1 ? lines.length : headingIdx;
+  lines.splice(insertAt, 0, ...section);
+  fs.writeFileSync(changelogPath, lines.join('\n'));
+}
+
 function extractJson(content) {
   const fenced = content.match(/```(?:json)?\s*([\s\S]*?)```/);
   const raw = fenced ? fenced[1] : content;
@@ -108,12 +153,14 @@ function extractJson(content) {
 }
 
 function validateResults(results, candidates) {
-  const validNames = new Set(candidates.map(c => c.dir));
+  const byDir = new Map(candidates.map(c => [c.dir, c]));
   if (!Array.isArray(results)) throw new Error('Model response is not a JSON array');
   for (const r of results) {
     if (!r || typeof r !== 'object') throw new Error('Result entry is not an object');
-    if (!validNames.has(r.package)) throw new Error(`Unknown package in result: ${r.package}`);
-    if (!['major', 'minor', 'patch'].includes(r.bump)) throw new Error(`Invalid bump type: ${r.bump}`);
+    const candidate = byDir.get(r.package);
+    if (!candidate) throw new Error(`Unknown package in result: ${r.package}`);
+    const allowedBumps = candidate.isRoot ? ['none'] : ['major', 'minor', 'patch'];
+    if (!allowedBumps.includes(r.bump)) throw new Error(`Invalid bump type "${r.bump}" for ${r.package}`);
     if (!r.entry || typeof r.entry !== 'string' || !r.entry.trim()) throw new Error('Missing changelog entry text');
   }
   return results;
@@ -126,36 +173,50 @@ async function main() {
     .filter(({ diff }) => diff.trim().length > 0);
 
   if (changed.length === 0) {
-    console.log('No relevant changes in any public package — nothing to do.');
+    console.log('No relevant changes in any public package or repo-root files — nothing to do.');
     return;
   }
 
-  const sections = changed
-    .map(
-      ({ pkg, diff }) => `## Package: ${pkg.dir} (name: ${pkg.pkgName}, current version: ${pkg.version})\n\n\`\`\`diff\n${diff}\n\`\`\``,
-    )
-    .join('\n\n');
+  const styleExample = pkg => {
+    const examplePath = path.posix.join(pkg.dir, 'CHANGELOG.md');
+    if (!fs.existsSync(examplePath)) {
+      return pkg.isRoot
+        ? '(new file — start with "# Changelog" followed by a "## YYYY-MM-DD" heading and bullets)'
+        : '(no existing CHANGELOG.md yet — use a "## x.y.z" heading followed by "### Patch Changes" etc.)';
+    }
+    return fs.readFileSync(examplePath, 'utf8').split('\n').slice(0, 20).join('\n');
+  };
 
-  const exampleChangelog = changed[0].pkg;
-  const examplePath = path.join(exampleChangelog.dir, 'CHANGELOG.md');
-  const example = fs.existsSync(examplePath)
-    ? fs.readFileSync(examplePath, 'utf8').split('\n').slice(0, 20).join('\n')
-    : '(no existing CHANGELOG.md yet — use a "## x.y.z" heading followed by "### Patch Changes" etc.)';
+  const sections = changed
+    .map(({ pkg, diff }) => {
+      const label = pkg.isRoot
+        ? `## Repo root / tooling changes (package identifier: "${ROOT_ID}", no version — this is NOT a publishable package)`
+        : `## Package: ${pkg.dir} (identifier: "${pkg.dir}", name: ${pkg.pkgName}, current version: ${pkg.version})`;
+      return `${label}\n\n\`\`\`diff\n${diff}\n\`\`\`\n\nCHANGELOG.md style example for this entry:\n\`\`\`\n${styleExample(pkg)}\n\`\`\``;
+    })
+    .join('\n\n');
 
   const systemPrompt = [
     'You are a release-notes assistant for a pnpm/turborepo monorepo.',
-    'You will be given a git diff for one or more changed packages and must decide',
-    'a semver bump (major/minor/patch) and write a changelog entry for each.',
+    'You will be given a git diff for one or more changed packages, and possibly',
+    'a special repo-root entry (identifier ".") for changes to tooling/CI/root',
+    'config files that do not belong to any individual package.',
     "Respond with ONLY a JSON array, no prose, no markdown code fences, matching:",
-    "Array<{ package: string; bump: 'major' | 'minor' | 'patch'; entry: string }>",
-    "`package` must be exactly one of the package directory paths given.",
-    '`entry` must be markdown bullet lines starting with "- ", written for developers',
-    'consuming this package, matching the tone and detail level of the example shown.',
-    'Only include packages that have a real, user-facing or API-relevant change;',
-    'omit packages whose diff is purely internal/test/story-only noise.',
+    "Array<{ package: string; bump: 'major' | 'minor' | 'patch' | 'none'; entry: string }>",
+    '`package` must be exactly one of the identifiers given.',
+    'For a real package, decide a semver `bump`: major = breaking API change,',
+    'minor = new backward-compatible feature/prop/export, patch = bug fix,',
+    'internal refactor, docs, or other non-breaking change.',
+    'For the repo-root entry (identifier "."), `bump` must always be exactly "none"',
+    '— it has no version number, it only gets a dated changelog entry.',
+    '`entry` must be markdown bullet lines starting with "- ", matching the tone',
+    'and detail level of the style example given for that entry.',
+    'Only include entries that have a real, user-facing/API-relevant, or',
+    'meaningfully-affects-contributors change; omit anything that is purely',
+    'internal/test/story-only noise with no one who would care to read about it.',
   ].join(' ');
 
-  const userPrompt = `${sections}\n\n## Existing CHANGELOG.md style example (from ${exampleChangelog.dir})\n\n\`\`\`\n${example}\n\`\`\``;
+  const userPrompt = sections;
 
   const response = await fetch(API_URL, {
     method: 'POST',
@@ -192,6 +253,11 @@ async function main() {
 
   for (const result of results) {
     const { pkg } = changed.find(c => c.pkg.dir === result.package);
+    if (pkg.isRoot) {
+      applyRootChangelogEntry(pkg, result.entry);
+      console.log(`Updated ${pkg.dir}/CHANGELOG.md (dated entry)`);
+      continue;
+    }
     const newVersion = bumpVersion(pkg.version, result.bump);
     applyVersionBump(pkg, newVersion);
     applyChangelogEntry(pkg, newVersion, result.bump, result.entry);
