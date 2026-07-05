@@ -97,9 +97,9 @@ function bumpVersion(version, bump) {
 }
 
 function bumpHeading(bump) {
-  if (bump === 'major') return 'Major Changes';
-  if (bump === 'minor') return 'Minor Changes';
-  return 'Patch Changes';
+  if (bump === 'major') return 'Major 변경사항';
+  if (bump === 'minor') return 'Minor 변경사항';
+  return 'Patch 변경사항';
 }
 
 function applyVersionBump(pkg, newVersion) {
@@ -209,8 +209,11 @@ async function main() {
     'internal refactor, docs, or other non-breaking change.',
     'For the repo-root entry (identifier "."), `bump` must always be exactly "none"',
     '— it has no version number, it only gets a dated changelog entry.',
-    '`entry` must be markdown bullet lines starting with "- ", matching the tone',
-    'and detail level of the style example given for that entry.',
+    '`entry` must be markdown bullet lines starting with "- ", matching the',
+    'structure and detail level of the style example given for that entry.',
+    'Write the bullet text itself in Korean (한국어), regardless of what',
+    'language the style example or older changelog entries happen to be in —',
+    'this only affects the language of new text you write, not existing content.',
     'Only include entries that have a real, user-facing/API-relevant, or',
     'meaningfully-affects-contributors change; omit anything that is purely',
     'internal/test/story-only noise with no one who would care to read about it.',

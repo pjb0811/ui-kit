@@ -62,10 +62,11 @@ jobs:
             4. Bump that package's `package.json` `version` field accordingly.
             5. Prepend a new section to that package's `CHANGELOG.md`, directly
                under the top-level `# @repo/ui`-style heading, following the
-               exact same style as the existing entries in that file (a
-               `## x.y.z` version heading followed by `### Major Changes` /
-               `### Minor Changes` / `### Patch Changes` with a bullet list
-               describing the actual change in clear language).
+               exact same structural style as the existing entries in that file
+               (a `## x.y.z` version heading followed by `### Major 변경사항` /
+               `### Minor 변경사항` / `### Patch 변경사항` with a bullet list).
+               Write the bullet list content in Korean (한국어), regardless of
+               what language older entries in the file happen to be in.
             6. Also check for changes to repo-root / tooling files — anything
                changed in this diff that is NOT under `packages/*` or `apps/*`
                (e.g. `.github/workflows`, root config files, root `package.json`
@@ -73,8 +74,9 @@ jobs:
                to the root `CHANGELOG.md` (create it if missing, with a `# Changelog`
                title): add a `## YYYY-MM-DD` heading (today's date; append to it
                instead of creating a duplicate if a section for today already
-               exists) followed by a bullet list. The root has no version number —
-               never touch the root `package.json`'s content for this.
+               exists) followed by a bullet list written in Korean (한국어). The
+               root has no version number — never touch the root `package.json`'s
+               content for this.
             7. Do not touch packages (or the root) with no relevant changes in
                this diff.
             8. Do not modify any file other than a changed package's
@@ -102,6 +104,7 @@ jobs:
 
       - name: Open changelog PR
         if: steps.changes.outputs.changed == 'true'
+        id: open_pr
         uses: peter-evans/create-pull-request@v5
         with:
           commit-message: 'chore: update changelog (automated)'
@@ -109,9 +112,13 @@ jobs:
           body: |
             Automatically generated from the diff merged into `develop` at
             ${{ github.sha }} (via GitHub Models, falling back to Claude if
-            that request failed).
-
-            Please review the version bump and changelog wording before merging.
+            that request failed). Auto-merged — see the diff for what changed.
           branch: 'chore/changelog-update-${{ github.run_id }}'
           base: develop
           delete-branch: true
+
+      - name: Merge changelog PR
+        if: steps.changes.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh pr merge ${{ steps.open_pr.outputs.pull-request-number }} --squash --delete-branch
