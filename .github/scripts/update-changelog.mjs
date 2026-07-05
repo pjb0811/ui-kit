@@ -1,9 +1,11 @@
 #!/usr/bin/env node
 // Changelog automation for .github/workflows/changelog-develop.yml.
-// Asks a GitHub Models chat completion for a semver bump + changelog entry per
-// changed public package (plus a dated entry for repo-root/tooling changes),
-// then applies that JSON directly to package.json / CHANGELOG.md. Exits
-// non-zero on failure, which fails the workflow run (no changelog PR that time).
+// Asks a GitHub Models chat completion for a semver bump + Keep a Changelog
+// (https://keepachangelog.com/en/1.1.0/) style entry per changed public
+// package — including a repo-root pseudo-package for tooling/CI/config
+// changes — then applies that JSON directly to package.json / CHANGELOG.md.
+// Exits non-zero on failure, which fails the workflow run (no changelog PR
+// that time).
 
 import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
@@ -12,6 +14,18 @@ import path from 'node:path';
 const MODEL = process.env.GITHUB_MODELS_MODEL || 'openai/gpt-4o';
 const API_URL = 'https://models.github.ai/inference/chat/completions';
 const MAX_DIFF_CHARS = 20000;
+
+const CATEGORY_ORDER = [
+  ['added', '추가'],
+  ['changed', '변경'],
+  ['deprecated', '사용 중단'],
+  ['removed', '제거'],
+  ['fixed', '수정'],
+  ['security', '보안'],
+];
+const CATEGORY_KEYS = CATEGORY_ORDER.map(([key]) => key);
+
+const ROOT_ID = '.';
 
 const token = requireEnv('GITHUB_TOKEN');
 const afterSha = requireEnv('AFTER_SHA');
@@ -31,8 +45,6 @@ function resolveBeforeSha(before, after) {
 function git(args) {
   return execFileSync('git', args, { encoding: 'utf8', maxBuffer: 10 * 1024 * 1024 });
 }
-
-const ROOT_ID = '.';
 
 function listCandidatePackages() {
   const root = 'packages';
@@ -56,20 +68,21 @@ function listCandidatePackages() {
     .filter(pkg => !pkg.private);
 
   // Repo-root / tooling changes (CI workflows, root config, etc.) that don't
-  // belong to any individual package — tracked in a dated root CHANGELOG.md
-  // instead of a semver-versioned one, since the root package.json has no
-  // version field (it isn't published).
+  // belong to any individual package. The root package.json is versioned
+  // like any other package, so this is tracked the same way.
+  const rootPkgJsonPath = 'package.json';
+  const rootPkg = JSON.parse(fs.readFileSync(rootPkgJsonPath, 'utf8'));
   const rootEntry = {
     name: 'root',
     dir: ROOT_ID,
-    pkgJsonPath: null,
-    pkgName: 'ui-kit',
-    version: null,
-    private: false,
+    pkgJsonPath: rootPkgJsonPath,
+    pkgName: rootPkg.name,
+    version: rootPkg.version,
+    private: rootPkg.private === true,
     isRoot: true,
   };
 
-  return [...packages, rootEntry];
+  return rootEntry.private ? packages : [...packages, rootEntry];
 }
 
 function diffFor(pkg) {
@@ -96,53 +109,59 @@ function bumpVersion(version, bump) {
   return `${major}.${minor}.${patch + 1}`;
 }
 
-function bumpHeading(bump) {
-  if (bump === 'major') return 'Major 변경사항';
-  if (bump === 'minor') return 'Minor 변경사항';
-  return 'Patch 변경사항';
-}
-
 function applyVersionBump(pkg, newVersion) {
   const text = fs.readFileSync(pkg.pkgJsonPath, 'utf8');
   const updated = text.replace(/"version":\s*"[^"]+"/, `"version": "${newVersion}"`);
   fs.writeFileSync(pkg.pkgJsonPath, updated);
 }
 
-function applyChangelogEntry(pkg, newVersion, bump, entry) {
-  const changelogPath = path.posix.join(pkg.dir, 'CHANGELOG.md');
-  const section = `## ${newVersion}\n\n### ${bumpHeading(bump)}\n\n${entry.trim()}\n`;
-
-  if (!fs.existsSync(changelogPath)) {
-    fs.writeFileSync(changelogPath, `# ${pkg.pkgName}\n\n${section}`);
-    return;
+function formatSection(newVersion, changes) {
+  const today = new Date().toISOString().slice(0, 10);
+  const lines = [`## [${newVersion}] - ${today}`, ''];
+  for (const [key, label] of CATEGORY_ORDER) {
+    const items = changes[key];
+    if (!items || items.length === 0) continue;
+    lines.push(`### ${label}`, '');
+    for (const item of items) lines.push(`- ${item.trim()}`);
+    lines.push('');
   }
+  return lines;
+}
+
+function ensureChangelogSkeleton(changelogPath, pkgName) {
+  if (fs.existsSync(changelogPath)) return;
+  const header = [
+    `# ${pkgName}`,
+    '',
+    '이 프로젝트의 모든 주요 변경사항을 이 파일에 기록합니다.',
+    '',
+    '형식은 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)를 따르며,',
+    '이 프로젝트는 [Semantic Versioning](https://semver.org/spec/v2.0.0.html)을 준수합니다.',
+    '',
+    '## [Unreleased]',
+    '',
+  ].join('\n');
+  fs.writeFileSync(changelogPath, header);
+}
+
+function applyChangelogEntry(pkg, newVersion, changes) {
+  const changelogPath = path.posix.join(pkg.dir, 'CHANGELOG.md');
+  ensureChangelogSkeleton(changelogPath, pkg.pkgName);
 
   const content = fs.readFileSync(changelogPath, 'utf8');
   const lines = content.split('\n');
-  // lines[0] is the "# PackageName" title, lines[1] is the blank line after it.
-  lines.splice(2, 0, section);
-  fs.writeFileSync(changelogPath, lines.join('\n'));
-}
+  const unreleasedIdx = lines.findIndex(l => l.trim() === '## [Unreleased]');
 
-function applyRootChangelogEntry(pkg, entry) {
-  const changelogPath = path.posix.join(pkg.dir, 'CHANGELOG.md');
-  const today = new Date().toISOString().slice(0, 10);
-  const todayHeading = `## ${today}`;
-  const bullets = entry.trim();
-
-  const content = fs.existsSync(changelogPath) ? fs.readFileSync(changelogPath, 'utf8') : '# Changelog\n';
-
-  if (content.includes(`${todayHeading}\n`)) {
-    const updated = content.replace(`${todayHeading}\n\n`, `${todayHeading}\n\n${bullets}\n`);
-    fs.writeFileSync(changelogPath, updated);
-    return;
+  let insertAt;
+  if (unreleasedIdx !== -1) {
+    insertAt = unreleasedIdx + 1;
+    while (insertAt < lines.length && lines[insertAt].trim() === '') insertAt++;
+  } else {
+    insertAt = lines.findIndex(l => l.startsWith('## '));
+    if (insertAt === -1) insertAt = lines.length;
   }
 
-  const lines = content.split('\n');
-  const headingIdx = lines.findIndex(l => l.startsWith('## '));
-  const section = [todayHeading, '', bullets, ''];
-  const insertAt = headingIdx === -1 ? lines.length : headingIdx;
-  lines.splice(insertAt, 0, ...section);
+  lines.splice(insertAt, 0, ...formatSection(newVersion, changes));
   fs.writeFileSync(changelogPath, lines.join('\n'));
 }
 
@@ -157,11 +176,18 @@ function validateResults(results, candidates) {
   if (!Array.isArray(results)) throw new Error('Model response is not a JSON array');
   for (const r of results) {
     if (!r || typeof r !== 'object') throw new Error('Result entry is not an object');
-    const candidate = byDir.get(r.package);
-    if (!candidate) throw new Error(`Unknown package in result: ${r.package}`);
-    const allowedBumps = candidate.isRoot ? ['none'] : ['major', 'minor', 'patch'];
-    if (!allowedBumps.includes(r.bump)) throw new Error(`Invalid bump type "${r.bump}" for ${r.package}`);
-    if (!r.entry || typeof r.entry !== 'string' || !r.entry.trim()) throw new Error('Missing changelog entry text');
+    if (!byDir.has(r.package)) throw new Error(`Unknown package in result: ${r.package}`);
+    if (!['major', 'minor', 'patch'].includes(r.bump)) throw new Error(`Invalid bump type "${r.bump}" for ${r.package}`);
+    if (!r.changes || typeof r.changes !== 'object') throw new Error(`Missing changes object for ${r.package}`);
+    const hasAny = CATEGORY_KEYS.some(key => Array.isArray(r.changes[key]) && r.changes[key].length > 0);
+    if (!hasAny) throw new Error(`No changelog categories populated for ${r.package}`);
+    for (const key of Object.keys(r.changes)) {
+      if (!CATEGORY_KEYS.includes(key)) throw new Error(`Unknown changelog category "${key}" for ${r.package}`);
+      const items = r.changes[key];
+      if (!Array.isArray(items) || items.some(item => typeof item !== 'string' || !item.trim())) {
+        throw new Error(`Invalid entries for category "${key}" in ${r.package}`);
+      }
+    }
   }
   return results;
 }
@@ -180,9 +206,8 @@ async function main() {
   const styleExample = pkg => {
     const examplePath = path.posix.join(pkg.dir, 'CHANGELOG.md');
     if (!fs.existsSync(examplePath)) {
-      return pkg.isRoot
-        ? '(new file — start with "# Changelog" followed by a "## YYYY-MM-DD" heading and bullets)'
-        : '(no existing CHANGELOG.md yet — use a "## x.y.z" heading followed by "### Patch Changes" etc.)';
+      return '(파일 없음 — Keep a Changelog 형식 사용: "## [Unreleased]" 아래에 ' +
+        '"## [x.y.z] - YYYY-MM-DD" 헤딩과 "### 추가/변경/사용 중단/제거/수정/보안" 하위 섹션)';
     }
     return fs.readFileSync(examplePath, 'utf8').split('\n').slice(0, 20).join('\n');
   };
@@ -190,34 +215,37 @@ async function main() {
   const sections = changed
     .map(({ pkg, diff }) => {
       const label = pkg.isRoot
-        ? `## Repo root / tooling changes (package identifier: "${ROOT_ID}", no version — this is NOT a publishable package)`
+        ? `## 저장소 루트 / 공통 설정 변경 (identifier: "${ROOT_ID}", name: ${pkg.pkgName}, current version: ${pkg.version})`
         : `## Package: ${pkg.dir} (identifier: "${pkg.dir}", name: ${pkg.pkgName}, current version: ${pkg.version})`;
       return `${label}\n\n\`\`\`diff\n${diff}\n\`\`\`\n\nCHANGELOG.md style example for this entry:\n\`\`\`\n${styleExample(pkg)}\n\`\`\``;
     })
     .join('\n\n');
 
   const systemPrompt = [
-    'You are a release-notes assistant for a pnpm/turborepo monorepo.',
-    'You will be given a git diff for one or more changed packages, and possibly',
-    'a special repo-root entry (identifier ".") for changes to tooling/CI/root',
-    'config files that do not belong to any individual package.',
-    "Respond with ONLY a JSON array, no prose, no markdown code fences, matching:",
-    "Array<{ package: string; bump: 'major' | 'minor' | 'patch' | 'none'; entry: string }>",
+    'You are a release-notes assistant for a pnpm/turborepo monorepo that',
+    'follows the Keep a Changelog format (https://keepachangelog.com/en/1.1.0/).',
+    'You will be given a git diff for one or more changed packages, including a',
+    'special repo-root entry (identifier ".") for changes to tooling/CI/root',
+    'config files that do not belong to any individual package — it has its',
+    'own package.json version like any other package.',
+    'Respond with ONLY a JSON array, no prose, no markdown code fences, matching:',
+    "Array<{ package: string; bump: 'major' | 'minor' | 'patch'; changes: {",
+    'added?: string[]; changed?: string[]; deprecated?: string[];',
+    'removed?: string[]; fixed?: string[]; security?: string[]; } }>',
     '`package` must be exactly one of the identifiers given.',
-    'For a real package, decide a semver `bump`: major = breaking API change,',
-    'minor = new backward-compatible feature/prop/export, patch = bug fix,',
-    'internal refactor, docs, or other non-breaking change.',
-    'For the repo-root entry (identifier "."), `bump` must always be exactly "none"',
-    '— it has no version number, it only gets a dated changelog entry.',
-    '`entry` must be markdown bullet lines starting with "- ", matching the',
-    'structure and detail level of the style example given for that entry.',
-    'Write the bullet text itself in Korean (한국어), regardless of what',
-    'language the style example or older changelog entries happen to be in —',
-    'this only affects the language of new text you write, not existing content.',
-    'Keep each bullet concise and terse: do NOT end sentences with polite',
-    'full-sentence endings like "~했습니다" or "~합니다"; end with a short',
-    'noun/verb-stem form instead (e.g. "~추가", "~수정", "~개선", "~제거"),',
-    'matching this repository\'s commit-message convention style.',
+    'Decide a semver `bump`: major = breaking API change, minor = new',
+    'backward-compatible feature/prop/export, patch = bug fix, internal',
+    'refactor, docs, or other non-breaking change.',
+    '`changes` groups the update into Keep a Changelog categories — only',
+    'include the categories that actually apply; each value is an array of',
+    'short bullet strings (no leading "- ", that is added automatically).',
+    'Write bullet text in Korean (한국어), regardless of what language the',
+    'style example or older changelog entries happen to be in — this only',
+    'affects the language of new text you write, not existing content.',
+    'Keep each bullet concise and terse: do NOT end with polite full-sentence',
+    'endings like "~했습니다" or "~합니다"; end with a short noun/verb-stem',
+    'form instead (e.g. "~추가", "~수정", "~개선", "~제거"), matching this',
+    "repository's commit-message convention style.",
     'Only include entries that have a real, user-facing/API-relevant, or',
     'meaningfully-affects-contributors change; omit anything that is purely',
     'internal/test/story-only noise with no one who would care to read about it.',
@@ -260,14 +288,9 @@ async function main() {
 
   for (const result of results) {
     const { pkg } = changed.find(c => c.pkg.dir === result.package);
-    if (pkg.isRoot) {
-      applyRootChangelogEntry(pkg, result.entry);
-      console.log(`Updated ${pkg.dir}/CHANGELOG.md (dated entry)`);
-      continue;
-    }
     const newVersion = bumpVersion(pkg.version, result.bump);
     applyVersionBump(pkg, newVersion);
-    applyChangelogEntry(pkg, newVersion, result.bump, result.entry);
+    applyChangelogEntry(pkg, newVersion, result.changes);
     console.log(`Updated ${pkg.dir}: ${pkg.version} -> ${newVersion} (${result.bump})`);
   }
 }

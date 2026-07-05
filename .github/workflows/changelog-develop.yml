@@ -36,7 +36,7 @@ jobs:
       - name: Check for changelog changes
         id: changes
         run: |
-          if git status --porcelain -- 'packages/*/CHANGELOG.md' 'packages/*/package.json' 'CHANGELOG.md' | grep -q .; then
+          if git status --porcelain -- 'packages/*/CHANGELOG.md' 'packages/*/package.json' 'CHANGELOG.md' 'package.json' | grep -q .; then
             echo "changed=true" >> "$GITHUB_OUTPUT"
           else
             echo "changed=false" >> "$GITHUB_OUTPUT"
@@ -47,7 +47,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add -- 'packages/*/CHANGELOG.md' 'packages/*/package.json' 'CHANGELOG.md'
+          git add -- 'packages/*/CHANGELOG.md' 'packages/*/package.json' 'CHANGELOG.md' 'package.json'
           git commit -m "🔧 chore: changelog 자동 업데이트"
 
       - name: Open changelog PR
