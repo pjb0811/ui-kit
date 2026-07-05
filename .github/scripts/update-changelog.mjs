@@ -38,10 +38,10 @@ function listCandidatePackages() {
   const root = 'packages';
   const packages = fs
     .readdirSync(root)
-    .map(name => ({ name, dir: path.join(root, name) }))
-    .filter(({ dir }) => fs.existsSync(path.join(dir, 'package.json')))
+    .map(name => ({ name, dir: path.posix.join(root, name) }))
+    .filter(({ dir }) => fs.existsSync(path.posix.join(dir, 'package.json')))
     .map(({ name, dir }) => {
-      const pkgJsonPath = path.join(dir, 'package.json');
+      const pkgJsonPath = path.posix.join(dir, 'package.json');
       const pkg = JSON.parse(fs.readFileSync(pkgJsonPath, 'utf8'));
       return {
         name,
@@ -109,7 +109,7 @@ function applyVersionBump(pkg, newVersion) {
 }
 
 function applyChangelogEntry(pkg, newVersion, bump, entry) {
-  const changelogPath = path.join(pkg.dir, 'CHANGELOG.md');
+  const changelogPath = path.posix.join(pkg.dir, 'CHANGELOG.md');
   const section = `## ${newVersion}\n\n### ${bumpHeading(bump)}\n\n${entry.trim()}\n`;
 
   if (!fs.existsSync(changelogPath)) {
@@ -125,7 +125,7 @@ function applyChangelogEntry(pkg, newVersion, bump, entry) {
 }
 
 function applyRootChangelogEntry(pkg, entry) {
-  const changelogPath = path.join(pkg.dir, 'CHANGELOG.md');
+  const changelogPath = path.posix.join(pkg.dir, 'CHANGELOG.md');
   const today = new Date().toISOString().slice(0, 10);
   const todayHeading = `## ${today}`;
   const bullets = entry.trim();
@@ -178,7 +178,7 @@ async function main() {
   }
 
   const styleExample = pkg => {
-    const examplePath = path.join(pkg.dir, 'CHANGELOG.md');
+    const examplePath = path.posix.join(pkg.dir, 'CHANGELOG.md');
     if (!fs.existsSync(examplePath)) {
       return pkg.isRoot
         ? '(new file — start with "# Changelog" followed by a "## YYYY-MM-DD" heading and bullets)'
