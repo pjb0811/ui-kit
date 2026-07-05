@@ -28,6 +28,6 @@ export interface ThemeConfig {
   dark?: boolean;
 }
 
-export interface ConfigContextValue {
+export interface ContextValue {
   theme: ThemeConfig;
 }
