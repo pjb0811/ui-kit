@@ -1,14 +1,12 @@
 import { cn } from '@repo/ui/utils';
 
-const Footer = ({
-  children,
-  className,
-  ...props
-}: React.ComponentPropsWithoutRef<'div'>) => {
+export interface Props extends React.ComponentPropsWithoutRef<'footer'> {}
+
+const Footer = ({ children, className, ...props }: Props) => {
   return (
-    <div className={cn(className, 'w-full')} {...props}>
+    <footer className={cn('w-full', className)} {...props}>
       {children}
-    </div>
+    </footer>
   );
 };
 
