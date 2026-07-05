@@ -1,0 +1,107 @@
+name: Changelog (develop)
+
+on:
+  push:
+    branches: [develop]
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+permissions:
+  contents: write
+  pull-requests: write
+  models: read
+
+jobs:
+  changelog:
+    if: "${{ !startsWith(github.event.head_commit.message, 'chore: update changelog') }}"
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.x
+
+      - name: Update package versions and changelogs via GitHub Models
+        id: github-models
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BEFORE_SHA: ${{ github.event.before }}
+          AFTER_SHA: ${{ github.event.after }}
+        run: node .github/scripts/update-changelog.mjs
+
+      - name: Update package versions and changelogs via Claude (fallback)
+        if: steps.github-models.outcome == 'failure'
+        uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          prompt: |
+            A pull request was just merged into the `develop` branch of this
+            pnpm/turborepo monorepo. Your job is to update version numbers and
+            changelogs for any publicly published package affected by this merge.
+
+            Steps:
+            1. Run `git diff ${{ github.event.before }} ${{ github.event.after }}`
+               to see exactly what changed in this merge (not the full history).
+            2. For each package under `packages/*`, check its `package.json`.
+               Skip any package where `"private": true` (currently
+               `packages/eslint-config` and `packages/typescript-config`).
+               Only `packages/ui` (`@repo/ui`) is publicly published today, but
+               do not hardcode this — always check the `private` field.
+            3. For each non-private package that has relevant changes in the
+               diff (changes under its `src/`, or otherwise affecting its public
+               API/behavior — ignore story/doc-only or test-only changes with no
+               package impact), decide a semver bump:
+               - major: breaking API change
+               - minor: new backward-compatible feature/prop/export
+               - patch: bug fix, internal refactor, docs, or other non-breaking change
+            4. Bump that package's `package.json` `version` field accordingly.
+            5. Prepend a new section to that package's `CHANGELOG.md`, directly
+               under the top-level `# @repo/ui`-style heading, following the
+               exact same style as the existing entries in that file (a
+               `## x.y.z` version heading followed by `### Major Changes` /
+               `### Minor Changes` / `### Patch Changes` with a bullet list
+               describing the actual change in clear language).
+            6. Do not touch packages with no relevant changes in this diff.
+            7. Do not modify any file other than a changed package's
+               `package.json` and `CHANGELOG.md`.
+          claude_args: |
+            --max-turns 20
+            --allowedTools "Read,Edit,Write,Bash(git diff:*),Bash(git log:*),Bash(git show:*)"
+
+      - name: Check for changelog changes
+        id: changes
+        run: |
+          if git status --porcelain -- 'packages/*/CHANGELOG.md' 'packages/*/package.json' | grep -q .; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Commit changelog updates
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -- 'packages/*/CHANGELOG.md' 'packages/*/package.json'
+          git commit -m "chore: update changelog (automated)"
+
+      - name: Open changelog PR
+        if: steps.changes.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v5
+        with:
+          commit-message: 'chore: update changelog (automated)'
+          title: 'chore: update changelog (automated)'
+          body: |
+            Automatically generated from the diff merged into `develop` at
+            ${{ github.sha }} (via GitHub Models, falling back to Claude if
+            that request failed).
+
+            Please review the version bump and changelog wording before merging.
+          branch: 'chore/changelog-update-${{ github.run_id }}'
+          base: develop
+          delete-branch: true
