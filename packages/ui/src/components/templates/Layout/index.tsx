@@ -14,17 +14,10 @@ export type { Props as SiderProps } from './Sider';
 
 export interface Props extends React.ComponentPropsWithoutRef<'div'> {}
 
-const hasSiderChild = (children: React.ReactNode) => {
-  let found = false;
-
-  Children.forEach(children, child => {
-    if (isValidElement(child) && child.type === Sider) {
-      found = true;
-    }
-  });
-
-  return found;
-};
+const hasSiderChild = (children: React.ReactNode) =>
+  Children.toArray(children).some(
+    child => isValidElement(child) && child.type === Sider,
+  );
 
 const Layout = ({ children, className, ...props }: Props) => {
   const isRow = hasSiderChild(children);
