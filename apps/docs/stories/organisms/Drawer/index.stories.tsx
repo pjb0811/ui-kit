@@ -18,6 +18,10 @@ const meta: Meta<typeof Drawer> = {
       control: { type: 'select' },
       options: ['top', 'bottom', 'left', 'right'],
     },
+    size: {
+      control: { type: 'select' },
+      options: ['small', 'medium', 'large', 'full'],
+    },
     maskClosable: {
       control: { type: 'boolean' },
     },
@@ -40,6 +44,9 @@ const meta: Meta<typeof Drawer> = {
       table: { disable: true },
     },
     children: {
+      table: { disable: true },
+    },
+    extra: {
       table: { disable: true },
     },
     footer: {
@@ -72,12 +79,59 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     open: false,
+    title: '드로어 제목',
     direction: 'bottom',
+    size: 'medium',
     maskClosable: true,
     closable: true,
     handlebar: true,
     draggable: true,
     rounded: false,
     mask: true,
+  },
+};
+
+export const WithExtra: Story = {
+  args: {
+    open: false,
+    title: '드로어 제목',
+    direction: 'bottom',
+    size: 'medium',
+    maskClosable: true,
+    closable: true,
+    handlebar: true,
+    draggable: true,
+    rounded: false,
+    mask: true,
+  },
+  render: function Render(props) {
+    const [open, setOpen] = useState(false);
+
+    return (
+      <div>
+        <Button onClick={() => setOpen(true)}>드로어 열기</Button>
+        <Drawer
+          {...props}
+          open={open}
+          onClose={() => setOpen(false)}
+          extra={
+            <div className="flex gap-2">
+              <Button size="small" onClick={() => setOpen(false)}>
+                취소
+              </Button>
+              <Button
+                type="primary"
+                size="small"
+                onClick={() => setOpen(false)}
+              >
+                확인
+              </Button>
+            </div>
+          }
+        >
+          <p>드로어 내용입니다.</p>
+        </Drawer>
+      </div>
+    );
   },
 };
