@@ -18,26 +18,19 @@
 
    빌드 실패 시 오류 내용을 보고하고 중단한다.
 
-3. **Changeset 상태 확인**
+3. **버전 상태 확인**
 
    ```bash
-   pnpm changeset status
+   node -p "require('./packages/ui/package.json').version"
+   npm view @repo/ui version 2>/dev/null || echo "not published yet"
    ```
 
-   - 변경사항이 없으면 경고: 퍼블리시할 버전 변경이 없을 수 있음
-   - pending changeset이 있으면 버전과 내용을 요약해서 보고
+   - `packages/ui/package.json` 버전이 npm 최신 버전보다 앞서 있으면, `develop`에서 `changelog-develop.yml`이 이미 버전을 승격시킨 상태 — `main`에 머지되는 즉시 `publish.yml`이 자동으로 빌드/퍼블리시/태그한다.
+   - 두 버전이 같으면 아직 퍼블리시할 변경사항이 없다는 뜻. `packages/ui/CHANGELOG.md`의 `## [Unreleased]` 바로 아래 섹션이 최신 버전과 일치하는지로도 확인 가능.
 
-4. **package.json 버전 확인**
-   - `packages/ui/package.json`의 `version` 필드 출력
-   - npm 최신 버전과 비교: `npm view @repo/ui version 2>/dev/null || echo "not published yet"`
-
-5. **exports 필드 확인**
+4. **exports 필드 확인**
    - `packages/ui/package.json`의 `exports` 필드에 새로 추가된 컴포넌트 진입점이 누락되지 않았는지 확인
    - `src/index.ts` re-export 목록과 대조
 
-6. **최종 요약**
-   통과/실패 항목을 표로 정리하고, 문제가 없으면 퍼블리시 커맨드를 안내한다:
-   ```bash
-   pnpm changeset version   # 버전 범프
-   pnpm publish-ui          # 퍼블리시
-   ```
+5. **최종 요약**
+   통과/실패 항목을 표로 정리한다. 별도 수동 퍼블리시 명령은 없다 — `main`에 머지되면 `publish.yml`이 자동으로 빌드/퍼블리시/태그까지 처리한다.

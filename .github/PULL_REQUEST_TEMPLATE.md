@@ -26,7 +26,6 @@
 ## Checklist
 
 - [ ] Commit messages follow the [convention](.github/COMMIT_CONVENTION.md)
-- [ ] A `.changeset/*.md` file has been added (run `changeset` command)
 - [ ] Storybook stories are added for new components / features
 - [ ] No type or lint errors (`pnpm lint`, `pnpm typecheck`)
 - [ ] Build completes successfully (`pnpm build`)

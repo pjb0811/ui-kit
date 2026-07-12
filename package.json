@@ -9,11 +9,9 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "turbo run check-types",
     "prepare": "husky",
-    "changeset": "changeset",
-    "publish-ui": "cd packages/ui && pnpm publish --no-git-checks"
+    "publish-ui": "cd packages/ui && npm publish"
   },
   "devDependencies": {
-    "@changesets/cli": "^2.29.8",
     "@trivago/prettier-plugin-sort-imports": "^5.2.2",
     "husky": "^9.1.7",
     "lint-staged": "^16.1.6",

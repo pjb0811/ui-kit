@@ -7,6 +7,8 @@ import { X } from 'lucide-react';
 import { drawer } from '@repo/ui/core';
 import { cn, renderConditional } from '@repo/ui/utils';
 
+import Button from '../../atoms/Button';
+
 const {
   DrawerContent,
   Drawer: DrawerCore,
@@ -16,14 +18,16 @@ const {
   DrawerTitle,
 } = drawer;
 
-interface Props {
+export interface Props {
   open: boolean;
   children?: React.ReactNode;
   title?: React.ReactNode;
+  extra?: React.ReactNode;
   footer?: React.ReactNode;
   closable?: boolean;
   closeIcon?: React.ReactNode;
   direction?: 'top' | 'bottom' | 'left' | 'right';
+  size?: 'small' | 'medium' | 'large' | 'full' | string;
   maskClosable?: boolean;
   handlebar?: boolean;
   draggable?: boolean;
@@ -38,6 +42,7 @@ interface Props {
     header?: string;
     title?: string;
     close?: string;
+    extra?: string;
     body?: string;
     footer?: string;
   };
@@ -45,13 +50,33 @@ interface Props {
   onClose: () => void;
 }
 
+const SIZES: Record<string, string> = {
+  small: '30%',
+  medium: '50%',
+  large: '75%',
+  full: '90%',
+};
+
+const getSizeStyles = (
+  direction: 'top' | 'bottom' | 'left' | 'right',
+  size: string,
+): React.CSSProperties => {
+  const value = SIZES[size] || size;
+
+  return direction === 'top' || direction === 'bottom'
+    ? { height: value }
+    : { width: value };
+};
+
 const Drawer = ({
   open,
   title,
+  extra,
   footer,
   closable = true,
   closeIcon,
   direction = 'bottom',
+  size = 'medium',
   maskClosable = true,
   handlebar = true,
   draggable = false,
@@ -66,27 +91,21 @@ const Drawer = ({
   ...props
 }: Props) => {
   useEffect(() => {
-    if (!open) {
+    if (!open || mask) {
       return;
     }
 
-    if (!mask) {
-      const originalPointerEvents = document.body.style.pointerEvents;
+    const originalPointerEvents = document.body.style.pointerEvents;
 
-      const raf = window.requestAnimationFrame(() => {
-        document.body.style.pointerEvents = 'auto';
-      });
+    const raf = window.requestAnimationFrame(() => {
+      document.body.style.pointerEvents = 'auto';
+    });
 
-      return () => {
-        window.cancelAnimationFrame(raf);
-        document.body.style.pointerEvents = originalPointerEvents;
-      };
-    }
+    return () => {
+      window.cancelAnimationFrame(raf);
+      document.body.style.pointerEvents = originalPointerEvents;
+    };
   }, [open, mask]);
-
-  if (typeof window === 'undefined') {
-    return null;
-  }
 
   return (
     <DrawerCore
@@ -94,7 +113,7 @@ const Drawer = ({
       direction={direction}
       handleOnly={!draggable}
       container={container}
-      onOpenChange={(open: boolean) => {
+      onOpenChange={open => {
         if (!open && maskClosable) {
           onClose();
         }
@@ -112,16 +131,13 @@ const Drawer = ({
         handlebar={handlebar}
         mask={mask}
         classNames={{
-          mask: cn(
-            classNames?.mask || '',
-            //
-          ),
-          handlebar: cn(
-            classNames?.handlebar || '',
-            //
-          ),
+          mask: classNames?.mask || '',
+          handlebar: classNames?.handlebar || '',
         }}
-        style={style}
+        style={{
+          ...getSizeStyles(direction, size),
+          ...style,
+        }}
       >
         <DrawerHeader
           className={cn(
@@ -130,27 +146,27 @@ const Drawer = ({
             //
           )}
         >
-          <DrawerTitle
-            className={cn(
-              'flex justify-between',
-              classNames?.title,
-              //
-            )}
-          >
-            <span>{title}</span>
+          <div className="flex items-start gap-2">
             {renderConditional(closable ? closeIcon || <X /> : null, v => (
-              <span
-                className={cn(
-                  'absolute top-3 right-5 cursor-pointer',
-                  classNames?.close,
-                  //
-                )}
+              <Button
+                type="text"
+                shape="circle"
+                size="small"
+                aria-label="닫기"
+                icon={v}
                 onClick={onClose}
-              >
-                {v}
-              </span>
+                className={cn(classNames?.close)}
+              />
             ))}
-          </DrawerTitle>
+            <div className="flex flex-1 items-start justify-between gap-2">
+              <DrawerTitle className={cn(classNames?.title)}>
+                {title}
+              </DrawerTitle>
+              {renderConditional(extra, v => (
+                <div className={cn('shrink-0', classNames?.extra)}>{v}</div>
+              ))}
+            </div>
+          </div>
           <DrawerDescription className="hidden" />
         </DrawerHeader>
         <div

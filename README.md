@@ -153,19 +153,11 @@ pnpm run format
 
 ### Deployment
 
-```bash
-# Add changes
-pnpm changeset
-
-# Update versions
-pnpm changeset version
-
-# Build UI package and publish
-pnpm build --filter=@repo/ui
-pnpm publish-ui
-```
-
-> **Note**: When publishing, `@repo/ui` is automatically deployed as `@jbpark/ui-kit`.
+Releases are fully automated. Merging to `develop` triggers an AI-generated
+changelog entry that bumps `packages/ui/package.json`'s version; merging
+`develop` into `main` then triggers the `publish.yml` workflow, which builds,
+publishes to npm via OIDC Trusted Publishing, and tags the release. No manual
+version bump or publish command is needed.
 
 ## 📚 Documentation
 
