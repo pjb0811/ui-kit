@@ -1,19 +1,20 @@
 import { cn } from '@repo/ui/utils';
 
-export interface Props extends React.ComponentPropsWithoutRef<'div'> {}
+export interface Props extends React.ComponentPropsWithoutRef<'header'> {}
 
 const Header = ({ children, className, ...props }: Props) => {
   return (
-    <div
+    <header
       className={cn(
         'sticky top-0 z-50',
-        'flex w-full items-center justify-center px-5',
+        'flex h-16 w-full items-center px-5',
         className,
+        //
       )}
       {...props}
     >
       {children}
-    </div>
+    </header>
   );
 };
 

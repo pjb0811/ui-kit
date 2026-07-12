@@ -1,6 +1,2 @@
-export { default as ConfigProvider, useConfig } from './ConfigProvider';
-export type {
-  Props as ConfigProviderProps,
-  ThemeConfig,
-  ThemeToken,
-} from './ConfigProvider';
+export { default as Config, useConfig } from './Config';
+export type { Props as ConfigProps, ThemeConfig, ThemeToken } from './Config';

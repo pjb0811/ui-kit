@@ -94,6 +94,35 @@ const meta: Meta<typeof Menu> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+const DemoControlledMenu = (args: React.ComponentProps<typeof Menu>) => {
+  const [selected, setSelected] = useState<React.Key[]>(['3']);
+
+  return (
+    <div className="p-4">
+      <div className="mb-4">
+        <p className="mb-2 text-sm font-semibold">제어 모드: 외부 상태 관리</p>
+        <p className="mb-3 text-sm text-gray-600">
+          선택된 항목: {selected.length > 0 ? selected.join(', ') : '없음'}
+        </p>
+        <button
+          onClick={() => setSelected([])}
+          className="mb-4 rounded bg-blue-500 px-3 py-1 text-sm text-white
+            hover:bg-blue-600"
+        >
+          초기화
+        </button>
+      </div>
+      <Menu
+        {...args}
+        selectedKeys={selected}
+        onSelect={params => {
+          setSelected([params.key]);
+        }}
+      />
+    </div>
+  );
+};
+
 export const Default: Story = {
   args: {
     mode: 'horizontal',
@@ -130,38 +159,5 @@ export const Controlled: Story = {
     offset: [0, 0],
     inlineOffset: 0,
   },
-  render: args => {
-    function ControlledMenuDemo() {
-      const [selected, setSelected] = useState<React.Key[]>(['3']);
-
-      return (
-        <div className="p-4">
-          <div className="mb-4">
-            <p className="mb-2 text-sm font-semibold">
-              제어 모드: 외부 상태 관리
-            </p>
-            <p className="mb-3 text-sm text-gray-600">
-              선택된 항목: {selected.length > 0 ? selected.join(', ') : '없음'}
-            </p>
-            <button
-              onClick={() => setSelected([])}
-              className="mb-4 rounded bg-blue-500 px-3 py-1 text-sm text-white
-                hover:bg-blue-600"
-            >
-              초기화
-            </button>
-          </div>
-          <Menu
-            {...args}
-            selectedKeys={selected}
-            onSelect={params => {
-              setSelected([params.key]);
-            }}
-          />
-        </div>
-      );
-    }
-
-    return <ControlledMenuDemo />;
-  },
+  render: args => <DemoControlledMenu {...args} />,
 };

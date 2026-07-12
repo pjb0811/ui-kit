@@ -47,12 +47,14 @@ Basic UI building blocks
 
 Composite components combining multiple atoms
 
+- **Card**: Container card with outlined/borderless variants
 - **Collapse**: Collapsible content area
 - **Dropdown**: Dropdown menu
 - **Marquees**: Infinite scrolling marquee component
 - **Menu**: Navigation menu
 - **Reveals**: Animation reveal component
 - **Space**: Spacing adjustment component
+- **Splitter**: Resizable panel splitter
 
 ### Organisms
 
@@ -67,7 +69,13 @@ Complex UI sections
 
 Page layout templates
 
-- **Layout**: Full page layout (includes Header, Sider, Content, Footer)
+- **Layout**: Full page layout (includes Header, collapsible Sider, Content, Footer)
+
+### Providers
+
+Theme and configuration providers
+
+- **Config**: Theme token overrides and dark mode configuration via CSS variables
 
 ## 🛠 Tech Stack
 
@@ -145,19 +153,11 @@ pnpm run format
 
 ### Deployment
 
-```bash
-# Add changes
-pnpm changeset
-
-# Update versions
-pnpm changeset version
-
-# Build UI package and publish
-pnpm build --filter=@repo/ui
-pnpm publish-ui
-```
-
-> **Note**: When publishing, `@repo/ui` is automatically deployed as `@jbpark/ui-kit`.
+Releases are fully automated. Merging to `develop` triggers an AI-generated
+changelog entry that bumps `packages/ui/package.json`'s version; merging
+`develop` into `main` then triggers the `publish.yml` workflow, which builds,
+publishes to npm via OIDC Trusted Publishing, and tags the release. No manual
+version bump or publish command is needed.
 
 ## 📚 Documentation
 

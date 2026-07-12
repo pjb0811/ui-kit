@@ -1,14 +1,15 @@
 import { cn } from '@repo/ui/utils';
 
-const Content = ({
-  children,
-  className,
-  ...props
-}: React.ComponentPropsWithoutRef<'div'>) => {
+export interface Props extends React.ComponentPropsWithoutRef<'main'> {}
+
+const Content = ({ children, className, ...props }: Props) => {
   return (
-    <div className={cn('shrink grow basis-0', className)} {...props}>
+    <main
+      className={cn('min-h-0 min-w-0 shrink grow basis-0', className)}
+      {...props}
+    >
       {children}
-    </div>
+    </main>
   );
 };
 

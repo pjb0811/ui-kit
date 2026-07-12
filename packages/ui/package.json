@@ -1,6 +1,6 @@
 {
   "name": "@repo/ui",
-  "version": "2.5.0",
+  "version": "2.7.0",
   "description": "Modern React UI component library built with TypeScript, Tailwind CSS, and Radix UI. Featuring atoms, molecules, organisms and layout templates for building beautiful interfaces.",
   "keywords": [
     "react",
@@ -79,11 +79,13 @@
     "@uidotdev/usehooks": "^2.4.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "gsap": "^3.15.0",
     "lucide-react": "^0.542.0",
     "motion": "^12.23.12",
     "postcss": "^8.4.31",
     "radix-ui": "^1.4.3",
     "react-colorful": "^5.6.1",
+    "react-resizable-panels": "^4.10.0",
     "react-use": "^17.6.0",
     "swiper": "^11.2.10",
     "tailwind-merge": "^3.3.1",

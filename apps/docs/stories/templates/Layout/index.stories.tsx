@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
 import { Layout, Typography } from '@repo/ui';
@@ -19,13 +21,8 @@ const meta: Meta<typeof Layout> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const Header = () => (
-  <div
-    className={cn(
-      'flex w-full items-center justify-between',
-      'border-b bg-white p-3',
-    )}
-  >
+const DemoHeader = () => (
+  <>
     <Typography.Title className="text-3xl">Header</Typography.Title>
     <div className="flex gap-2">
       <button
@@ -45,10 +42,10 @@ const Header = () => (
         회원가입
       </button>
     </div>
-  </div>
+  </>
 );
 
-const Content = () => (
+const DemoContent = () => (
   <div className="p-6">
     <Typography.Title className="text-2xl">Content</Typography.Title>
     <Typography.Paragraph>
@@ -63,7 +60,7 @@ const Content = () => (
   </div>
 );
 
-const Sider = () => (
+const DemoSider = ({ collapsed = false }: { collapsed?: boolean }) => (
   <div
     className={cn(
       'h-full bg-gray-50 p-4',
@@ -71,40 +68,27 @@ const Sider = () => (
       //
     )}
   >
-    <Typography.Title className="text-xl">Sider</Typography.Title>
+    {!collapsed && (
+      <Typography.Title className="text-xl">Sider</Typography.Title>
+    )}
     <nav className="mt-4 space-y-2">
-      <Typography.Link
-        href="#"
-        className={cn(
-          'block rounded p-2',
-          'transition-colors hover:bg-gray-200',
-        )}
-      >
-        메뉴 1
-      </Typography.Link>
-      <Typography.Link
-        href="#"
-        className={cn(
-          'block rounded p-2',
-          'transition-colors hover:bg-gray-200',
-        )}
-      >
-        메뉴 2
-      </Typography.Link>
-      <Typography.Link
-        href="#"
-        className={cn(
-          'block rounded p-2',
-          'transition-colors hover:bg-gray-200',
-        )}
-      >
-        메뉴 3
-      </Typography.Link>
+      {['메뉴 1', '메뉴 2', '메뉴 3'].map((label, index) => (
+        <Typography.Link
+          key={label}
+          href="#"
+          className={cn(
+            'block rounded p-2 text-center',
+            'transition-colors hover:bg-gray-200',
+          )}
+        >
+          {collapsed ? index + 1 : label}
+        </Typography.Link>
+      ))}
     </nav>
   </div>
 );
 
-const Footer = () => (
+const DemoFooter = () => (
   <div
     className={cn(
       'bg-gray-100 p-4 text-center',
@@ -118,15 +102,15 @@ const Footer = () => (
 
 export const Default: Story = {
   render: () => (
-    <Layout>
-      <Layout.Header>
-        <Header />
+    <Layout className="h-screen">
+      <Layout.Header className="justify-between border-b bg-white py-3">
+        <DemoHeader />
       </Layout.Header>
       <Layout.Content>
-        <Content />
+        <DemoContent />
       </Layout.Content>
       <Layout.Footer>
-        <Footer />
+        <DemoFooter />
       </Layout.Footer>
     </Layout>
   ),
@@ -134,20 +118,130 @@ export const Default: Story = {
 
 export const WithSider: Story = {
   render: () => (
-    <Layout>
-      <Layout.Header>
-        <Header />
+    <Layout className="h-screen">
+      <Layout.Header className="justify-between border-b bg-white py-3">
+        <DemoHeader />
       </Layout.Header>
       <Layout>
         <Layout.Sider>
-          <Sider />
+          <DemoSider />
         </Layout.Sider>
         <Layout.Content>
-          <Content />
+          <DemoContent />
         </Layout.Content>
       </Layout>
       <Layout.Footer>
-        <Footer />
+        <DemoFooter />
+      </Layout.Footer>
+    </Layout>
+  ),
+};
+
+export const CollapsibleSider: Story = {
+  name: 'WithSider (Collapsible)',
+  render: () => (
+    <Layout className="h-screen">
+      <Layout.Header className="justify-between border-b bg-white py-3">
+        <DemoHeader />
+      </Layout.Header>
+      <Layout>
+        <Layout.Sider collapsible defaultCollapsed={false}>
+          <DemoSider />
+        </Layout.Sider>
+        <Layout.Content>
+          <DemoContent />
+        </Layout.Content>
+      </Layout>
+      <Layout.Footer>
+        <DemoFooter />
+      </Layout.Footer>
+    </Layout>
+  ),
+};
+
+const DemoControlledSider = () => {
+  const [collapsed, setCollapsed] = useState(false);
+
+  return (
+    <Layout className="h-screen">
+      <Layout.Header className="justify-between border-b bg-white py-3">
+        <Typography.Title className="text-3xl">Header</Typography.Title>
+        <button
+          onClick={() => setCollapsed(prev => !prev)}
+          className={cn(
+            'rounded border px-3 py-1 text-sm',
+            'transition-colors hover:bg-gray-50',
+          )}
+        >
+          {collapsed ? '펼치기' : '접기'}
+        </button>
+      </Layout.Header>
+      <Layout>
+        <Layout.Sider
+          collapsible
+          collapsed={collapsed}
+          onCollapse={setCollapsed}
+          trigger={null}
+        >
+          <DemoSider collapsed={collapsed} />
+        </Layout.Sider>
+        <Layout.Content>
+          <DemoContent />
+        </Layout.Content>
+      </Layout>
+      <Layout.Footer>
+        <DemoFooter />
+      </Layout.Footer>
+    </Layout>
+  );
+};
+
+export const ControlledSider: Story = {
+  render: () => <DemoControlledSider />,
+};
+
+export const WithSiderRight: Story = {
+  render: () => (
+    <Layout className="h-screen">
+      <Layout.Header className="justify-between border-b bg-white py-3">
+        <DemoHeader />
+      </Layout.Header>
+      <Layout>
+        <Layout.Content>
+          <DemoContent />
+        </Layout.Content>
+        <Layout.Sider className="border-r-0 border-l">
+          <DemoSider />
+        </Layout.Sider>
+      </Layout>
+      <Layout.Footer>
+        <DemoFooter />
+      </Layout.Footer>
+    </Layout>
+  ),
+};
+
+export const HeaderOnly: Story = {
+  render: () => (
+    <Layout className="h-screen">
+      <Layout.Header className="justify-between border-b bg-white py-3">
+        <DemoHeader />
+      </Layout.Header>
+      <Layout.Content>
+        <DemoContent />
+      </Layout.Content>
+    </Layout>
+  ),
+};
+
+export const FooterOnly: Story = {
+  render: () => (
+    <Layout className="h-screen">
+      <Layout.Content>
+        <DemoContent />
+      </Layout.Content>
+      <Layout.Footer>
+        <DemoFooter />
       </Layout.Footer>
     </Layout>
   ),
