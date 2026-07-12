@@ -6,48 +6,69 @@ on:
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
+permissions:
+  contents: write
+  pull-requests: write
+  id-token: write
+
 jobs:
   publish:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
 
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          fetch-tags: true
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
         with:
           version: 9
 
+      # v6+ is required for npm's OIDC "Trusted Publishing" used below.
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 24.x
           cache: 'pnpm'
           registry-url: 'https://registry.npmjs.org'
 
+      # packages/ui's version is untagged only right after a develop -> main
+      # merge has just landed a new version (bumped earlier by
+      # changelog-develop.yml on develop) — that's the signal to actually
+      # build/publish/tag. Otherwise this push is an ordinary main update
+      # with nothing new to release.
+      - name: Check if current version is already tagged
+        id: tag_check
+        run: |
+          VERSION=$(node -p "require('./packages/ui/package.json').version")
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          if git ls-remote --exit-code --tags origin "refs/tags/v$VERSION" >/dev/null 2>&1; then
+            echo "already_tagged=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "already_tagged=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Install dependencies
+        if: steps.tag_check.outputs.already_tagged == 'false'
         run: pnpm install
 
       - name: Build
-        run: pnpm run build
+        if: steps.tag_check.outputs.already_tagged == 'false'
+        run: pnpm exec turbo run build --filter=@repo/ui
 
-      - name: Create Release Pull Request or Publish to npm
-        id: changesets
-        uses: changesets/action@v1
-        with:
-          version: pnpm exec changeset version
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      # Uses npm's OIDC "Trusted Publishing" — no NPM_TOKEN needed. pnpm
+      # publish doesn't support this yet, so publish-ui shells out to npm
+      # directly; the package itself is still built via pnpm above.
+      - name: Publish to npm
+        if: steps.tag_check.outputs.already_tagged == 'false'
+        run: pnpm run publish-ui
 
-      - name: Publish to npm (changesets only)
-        if: steps.changesets.outputs.hasChangesets == 'true'
-        run: pnpm -w publish-ui
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Tag release
+        if: steps.tag_check.outputs.already_tagged == 'false'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag "v${{ steps.tag_check.outputs.version }}"
+          git push origin "v${{ steps.tag_check.outputs.version }}"
