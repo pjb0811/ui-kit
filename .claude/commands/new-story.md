@@ -9,7 +9,12 @@
 
 ### 2. 컴포넌트 현재 상태 파악
 
-`packages/ui/src/components/{tier}/{kebab-case-name}/index.tsx`를 읽어 다음을 파악한다:
+먼저 컴포넌트가 서브컴포넌트 없는 단일 파일인지, 조합 컴포넌트(폴더)인지 확인한다.
+
+- **단일 파일**: `packages/ui/src/components/{tier}/{kebab-case-name}.tsx`를 읽는다.
+- **조합 컴포넌트**: `packages/ui/src/components/{tier}/{kebab-case-name}/index.ts`(배럴)를 읽어 공개 `Component.Sub` API를 파악하고, `packages/ui/src/components/{tier}/{kebab-case-name}/{kebab-case-name}.tsx`(메인 구현)를 읽어 `Props`를 파악한다.
+
+다음을 파악한다:
 
 - `Props` 인터페이스의 모든 prop과 타입
 - variant, size 등 string union 옵션
