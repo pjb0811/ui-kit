@@ -6,9 +6,9 @@ import postcss from 'rollup-plugin-postcss';
 export default defineConfig({
   entry: {
     index: 'src/index.ts',
-    Typography: 'src/components/atoms/Typography/index.tsx',
-    Menu: 'src/components/molecules/Menu/index.tsx',
-    Reveals: 'src/components/molecules/Reveals/index.tsx',
+    Typography: 'src/components/atoms/typography/index.tsx',
+    Menu: 'src/components/molecules/menu/index.tsx',
+    Reveals: 'src/components/molecules/reveals/index.tsx',
     utils: 'src/lib/utils/index.ts',
     enums: 'src/lib/enums/index.ts',
     core: 'src/core/index.ts',
