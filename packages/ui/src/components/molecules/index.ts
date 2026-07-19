@@ -1,8 +1,8 @@
-export { default as Card } from './Card';
-export { default as Collapse } from './Collapse';
-export { default as Dropdown } from './Dropdown';
-export { default as Marquees } from './Marquees';
-export { default as Menu } from './Menu';
-export { default as Reveals } from './Reveals';
-export { default as Splitter } from './Splitter';
-export { default as Space } from './Space';
+export { default as Card } from './card';
+export { default as Collapse } from './collapse';
+export { default as Dropdown } from './dropdown';
+export { default as Marquees } from './marquees';
+export { default as Menu } from './menu';
+export { default as Reveals } from './reveals';
+export { default as Splitter } from './splitter';
+export { default as Space } from './space';
