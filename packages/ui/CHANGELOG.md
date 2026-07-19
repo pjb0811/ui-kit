@@ -7,6 +7,22 @@
 
 ## [Unreleased]
 
+## [2.8.0] - 2026-07-19
+
+### 변경
+
+- Typography 컴포넌트 경로 변경
+- Menu 컴포넌트 경로 변경
+- Reveals 컴포넌트 경로 변경
+- Checkbox.Group 제거
+- Checkbox.Group 경로 변경
+- ColorPicker 컴포넌트 경로 변경
+- FloatButton.BackTop 컴포넌트 경로 변경
+
+### 제거
+
+- Typography 컴포넌트 삭제
+
 ## [2.7.0] - 2026-07-12
 
 ### 추가
