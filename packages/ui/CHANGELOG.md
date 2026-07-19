@@ -1,187 +1,187 @@
 # @repo/ui
 
-이 프로젝트의 모든 주요 변경사항을 이 파일에 기록합니다.
+All notable changes to this project will be documented in this file.
 
-형식은 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)를 따르며,
-이 프로젝트는 [Semantic Versioning](https://semver.org/spec/v2.0.0.html)을 준수합니다.
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
 ## [2.6.0] - 2026-07-05
 
-### 추가
+### Added
 
-- Splitter 컴포넌트 추가
-- AGENTS.md 문서 추가
-- react-resizable-panels 의존성 추가
+- Add Splitter component
+- Add AGENTS.md documentation
+- Add react-resizable-panels dependency
 
-### 변경
+### Changed
 
-- Content 컴포넌트를 div에서 main으로 변경
+- Change Content component from div to main
 
 ## [2.5.0] - 2026-04-05
 
-### 추가
+### Added
 
-- `ConfigProvider` export 추가 (중첩 테마 토큰 오버라이드 및 다크 모드 설정 적용)
+- Add `ConfigProvider` export (supports nested theme token overrides and dark mode configuration)
 
-### 변경
+### Changed
 
-- 버튼, 스위치, 공용 테마 스타일이 provider 기반 테마 값을 반영하도록 개선
-- 토큰 오버라이드/다크 모드/중첩 provider 사용 예시를 다루는 Storybook 스토리 추가
+- Update Button, Switch, and shared theme styles to reflect provider-based theme values
+- Add Storybook stories covering token overrides, dark mode, and nested provider usage
 
 ## [2.4.0] - 2026-03-22
 
-### 추가
+### Added
 
-- `Radio.Group`에 `optionType`(`'default' | 'button'`), `buttonStyle`, `size`, `disabled` prop 추가 (버튼 스타일 라디오 렌더링)
-- `Button`에 `type`(`'primary' | 'default' | 'dashed' | 'text' | 'link'`), `shape`(`'default' | 'circle' | 'round'`) prop 추가
-- `Switch`에 `size`(`'small' | 'medium'`) prop 추가
-- `Switch`에 `checkedChildren`, `unCheckedChildren` prop 추가 (애니메이션 라벨 렌더링)
-- core `Switch` 프리미티브에 `children` 슬롯 노출
+- Add `optionType` (`'default' | 'button'`), `buttonStyle`, `size`, `disabled` props to `Radio.Group` (button-style radio rendering)
+- Add `type` (`'primary' | 'default' | 'dashed' | 'text' | 'link'`), `shape` (`'default' | 'circle' | 'round'`) props to `Button`
+- Add `size` (`'small' | 'medium'`) prop to `Switch`
+- Add `checkedChildren`, `unCheckedChildren` props to `Switch` (animated label rendering)
+- Expose `children` slot on core `Switch` primitive
 
-### 변경
+### Changed
 
-- `Radio.Group` 기본 방향을 `'vertical'`에서 `'horizontal'`로 변경
-- `Button`이 `variant`를 명시하지 않으면 내부 `typeToVariant` 매핑으로 `type`에서 결정하도록 변경
-- `OptionValue` 타입을 `Group` 모듈로 이동, `Radio`/`Checkbox` 양쪽에서 재노출
-- 아이콘 전용 `Button` 사이즈 처리에 `iconClasses` 기반 SVG 크기 유틸리티 반영
+- Change `Radio.Group` default orientation from `'vertical'` to `'horizontal'`
+- Change `Button` to derive `variant` from `type` via the internal `typeToVariant` mapping when `variant` is not specified
+- Move `OptionValue` type to the `Group` module, re-export from both `Radio` and `Checkbox`
+- Apply `iconClasses`-based SVG sizing utility to icon-only `Button` size handling
 
 ## [2.3.4] - 2026-02-10
 
-### 변경
+### Changed
 
-- 빌드 파이프라인 정리: tsdown 설정으로 전환, CSS 출력 이름 조정, TS 빌드 설정 업데이트
+- Clean up build pipeline: switch to tsdown config, adjust CSS output naming, update TS build settings
 
 ## [2.3.3] - 2026-02-06
 
-### 수정
+### Fixed
 
-- field 컴포넌트의 core export 구조 분해 오류 수정
+- Fix core export destructuring error in field component
 
 ## [2.3.2] - 2026-02-05
 
-### 수정
+### Fixed
 
-- core 프리미티브에서 네임스페이스 import와 직접 import 방식 모두 지원하도록 수정
+- Support both namespace and direct import styles for core primitives
 
 ## [2.3.1] - 2026-02-05
 
-### 추가
+### Added
 
-- 패키지 export를 통해 core 프리미티브 노출
+- Expose core primitives via package exports
 
 ## [2.3.0] - 2026-02-05
 
-### 추가
+### Added
 
-- 신규 컴포넌트 추가
+- Add new components
 
-### 변경
+### Changed
 
-- 컴포넌트 API 개선
+- Improve component API
 
 ## [2.2.2] - 2026-02-03
 
-### 변경
+### Changed
 
-- 버전 정리 (기능 변경 없음)
+- Clean up versioning (no functional changes)
 
 ## [2.2.1] - 2026-02-03
 
-### 수정
+### Fixed
 
-- Progress 값을 0~100 범위로 clamp 처리해 렌더링 안정화
+- Clamp Progress value to the 0–100 range for rendering stability
 
 ## [2.2.0] - 2026-02-03
 
-### 추가
+### Added
 
-- Radio, Select, ColorPicker 신규 컴포넌트 추가
+- Add Radio, Select, ColorPicker components
 
-### 변경
+### Changed
 
-- Popover, Progress, Switch, Textarea 스타일 및 옵션 개선
+- Improve Popover, Progress, Switch, Textarea styles and options
 
 ## [2.1.0] - 2026-01-28
 
-### 추가
+### Added
 
-- Popover placement 옵션 추가
+- Add Popover placement option
 
-### 변경
+### Changed
 
-- 컴포넌트 아키텍처를 centralized core export 구조로 리팩터링
-- Card, Drawer의 조건부 렌더링 패턴 개선
-- Button, Checkbox, Input, Progress, Skeleton, Switch가 새로운 core import 구조를 사용하도록 변경
+- Refactor component architecture to a centralized core export structure
+- Improve conditional rendering pattern in Card, Drawer
+- Change Button, Checkbox, Input, Progress, Skeleton, Switch to use the new core import structure
 
 ## [2.0.1] - 2026-01-26
 
-### 변경
+### Changed
 
-- 버전 정리
+- Clean up versioning
 
 ## [2.0.0] - 2026-01-24
 
-### 변경
+### Changed
 
-- **(주요 변경)** `Button` variant 및 color 처리 방식 개선
+- **(Breaking change)** Improve `Button` variant and color handling
 
 ## [1.1.7] - 2026-01-24
 
-### 변경
+### Changed
 
-- Marquees 너비 처리 및 반응형 개선
+- Improve Marquees width handling and responsiveness
 
 ## [1.1.6] - 2026-01-18
 
-### 추가
+### Added
 
-- `Input` 컴포넌트 export 추가
+- Add `Input` component export
 
 ## [1.1.5] - 2026-01-18
 
-### 제거
+### Removed
 
-- tsdown 설정에서 미사용 외부 의존성 제거
+- Remove unused external dependency from tsdown config
 
 ## [1.1.4] - 2026-01-18
 
-### 변경
+### Changed
 
-- README 파일 언어 링크 업데이트
+- Update README language links
 
 ## [1.1.3] - 2026-01-17
 
-### 변경
+### Changed
 
-- CI를 main 브랜치로만 제한
+- Restrict CI to main branch only
 
 ## [1.1.2] - 2026-01-17
 
-### 변경
+### Changed
 
-- publish 워크플로우 및 스크립트 업데이트
+- Update publish workflow and scripts
 
 ## [1.1.1] - 2026-01-17
 
-### 변경
+### Changed
 
-- 버전 관리용 changeset 정리
+- Clean up changesets used for versioning
 
 ## [1.1.0] - 2026-01-17
 
-### 추가
+### Added
 
-- `Card`, `Label` 컴포넌트 추가
+- Add `Card`, `Label` components
 
-### 변경
+### Changed
 
-- `Button`, `Checkbox` 개선
+- Improve `Button`, `Checkbox`
 
 ## [1.0.1] - 2026-01-10
 
-### 변경
+### Changed
 
-- 빌드 설정 업데이트, 배포 스크립트 에러 처리 개선
-- `.gitignore` 규칙 수정
+- Update build configuration, improve deploy script error handling
+- Fix `.gitignore` rules
