@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.4] - 2026-07-20
+
+### Changed
+
+- Update changelog script to use English for category labels
+- Change default message for missing changelog file to English
+- Update changelog script documentation to use English
+
 ## [0.4.3] - 2026-07-19
 
 ### 추가
