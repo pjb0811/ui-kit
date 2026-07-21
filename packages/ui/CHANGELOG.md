@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.9.0] - 2026-07-21
+
+### Added
+
+- Add Tag component to documentation
+- Add Tag to exports in package.json
+- Add Tag to README import examples
+
 ## [2.8.0] - 2026-07-19
 
 ### 변경
