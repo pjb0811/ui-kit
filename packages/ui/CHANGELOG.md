@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.9.2] - 2026-07-21
+
+### Changed
+
+- Version bump only, no code changes. Skips 2.9.0/2.9.1: those version numbers were already published to npm from an earlier direct-push-to-main mistake (since reverted) and can't be reused, so this release picks up the next clean number.
+
 ## [2.9.0] - 2026-07-21
 
 ### Added
