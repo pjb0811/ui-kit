@@ -2,9 +2,9 @@
 
 import { useState } from 'react';
 
-import { Button } from '@repo/ui';
 import { cn } from '@repo/ui/utils';
 
+import Button from '../button';
 import Radio from './radio';
 
 export type OptionValue = string | number | boolean;

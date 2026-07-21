@@ -22,8 +22,8 @@ const Card = ({
       className={cn(
         'w-full',
         'rounded-lg p-4',
-        'bg-white shadow-sm transition-all',
-        variant === 'outlined' && 'border border-gray-200',
+        'bg-card text-card-foreground shadow-sm transition-all',
+        variant === 'outlined' && 'border-border border',
         className,
         //
       )}
