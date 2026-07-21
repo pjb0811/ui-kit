@@ -41,6 +41,7 @@ Basic UI building blocks
 - **Skeleton**: Loading skeleton (includes Button, Node)
 - **Spin**: Loading spinner
 - **Switch**: Toggle switch
+- **Tag**: Pill-style label/tag
 - **Typography**: Text components (includes Link, Paragraph, Text, Title)
 
 ### Molecules

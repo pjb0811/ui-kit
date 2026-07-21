@@ -4,8 +4,9 @@ import React, { useEffect } from 'react';
 
 import { useIntersectionObserver } from '@uidotdev/usehooks';
 
-import { Skeleton } from '@repo/ui';
 import { cn, renderConditional } from '@repo/ui/utils';
+
+import Skeleton from '../../atoms/skeleton';
 
 interface Props<T> extends Omit<
   React.ComponentPropsWithoutRef<'div'>,
