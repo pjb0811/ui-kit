@@ -72,3 +72,34 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git tag "v${{ steps.tag_check.outputs.version }}"
           git push origin "v${{ steps.tag_check.outputs.version }}"
+
+      # release.yml used to do this on tag push, but a tag pushed with the
+      # default GITHUB_TOKEN (as above) never triggers another workflow run
+      # — GitHub blocks that to prevent recursive runs — so it never fired.
+      # Doing it here, in the same job/token context, sidesteps that
+      # entirely instead of needing a separate PAT.
+      - name: Get changelog entry
+        if: steps.tag_check.outputs.already_tagged == 'false'
+        id: changelog
+        run: |
+          VERSION=${{ steps.tag_check.outputs.version }}
+          CHANGELOG_FILE="packages/ui/CHANGELOG.md"
+          if [ -f "$CHANGELOG_FILE" ]; then
+            CONTENT=$(awk "/## \[$VERSION\]/,/## \[/" "$CHANGELOG_FILE" | head -n -1)
+            CONTENT="${CONTENT//'%'/'%25'}"
+            CONTENT="${CONTENT//$'\n'/'%0A'}"
+            CONTENT="${CONTENT//$'\r'/'%0D'}"
+            echo "body=$CONTENT" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create GitHub Release
+        if: steps.tag_check.outputs.already_tagged == 'false'
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ steps.tag_check.outputs.version }}
+          body: ${{ steps.changelog.outputs.body || format('Release {0}', steps.tag_check.outputs.version) }}
+          draft: false
+          prerelease: ${{ contains(steps.tag_check.outputs.version, 'alpha') || contains(steps.tag_check.outputs.version, 'beta') || contains(steps.tag_check.outputs.version, 'rc') }}
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
