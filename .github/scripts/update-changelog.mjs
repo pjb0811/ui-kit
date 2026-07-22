@@ -27,12 +27,12 @@ const MAX_TOTAL_DIFF_CHARS = 10000;
 const MAX_STYLE_EXAMPLE_CHARS = 600;
 
 const CATEGORY_ORDER = [
-  ['added', '추가'],
-  ['changed', '변경'],
-  ['deprecated', '사용 중단'],
-  ['removed', '제거'],
-  ['fixed', '수정'],
-  ['security', '보안'],
+  ['added', 'Added'],
+  ['changed', 'Changed'],
+  ['deprecated', 'Deprecated'],
+  ['removed', 'Removed'],
+  ['fixed', 'Fixed'],
+  ['security', 'Security'],
 ];
 const CATEGORY_KEYS = CATEGORY_ORDER.map(([key]) => key);
 
@@ -144,10 +144,10 @@ function ensureChangelogSkeleton(changelogPath, pkgName) {
   const header = [
     `# ${pkgName}`,
     '',
-    '이 프로젝트의 모든 주요 변경사항을 이 파일에 기록합니다.',
+    'All notable changes to this project will be documented in this file.',
     '',
-    '형식은 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)를 따르며,',
-    '이 프로젝트는 [Semantic Versioning](https://semver.org/spec/v2.0.0.html)을 준수합니다.',
+    'The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),',
+    'and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).',
     '',
     '## [Unreleased]',
     '',
@@ -224,8 +224,8 @@ async function main() {
   const styleExample = pkg => {
     const examplePath = path.posix.join(pkg.dir, 'CHANGELOG.md');
     if (!fs.existsSync(examplePath)) {
-      return '(파일 없음 — Keep a Changelog 형식 사용: "## [Unreleased]" 아래에 ' +
-        '"## [x.y.z] - YYYY-MM-DD" 헤딩과 "### 추가/변경/사용 중단/제거/수정/보안" 하위 섹션)';
+      return '(no file yet — use Keep a Changelog format: under "## [Unreleased]", ' +
+        'a "## [x.y.z] - YYYY-MM-DD" heading with "### Added/Changed/Deprecated/Removed/Fixed/Security" subsections)';
     }
     const example = fs.readFileSync(examplePath, 'utf8').split('\n').slice(0, 10).join('\n');
     return truncate(example, MAX_STYLE_EXAMPLE_CHARS);
@@ -234,7 +234,7 @@ async function main() {
   const sections = changed
     .map(({ pkg, diff }) => {
       const label = pkg.isRoot
-        ? `## 저장소 루트 / 공통 설정 변경 (identifier: "${ROOT_ID}", name: ${pkg.pkgName}, current version: ${pkg.version})`
+        ? `## Repo-root / shared config changes (identifier: "${ROOT_ID}", name: ${pkg.pkgName}, current version: ${pkg.version})`
         : `## Package: ${pkg.dir} (identifier: "${pkg.dir}", name: ${pkg.pkgName}, current version: ${pkg.version})`;
       const trimmedDiff = truncate(diff, perPackageDiffBudget);
       return `${label}\n\n\`\`\`diff\n${trimmedDiff}\n\`\`\`\n\nCHANGELOG.md style example for this entry:\n\`\`\`\n${styleExample(pkg)}\n\`\`\``;
@@ -259,13 +259,12 @@ async function main() {
     '`changes` groups the update into Keep a Changelog categories — only',
     'include the categories that actually apply; each value is an array of',
     'short bullet strings (no leading "- ", that is added automatically).',
-    'Write bullet text in Korean (한국어), regardless of what language the',
-    'style example or older changelog entries happen to be in — this only',
-    'affects the language of new text you write, not existing content.',
-    'Keep each bullet concise and terse: do NOT end with polite full-sentence',
-    'endings like "~했습니다" or "~합니다"; end with a short noun/verb-stem',
-    'form instead (e.g. "~추가", "~수정", "~개선", "~제거"), matching this',
-    "repository's commit-message convention style.",
+    'Write bullet text in English, regardless of what language the style',
+    'example or older changelog entries happen to be in — this only affects',
+    'the language of new text you write, not existing content.',
+    'Keep each bullet concise: use imperative present tense (e.g. "Add",',
+    '"Fix", "Improve", "Remove"), no trailing period, matching this',
+    "repository's English commit-message convention style.",
     'Only include entries that have a real, user-facing/API-relevant, or',
     'meaningfully-affects-contributors change; omit anything that is purely',
     'internal/test/story-only noise with no one who would care to read about it.',

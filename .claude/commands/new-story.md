@@ -5,11 +5,16 @@
 
 ### 1. 인자 파싱
 
-`$ARGUMENTS`를 `{tier}/{ComponentName}` 형태로 파싱한다.
+`$ARGUMENTS`를 `{tier}/{ComponentName}` 형태로 파싱한다. `ComponentName`은 PascalCase(컴포넌트 export 이름)로 받되, 폴더 경로를 만들 때는 kebab-case로 변환한다 (예: `FloatButton` → `float-button`).
 
 ### 2. 컴포넌트 현재 상태 파악
 
-`packages/ui/src/components/{tier}/{ComponentName}/index.tsx`를 읽어 다음을 파악한다:
+먼저 컴포넌트가 서브컴포넌트 없는 단일 파일인지, 조합 컴포넌트(폴더)인지 확인한다.
+
+- **단일 파일**: `packages/ui/src/components/{tier}/{kebab-case-name}.tsx`를 읽는다.
+- **조합 컴포넌트**: `packages/ui/src/components/{tier}/{kebab-case-name}/index.ts`(배럴)를 읽어 공개 `Component.Sub` API를 파악하고, `packages/ui/src/components/{tier}/{kebab-case-name}/{kebab-case-name}.tsx`(메인 구현)를 읽어 `Props`를 파악한다.
+
+다음을 파악한다:
 
 - `Props` 인터페이스의 모든 prop과 타입
 - variant, size 등 string union 옵션
@@ -19,7 +24,7 @@
 
 ### 3. 기존 스토리 존재 여부 확인
 
-`apps/docs/stories/{tier}/{ComponentName}/index.stories.tsx`를 읽는다.
+`apps/docs/stories/{tier}/{kebab-case-name}/index.stories.tsx`를 읽는다.
 
 **스토리가 없으면** → 4단계로 진행해 새로 생성한다.
 

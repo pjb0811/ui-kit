@@ -1,6 +1,6 @@
 {
   "name": "@repo/ui",
-  "version": "2.7.0",
+  "version": "2.9.7",
   "description": "Modern React UI component library built with TypeScript, Tailwind CSS, and Radix UI. Featuring atoms, molecules, organisms and layout templates for building beautiful interfaces.",
   "keywords": [
     "react",
@@ -37,9 +37,14 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
-    "./Typography": "./src/components/atoms/Typography/index.tsx",
-    "./Menu": "./src/components/molecules/Menu/index.tsx",
-    "./Reveals": "./src/components/molecules/Reveals/index.tsx",
+    "./Typography": "./src/components/atoms/typography/index.ts",
+    "./Button": "./src/components/atoms/button.tsx",
+    "./Tag": "./src/components/atoms/tag.tsx",
+    "./Card": "./src/components/molecules/card.tsx",
+    "./Space": "./src/components/molecules/space.tsx",
+    "./Menu": "./src/components/molecules/menu/index.ts",
+    "./Reveals": "./src/components/molecules/reveals/index.ts",
+    "./Layout": "./src/components/templates/layout/index.ts",
     "./utils": "./src/lib/utils/index.ts",
     "./enums": "./src/lib/enums/index.ts",
     "./core": "./src/core/index.ts",
