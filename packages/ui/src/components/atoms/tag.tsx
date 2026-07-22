@@ -1,16 +1,22 @@
+import { badge } from '@repo/ui/core';
 import { cn } from '@repo/ui/utils';
 
-interface Props extends React.ComponentPropsWithoutRef<'span'> {
+const Core = badge.Badge;
+type BadgeProps = badge.Props;
+
+export interface Props extends Omit<BadgeProps, 'variant'> {
   variant?: 'default' | 'outlined';
   color?: 'default' | 'primary' | 'success' | 'warning' | 'danger';
 }
 
 const fillColorClasses: Record<string, string> = {
-  default: 'bg-muted text-muted-foreground',
-  primary: 'bg-primary/10 text-primary',
-  success: 'bg-green-500/10 text-green-600 dark:text-green-400',
-  warning: 'bg-yellow-500/10 text-yellow-600 dark:text-yellow-400',
-  danger: 'bg-destructive/10 text-destructive',
+  default: 'border-transparent bg-muted text-muted-foreground',
+  primary: 'border-transparent bg-primary/10 text-primary',
+  success:
+    'border-transparent bg-green-500/10 text-green-600 dark:text-green-400',
+  warning:
+    'border-transparent bg-yellow-500/10 text-yellow-600 dark:text-yellow-400',
+  danger: 'border-transparent bg-destructive/10 text-destructive',
 };
 
 const outlinedColorClasses: Record<string, string> = {
@@ -29,20 +35,20 @@ const Tag = ({
   ...props
 }: Props) => {
   return (
-    <span
+    <Core
+      variant="outline"
       className={cn(
-        'inline-flex items-center',
         'rounded-full px-2.5 py-1',
         'text-xs font-medium',
         variant === 'default' && fillColorClasses[color],
-        variant === 'outlined' && ['border', outlinedColorClasses[color]],
+        variant === 'outlined' && outlinedColorClasses[color],
         className,
         //
       )}
       {...props}
     >
       {children}
-    </span>
+    </Core>
   );
 };
 
