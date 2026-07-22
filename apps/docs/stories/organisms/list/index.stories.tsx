@@ -32,6 +32,9 @@ const meta: Meta<typeof List<Item>> = {
     renderItem: {
       action: 'renderItem',
     },
+    itemKey: {
+      action: 'itemKey',
+    },
   },
 };
 
@@ -42,10 +45,26 @@ export const Default: Story = {
   args: {
     loading: false,
     data: defaultData,
+    itemKey: item => item.id,
     renderItem: item => (
-      <div key={item.id} className="rounded-lg border p-4">
+      <div className="rounded-lg border p-4">
         <h3 className="font-semibold">{item.name}</h3>
         <p className="text-gray-600">{item.description}</p>
+      </div>
+    ),
+  },
+};
+
+export const Empty: Story = {
+  args: {
+    loading: false,
+    data: [],
+    empty: (
+      <div
+        className="rounded-lg border border-dashed p-8 text-center
+          text-gray-500"
+      >
+        No items to display.
       </div>
     ),
   },

@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.10.0] - 2026-07-22
+
+### Added
+
+- Add role attribute to list item component
+- Add titleLevel prop to List component
+- Add itemKey prop to List component
+
+### Changed
+
+- Change title rendering to use Title component
+- Change list rendering to use role attribute
+
 ## [2.9.7] - 2026-07-22
 
 ### Changed
