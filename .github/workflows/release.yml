@@ -33,7 +33,15 @@ jobs:
           VERSION=${VERSION#v}
           CHANGELOG_FILE="packages/ui/CHANGELOG.md"
           if [ -f "$CHANGELOG_FILE" ]; then
-            CONTENT=$(awk "/## \[$VERSION\]/,/## \[/" "$CHANGELOG_FILE" | head -n -1)
+            # Can't use awk's `/start/,/end/` range here: the end pattern
+            # (any "## [" header) also matches the start line itself, so the
+            # range would close immediately and yield nothing. Skip the
+            # start header explicitly and exit before printing the next one.
+            CONTENT=$(awk -v version="$VERSION" '
+              $0 ~ "^## \\[" version "\\]" { found=1; next }
+              found && /^## \[/ { exit }
+              found { print }
+            ' "$CHANGELOG_FILE")
             CONTENT="${CONTENT//'%'/'%25'}"
             CONTENT="${CONTENT//$'\n'/'%0A'}"
             CONTENT="${CONTENT//$'\r'/'%0D'}"
