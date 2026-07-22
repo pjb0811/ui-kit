@@ -51,6 +51,7 @@ src/
 | **Skeleton**    | 로딩 스켈레톤             | `Button`, `Node`                     |
 | **Spin**        | 로딩 스피너               | -                                    |
 | **Switch**      | 토글 스위치               | -                                    |
+| **Tag**         | 알약 모양의 라벨/태그     | -                                    |
 | **Typography**  | 텍스트 컴포넌트           | `Link`, `Paragraph`, `Text`, `Title` |
 
 ## 🔬 Molecules (분자)
@@ -140,12 +141,29 @@ function App() {
 
 ```tsx
 // Typography 컴포넌트
+// Button 컴포넌트
+import Button from '@jbpark/ui-kit/Button';
+// Card 컴포넌트
+import Card from '@jbpark/ui-kit/Card';
+// Layout 컴포넌트
+import Layout from '@jbpark/ui-kit/Layout';
 // Menu 컴포넌트
-import { Menu } from '@jbpark/ui-kit/Menu';
+import Menu from '@jbpark/ui-kit/Menu';
 // Reveals 컴포넌트
-import { Reveals } from '@jbpark/ui-kit/Reveals';
-import { Typography } from '@jbpark/ui-kit/Typography';
+import Reveals from '@jbpark/ui-kit/Reveals';
+// Space 컴포넌트
+import Space from '@jbpark/ui-kit/Space';
+// Tag 컴포넌트
+import Tag from '@jbpark/ui-kit/Tag';
+import Typography from '@jbpark/ui-kit/Typography';
 ```
+
+> 이 개별 import 경로들은 전부 default export만 있습니다 — `{ ComponentName }`이
+> 아니라 컴포넌트 자체를 import하세요. 필요한 컴포넌트만 쓸 거라면 루트
+> `@jbpark/ui-kit` 대신 개별 경로를 쓰는 걸 권장합니다. 루트 진입점은 organisms
+> 전체(Swiper 포함)를 다시 export하는데, `Swiper`가 `swiper`의 CSS를 사이드
+> 이펙트로 불러오기 때문에 Node/SSR 빌드(예: Astro static build)에서 순수
+> `.css` import를 처리 못 해 빌드가 깨질 수 있습니다.
 
 ### 유틸리티 및 열거형 import
 

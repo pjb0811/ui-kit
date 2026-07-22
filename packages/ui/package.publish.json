@@ -11,6 +11,26 @@
       "import": "./dist/Typography.mjs",
       "default": "./dist/Typography.mjs"
     },
+    "./Button": {
+      "types": "./dist/Button.d.mts",
+      "import": "./dist/Button.mjs",
+      "default": "./dist/Button.mjs"
+    },
+    "./Tag": {
+      "types": "./dist/Tag.d.mts",
+      "import": "./dist/Tag.mjs",
+      "default": "./dist/Tag.mjs"
+    },
+    "./Card": {
+      "types": "./dist/Card.d.mts",
+      "import": "./dist/Card.mjs",
+      "default": "./dist/Card.mjs"
+    },
+    "./Space": {
+      "types": "./dist/Space.d.mts",
+      "import": "./dist/Space.mjs",
+      "default": "./dist/Space.mjs"
+    },
     "./Menu": {
       "types": "./dist/Menu.d.mts",
       "import": "./dist/Menu.mjs",
@@ -20,6 +40,11 @@
       "types": "./dist/Reveals.d.mts",
       "import": "./dist/Reveals.mjs",
       "default": "./dist/Reveals.mjs"
+    },
+    "./Layout": {
+      "types": "./dist/Layout.d.mts",
+      "import": "./dist/Layout.mjs",
+      "default": "./dist/Layout.mjs"
     },
     "./utils": {
       "types": "./dist/utils.d.mts",
