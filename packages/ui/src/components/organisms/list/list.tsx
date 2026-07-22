@@ -32,6 +32,7 @@ interface Props<T> extends Omit<
   };
   data?: T[];
   renderItem?: (item: T, index: number) => React.ReactNode;
+  itemKey?: (item: T, index: number) => React.Key;
 }
 
 const List = <T,>({
@@ -46,6 +47,7 @@ const List = <T,>({
   className,
   classNames,
   renderItem = () => null,
+  itemKey,
   ...props
 }: Props<T>) => {
   const [loaderRef, entry] = useIntersectionObserver({
@@ -82,7 +84,11 @@ const List = <T,>({
   }
 
   if (!data?.length && empty) {
-    return empty;
+    return (
+      <div className={cn(className)} {...props}>
+        {empty}
+      </div>
+    );
   }
 
   return (
@@ -106,12 +112,20 @@ const List = <T,>({
       ))}
       <div className={cn(classNames?.header)}>{header}</div>
       <div className={cn('space-y-2', classNames?.body)}>
-        {data?.map((item, i) => renderItem(item, i))}
+        {data?.map((item, i) =>
+          itemKey ? (
+            <React.Fragment key={itemKey(item, i)}>
+              {renderItem(item, i)}
+            </React.Fragment>
+          ) : (
+            renderItem(item, i)
+          ),
+        )}
         {scroll?.loading &&
           (scroll?.loader ?? (
             <Skeleton.Node count={10} gap={10} {...loaderProps} />
           ))}
-        <div ref={loaderRef} />
+        {scroll && <div ref={loaderRef} />}
       </div>
     </div>
   );
