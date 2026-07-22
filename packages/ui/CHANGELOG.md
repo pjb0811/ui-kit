@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.9.0] - 2026-07-22
+
+### Added
+
+- Add Tag component to documentation
+- Add default export paths for Button, Tag, Card, Space, and Layout components
+
 ## [2.8.0] - 2026-07-19
 
 ### Changed
