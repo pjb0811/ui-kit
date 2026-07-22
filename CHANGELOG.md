@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.5] - 2026-07-22
+
+### Added
+
+- Add Tag component to README
+
+### Changed
+
+- Update changelog workflow descriptions to English
+- Update commit messages in changelog workflow to English
+
 ## [0.4.4] - 2026-07-20
 
 ### Changed
