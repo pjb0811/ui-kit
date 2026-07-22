@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-07-22
+
+### Added
+
+- Add manual fallback workflow for creating GitHub Releases for existing tags
+- Add input parameter for existing git tag in manual release workflow
+- Add changelog entry retrieval in publish workflow
+
+### Changed
+
+- Change release workflow trigger from tag push to manual dispatch
+- Update publish workflow to create GitHub Release immediately after tagging
+
 ## [0.4.5] - 2026-07-22
 
 ### Added
