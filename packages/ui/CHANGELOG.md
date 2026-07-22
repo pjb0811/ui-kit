@@ -9,31 +9,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.8.0] - 2026-07-19
 
-### 변경
+### Changed
 
-- Typography 컴포넌트 경로 변경
-- Menu 컴포넌트 경로 변경
-- Reveals 컴포넌트 경로 변경
-- Checkbox.Group 제거
-- Checkbox.Group 경로 변경
-- ColorPicker 컴포넌트 경로 변경
-- FloatButton.BackTop 컴포넌트 경로 변경
+- Change Typography component path
+- Change Menu component path
+- Change Reveals component path
+- Remove Checkbox.Group
+- Change Checkbox.Group path
+- Change ColorPicker component path
+- Change FloatButton.BackTop component path
 
-### 제거
+### Removed
 
-- Typography 컴포넌트 삭제
+- Remove Typography component
 
 ## [2.7.0] - 2026-07-12
 
-### 추가
+### Added
 
-- gsap 의존성 추가
-- Drawer 컴포넌트에 extra prop 추가
-- Drawer 컴포넌트에 size prop 추가
+- Add gsap dependency
+- Add extra prop to Drawer component
+- Add size prop to Drawer component
 
-### 변경
+### Changed
 
-- Drawer 컴포넌트의 크기 스타일 처리 방식 개선
+- Improve Drawer component's size style handling
 
 ## [2.6.0] - 2026-07-05
 

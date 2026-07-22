@@ -17,24 +17,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.4.3] - 2026-07-19
 
-### 추가
+### Added
 
-- 코딩 스타일 가이드 추가
+- Add coding style guide
 
-### 변경
+### Changed
 
-- 새 컴포넌트 생성 시 폴더명 규칙 변경
-- 스토리북 스토리 생성 시 폴더명 규칙 변경
+- Change folder naming convention for new component creation
+- Change folder naming convention for new Storybook story creation
 
 ## [0.4.2] - 2026-07-12
 
-### 변경
+### Changed
 
-- 퍼블리시 체크 명령어 개선
+- Improve publish check command
 
-### 제거
+### Removed
 
-- Changesets 관련 설정 파일 제거
+- Remove Changesets-related config files
 
 ## [0.4.1] - 2026-07-05
 
