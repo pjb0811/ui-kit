@@ -6,7 +6,7 @@ const Item = ({
   ...props
 }: React.ComponentPropsWithoutRef<'div'>) => {
   return (
-    <div className={cn(className)} {...props}>
+    <div role="listitem" className={cn(className)} {...props}>
       {children}
     </div>
   );

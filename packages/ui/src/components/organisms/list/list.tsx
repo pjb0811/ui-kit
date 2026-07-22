@@ -1,12 +1,13 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 import { useIntersectionObserver } from '@uidotdev/usehooks';
 
 import { cn, renderConditional } from '@repo/ui/utils';
 
 import Skeleton from '../../atoms/skeleton';
+import { Title } from '../../atoms/typography';
 
 interface Props<T> extends Omit<
   React.ComponentPropsWithoutRef<'div'>,
@@ -16,6 +17,7 @@ interface Props<T> extends Omit<
   loaderProps?: React.ComponentProps<typeof Skeleton>;
   loader?: React.ReactNode;
   title?: React.ReactNode;
+  titleLevel?: 1 | 2 | 3 | 4 | 5 | 6;
   header?: React.ReactNode;
   empty?: React.ReactNode;
   classNames?: {
@@ -41,6 +43,7 @@ const List = <T,>({
   loader,
   header,
   title,
+  titleLevel = 2,
   empty,
   scroll,
   data,
@@ -57,12 +60,25 @@ const List = <T,>({
     ...scroll?.options,
   });
 
+  // `scroll` is typically a new object identity every render, so this
+  // effect re-runs often. Guard with a ref (updated synchronously, unlike
+  // the `loading` prop which only reflects the caller's next state update)
+  // to avoid firing `next()` again for the same in-flight request before
+  // the caller's `loading` has had a chance to become true.
+  const fetchingRef = useRef(false);
+
   useEffect(() => {
     if (!scroll) {
       return;
     }
 
-    if (entry?.isIntersecting && scroll.hasMore && !scroll.loading) {
+    if (scroll.loading) {
+      fetchingRef.current = false;
+      return;
+    }
+
+    if (entry?.isIntersecting && scroll.hasMore && !fetchingRef.current) {
+      fetchingRef.current = true;
       scroll.next();
     }
   }, [entry, scroll]);
@@ -100,7 +116,8 @@ const List = <T,>({
       {...props}
     >
       {renderConditional(title, v => (
-        <h2
+        <Title
+          level={titleLevel}
           className={cn(
             'px-1.5 py-4',
             'text-black-90 text-lg leading-5.75 font-bold',
@@ -108,10 +125,10 @@ const List = <T,>({
           )}
         >
           {v}
-        </h2>
+        </Title>
       ))}
       <div className={cn(classNames?.header)}>{header}</div>
-      <div className={cn('space-y-2', classNames?.body)}>
+      <div role="list" className={cn('space-y-2', classNames?.body)}>
         {data?.map((item, i) =>
           itemKey ? (
             <React.Fragment key={itemKey(item, i)}>
