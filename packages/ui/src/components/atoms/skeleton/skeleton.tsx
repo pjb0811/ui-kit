@@ -52,10 +52,13 @@ const Skeleton = ({
 
   return (
     <div
+      role="status"
+      aria-label="로딩 중"
       className={cn(
         'flex items-center gap-3',
         //
       )}
+      {...props}
     >
       {avatar && (
         <Core
@@ -97,7 +100,6 @@ const Skeleton = ({
                 width: itemWidth,
                 height: itemHeight,
               }}
-              {...props}
             />
           );
         })}
