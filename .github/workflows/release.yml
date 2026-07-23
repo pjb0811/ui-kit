@@ -34,12 +34,16 @@ jobs:
           CHANGELOG_FILE="packages/ui/CHANGELOG.md"
           if [ -f "$CHANGELOG_FILE" ]; then
             # Can't use awk's `/start/,/end/` range here: the end pattern
-            # (any "## [" header) also matches the start line itself, so the
+            # (any "## " header) also matches the start line itself, so the
             # range would close immediately and yield nothing. Skip the
             # start header explicitly and exit before printing the next one.
+            # changesets writes headers as "## VERSION" with no brackets
+            # (older entries in this file predate the changesets migration
+            # and still use "## [VERSION] - date" — the exit pattern below
+            # matches either since it only checks the "## " prefix).
             CONTENT=$(awk -v version="$VERSION" '
-              $0 ~ "^## \\[" version "\\]" { found=1; next }
-              found && /^## \[/ { exit }
+              $0 ~ "^## " version "$" { found=1; next }
+              found && /^## / { exit }
               found { print }
             ' "$CHANGELOG_FILE")
             # %0A/%0D/%25 escaping only applied to the old, deprecated

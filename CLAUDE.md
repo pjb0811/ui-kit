@@ -202,19 +202,19 @@ import './local';
 
 ## 기술 스택 요약
 
-| 항목          | 기술                                                                                  |
-| ------------- | ------------------------------------------------------------------------------------- |
-| 런타임        | React 19, Node ≥18                                                                    |
-| 언어          | TypeScript 5.9                                                                        |
-| 스타일        | Tailwind CSS v4                                                                       |
-| UI 프리미티브 | Radix UI                                                                              |
-| 아이콘        | lucide-react                                                                          |
-| 애니메이션    | motion (framer), GSAP                                                                 |
-| 패키지 매니저 | pnpm 10                                                                               |
-| 모노레포      | turborepo                                                                             |
-| 빌드          | tsdown                                                                                |
-| 포맷          | prettier (single quote, 2 spaces, trailing comma)                                     |
-| 릴리스        | GitHub Actions 자동화 (changelog-develop.yml 버전 승격 + npm OIDC Trusted Publishing) |
+| 항목          | 기술                                                                               |
+| ------------- | ---------------------------------------------------------------------------------- |
+| 런타임        | React 19, Node ≥18                                                                 |
+| 언어          | TypeScript 5.9                                                                     |
+| 스타일        | Tailwind CSS v4                                                                    |
+| UI 프리미티브 | Radix UI                                                                           |
+| 아이콘        | lucide-react                                                                       |
+| 애니메이션    | motion (framer), GSAP                                                              |
+| 패키지 매니저 | pnpm 10                                                                            |
+| 모노레포      | turborepo                                                                          |
+| 빌드          | tsdown                                                                             |
+| 포맷          | prettier (single quote, 2 spaces, trailing comma)                                  |
+| 릴리스        | changesets (develop의 Version Packages PR 버전 승격) + npm OIDC Trusted Publishing |
 
 ---
 
