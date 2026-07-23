@@ -28,6 +28,9 @@
     "url": "https://github.com/pjb0811/ui-kit/issues"
   },
   "private": false,
+  "sideEffects": [
+    "*.css"
+  ],
   "publishConfig": {
     "access": "public"
   },
