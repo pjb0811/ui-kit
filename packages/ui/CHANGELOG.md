@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.12.0] - 2026-07-23
+
+### Added
+
+- Add role and aria-label for accessibility
+- Spread props onto the skeleton component
+
+### Removed
+
+- Remove props spreading from the inner component
+
 ## [2.11.0] - 2026-07-23
 
 ### Added
