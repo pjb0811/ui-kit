@@ -42,10 +42,16 @@ jobs:
               found && /^## \[/ { exit }
               found { print }
             ' "$CHANGELOG_FILE")
-            CONTENT="${CONTENT//'%'/'%25'}"
-            CONTENT="${CONTENT//$'\n'/'%0A'}"
-            CONTENT="${CONTENT//$'\r'/'%0D'}"
-            echo "body=$CONTENT" >> "$GITHUB_OUTPUT"
+            # %0A/%0D/%25 escaping only applied to the old, deprecated
+            # `::set-output` command syntax (which the runner auto-decoded).
+            # The modern $GITHUB_OUTPUT file doesn't decode that, so it was
+            # writing literal "%0A" text into the release body. Use the
+            # heredoc form instead, which preserves real newlines as-is.
+            {
+              echo "body<<EOF"
+              echo "$CONTENT"
+              echo "EOF"
+            } >> "$GITHUB_OUTPUT"
           fi
 
       - name: Create GitHub Release
