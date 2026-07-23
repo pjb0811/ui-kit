@@ -1,6 +1,6 @@
 {
   "name": "@repo/ui",
-  "version": "2.10.0",
+  "version": "2.11.0",
   "description": "Modern React UI component library built with TypeScript, Tailwind CSS, and Radix UI. Featuring atoms, molecules, organisms and layout templates for building beautiful interfaces.",
   "keywords": [
     "react",
@@ -28,6 +28,9 @@
     "url": "https://github.com/pjb0811/ui-kit/issues"
   },
   "private": false,
+  "sideEffects": [
+    "*.css"
+  ],
   "publishConfig": {
     "access": "public"
   },
