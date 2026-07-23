@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 
 import { CircleX, Search as SearchOutlined } from 'lucide-react';
 
@@ -32,9 +32,17 @@ const Search = ({
   const internalRef = useRef<HTMLInputElement>(null);
   const inputRef = (ref as React.RefObject<HTMLInputElement>) || internalRef;
 
+  const [uncontrolledHasValue, setUncontrolledHasValue] =
+    useState(!!defaultValue);
+  const hasValue = value !== undefined ? !!value : uncontrolledHasValue;
+
   const onClear = () => {
     if (inputRef.current) {
       inputRef.current.value = '';
+
+      if (value === undefined) {
+        setUncontrolledHasValue(false);
+      }
 
       const event = {
         target: { value: '' },
@@ -78,7 +86,12 @@ const Search = ({
           )}
           value={value}
           defaultValue={defaultValue}
-          onChange={onChange}
+          onChange={e => {
+            if (value === undefined) {
+              setUncontrolledHasValue(!!e.target.value);
+            }
+            onChange?.(e);
+          }}
           onKeyDown={e => {
             if (e.key === 'Enter') {
               onSearch();
@@ -90,7 +103,7 @@ const Search = ({
           className={cn(
             'absolute right-2 size-4',
             'shrink-0 cursor-pointer',
-            (!allowClear || (value !== undefined && !value)) && 'hidden',
+            (!allowClear || !hasValue) && 'hidden',
           )}
           onClick={onClear}
         />
