@@ -25,6 +25,7 @@ const BackTop = ({
 
   return (
     <FloatButton
+      aria-label="맨 위로"
       icon={<ArrowUp />}
       className={cn(
         className,
