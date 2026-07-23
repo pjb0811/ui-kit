@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.12.0] - 2026-07-23
+
+### Added
+
+- Add LayoutNestedContext to manage nested layout states
+- Wrap layout children in LayoutNestedContext.Provider
+
+### Changed
+
+- Update layout component to conditionally apply min-h-0 or min-h-screen based on nested context
+
 ## [2.11.0] - 2026-07-23
 
 ### Added
