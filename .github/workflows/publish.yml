@@ -34,11 +34,11 @@ jobs:
           cache: 'pnpm'
           registry-url: 'https://registry.npmjs.org'
 
-      # packages/ui's version is untagged only right after a develop -> main
-      # merge has just landed a new version (bumped earlier by the Version
-      # Packages PR that version-develop.yml/changesets opened on develop)
-      # — that's the signal to actually build/publish/tag. Otherwise this
-      # push is an ordinary main update with nothing new to release.
+      # packages/ui's version is untagged only right after a Version
+      # Packages PR (opened on main by version.yml/changesets) has just
+      # merged and landed a new version — that's the signal to actually
+      # build/publish/tag. Otherwise this push is an ordinary main update
+      # with nothing new to release.
       - name: Check if current version is already tagged
         id: tag_check
         run: |

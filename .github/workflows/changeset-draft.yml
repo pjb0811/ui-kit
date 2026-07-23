@@ -2,7 +2,7 @@ name: Changeset Draft
 
 on:
   pull_request:
-    branches: [develop]
+    branches: [main]
     types: [opened, synchronize]
 
 concurrency: changeset-draft-${{ github.event.pull_request.number }}

@@ -1,8 +1,8 @@
-name: Version (develop)
+name: Version
 
 on:
   push:
-    branches: [develop]
+    branches: [main]
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
@@ -34,12 +34,12 @@ jobs:
         run: pnpm install
 
       # No `publish` input here on purpose — this only opens/updates a
-      # "Version Packages" PR against develop from whatever .changeset/*.md
+      # "Version Packages" PR against main from whatever .changeset/*.md
       # files have accumulated (via manual `pnpm changeset` or the
       # Changeset Draft workflow). It never publishes; the existing
-      # publish.yml (push to main) still owns that, unchanged, using
+      # publish.yml (also push to main) still owns that, unchanged, using
       # whatever version ends up in packages/ui/package.json once this PR
-      # is reviewed and merged and later reaches main.
+      # is reviewed and merged.
       - name: Open/update Version Packages PR
         uses: changesets/action@v1
         with:
