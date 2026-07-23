@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.2] - 2026-07-23
+
+### Changed
+
+- Update GitHub Actions to use heredoc for release body to preserve newlines
+
 ## [0.5.1] - 2026-07-22
 
 ### Changed
