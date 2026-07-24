@@ -27,7 +27,7 @@ export interface Props extends Omit<
 
 const Radio = ({
   placement = 'left',
-  value = '',
+  value: _value,
   children,
   className,
   icons,
@@ -41,8 +41,7 @@ const Radio = ({
     defaultChecked || false,
   );
 
-  const reactId = useId();
-  const id = typeof value === 'boolean' || !value ? reactId : String(value);
+  const id = useId();
   const controlled = _checked !== undefined;
   const checked = controlled ? _checked : uncontrolledChecked;
 
