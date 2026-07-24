@@ -154,11 +154,12 @@ pnpm run format
 
 ### 배포
 
-배포는 완전히 자동화되어 있다. `develop`에 머지되면 AI가 생성한 changelog
-항목이 `packages/ui/package.json`의 버전을 승격시키고, `develop`이 `main`에
-머지되면 `publish.yml` 워크플로우가 빌드 → npm OIDC Trusted Publishing으로
-퍼블리시 → 릴리스 태그까지 자동으로 처리한다. 수동 버전 범프나 퍼블리시
-명령은 필요 없다.
+배포는 [changesets](https://github.com/changesets/changesets)로 완전히
+자동화되어 있다. PR마다 AI가 changeset 파일을 초안으로 작성하고, `main`에
+changeset들이 쌓이면 "Version Packages" PR이 `packages/ui/package.json`의
+버전을 승격시키고 changelog를 정리한다. 이 PR이 머지되면 `publish.yml`
+워크플로우가 빌드 → npm OIDC Trusted Publishing으로 퍼블리시 → 릴리스
+태그까지 자동으로 처리한다. 수동 버전 범프나 퍼블리시 명령은 필요 없다.
 
 ## 📚 문서화
 
