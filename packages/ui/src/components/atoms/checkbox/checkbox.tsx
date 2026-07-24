@@ -28,7 +28,7 @@ export interface Props extends Omit<
 
 const Checkbox = ({
   placement = 'left',
-  value = '',
+  value: _value,
   children,
   className,
   icons,
@@ -42,9 +42,8 @@ const Checkbox = ({
     defaultChecked || false,
   );
 
-  const reactId = useId();
+  const id = useId();
 
-  const id = typeof value === 'boolean' || !value ? reactId : String(value);
   const controlled = _checked !== undefined;
   const checked = controlled ? _checked : uncontrolledChecked;
 

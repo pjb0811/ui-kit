@@ -47,7 +47,7 @@ const Skeleton = ({
   ...props
 }: Props) => {
   if (!loading) {
-    return children;
+    return children ?? null;
   }
 
   return (
