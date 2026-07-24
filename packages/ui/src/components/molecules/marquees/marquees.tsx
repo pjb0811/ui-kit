@@ -32,8 +32,12 @@ const Marquees = ({
 
   const throttledWidth = useThrottle(width, 200);
 
-  const { size } = useResponsiveSize<HTMLDivElement>();
+  const { size, ref: responsiveRef } = useResponsiveSize<HTMLDivElement>();
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const setContainerRef = (node: HTMLDivElement | null) => {
+    containerRef.current = node;
+    responsiveRef(node);
+  };
   const hoverEvents = pauseOnHover
     ? {
         onMouseEnter: () => {
@@ -59,21 +63,9 @@ const Marquees = ({
     setWidth(size.width);
   }, [size]);
 
-  useEffect(() => {
-    const onScroll = () => {
-      setWidth(document.body.scrollWidth);
-    };
-
-    window.addEventListener('scroll', onScroll);
-
-    return () => {
-      window.removeEventListener('scroll', onScroll);
-    };
-  }, []);
-
   return (
     <div
-      ref={containerRef}
+      ref={setContainerRef}
       className={cn(
         className,
         //
