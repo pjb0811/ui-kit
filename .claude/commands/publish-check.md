@@ -25,8 +25,8 @@
    npm view @repo/ui version 2>/dev/null || echo "not published yet"
    ```
 
-   - `packages/ui/package.json` 버전이 npm 최신 버전보다 앞서 있으면, `develop`에서 changesets의 "Version Packages" PR이 이미 버전을 승격시킨 상태 — `main`에 머지되는 즉시 `publish.yml`이 자동으로 빌드/퍼블리시/태그한다.
-   - 두 버전이 같으면 아직 퍼블리시할 변경사항이 없다는 뜻(= `.changeset/*.md`가 없거나 아직 develop에 Version Packages PR이 머지 안 됨). `packages/ui/CHANGELOG.md` 최상단 섹션이 최신 버전과 일치하는지로도 확인 가능.
+   - `packages/ui/package.json` 버전이 npm 최신 버전보다 앞서 있으면, changesets의 "Version Packages" PR이 `main`에 이미 머지되어 버전을 승격시킨 상태 — 다음 `main` push 시 `publish.yml`이 자동으로 빌드/퍼블리시/태그한다.
+   - 두 버전이 같으면 아직 퍼블리시할 변경사항이 없다는 뜻(= `.changeset/*.md`가 없거나 아직 Version Packages PR이 머지 안 됨). `packages/ui/CHANGELOG.md` 최상단 섹션이 최신 버전과 일치하는지로도 확인 가능.
 
 4. **exports 필드 확인**
    - `packages/ui/package.json`의 `exports` 필드에 새로 추가된 컴포넌트 진입점이 누락되지 않았는지 확인

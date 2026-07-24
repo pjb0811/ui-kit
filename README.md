@@ -154,11 +154,12 @@ pnpm run format
 
 ### Deployment
 
-Releases are fully automated. Merging to `develop` triggers an AI-generated
-changelog entry that bumps `packages/ui/package.json`'s version; merging
-`develop` into `main` then triggers the `publish.yml` workflow, which builds,
-publishes to npm via OIDC Trusted Publishing, and tags the release. No manual
-version bump or publish command is needed.
+Releases are fully automated via [changesets](https://github.com/changesets/changesets).
+Each PR gets an AI-drafted changeset file; once changesets accumulate on
+`main`, a "Version Packages" PR bumps `packages/ui/package.json`'s version
+and consolidates the changelog. Merging that PR triggers the `publish.yml`
+workflow, which builds, publishes to npm via OIDC Trusted Publishing, and
+tags the release. No manual version bump or publish command is needed.
 
 ## 📚 Documentation
 
