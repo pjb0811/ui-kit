@@ -8,12 +8,7 @@ export interface Props extends React.ComponentPropsWithoutRef<'span'> {
 const Text = ({ children, underline, strong, className, ...props }: Props) => {
   return (
     <span
-      className={cn(
-        'text-nowrap',
-        underline && 'underline',
-        strong && 'font-bold',
-        className,
-      )}
+      className={cn(underline && 'underline', strong && 'font-bold', className)}
       {...props}
     >
       {children}

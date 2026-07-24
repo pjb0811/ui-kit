@@ -9,7 +9,6 @@ const FloatButton = ({ className, children, ...props }: Props) => {
     <Button
       className={cn(
         'fixed right-5 bottom-5 rounded-full',
-        'bg-white hover:bg-white',
         'z-50 h-12 w-12',
         'shadow-md',
         className,
