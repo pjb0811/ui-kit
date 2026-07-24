@@ -34,9 +34,9 @@ jobs:
           cache: 'pnpm'
           registry-url: 'https://registry.npmjs.org'
 
-      # packages/ui's version is untagged only right after a develop -> main
-      # merge has just landed a new version (bumped earlier by
-      # changelog-develop.yml on develop) — that's the signal to actually
+      # packages/ui's version is untagged only right after a Version
+      # Packages PR (opened on main by version.yml/changesets) has just
+      # merged and landed a new version — that's the signal to actually
       # build/publish/tag. Otherwise this push is an ordinary main update
       # with nothing new to release.
       - name: Check if current version is already tagged
@@ -81,30 +81,53 @@ jobs:
       - name: Get changelog entry
         if: steps.tag_check.outputs.already_tagged == 'false'
         id: changelog
+        env:
+          # Reused for the release-note polishing step below — a personal
+          # PAT with models:read (GITHUB_TOKEN doesn't get the free-tier
+          # rate-limit benefit of the personal subscription).
+          GITHUB_TOKEN: ${{ secrets.GH_MODELS_PAT }}
         run: |
           VERSION=${{ steps.tag_check.outputs.version }}
           CHANGELOG_FILE="packages/ui/CHANGELOG.md"
+          RAW=""
           if [ -f "$CHANGELOG_FILE" ]; then
             # Can't use awk's `/start/,/end/` range here: the end pattern
-            # (any "## [" header) also matches the start line itself, so the
+            # (any "## " header) also matches the start line itself, so the
             # range would close immediately and yield nothing. Skip the
             # start header explicitly and exit before printing the next one.
-            CONTENT=$(awk -v version="$VERSION" '
-              $0 ~ "^## \\[" version "\\]" { found=1; next }
-              found && /^## \[/ { exit }
+            # changesets writes headers as "## VERSION" with no brackets
+            # (older entries in this file predate the changesets migration
+            # and still use "## [VERSION] - date" — the exit pattern below
+            # matches either since it only checks the "## " prefix).
+            RAW=$(awk -v version="$VERSION" '
+              $0 ~ "^## " version "$" { found=1; next }
+              found && /^## / { exit }
               found { print }
             ' "$CHANGELOG_FILE")
-            # %0A/%0D/%25 escaping only applied to the old, deprecated
-            # `::set-output` command syntax (which the runner auto-decoded).
-            # The modern $GITHUB_OUTPUT file doesn't decode that, so it was
-            # writing literal "%0A" text into the release body. Use the
-            # heredoc form instead, which preserves real newlines as-is.
-            {
-              echo "body<<EOF"
-              echo "$CONTENT"
-              echo "EOF"
-            } >> "$GITHUB_OUTPUT"
           fi
+
+          CONTENT="$RAW"
+          if [ -n "$RAW" ]; then
+            # Best-effort: polish the raw changelog bullets into flowing
+            # release notes via GitHub Models. Never blocks the release —
+            # fall back to the raw changelog text on any failure.
+            if POLISHED=$(echo "$RAW" | PACKAGE_NAME="@repo/ui" VERSION="$VERSION" node .github/scripts/polish-release-notes.mjs); then
+              CONTENT="$POLISHED"
+            else
+              echo "::warning::Release-note polishing failed, falling back to raw changelog"
+            fi
+          fi
+
+          # %0A/%0D/%25 escaping only applied to the old, deprecated
+          # `::set-output` command syntax (which the runner auto-decoded).
+          # The modern $GITHUB_OUTPUT file doesn't decode that, so it was
+          # writing literal "%0A" text into the release body. Use the
+          # heredoc form instead, which preserves real newlines as-is.
+          {
+            echo "body<<EOF"
+            echo "$CONTENT"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
 
       - name: Create GitHub Release
         if: steps.tag_check.outputs.already_tagged == 'false'
