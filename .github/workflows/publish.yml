@@ -27,11 +27,17 @@ jobs:
           version: 9
 
       # v6+ is required for npm's OIDC "Trusted Publishing" used below.
+      # No built-in `cache: 'pnpm'` here on purpose — this job skips
+      # `pnpm install` whenever already_tagged is true (the common case
+      # under changesets, since most main pushes are plain PR merges with
+      # no version bump), and setup-node's post-job cache-save step errors
+      # if the store directory it expects was never created. The cache
+      # step below is scoped to the same already_tagged condition as
+      # Install dependencies instead.
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
           node-version: 24.x
-          cache: 'pnpm'
           registry-url: 'https://registry.npmjs.org'
 
       # packages/ui's version is untagged only right after a Version
@@ -49,6 +55,19 @@ jobs:
           else
             echo "already_tagged=false" >> "$GITHUB_OUTPUT"
           fi
+
+      - name: Get pnpm store directory
+        if: steps.tag_check.outputs.already_tagged == 'false'
+        run: echo "STORE_PATH=$(pnpm store path --silent)" >> "$GITHUB_ENV"
+
+      - name: Setup pnpm cache
+        if: steps.tag_check.outputs.already_tagged == 'false'
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
 
       - name: Install dependencies
         if: steps.tag_check.outputs.already_tagged == 'false'
