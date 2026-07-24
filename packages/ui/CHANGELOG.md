@@ -1,5 +1,12 @@
 # @repo/ui
 
+## 2.11.3
+
+### Patch Changes
+
+- f9b81ae: Fix Layout's Footer rendering mid-page instead of after the content when Content is taller than the viewport.
+- cc22483: Fix several component bugs found in a follow-up audit: Marquees now measures against its own container instead of `document.body`, Skeleton no longer throws when `loading={false}` with no children, and Checkbox/Radio no longer generate colliding DOM ids when separate instances share the same option value.
+
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
