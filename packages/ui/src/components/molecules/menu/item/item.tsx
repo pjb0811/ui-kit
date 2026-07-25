@@ -94,6 +94,27 @@ const Item = ({
     root ? classNames?.rootItem : classNames?.item,
   );
 
+  const handleSelect = (domEvent: React.SyntheticEvent) => {
+    domEvent.stopPropagation();
+
+    if (isInline) {
+      setOpen(!open);
+    }
+
+    const params = {
+      domEvent,
+      key: itemKey,
+      keyPath,
+      item,
+    };
+
+    onClick?.(params);
+
+    if (!selected) {
+      onSelect?.(params);
+    }
+  };
+
   const childrenContainerClassNames = cn(
     isInline ? 'relative overflow-hidden' : 'absolute min-w-[200px]',
     !isInline && root && isHorizontal
@@ -135,9 +156,24 @@ const Item = ({
         }
         setOpen(false);
       }}
+      onFocus={() => {
+        if (isInline) {
+          return;
+        }
+        setOpen(true);
+      }}
+      onBlur={e => {
+        if (isInline) {
+          return;
+        }
+        if (!itemRef.current?.contains(e.relatedTarget as Node)) {
+          setOpen(false);
+        }
+      }}
     >
       <div
         role="menuitem"
+        tabIndex={0}
         aria-expanded={children?.length ? open : undefined}
         aria-haspopup={children?.length ? 'menu' : undefined}
         aria-selected={selected}
@@ -153,24 +189,11 @@ const Item = ({
           //
         )}
         style={root ? styles?.rootItem : styles?.item}
-        onClick={e => {
-          e.stopPropagation();
-
-          if (isInline) {
-            setOpen(!open);
-          }
-
-          const params = {
-            domEvent: e,
-            key: itemKey,
-            keyPath,
-            item,
-          };
-
-          onClick?.(params);
-
-          if (!selected) {
-            onSelect?.(params);
+        onClick={handleSelect}
+        onKeyDown={e => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            handleSelect(e);
           }
         }}
       >
