@@ -65,7 +65,6 @@ interface StaticProps extends Props {
 const isBrowser =
   typeof window !== 'undefined' && typeof document !== 'undefined';
 
-let modalRoot: Root | null = null;
 let modalStack: StaticProps[] = [];
 let updateStack: (() => void) | null = null;
 
@@ -326,9 +325,9 @@ Modal.destroy = (id?: string) => {
 
   updateStack?.();
 
-  if (!modalStack.length && modalRoot) {
-    modalRoot.unmount();
-    modalRoot = null;
+  if (!modalStack.length) {
+    modalRoots.forEach(root => root.unmount());
+    modalRoots.clear();
   }
 };
 
