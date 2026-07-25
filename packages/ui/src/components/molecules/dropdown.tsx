@@ -24,6 +24,9 @@ const Dropdown = ({
   trigger = 'hover',
   open: _open,
   onOpenChange: _onOpenChange = () => {},
+  className,
+  onMouseEnter,
+  onMouseLeave,
   ...props
 }: Props) => {
   const [uncontrolledOpen, setUncontrolledOpen] = useState<boolean>(false);
@@ -43,14 +46,21 @@ const Dropdown = ({
   return (
     <div
       {...props}
-      className={cn('relative z-0', 'inline-block cursor-pointer')}
-      onMouseEnter={() => {
+      className={cn(
+        'relative z-0',
+        'inline-block cursor-pointer',
+        className,
+        //
+      )}
+      onMouseEnter={event => {
+        onMouseEnter?.(event);
         if (isClickTrigger) {
           return;
         }
         onOpenChange(true);
       }}
-      onMouseLeave={() => {
+      onMouseLeave={event => {
+        onMouseLeave?.(event);
         if (isClickTrigger) {
           return;
         }
