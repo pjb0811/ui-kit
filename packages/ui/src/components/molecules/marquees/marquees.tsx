@@ -59,18 +59,6 @@ const Marquees = ({
     setWidth(size.width);
   }, [size]);
 
-  useEffect(() => {
-    const onScroll = () => {
-      setWidth(document.body.scrollWidth);
-    };
-
-    window.addEventListener('scroll', onScroll);
-
-    return () => {
-      window.removeEventListener('scroll', onScroll);
-    };
-  }, []);
-
   return (
     <div
       ref={containerRef}
