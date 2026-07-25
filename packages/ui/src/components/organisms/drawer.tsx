@@ -114,7 +114,7 @@ const Drawer = ({
       handleOnly={!draggable}
       container={container}
       onOpenChange={open => {
-        if (!open && maskClosable) {
+        if (!open) {
           onClose();
         }
       }}
@@ -130,6 +130,11 @@ const Drawer = ({
         )}
         handlebar={handlebar}
         mask={mask}
+        onPointerDownOutside={event => {
+          if (!maskClosable) {
+            event.preventDefault();
+          }
+        }}
         classNames={{
           mask: classNames?.mask || '',
           handlebar: classNames?.handlebar || '',

@@ -118,7 +118,7 @@ const Modal = ({
     <Dialog
       open={open}
       onOpenChange={(open: boolean) => {
-        if (!open && maskClosable) {
+        if (!open) {
           onCancel?.();
         }
       }}
@@ -135,10 +135,14 @@ const Modal = ({
           mask: cn('bg-black/60', classNames?.mask),
         }}
         style={style}
-        showCloseButton={!!closable}
+        closable={closable}
         closeIcon={closeIcon}
         container={container}
-        onCancel={onCancel}
+        onPointerDownOutside={event => {
+          if (!maskClosable) {
+            event.preventDefault();
+          }
+        }}
       >
         {/**
          * @todo [Dialog & AlertDialog] fix: can't get id correctly in shadow dom
