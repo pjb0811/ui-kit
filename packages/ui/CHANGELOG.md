@@ -1,11 +1,111 @@
 # @repo/ui
 
+## 2.11.3
+
+### Patch Changes
+
+- f9b81ae: Fix Layout's Footer rendering mid-page instead of after the content when Content is taller than the viewport.
+- cc22483: Fix several component bugs found in a follow-up audit: Marquees now measures against its own container instead of `document.body`, Skeleton no longer throws when `loading={false}` with no children, and Checkbox/Radio no longer generate colliding DOM ids when separate instances share the same option value.
+
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [2.11.2] - 2026-07-23
+
+### Added
+
+- Add aria-label to BackTop component
+- Add role and aria-label to Skeleton component
+- Add target and rel props to Link component
+- Add context for nested Layout
+
+### Changed
+
+- Update FloatButton styles to remove unnecessary class
+- Refactor Search component to manage uncontrolled state
+- Simplify Text component className logic
+- Update Layout component to handle nested contexts
+
+## [2.11.1] - 2026-07-23
+
+### Added
+
+- Add aria-label to BackTop component
+
+### Removed
+
+- Remove background color from FloatButton component
+
+## [2.11.0] - 2026-07-23
+
+### Added
+
+- Add sideEffects configuration for CSS files
+- Implement responsive typography scaling for title component
+
+## [2.10.0] - 2026-07-22
+
+### Added
+
+- Add role attribute to list item component
+- Add titleLevel prop to List component
+- Add itemKey prop to List component
+
+### Changed
+
+- Change title rendering to use Title component
+- Change list rendering to use role attribute
+
+## [2.9.7] - 2026-07-22
+
+### Changed
+
+- Bump version to 2.9.6
+
+## [2.9.6] - 2026-07-22
+
+### Changed
+
+- Version bump only, no code changes. Skips 2.9.0-2.9.5: those version numbers are already published on npm and can't be reused, so this release picks up the next clean number.
+
+## [2.9.0] - 2026-07-22
+
+### Added
+
+- Add Tag component to documentation
+- Add default export paths for Button, Tag, Card, Space, and Layout components
+
+## [2.8.0] - 2026-07-19
+
+### Changed
+
+- Change Typography component path
+- Change Menu component path
+- Change Reveals component path
+- Remove Checkbox.Group
+- Change Checkbox.Group path
+- Change ColorPicker component path
+- Change FloatButton.BackTop component path
+
+### Removed
+
+- Remove Typography component
+
+## [2.7.0] - 2026-07-12
+
+### Added
+
+- Add gsap dependency
+- Add extra prop to Drawer component
+- Add size prop to Drawer component
+
+### Changed
+
+- Improve Drawer component's size style handling
 
 ## [2.6.0] - 2026-07-05
 

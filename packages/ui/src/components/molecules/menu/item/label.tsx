@@ -1,5 +1,6 @@
-import { Typography } from '@repo/ui';
 import { cn } from '@repo/ui/utils';
+
+import Typography from '../../../atoms/typography';
 
 interface Props extends React.ComponentPropsWithoutRef<
   typeof Typography.Text

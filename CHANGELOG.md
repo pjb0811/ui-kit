@@ -7,6 +7,71 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.2] - 2026-07-23
+
+### Changed
+
+- Update GitHub Actions to use heredoc for release body to preserve newlines
+
+## [0.5.1] - 2026-07-22
+
+### Changed
+
+- Improve changelog extraction logic in publish and release workflows
+
+## [0.5.0] - 2026-07-22
+
+### Added
+
+- Add manual fallback workflow for creating GitHub Releases for existing tags
+- Add input parameter for existing git tag in manual release workflow
+- Add changelog entry retrieval in publish workflow
+
+### Changed
+
+- Change release workflow trigger from tag push to manual dispatch
+- Update publish workflow to create GitHub Release immediately after tagging
+
+## [0.4.5] - 2026-07-22
+
+### Added
+
+- Add Tag component to README
+
+### Changed
+
+- Update changelog workflow descriptions to English
+- Update commit messages in changelog workflow to English
+
+## [0.4.4] - 2026-07-20
+
+### Changed
+
+- Update changelog script to use English for category labels
+- Change default message for missing changelog file to English
+- Update changelog script documentation to use English
+
+## [0.4.3] - 2026-07-19
+
+### Added
+
+- Add coding style guide
+
+### Changed
+
+- Change folder naming convention for new component creation
+- Change folder naming convention for new Storybook story creation
+
+## [0.4.2] - 2026-07-12
+
+### Changed
+
+- Improve publish check command
+
+### Removed
+
+- Remove Changesets-related config files
+
 ## [0.4.1] - 2026-07-05
 
 ### Added

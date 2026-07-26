@@ -102,7 +102,7 @@ const DemoFooter = () => (
 
 export const Default: Story = {
   render: () => (
-    <Layout className="h-screen">
+    <Layout>
       <Layout.Header className="justify-between border-b bg-white py-3">
         <DemoHeader />
       </Layout.Header>
@@ -118,7 +118,7 @@ export const Default: Story = {
 
 export const WithSider: Story = {
   render: () => (
-    <Layout className="h-screen">
+    <Layout>
       <Layout.Header className="justify-between border-b bg-white py-3">
         <DemoHeader />
       </Layout.Header>
@@ -140,7 +140,7 @@ export const WithSider: Story = {
 export const CollapsibleSider: Story = {
   name: 'WithSider (Collapsible)',
   render: () => (
-    <Layout className="h-screen">
+    <Layout>
       <Layout.Header className="justify-between border-b bg-white py-3">
         <DemoHeader />
       </Layout.Header>
@@ -163,7 +163,7 @@ const DemoControlledSider = () => {
   const [collapsed, setCollapsed] = useState(false);
 
   return (
-    <Layout className="h-screen">
+    <Layout>
       <Layout.Header className="justify-between border-b bg-white py-3">
         <Typography.Title className="text-3xl">Header</Typography.Title>
         <button
@@ -202,7 +202,7 @@ export const ControlledSider: Story = {
 
 export const WithSiderRight: Story = {
   render: () => (
-    <Layout className="h-screen">
+    <Layout>
       <Layout.Header className="justify-between border-b bg-white py-3">
         <DemoHeader />
       </Layout.Header>
@@ -223,7 +223,7 @@ export const WithSiderRight: Story = {
 
 export const HeaderOnly: Story = {
   render: () => (
-    <Layout className="h-screen">
+    <Layout>
       <Layout.Header className="justify-between border-b bg-white py-3">
         <DemoHeader />
       </Layout.Header>
@@ -236,7 +236,7 @@ export const HeaderOnly: Story = {
 
 export const FooterOnly: Story = {
   render: () => (
-    <Layout className="h-screen">
+    <Layout>
       <Layout.Content>
         <DemoContent />
       </Layout.Content>

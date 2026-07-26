@@ -1,4 +1,5 @@
 export * as accordion from './accordion';
+export * as badge from './badge';
 export * as button from './button';
 export * as checkbox from './checkbox';
 export * as dialog from './dialog';

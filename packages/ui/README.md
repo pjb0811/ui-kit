@@ -51,6 +51,7 @@ Basic UI building blocks
 | **Skeleton**    | Loading skeleton             | `Button`, `Node`                     |
 | **Spin**        | Loading spinner              | -                                    |
 | **Switch**      | Toggle switch component      | -                                    |
+| **Tag**         | Pill-style label/tag         | -                                    |
 | **Typography**  | Text components              | `Link`, `Paragraph`, `Text`, `Title` |
 
 ## 🔬 Molecules
@@ -140,12 +141,29 @@ function App() {
 
 ```tsx
 // Typography component
+// Button component
+import Button from '@jbpark/ui-kit/Button';
+// Card component
+import Card from '@jbpark/ui-kit/Card';
+// Layout component
+import Layout from '@jbpark/ui-kit/Layout';
 // Menu component
-import { Menu } from '@jbpark/ui-kit/Menu';
+import Menu from '@jbpark/ui-kit/Menu';
 // Reveals component
-import { Reveals } from '@jbpark/ui-kit/Reveals';
-import { Typography } from '@jbpark/ui-kit/Typography';
+import Reveals from '@jbpark/ui-kit/Reveals';
+// Space component
+import Space from '@jbpark/ui-kit/Space';
+// Tag component
+import Tag from '@jbpark/ui-kit/Tag';
+import Typography from '@jbpark/ui-kit/Typography';
 ```
+
+> Each of these deep-import paths only has a default export -- import the
+> component itself, not `{ ComponentName }`. Prefer these paths over the
+> root `@jbpark/ui-kit` entry when you don't need every component: the root
+> entry re-exports all organisms, including `Swiper`, which pulls in
+> `swiper`'s CSS as a side effect and can break Node/SSR builds (e.g. an
+> Astro static build) that don't expect a bare `.css` import.
 
 ### Import Utilities and Enums
 
