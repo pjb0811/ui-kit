@@ -66,7 +66,6 @@ interface StaticProps extends Props {
 const isBrowser =
   typeof window !== 'undefined' && typeof document !== 'undefined';
 
-let modalRoot: Root | null = null;
 let modalStack: StaticProps[] = [];
 let updateStack: (() => void) | null = null;
 
@@ -119,7 +118,7 @@ const Modal = ({
     <Dialog
       open={open}
       onOpenChange={(open: boolean) => {
-        if (!open && maskClosable) {
+        if (!open) {
           onCancel?.();
         }
       }}
@@ -136,10 +135,14 @@ const Modal = ({
           mask: cn('bg-black/60', classNames?.mask),
         }}
         style={style}
-        showCloseButton={!!closable}
+        closable={closable}
         closeIcon={closeIcon}
         container={container}
-        onCancel={onCancel}
+        onPointerDownOutside={event => {
+          if (!maskClosable) {
+            event.preventDefault();
+          }
+        }}
       >
         {/**
          * @todo [Dialog & AlertDialog] fix: can't get id correctly in shadow dom
@@ -323,9 +326,9 @@ Modal.destroy = (id?: string) => {
 
   updateStack?.();
 
-  if (!modalStack.length && modalRoot) {
-    modalRoot.unmount();
-    modalRoot = null;
+  if (!modalStack.length) {
+    modalRoots.forEach(root => root.unmount());
+    modalRoots.clear();
   }
 };
 

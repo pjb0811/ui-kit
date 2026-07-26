@@ -10,7 +10,7 @@ Please write it accurately as it will be used for actual commits.
 │       │        │            │
 │       │        │            └─⫸ Imperative, present tense. No capitalization. No period at the end.
 │       │        │
-│       │        └─⫸ Use branch name first. Otherwise, specify the area of change (optional)
+│       │        └─⫸ Optional. Only when the change is clearly scoped to one specific area
 │       │
 │       └─⫸ feat|fix|docs|style|refactor|test|chore|perf|ci|build
 │
@@ -36,13 +36,15 @@ Please write it accurately as it will be used for actual commits.
 
 ### Scope Writing Rules
 
-**Priority**:
+Scope is optional. Add it only when the change is clearly limited to one specific area, e.g.:
 
-1. **Use branch name if available** (`$(git rev-parse --abbrev-ref HEAD)`)
-2. If no branch name, specify the area of change
-   - hooks: `useBodyScrollLock`, `useDebounce`, `useLocalStorage`, etc.
-   - UI: `components`, `styles`
-   - config: `config`, `build`
+- hooks: `useBodyScrollLock`, `useDebounce`, `useLocalStorage`, etc.
+- UI: `components`, `styles`
+- config: `config`, `build`
+
+**Don't use the branch name as scope** — branch names (especially ones with slashes, like `feat/main`) aren't valid conventional-commit scopes.
+
+For changes spanning multiple areas (e.g. a CI/release pipeline overhaul, a broad documentation cleanup), omit the scope entirely rather than forcing it into one.
 
 ### Gitmoji Selection
 
@@ -147,7 +149,7 @@ Please write it accurately as it will be used for actual commits.
 ### Examples
 
 ```
-✨ feat(feat/auth): add user authentication feature
+✨ feat(auth): add user authentication feature
 
 - Implement JWT-based login/logout
 - Add automatic token refresh logic
@@ -155,7 +157,7 @@ Please write it accurately as it will be used for actual commits.
 ```
 
 ```
-🐛 fix(fix/use-query): fix metaform type error
+🐛 fix(use-query): fix metaform type error
 
 - Change any type to specific type in useMutation
 - Improve error handling logic in useQuery

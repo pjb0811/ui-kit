@@ -27,7 +27,7 @@ export interface Props extends Omit<
 
 const Radio = ({
   placement = 'left',
-  value: _value,
+  value: _value = '',
   children,
   className,
   icons,
@@ -70,9 +70,19 @@ const Radio = ({
         }}
       />
       <span
+        role="radio"
+        aria-checked={checked}
+        aria-disabled={disabled}
+        tabIndex={disabled ? -1 : 0}
         className={cn(cursorClassName, disabled && 'opacity-50')}
         onClick={() => {
           document.getElementById(id)?.click();
+        }}
+        onKeyDown={e => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            document.getElementById(id)?.click();
+          }
         }}
       >
         {checked

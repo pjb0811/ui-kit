@@ -17,7 +17,7 @@ const Progress = ({
   className,
   direction = 'horizontal',
   classNames,
-  //
+  ...props
 }: Props) => {
   const isHorizontal = direction === 'horizontal';
   const dimension = isHorizontal ? 'width' : 'height';
@@ -27,6 +27,7 @@ const Progress = ({
 
   return (
     <Core
+      {...props}
       value={normalizedValue}
       className={cn(
         isHorizontal ? 'h-4 w-full' : 'flex h-full w-4 flex-col justify-end',

@@ -17,7 +17,7 @@ interface Item {
 
 interface Props extends Omit<
   React.ComponentPropsWithoutRef<'div'>,
-  'onChange'
+  'onChange' | 'defaultValue' | 'value' | 'dir'
 > {
   items?: Item[];
   accordion?: boolean;
@@ -41,37 +41,32 @@ const Collapse = ({
   defaultActiveKey,
   activeKey: _activeKey,
   onChange: _onChange,
+  ...props
 }: Props) => {
   const controlled = _activeKey !== undefined;
 
   const accordionProps = accordion
-    ? controlled
-      ? {
-          type: 'single' as const,
-          value: `${_activeKey?.[0] ?? ''}`,
-          onValueChange: (value: string) => {
-            _onChange?.(value ? [value] : []);
-          },
-        }
-      : {
-          type: 'single' as const,
-          defaultValue: `${defaultActiveKey?.[0] ?? ''}`,
-        }
-    : controlled
-      ? {
-          type: 'multiple' as const,
-          value: _activeKey?.map(key => `${key}`),
-          onValueChange: (values: string[]) => {
-            _onChange?.(values);
-          },
-        }
-      : {
-          type: 'multiple' as const,
-          defaultValue: defaultActiveKey?.map(key => `${key}`),
-        };
+    ? {
+        type: 'single' as const,
+        onValueChange: (value: string) => {
+          _onChange?.(value ? [value] : []);
+        },
+        ...(controlled
+          ? { value: `${_activeKey?.[0] ?? ''}` }
+          : { defaultValue: `${defaultActiveKey?.[0] ?? ''}` }),
+      }
+    : {
+        type: 'multiple' as const,
+        onValueChange: (values: string[]) => {
+          _onChange?.(values);
+        },
+        ...(controlled
+          ? { value: _activeKey?.map(key => `${key}`) }
+          : { defaultValue: defaultActiveKey?.map(key => `${key}`) }),
+      };
 
   return (
-    <Accordion className={className} {...accordionProps}>
+    <Accordion {...props} className={className} {...accordionProps}>
       {items.map(({ label, children, disabled }, key) => (
         <AccordionItem
           key={key}

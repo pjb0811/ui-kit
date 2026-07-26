@@ -138,7 +138,12 @@ const Item = ({
       if (!tweenRef.current || !containerRef.current) {
         return;
       }
-      tweenRef.current.pause();
+
+      if (isPaused) {
+        tweenRef.current.pause();
+      } else {
+        tweenRef.current.play();
+      }
     };
 
     window.addEventListener('resize', onResize);
@@ -146,7 +151,7 @@ const Item = ({
     return () => {
       window.removeEventListener('resize', onResize);
     };
-  }, []);
+  }, [isPaused]);
 
   return (
     <div

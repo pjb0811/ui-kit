@@ -6,8 +6,12 @@ export interface Props extends React.ComponentPropsWithoutRef<'div'> {
   spinning?: boolean;
 }
 
-const Spin = ({ spinning, className, ...props }: Props) => {
-  if (spinning) {
+const Spin = ({ spinning, className, children, ...props }: Props) => {
+  if (!spinning) {
+    return children ?? null;
+  }
+
+  if (!children) {
     return (
       <div
         className={cn(
@@ -27,7 +31,21 @@ const Spin = ({ spinning, className, ...props }: Props) => {
     );
   }
 
-  return null;
+  return (
+    <div
+      className={cn(
+        'relative',
+        className,
+        //
+      )}
+      {...props}
+    >
+      <div className="pointer-events-none opacity-50">{children}</div>
+      <div className="absolute inset-0 flex items-center justify-center">
+        <Loader2 className="animate-spin" />
+      </div>
+    </div>
+  );
 };
 
 export default Spin;

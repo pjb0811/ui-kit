@@ -35,14 +35,12 @@ const Reveals = ({
         key={index}
         duration={duration}
         delay={delay + cascade * index}
+        {...item}
         className={cn(
           item.className,
           classNames?.item,
           //
         )}
-        {...props}
-        {...item}
-        //
       >
         {item.children}
       </Item>

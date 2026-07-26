@@ -16,7 +16,7 @@ type Option = {
 type Options = string[] | number[] | boolean[] | Option[];
 
 export interface Props extends Omit<
-  React.ComponentPropsWithoutRef<'div'>,
+  React.ComponentPropsWithoutRef<'ul'>,
   'onChange' | 'defaultValue' | 'value'
 > {
   options?: Options;
@@ -37,6 +37,7 @@ const Group = ({
   defaultValue,
   value: _value,
   onChange: _onChange = () => {},
+  ...props
 }: Props) => {
   const [uncontrolledValue, setUncontrolledValue] = useState<OptionValue[]>(
     defaultValue || [],
@@ -67,6 +68,7 @@ const Group = ({
 
   return (
     <ul
+      {...props}
       className={cn(
         orientation === 'vertical' ? 'space-y-2' : 'flex gap-2',
         className,

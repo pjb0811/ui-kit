@@ -241,11 +241,13 @@ const Popover = ({
   className,
   content,
   children,
+  ...props
 }: Props) => {
   return (
     <CorePopover>
       <PopoverTrigger asChild>{children}</PopoverTrigger>
       <PopoverContent
+        {...props}
         align={placementMap[placement].align}
         side={placementMap[placement].side}
         sideOffset={16}

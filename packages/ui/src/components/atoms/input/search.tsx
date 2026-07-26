@@ -29,8 +29,17 @@ const Search = ({
   onSearch: _onSearch,
   ...props
 }: Props) => {
-  const internalRef = useRef<HTMLInputElement>(null);
-  const inputRef = (ref as React.RefObject<HTMLInputElement>) || internalRef;
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const setRefs = (node: HTMLInputElement | null) => {
+    inputRef.current = node;
+
+    if (typeof ref === 'function') {
+      ref(node);
+    } else if (ref) {
+      ref.current = node;
+    }
+  };
 
   const [uncontrolledHasValue, setUncontrolledHasValue] =
     useState(!!defaultValue);
@@ -74,7 +83,7 @@ const Search = ({
         )}
       >
         <Core
-          ref={inputRef}
+          ref={setRefs}
           inputMode="search"
           type="search"
           enterKeyHint="search"

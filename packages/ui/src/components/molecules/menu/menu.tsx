@@ -47,7 +47,7 @@ export interface MenuProps
 }
 
 export type ClickEventHandler = (params: {
-  domEvent: React.MouseEvent;
+  domEvent: React.SyntheticEvent;
   key: React.Key;
   keyPath: React.Key[];
   item: MenuItem;
@@ -134,7 +134,7 @@ const Menu = ({
   );
 
   const onSelect = (params: {
-    domEvent: React.MouseEvent;
+    domEvent: React.SyntheticEvent;
     key: React.Key;
     keyPath: React.Key[];
     item: MenuItem;
