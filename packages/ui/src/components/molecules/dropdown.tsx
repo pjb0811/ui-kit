@@ -14,7 +14,6 @@ interface Props extends React.ComponentPropsWithoutRef<'div'> {
   open?: boolean;
   trigger?: string;
   menu?: MenuProps;
-  placement?: string;
   onOpenChange?: ChangeEventHandler;
 }
 
