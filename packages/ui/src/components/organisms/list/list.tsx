@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef } from 'react';
 
-import { useIntersectionObserver } from '@uidotdev/usehooks';
+import { useIntersectionObserver } from '@jbpark/use-hooks';
 
 import { cn, renderConditional } from '@repo/ui/utils';
 
