@@ -21,6 +21,7 @@
     "postcss": "^8.4.31",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "swiper": "^11.2.10",
     "tailwindcss": "^4.1.12"
   },
   "devDependencies": {
