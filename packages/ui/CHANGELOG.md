@@ -1,5 +1,17 @@
 # @repo/ui
 
+## 3.0.0
+
+### Major Changes
+
+- 5738070: **BREAKING**: `Swiper` no longer bundles or activates any Swiper feature module. `Autoplay`, `EffectCards`, `Navigation` and `Scrollbar` (and their stylesheets) used to be imported statically and always enabled, which meant every carousel autoplayed by default via `initialOptions`. The component now ships only `swiper/css` and exposes a new `modules` prop (default `[]`) — import the modules you need from `swiper/modules` along with `swiper/css/<module>` and pass them explicitly, otherwise `autoplay` / `navigation` / `scrollbar` / `effect` options are inert. See `packages/ui/src/components/organisms/swiper/README.md` for the migration guide.
+
+  Other changes in this release:
+  - `RadioGroup` now owns a single shared Radix radiogroup root instead of wrapping each option in its own, so arrow keys move focus between options. Standalone `Radio`, the `icons` variant and `optionType="button"` groups are unaffected. `Radio` also accepts an optional `id` prop.
+  - `Button` no longer calls `preventDefault()` on `mousedown`, restoring native focus-on-click behaviour (buttons now keep focus after a mouse click).
+  - `Drawer` reference-counts `document.body.style.pointerEvents` so concurrent mask-less drawers no longer restore a stale value.
+  - `List` documents the `scroll.next()` contract: callers must reset `loading` to `false` when a fetch settles, including on failure.
+
 ## 2.12.0
 
 ### Minor Changes
