@@ -116,7 +116,7 @@ const RadioGroup = ({
                 className={cn(classNames?.item)}
                 value={item.value}
                 checked={checked}
-                disabled={item.disabled}
+                disabled={disabled || item.disabled}
                 onChange={checked => onChange(checked, item.value)}
               >
                 {item.label}

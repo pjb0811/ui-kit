@@ -20,9 +20,6 @@ const meta: Meta<typeof Dropdown> = {
     menu: {
       control: { type: 'object' },
     },
-    placement: {
-      table: { disable: true },
-    },
   },
 };
 

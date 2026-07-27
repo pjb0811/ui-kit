@@ -11,6 +11,7 @@ export type OptionValue = string | number | boolean;
 type Option = {
   label: string;
   value: OptionValue;
+  disabled?: boolean;
 };
 
 type Options = string[] | number[] | boolean[] | Option[];
@@ -87,6 +88,7 @@ const Group = ({
               className={cn(classNames?.item)}
               value={item.value}
               checked={checked}
+              disabled={item.disabled}
               onChange={checked => onChange(checked, item.value)}
             >
               {item.label}

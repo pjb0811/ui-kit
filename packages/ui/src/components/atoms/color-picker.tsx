@@ -40,11 +40,19 @@ const ColorPicker = ({
       content={<HexColorPicker color={value} onChange={onChange} />}
     >
       <div
+        role="button"
+        tabIndex={0}
         className={cn(
           'inline-flex items-center',
           'rounded border p-0.5',
           //
         )}
+        onKeyDown={e => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            e.currentTarget.click();
+          }
+        }}
       >
         <div
           className={cn(

@@ -46,18 +46,19 @@ const Search = ({
   const hasValue = value !== undefined ? !!value : uncontrolledHasValue;
 
   const onClear = () => {
-    if (inputRef.current) {
-      inputRef.current.value = '';
-
-      if (value === undefined) {
-        setUncontrolledHasValue(false);
-      }
-
-      const event = {
-        target: { value: '' },
-      } as React.ChangeEvent<HTMLInputElement>;
-      onChange?.(event);
+    if (!inputRef.current) {
+      return;
     }
+
+    if (value === undefined) {
+      inputRef.current.value = '';
+      setUncontrolledHasValue(false);
+    }
+
+    const event = {
+      target: { value: '' },
+    } as React.ChangeEvent<HTMLInputElement>;
+    onChange?.(event);
   };
 
   const onSearch = () => {
@@ -108,14 +109,18 @@ const Search = ({
           }}
           {...props}
         />
-        <CircleX
+        <button
+          type="button"
+          aria-label="지우기"
           className={cn(
-            'absolute right-2 size-4',
+            'absolute right-2',
             'shrink-0 cursor-pointer',
             (!allowClear || !hasValue) && 'hidden',
           )}
           onClick={onClear}
-        />
+        >
+          <CircleX className="size-4" />
+        </button>
       </div>
       <Button
         icon={<SearchOutlined />}

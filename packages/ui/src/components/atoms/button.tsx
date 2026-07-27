@@ -126,8 +126,8 @@ const Button = ({
         'h-auto py-0',
         'transition-all',
         variantClasses[resolvedVariant],
-        sizesClasses[size || 'medium'],
-        iconOnly && ['p-0', iconClasses[size || 'medium']],
+        sizesClasses[size],
+        iconOnly && ['p-0', iconClasses[size]],
         shapesClasses[shape || 'default'],
         block && 'w-full',
         colored &&

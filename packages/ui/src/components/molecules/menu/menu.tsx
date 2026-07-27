@@ -55,7 +55,8 @@ export type ClickEventHandler = (params: {
 
 export const MENU_CLASSNAMES = [
   'p-0',
-  'bg-white',
+  'bg-popover',
+  'text-popover-foreground',
   'shadow-md',
   'rounded-md',
   //

@@ -14,6 +14,8 @@ const Spin = ({ spinning, className, children, ...props }: Props) => {
   if (!children) {
     return (
       <div
+        role="status"
+        aria-label="로딩 중"
         className={cn(
           'flex h-full items-center justify-center',
           //
@@ -41,7 +43,11 @@ const Spin = ({ spinning, className, children, ...props }: Props) => {
       {...props}
     >
       <div className="pointer-events-none opacity-50">{children}</div>
-      <div className="absolute inset-0 flex items-center justify-center">
+      <div
+        role="status"
+        aria-label="로딩 중"
+        className="absolute inset-0 flex items-center justify-center"
+      >
         <Loader2 className="animate-spin" />
       </div>
     </div>
