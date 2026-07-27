@@ -15,7 +15,6 @@ export default defineConfig({
     Reveals: 'src/components/molecules/reveals/index.ts',
     Layout: 'src/components/templates/layout/index.ts',
     utils: 'src/lib/utils/index.ts',
-    enums: 'src/lib/enums/index.ts',
     core: 'src/core/index.ts',
     style: 'src/globals.css',
   },
