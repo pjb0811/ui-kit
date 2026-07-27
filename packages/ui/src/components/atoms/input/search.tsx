@@ -109,14 +109,18 @@ const Search = ({
           }}
           {...props}
         />
-        <CircleX
+        <button
+          type="button"
+          aria-label="지우기"
           className={cn(
-            'absolute right-2 size-4',
+            'absolute right-2',
             'shrink-0 cursor-pointer',
             (!allowClear || !hasValue) && 'hidden',
           )}
           onClick={onClear}
-        />
+        >
+          <CircleX className="size-4" />
+        </button>
       </div>
       <Button
         icon={<SearchOutlined />}
