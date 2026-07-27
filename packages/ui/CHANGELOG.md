@@ -1,5 +1,12 @@
 # @repo/ui
 
+## 2.12.0
+
+### Minor Changes
+
+- 15d7508: Add new props to several components for improved customization and accessibility, including role attributes and keyboard interactions for checkboxes and radios.
+- 7fec05c: Remove the unused `enums` subpath export (`TEXT_LEVELS`), which was not referenced by any component internally.
+
 ## 2.11.3
 
 ### Patch Changes
