@@ -18,6 +18,14 @@ const {
   DrawerTitle,
 } = drawer;
 
+// `document.body.style.pointerEvents` is global state, so several mask-less
+// overlays opening at once would otherwise race: each instance would capture
+// whatever the previous one had already written and the last cleanup would
+// restore a stale value. Reference counting makes only the first instance
+// capture the original value and only the last one restore it.
+let maskLessOverlayCount = 0;
+let originalBodyPointerEvents: string | null = null;
+
 export interface Props {
   open: boolean;
   children?: React.ReactNode;
@@ -95,7 +103,10 @@ const Drawer = ({
       return;
     }
 
-    const originalPointerEvents = document.body.style.pointerEvents;
+    if (maskLessOverlayCount === 0) {
+      originalBodyPointerEvents = document.body.style.pointerEvents;
+    }
+    maskLessOverlayCount += 1;
 
     const raf = window.requestAnimationFrame(() => {
       document.body.style.pointerEvents = 'auto';
@@ -103,7 +114,12 @@ const Drawer = ({
 
     return () => {
       window.cancelAnimationFrame(raf);
-      document.body.style.pointerEvents = originalPointerEvents;
+      maskLessOverlayCount -= 1;
+
+      if (maskLessOverlayCount === 0) {
+        document.body.style.pointerEvents = originalBodyPointerEvents ?? '';
+        originalBodyPointerEvents = null;
+      }
     };
   }, [open, mask]);
 
