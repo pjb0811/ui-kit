@@ -30,6 +30,13 @@ interface Props<T> extends Omit<
     loading: boolean;
     loader?: React.ReactNode;
     options?: IntersectionObserverInit;
+    /**
+     * Called when more items should be fetched. `List` tracks in-flight
+     * requests via `loading` — the caller MUST flip `loading` back to
+     * `false` when the fetch settles, including on failure/rejection.
+     * If `loading` never becomes `false` again after a failed fetch,
+     * `List` will stop calling `next()` for subsequent intersections.
+     */
     next: () => void;
   };
   data?: T[];
