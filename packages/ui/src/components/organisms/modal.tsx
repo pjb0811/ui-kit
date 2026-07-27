@@ -66,8 +66,23 @@ interface StaticProps extends Props {
 const isBrowser =
   typeof window !== 'undefined' && typeof document !== 'undefined';
 
-let modalStack: StaticProps[] = [];
-let updateStack: (() => void) | null = null;
+type ContainerState = {
+  stack: StaticProps[];
+  update: (() => void) | null;
+};
+
+const containerStates = new Map<HTMLElement, ContainerState>();
+
+const getContainerState = (container: HTMLElement): ContainerState => {
+  let state = containerStates.get(container);
+
+  if (!state) {
+    state = { stack: [], update: null };
+    containerStates.set(container, state);
+  }
+
+  return state;
+};
 
 const createModalRoot = (container?: HTMLElement) => {
   if (!isBrowser) {
@@ -279,19 +294,22 @@ const StaticModal = ({
   );
 };
 
-const ModalStackRenderer = () => {
+const ModalStackRenderer = ({ container }: { container: HTMLElement }) => {
   const [, forceUpdate] = useState({});
 
   useEffect(() => {
-    updateStack = () => forceUpdate({});
+    const state = getContainerState(container);
+    state.update = () => forceUpdate({});
     return () => {
-      updateStack = null;
+      state.update = null;
     };
-  }, []);
+  }, [container]);
+
+  const { stack } = getContainerState(container);
 
   return (
     <>
-      {modalStack.map(({ id, ...props }) => (
+      {stack.map(({ id, ...props }) => (
         <StaticModal key={id} id={id} {...props} />
       ))}
     </>
@@ -311,25 +329,43 @@ const renderModal = (props: StaticProps) => {
   if (!modalRoots.has(targetContainer)) {
     const root = createRoot(rootElement);
     modalRoots.set(targetContainer, root);
-    root.render(<ModalStackRenderer />);
+    root.render(<ModalStackRenderer container={targetContainer} />);
   }
 
+  const state = getContainerState(targetContainer);
   const id = props.id || uuid();
-  modalStack.push({ ...props, id });
-  updateStack?.();
+  state.stack.push({ ...props, id });
+  state.update?.();
 
   return id;
 };
 
 Modal.destroy = (id?: string) => {
-  modalStack = id ? modalStack.filter(modal => modal.id !== id) : [];
-
-  updateStack?.();
-
-  if (!modalStack.length) {
+  if (!id) {
+    containerStates.forEach(state => {
+      state.stack = [];
+      state.update?.();
+    });
     modalRoots.forEach(root => root.unmount());
     modalRoots.clear();
+    containerStates.clear();
+    return;
   }
+
+  containerStates.forEach((state, container) => {
+    if (!state.stack.some(modal => modal.id === id)) {
+      return;
+    }
+
+    state.stack = state.stack.filter(modal => modal.id !== id);
+    state.update?.();
+
+    if (!state.stack.length) {
+      modalRoots.get(container)?.unmount();
+      modalRoots.delete(container);
+      containerStates.delete(container);
+    }
+  });
 };
 
 Modal.destroyAll = () => {
