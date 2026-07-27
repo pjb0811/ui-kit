@@ -67,14 +67,27 @@ const Dropdown = ({
       }}
     >
       <div
+        aria-haspopup="menu"
+        aria-expanded={open}
         onClick={() => {
           if (!isClickTrigger) {
             return;
           }
           onOpenChange(!open);
         }}
+        onFocus={() => {
+          if (isClickTrigger) {
+            return;
+          }
+          onOpenChange(true);
+        }}
         onBlur={() => {
           onOpenChange(false);
+        }}
+        onKeyDown={e => {
+          if (e.key === 'Escape') {
+            onOpenChange(false);
+          }
         }}
       >
         {children}
