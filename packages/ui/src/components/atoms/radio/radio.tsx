@@ -1,12 +1,13 @@
 'use client';
 
-import { useId, useState } from 'react';
+import { useContext, useId, useState } from 'react';
 
 import { Circle, CircleCheck } from 'lucide-react';
 
 import { field, radio } from '@repo/ui/core';
 import { cn } from '@repo/ui/utils';
 
+import { RadioGroupContext } from './context';
 import { type OptionValue } from './group';
 
 const { RadioGroup: Core, RadioGroupItem: Item } = radio;
@@ -21,6 +22,12 @@ export interface Props extends Omit<
   checked?: boolean;
   value?: OptionValue;
   disabled?: boolean;
+  /**
+   * Id shared by the underlying control and its label. Generated internally
+   * when omitted. `RadioGroup` passes a deterministic id so that the group's
+   * single Radix root can address each option.
+   */
+  id?: string;
   icons?: { checked: React.ReactNode; unchecked: React.ReactNode };
   onChange?: (checked: boolean) => void;
 }
@@ -34,6 +41,7 @@ const Radio = ({
   disabled,
   defaultChecked,
   checked: _checked,
+  id: _id,
   onChange: _onChange = () => {},
   ...props
 }: Props) => {
@@ -41,7 +49,9 @@ const Radio = ({
     defaultChecked || false,
   );
 
-  const id = useId();
+  const generatedId = useId();
+  const id = _id ?? generatedId;
+  const grouped = useContext(RadioGroupContext);
   const controlled = _checked !== undefined;
   const checked = controlled ? _checked : uncontrolledChecked;
 
@@ -57,6 +67,22 @@ const Radio = ({
     }
     _onChange(next);
   };
+
+  // When rendered inside a `RadioGroup`, the group owns the single shared
+  // `Core` (Radix radiogroup root) so that arrow keys move focus across every
+  // option. A standalone `Radio` still has to provide its own root.
+  const renderField = (
+    <Field
+      orientation="horizontal"
+      className={cn('flex gap-2', placement === 'right' && 'flex-row-reverse')}
+      data-disabled={disabled}
+    >
+      <Item value={id} id={id} checked={checked} disabled={disabled} />
+      <FieldLabel htmlFor={id} className={cursorClassName}>
+        {children}
+      </FieldLabel>
+    </Field>
+  );
 
   const renderContent = icons ? (
     <>
@@ -98,21 +124,11 @@ const Radio = ({
         </label>
       )}
     </>
+  ) : grouped ? (
+    renderField
   ) : (
     <Core value={checked ? id : ''} onValueChange={() => onChange(true)}>
-      <Field
-        orientation="horizontal"
-        className={cn(
-          'flex gap-2',
-          placement === 'right' && 'flex-row-reverse',
-        )}
-        data-disabled={disabled}
-      >
-        <Item value={id} id={id} checked={checked} disabled={disabled} />
-        <FieldLabel htmlFor={id} className={cursorClassName}>
-          {children}
-        </FieldLabel>
-      </Field>
+      {renderField}
     </Core>
   );
 

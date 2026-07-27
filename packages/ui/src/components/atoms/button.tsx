@@ -148,7 +148,6 @@ const Button = ({
         //
       )}
       onMouseDown={e => {
-        e.preventDefault();
         onMouseDown?.(e);
       }}
       {...props}

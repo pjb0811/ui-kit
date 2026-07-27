@@ -1,11 +1,15 @@
 'use client';
 
-import { useState } from 'react';
+import { useId, useState } from 'react';
 
+import { radio } from '@repo/ui/core';
 import { cn } from '@repo/ui/utils';
 
 import Button from '../button';
+import { RadioGroupContext } from './context';
 import Radio from './radio';
+
+const { RadioGroup: Core } = radio;
 
 export type OptionValue = string | number | boolean;
 
@@ -77,7 +81,25 @@ const RadioGroup = ({
     _onChange(optionValue);
   };
 
-  return (
+  // A single Radix radiogroup root owns every option so that arrow keys move
+  // focus across the whole group. Radix addresses items by string value, so
+  // each option gets a deterministic id derived from a stable base id.
+  const baseId = useId();
+  const getOptionId = (index: number) => `${baseId}-${index}`;
+  const checkedIndex = options.findIndex(item => item.value === value);
+  const checkedId = checkedIndex === -1 ? '' : getOptionId(checkedIndex);
+
+  const onValueChange = (optionId: string) => {
+    const item = options.find((_, index) => getOptionId(index) === optionId);
+
+    if (!item) {
+      return;
+    }
+
+    onChange(true, item.value);
+  };
+
+  const list = (
     <ul
       {...props}
       className={cn(
@@ -112,6 +134,7 @@ const RadioGroup = ({
               </Button>
             ) : (
               <Radio
+                id={getOptionId(index)}
                 placement={placement}
                 className={cn(classNames?.item)}
                 value={item.value}
@@ -126,6 +149,20 @@ const RadioGroup = ({
         );
       })}
     </ul>
+  );
+
+  // `optionType='button'` renders `Button`s instead of radios, so it keeps the
+  // plain list and stays out of the Radix radiogroup entirely.
+  if (isButton) {
+    return list;
+  }
+
+  return (
+    <RadioGroupContext.Provider value={true}>
+      <Core className="block" value={checkedId} onValueChange={onValueChange}>
+        {list}
+      </Core>
+    </RadioGroupContext.Provider>
   );
 };
 

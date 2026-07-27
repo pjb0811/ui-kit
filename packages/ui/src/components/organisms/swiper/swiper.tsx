@@ -1,19 +1,19 @@
 'use client';
 
-import { Autoplay, EffectCards, Navigation, Scrollbar } from 'swiper/modules';
 import { Swiper as SwiperCore, SwiperProps } from 'swiper/react';
-import { SwiperOptions } from 'swiper/types';
+import { SwiperModule, SwiperOptions } from 'swiper/types';
 
 import { cn } from '@repo/ui/utils';
 
 import 'swiper/css';
-import 'swiper/css/autoplay';
-import 'swiper/css/effect-cards';
-import 'swiper/css/navigation';
-import 'swiper/css/scrollbar';
 
 import { Spin } from '../../atoms';
 
+/**
+ * Baseline Swiper options. `navigation` / `autoplay` are inert unless the
+ * matching modules are passed through the `modules` prop — see the README next
+ * to this file.
+ */
 export const initialOptions: SwiperOptions = {
   loop: false,
   spaceBetween: 8,
@@ -32,6 +32,21 @@ interface Props<T> extends SwiperProps {
   loader?: React.ReactNode;
   loadingClassName?: string;
   options?: SwiperOptions;
+  /**
+   * Swiper feature modules to activate. Nothing is bundled by default — import
+   * the modules you need from `swiper/modules` together with their stylesheets
+   * (`swiper/css/<module>`) and pass them here.
+   *
+   * @example
+   * import { Autoplay, Navigation } from 'swiper/modules';
+   * import 'swiper/css/autoplay';
+   * import 'swiper/css/navigation';
+   *
+   * <Swiper modules={[Autoplay, Navigation]} ... />
+   *
+   * @default []
+   */
+  modules?: SwiperModule[];
   data: T[];
   renderItem(item: T, key: number): React.ReactNode;
 }
@@ -40,6 +55,7 @@ const Swiper = <T,>({
   loading,
   loader,
   options = {},
+  modules = [],
   data = [],
   style,
   renderItem,
@@ -56,7 +72,7 @@ const Swiper = <T,>({
 
   return (
     <SwiperCore
-      modules={[Navigation, Scrollbar, Autoplay, EffectCards]}
+      modules={modules}
       {...initialOptions}
       {...options}
       style={{ ...initialStyle, ...style }}

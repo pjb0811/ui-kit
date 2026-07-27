@@ -1,7 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { Autoplay, Navigation } from 'swiper/modules';
 
 import { Swiper } from '@repo/ui';
 import { cn } from '@repo/ui/utils';
+
+// `Swiper` ships only the core bundle. Feature modules and their stylesheets
+// are opted into by the consumer and passed through the `modules` prop.
+import 'swiper/css/autoplay';
+import 'swiper/css/navigation';
 
 interface Item {
   id: number;
@@ -36,6 +42,9 @@ const meta: Meta<typeof Swiper<Item>> = {
     renderItem: {
       action: 'renderItem',
     },
+    modules: {
+      control: false,
+    },
   },
 };
 
@@ -46,6 +55,14 @@ export const Default: Story = {
   args: {
     loading: false,
     data: defaultData,
+    modules: [Autoplay, Navigation],
+    options: {
+      navigation: true,
+      autoplay: {
+        delay: 2500,
+        disableOnInteraction: false,
+      },
+    },
     style: {
       width: 480,
     },
