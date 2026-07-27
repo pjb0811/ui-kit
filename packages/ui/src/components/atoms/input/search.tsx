@@ -46,18 +46,19 @@ const Search = ({
   const hasValue = value !== undefined ? !!value : uncontrolledHasValue;
 
   const onClear = () => {
-    if (inputRef.current) {
-      inputRef.current.value = '';
-
-      if (value === undefined) {
-        setUncontrolledHasValue(false);
-      }
-
-      const event = {
-        target: { value: '' },
-      } as React.ChangeEvent<HTMLInputElement>;
-      onChange?.(event);
+    if (!inputRef.current) {
+      return;
     }
+
+    if (value === undefined) {
+      inputRef.current.value = '';
+      setUncontrolledHasValue(false);
+    }
+
+    const event = {
+      target: { value: '' },
+    } as React.ChangeEvent<HTMLInputElement>;
+    onChange?.(event);
   };
 
   const onSearch = () => {
