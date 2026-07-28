@@ -1,6 +1,6 @@
 ---
 name: coding-style
-description: "Repo-agnostic coding-conventions toolkit — a growing set of procedures for working consistently within any codebase. Currently covers: (A) discovering and following a project's existing directory structure and coding conventions before writing/editing code (checks CLAUDE.md/AGENTS.md, README/CONTRIBUTING, formatter/linter configs, and neighboring files); (B) safely renaming directories/files to a different naming convention (e.g. PascalCase to kebab-case) across a codebase without breaking imports or losing git history; (C) restructuring a grouped/composition component (a parent with sub-components living in their own subdirectories, e.g. Error/Boundary, Input/Search) into named files with a thin composing barrel index.ts, matching ui-kit's own components/atoms/input/ pattern; (D) deciding whether a new reusable UI element or hook belongs in the shared ui-kit/use-hooks libraries first, before implementing it inline in an app repo. Use when the user says '코딩 스타일대로', '컨벤션 맞춰줘', '이 프로젝트 스타일로', 'follow the project conventions', 'match the existing style', '케밥 케이스로 바꿔줘', '폴더명 리네임', 'rename directories to kebab-case', '배럴 파일 규칙', '그룹화된 컴포넌트 구조', '재사용 가능한 컴포넌트', '공유 라이브러리에 먼저', or before creating/editing a file in an unfamiliar repo without already having its conventions in context."
+description: "Repo-agnostic coding-conventions toolkit — a growing set of procedures for working consistently within any codebase. Currently covers: (A) discovering and following a project's existing directory structure and coding conventions before writing/editing code (checks CLAUDE.md/AGENTS.md, README/CONTRIBUTING, formatter/linter configs, and neighboring files); (B) safely renaming directories/files to a different naming convention (e.g. PascalCase to kebab-case) across a codebase without breaking imports or losing git history; (C) restructuring a grouped/composition component (a parent with sub-components living in their own subdirectories, e.g. Error/Boundary, Input/Search) into named files with a thin composing barrel index.ts, matching ui-kit's own components/atoms/input/ pattern; (D) deciding whether a new reusable UI element or hook belongs in the shared ui-kit/use-hooks libraries first, before implementing it inline in an app repo; (E) in ui-kit's Atomic Design layers, composing existing atoms (e.g. Button) instead of reaching into src/core primitives or raw HTML elements — applies to any layer including atom-composing-atom (e.g. an atom like DatePicker reusing the Button atom), not just molecules/organisms. Use when the user says '코딩 스타일대로', '컨벤션 맞춰줘', '이 프로젝트 스타일로', 'follow the project conventions', 'match the existing style', '케밥 케이스로 바꿔줘', '폴더명 리네임', 'rename directories to kebab-case', '배럴 파일 규칙', '그룹화된 컴포넌트 구조', '재사용 가능한 컴포넌트', '공유 라이브러리에 먼저', '기존 prop 활용', 'atoms 조합', or before creating/editing a file in an unfamiliar repo without already having its conventions in context."
 ---
 
 # Coding Style
@@ -11,6 +11,7 @@ description: "Repo-agnostic coding-conventions toolkit — a growing set of proc
 - **B. 네이밍 컨벤션 일괄 변경** — 디렉토리/파일명 케이스 컨벤션을 바꿔야 할 때
 - **C. 그룹화된/합성 컴포넌트의 배럴 파일 구조** — 하위 컴포넌트가 서브디렉토리+자체 index.tsx로 흩어져 있는 걸 named file + 얇은 배럴로 평탄화할 때
 - **D. 재사용 가능한 UI/훅은 공유 라이브러리에 먼저 구현** — 새 컴포넌트/훅을 앱 저장소에 바로 만들지, `ui-kit`/`use-hooks`에 먼저 만들지 판단할 때
+- **E. 어느 계층이든 core를 직접 만지지 않고 기존 atoms를 조합** — `ui-kit` 내에서 (atoms 포함) 어떤 컴포넌트든 버튼 등 기본 요소가 필요할 때 raw 엘리먼트/core 대신 기존 atom을 조합할 때
 
 ---
 
@@ -263,3 +264,30 @@ export { default, type FrameProps } from './frame';
 - **공유 라이브러리에 이미 비슷한 게 있는데 완전히 똑같진 않음**: 새로 만들기 전에 기존 것을 확장/일반화할 수 있는지부터 검토한다.
 - **급하게 먼저 써봐야 검증이 되는 경우**: 앱 저장소에 임시로 구현해서 프로토타이핑하는 것 자체는 막지 않지만, 검증되면 공유 라이브러리로 옮기는 후속 작업이 뒤따라야 한다 — "임시"가 영구적으로 로컬에 남지 않도록 사용자에게 후속 작업으로 남겨둔다.
 - **어느 라이브러리로 가야 할지 애매함** (UI 컴포넌트인데 훅도 포함): UI 렌더링이 주된 산출물이면 `ui-kit`, 순수 로직/상태 관리가 주된 산출물이면 `use-hooks`. 둘 다 필요하면 분리해서 각각 해당 라이브러리에 넣는다.
+
+## E. 어느 계층이든 core를 직접 만지지 않고 기존 atoms를 조합한다
+
+`ui-kit`(`packages/ui`)의 Atomic Design 계층에서, `src/core/`는 **headless 래퍼를 새로 만들 때만** 접근하는 최하위 레이어다. 새로 만드는 컴포넌트가 atoms/molecules/organisms/templates 중 어느 계층에 속하든, 버튼·인풋 같은 기본 요소가 필요하면 `src/core/*`를 직접 import하거나 raw HTML 엘리먼트(`<button>`, `<input>` 등)로 새로 만들지 않고, 이미 존재하는 atoms(`atoms/button`, `atoms/input` 등)를 가져다 그 컴포넌트의 정의된 prop으로 조합한다.
+
+**"molecule/organism이 atoms를 쓴다"로 한정되는 규칙이 아니다.** atom도 다른 atom을 조합할 수 있다 — 예를 들어 `atoms/date-picker`가 트리거로 `atoms/button`을, 팝업 레이어로 `atoms/popover`를 가져다 쓰는 것처럼, 같은 atoms 계층 안에서도 이미 있는 atom을 재사용하는 게 맞다. 계층을 근거로 "나는 atom이니까 core를 직접 써도 된다"고 판단하지 않는다. 유일한 방향성 제약은 상위 계층으로 거슬러 올라가지 않는 것(atom이 molecule/organism을 import하지 않는 것)뿐이다.
+
+### E0. 판단 기준
+
+컴포넌트를 만들다가(그 컴포넌트 자신이 atom이든 molecule이든 organism이든 상관없이) 버튼·인풋 같은 기본 상호작용 요소가 필요할 때 스스로 묻는다: "이거랑 똑같은 역할을 하는 atom이 이미 `src/components/atoms/`에 있나?"
+
+- **있다** → 그 atom을 import해서 조합한다. `type`/`variant`/`icon`/`shape`/`size` 등 이미 정의된 prop으로 표현 가능한 걸 raw 엘리먼트나 `className`으로 재구현하지 않는다. 지금 만들고 있는 게 atom이라도 예외 아님
+- **없다 (그 atom 자체가 이번에 새로 필요한 것)** → 먼저 atoms 계층에 만들고, 그다음 그걸 필요로 하는 컴포넌트에서 가져다 쓴다
+
+### E1. 실제 사례 (반례)
+
+`Upload`(molecule)와 `DatePicker`(atom, 내부에서 트리거 버튼 필요)를 추가할 때(2026-07-28), 둘 다 이미 있는 `atoms/button`을 쓰지 않고:
+
+- `Upload`의 파일 삭제 버튼을 `atoms/button` import 없이 raw `<button type="button">`으로 구현 (`icon`/`shape="circle"`/`type="text"` prop으로 표현 가능했음)
+- `DatePicker`의 트리거 버튼을 `atoms/button`이 아니라 `src/core`의 `buttonVariants`를 직접 가져다 클래스만 입혀서 raw `<button>`으로 구현
+
+반면 기존 `modal.tsx`/`drawer.tsx`(organisms)는 `import Button from '../atoms/button'` 해서 `<Button variant="outlined" onClick={...}>`처럼 정상적으로 조합해서 썼다 — 이게 이 코드베이스가 실제로 따르던 컨벤션이었는데 문서화가 안 돼 있었다. 새 컴포넌트를 만들 때는 이 사례처럼 놓치지 말고, 작업 전에 계층 상관없이 기존 파일(다른 atom이든 molecule/organism이든)에서 atoms를 어떻게 조합하는지 먼저 확인한다.
+
+### E 엣지 케이스
+
+- **atom의 기존 prop으로 원하는 스타일/동작을 정확히 표현할 수 없음** (예: atom에 없는 새 variant가 필요): 그 자리에서 raw 엘리먼트로 우회하지 말고, atom 쪽에 prop/variant를 추가하는 걸 먼저 검토한다. atom 확장이 과하다고 판단되면(지금 만드는 컴포넌트에만 필요한 아주 특수한 케이스라면) `className`으로 atom 위에 스타일을 얹는 것까지는 허용하되, atom 자체를 우회하고 core나 raw 엘리먼트로 내려가지는 않는다.
+- **atoms에 아직 없는 요소** (예: 이번 케이스처럼 프로젝트에 `Icon Button` 전용 atom이 없었던 경우): 기존 atom(`Button`)의 prop 조합(`type="text"` + `shape="circle"` + `icon`)으로 커버되는지 먼저 확인 — 대부분 새 atom을 또 만들 필요 없이 기존 atom의 조합만으로 충분하다.
