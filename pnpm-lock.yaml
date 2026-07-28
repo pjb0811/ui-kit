@@ -187,8 +187,8 @@ importers:
         specifier: ^2.1.2
         version: 2.1.2(gsap@3.15.0)(react@19.2.3)
       '@jbpark/use-hooks':
-        specifier: ^2.1.0
-        version: 2.1.0(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+        specifier: ^2.5.0
+        version: 2.5.0(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       '@radix-ui/react-accordion':
         specifier: ^1.2.12
         version: 1.2.12(@types/react-dom@19.1.1(@types/react@19.1.0))(@types/react@19.1.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
@@ -213,9 +213,6 @@ importers:
       '@radix-ui/react-switch':
         specifier: ^1.2.6
         version: 1.2.6(@types/react-dom@19.1.1(@types/react@19.1.0))(@types/react@19.1.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
-      '@uidotdev/usehooks':
-        specifier: ^2.4.1
-        version: 2.4.1(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
@@ -853,8 +850,8 @@ packages:
     resolution: {integrity: sha512-O8jcjabXaleOG9DQ0+ARXWZBTfnP4WNAqzuiJK7ll44AmxGKv/J2M4TPjxjY3znBCfvBXFzucm1twdyFybFqEA==}
     engines: {node: '>=12'}
 
-  '@jbpark/use-hooks@2.1.0':
-    resolution: {integrity: sha512-/rgfrPG3zT74OFA/snZOJbBtgTiTDP0Naq/xWUNzTJGnyto7ssNCq9zTsGVeTVEqa3TYnUe/CS3bWoJ4WzCeBg==}
+  '@jbpark/use-hooks@2.5.0':
+    resolution: {integrity: sha512-7jKz3Lv8Xi+x8AG0N7Rm9cowIFRqwA7wl6TByUKPT8+mFmPiZqRXN3eKw85wjLpMfBIY7i4ILvmMo+Mw1Z7DbA==}
     peerDependencies:
       react: ^19.1.1
       react-dom: ^19.1.1
@@ -2240,13 +2237,6 @@ packages:
   '@typescript-eslint/visitor-keys@8.53.0':
     resolution: {integrity: sha512-LZ2NqIHFhvFwxG0qZeLL9DvdNAHPGCY5dIRwBhyYeU+LfLhcStE1ImjsuTG/WaVh3XysGaeLW8Rqq7cGkPCFvw==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
-
-  '@uidotdev/usehooks@2.4.1':
-    resolution: {integrity: sha512-1I+RwWyS+kdv3Mv0Vmc+p0dPYH0DTRAo04HLyXReYBL9AeseDWUJyi4THuksBJcu9F0Pih69Ak150VDnqbVnXg==}
-    engines: {node: '>=16'}
-    peerDependencies:
-      react: '>=18.0.0'
-      react-dom: '>=18.0.0'
 
   '@vitest/expect@3.2.4':
     resolution: {integrity: sha512-Io0yyORnB6sikFlt8QW5K7slY4OjqNX9jmJQ02QDda8lyM6B5oNgVWoSoKPac8/kgnCUzuHQKrSLtu/uOqqrig==}
@@ -5477,7 +5467,7 @@ snapshots:
       wrap-ansi: 8.1.0
       wrap-ansi-cjs: wrap-ansi@7.0.0
 
-  '@jbpark/use-hooks@2.1.0(react-dom@19.2.3(react@19.2.3))(react@19.2.3)':
+  '@jbpark/use-hooks@2.5.0(react-dom@19.2.3(react@19.2.3))(react@19.2.3)':
     dependencies:
       react: 19.2.3
       react-dom: 19.2.3(react@19.2.3)
@@ -6852,11 +6842,6 @@ snapshots:
     dependencies:
       '@typescript-eslint/types': 8.53.0
       eslint-visitor-keys: 4.2.1
-
-  '@uidotdev/usehooks@2.4.1(react-dom@19.2.3(react@19.2.3))(react@19.2.3)':
-    dependencies:
-      react: 19.2.3
-      react-dom: 19.2.3(react@19.2.3)
 
   '@vitest/expect@3.2.4':
     dependencies:
