@@ -1,6 +1,7 @@
 export { default as Button } from './button';
 export { default as Checkbox } from './checkbox';
 export { default as ColorPicker } from './color-picker';
+export { default as DatePicker } from './date-picker';
 export { default as FloatButton } from './float-button';
 export { default as Input } from './input';
 export { default as Popover } from './popover';

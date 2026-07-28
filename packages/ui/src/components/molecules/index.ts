@@ -6,3 +6,5 @@ export { default as Menu } from './menu';
 export { default as Reveals } from './reveals';
 export { default as Splitter } from './splitter';
 export { default as Space } from './space';
+export { default as Upload } from './upload';
+export type { UploadFile } from './upload';
