@@ -7,6 +7,8 @@ import { Upload as UploadIcon, X } from 'lucide-react';
 
 import { cn } from '@repo/ui/utils';
 
+import Button from '../atoms/button';
+
 export interface UploadFile {
   uid: string;
   name: string;
@@ -167,14 +169,15 @@ const Upload = ({
                 />
               )}
               <span className="flex-1 truncate text-sm">{file.name}</span>
-              <button
-                type="button"
+              <Button
+                type="text"
+                shape="circle"
+                size="small"
+                icon={<X className="size-4" />}
                 onClick={() => removeFile(file.uid)}
                 className="text-muted-foreground hover:text-foreground shrink-0"
                 aria-label={`Remove ${file.name}`}
-              >
-                <X className="size-4" />
-              </button>
+              />
             </li>
           ))}
         </ul>
