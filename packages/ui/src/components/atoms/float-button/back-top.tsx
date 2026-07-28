@@ -2,7 +2,7 @@
 
 import { MouseEvent } from 'react';
 
-import { useWindowScroll } from '@uidotdev/usehooks';
+import { useWindowScroll } from '@jbpark/use-hooks';
 import { ArrowUp } from 'lucide-react';
 
 import { cn } from '@repo/ui/utils';
@@ -21,7 +21,7 @@ const BackTop = ({
   onClick,
   ...props
 }: Props) => {
-  const [{ y }, scrollTo] = useWindowScroll();
+  const { y } = useWindowScroll();
 
   return (
     <FloatButton
@@ -33,7 +33,7 @@ const BackTop = ({
         //
       )}
       onClick={e => {
-        scrollTo({ left: 0, top: 0, behavior: 'smooth' });
+        window.scrollTo({ left: 0, top: 0, behavior: 'smooth' });
         onClick?.(e);
       }}
       {...props}
