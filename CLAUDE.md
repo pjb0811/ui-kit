@@ -4,6 +4,8 @@
 
 pnpm + turborepo 기반 모노레포. `packages/ui`가 퍼블리시되는 React 컴포넌트 라이브러리이며, `apps/docs`가 Next.js + Storybook 문서 앱이다.
 
+**이 저장소는 재사용 가능한 UI 컴포넌트의 정본(canonical home)이다.** `live-editor` 같은 앱 저장소에서 새 컴포넌트를 만들 때, 그게 다른 프로젝트에서도 쓸 만한 범용 UI 프리미티브/합성 컴포넌트라면 그 앱 저장소에 바로 구현하지 말고 여기(`packages/ui`)에 먼저 구현하고 배포한 뒤 의존성으로 가져다 쓰게 한다. 자세한 판단 기준과 절차는 `.claude/skills/coding-style/SKILL.md`의 "D. 재사용 가능한 UI/훅은 공유 라이브러리에 먼저 구현" 참고.
+
 ```
 ui-kit/
 ├── apps/
