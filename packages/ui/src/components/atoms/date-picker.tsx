@@ -5,13 +5,13 @@ import { useState } from 'react';
 import { format } from 'date-fns';
 import { CalendarIcon } from 'lucide-react';
 
-import { button, calendar } from '@repo/ui/core';
+import { calendar } from '@repo/ui/core';
 import { cn } from '@repo/ui/utils';
 
+import Button from './button';
 import Popover from './popover';
 
 const { Calendar } = calendar;
-const { buttonVariants } = button;
 
 interface Props {
   defaultValue?: Date;
@@ -47,20 +47,19 @@ const DatePicker = ({
       placement="bottomLeft"
       content={<Calendar mode="single" selected={value} onSelect={onChange} />}
     >
-      <button
-        type="button"
+      <Button
+        type="default"
+        icon={<CalendarIcon />}
         data-empty={!value}
         className={cn(
-          buttonVariants({ variant: 'outline' }),
           'w-full justify-start text-left font-normal',
           'data-[empty=true]:text-muted-foreground',
           className,
           //
         )}
       >
-        <CalendarIcon />
         {value ? format(value, 'PPP') : placeholder}
-      </button>
+      </Button>
     </Popover>
   );
 };
