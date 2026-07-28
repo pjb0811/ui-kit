@@ -1,5 +1,19 @@
 # @repo/ui
 
+## 3.1.0
+
+### Minor Changes
+
+- b90770b: Add DatePicker and Upload components to the library, providing users with new options for date selection and file uploads.
+- b90770b: Add `Upload` (molecule) and `DatePicker` (atom) components.
+  - `Upload`: multi-file drag-and-drop upload with a file list (thumbnail preview + remove), using `@jbpark/use-hooks`'s `useFileToDataUrl` to convert selected files to data URLs
+  - `DatePicker`: a `Popover` + `Calendar` composition (shadcn's `react-day-picker`-based `Calendar` core primitive, newly added under `src/core/calendar.tsx`) for single-date selection
+  - Add `react-day-picker` and `date-fns` dependencies for the new `Calendar` core primitive
+
+### Patch Changes
+
+- 97f27c1: Switch `List` and `FloatButton.BackTop` to use `@jbpark/use-hooks` instead of `@uidotdev/usehooks` internally (removes the `@uidotdev/usehooks` dependency). No public API or behavior changes.
+
 ## 3.0.0
 
 ### Major Changes
