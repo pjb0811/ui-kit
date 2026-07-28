@@ -1,7 +1,9 @@
+export { default as AssetPicker } from './asset-picker';
 export { default as Button } from './button';
 export { default as Checkbox } from './checkbox';
 export { default as ColorPicker } from './color-picker';
 export { default as FloatButton } from './float-button';
+export { default as IconPicker } from './icon-picker';
 export { default as Input } from './input';
 export { default as Popover } from './popover';
 export { default as Progress } from './progress';
