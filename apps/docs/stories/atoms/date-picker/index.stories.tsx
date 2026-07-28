@@ -4,24 +4,21 @@ import { useEffect, useState } from 'react';
 
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
-import { IconPicker } from '@repo/ui';
+import { DatePicker } from '@repo/ui';
 import { cn } from '@repo/ui/utils';
 
-const meta: Meta<typeof IconPicker> = {
-  title: 'UI/IconPicker',
-  component: IconPicker,
+const meta: Meta<typeof DatePicker> = {
+  title: 'UI/DatePicker',
+  component: DatePicker,
   parameters: {
     layout: 'centered',
   },
   argTypes: {
     defaultValue: {
-      description: 'Uncontrolled 모드의 초기 아이콘 이름',
+      description: 'Uncontrolled 모드의 초기 날짜',
     },
     value: {
-      description: 'Controlled 모드의 아이콘 이름',
-    },
-    icons: {
-      description: '선택 가능한 아이콘 맵. 생략 시 기본 아이콘 세트 사용',
+      description: 'Controlled 모드의 날짜',
     },
   },
 };
@@ -30,10 +27,6 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  args: {
-    defaultValue: 'Star',
-    placeholder: 'Select an icon',
-  },
   render: props => (
     <div
       className={cn(
@@ -43,20 +36,20 @@ export const Default: Story = {
         'bg-gray-50',
       )}
     >
-      <IconPicker {...props} />
+      <DatePicker {...props} />
     </div>
   ),
 };
 
 export const Controlled: Story = {
   args: {
-    value: 'Heart',
+    value: new Date(),
   },
-  render: function Render({ value = 'Heart' }) {
-    const [icon, setIcon] = useState(value);
+  render: function Render({ value = new Date() }) {
+    const [date, setDate] = useState(value);
 
     useEffect(() => {
-      setIcon(value);
+      setDate(value);
     }, [value]);
 
     return (
@@ -68,7 +61,7 @@ export const Controlled: Story = {
           'bg-gray-50',
         )}
       >
-        <IconPicker value={icon} onChange={setIcon} />
+        <DatePicker value={date} onChange={next => next && setDate(next)} />
       </div>
     );
   },
