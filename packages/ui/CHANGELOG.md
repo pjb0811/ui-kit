@@ -1,5 +1,17 @@
 # @repo/ui
 
+## 3.2.0
+
+### Minor Changes
+
+- e0870f5: Refactor DatePicker and Upload components to use the new Button component, enhancing consistency across the UI.
+- 60d8744: Update calendar component to use parentheses for CSS custom properties, improving consistency in styling.
+
+### Patch Changes
+
+- e0870f5: Fix `Upload` and `DatePicker` to compose the existing `Button` atom instead of a raw `<button>`/`buttonVariants` from `src/core`. No public API changes.
+- 60d8744: Fix `Calendar`/`DatePicker` rendering squished — `--cell-size` references used square-bracket arbitrary values (`h-[--cell-size]`) which compile without `var()` in this repo's Tailwind v4 setup, producing invalid CSS. Switched to the parenthesis syntax (`h-(--cell-size)`) already used elsewhere in the codebase (e.g. `atoms/button.tsx`).
+
 ## 3.1.0
 
 ### Minor Changes
