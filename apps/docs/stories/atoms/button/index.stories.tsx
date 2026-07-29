@@ -37,7 +37,7 @@ const colorOptions: ColorType[] = [
 ];
 
 const meta: Meta<typeof Button> = {
-  title: 'UI/Button',
+  title: 'General/Button',
   component: Button,
 
   parameters: {

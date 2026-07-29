@@ -4,7 +4,7 @@ import { Button, Config, Switch } from '@repo/ui';
 import { cn } from '@repo/ui/utils';
 
 const meta: Meta<typeof Config> = {
-  title: 'UI/Config',
+  title: 'Providers/Config',
   component: Config,
   parameters: {
     layout: 'centered',

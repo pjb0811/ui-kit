@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { Typography } from '@repo/ui';
 
 const meta: Meta<typeof Typography.Paragraph> = {
-  title: 'UI/Typography/Paragraph',
+  title: 'General/Typography/Paragraph',
   component: Typography.Paragraph,
   parameters: {
     layout: 'centered',

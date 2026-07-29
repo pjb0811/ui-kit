@@ -6,7 +6,7 @@ import { Layout, Typography } from '@repo/ui';
 import { cn } from '@repo/ui/utils';
 
 const meta: Meta<typeof Layout> = {
-  title: 'UI/Layout',
+  title: 'Layout/Layout',
   component: Layout,
   parameters: {
     layout: 'fullscreen',

@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { Select } from '@repo/ui';
 
 const meta: Meta<typeof Select> = {
-  title: 'UI/Select',
+  title: 'Data Entry/Select',
   component: Select,
   parameters: {
     layout: 'centered',

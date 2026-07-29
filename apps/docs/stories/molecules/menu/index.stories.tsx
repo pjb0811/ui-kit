@@ -66,7 +66,7 @@ const defaultItems = [
 ];
 
 const meta: Meta<typeof Menu> = {
-  title: 'UI/Menu',
+  title: 'Navigation/Menu',
   component: Menu,
   parameters: {
     layout: 'fullscreen',

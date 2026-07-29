@@ -4,7 +4,7 @@ import { Spin } from '@repo/ui';
 import { cn } from '@repo/ui/utils';
 
 const meta: Meta<typeof Spin> = {
-  title: 'UI/Spin',
+  title: 'Feedback/Spin',
   component: Spin,
   parameters: {
     layout: 'centered',

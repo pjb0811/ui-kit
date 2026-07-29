@@ -4,7 +4,7 @@ import { Settings } from 'lucide-react';
 import { FloatButton } from '@repo/ui';
 
 const meta: Meta<typeof FloatButton> = {
-  title: 'UI/FloatButton',
+  title: 'Navigation/FloatButton',
   component: FloatButton,
   parameters: {
     layout: 'fullscreen',

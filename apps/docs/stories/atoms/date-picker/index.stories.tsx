@@ -8,7 +8,7 @@ import { DatePicker } from '@repo/ui';
 import { cn } from '@repo/ui/utils';
 
 const meta: Meta<typeof DatePicker> = {
-  title: 'UI/DatePicker',
+  title: 'Data Entry/DatePicker',
   component: DatePicker,
   parameters: {
     layout: 'centered',

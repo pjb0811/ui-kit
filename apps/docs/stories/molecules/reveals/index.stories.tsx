@@ -38,7 +38,7 @@ const defaultItems = [
 ];
 
 const meta: Meta<typeof Reveals> = {
-  title: 'UI/Reveals',
+  title: 'Data Display/Reveals',
   component: Reveals,
   parameters: {
     layout: 'fullscreen',

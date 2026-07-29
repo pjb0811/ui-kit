@@ -5,7 +5,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { Button, Drawer } from '@repo/ui';
 
 const meta: Meta<typeof Drawer> = {
-  title: 'UI/Drawer',
+  title: 'Feedback/Drawer',
   component: Drawer,
   parameters: {
     layout: 'centered',

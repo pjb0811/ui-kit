@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { FloatButton } from '@repo/ui';
 
 const meta: Meta<typeof FloatButton.BackTop> = {
-  title: 'UI/FloatButton/BackTop',
+  title: 'Navigation/FloatButton/BackTop',
   component: FloatButton.BackTop,
   parameters: {
     layout: 'fullscreen',

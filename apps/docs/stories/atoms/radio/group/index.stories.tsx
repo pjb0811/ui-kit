@@ -5,7 +5,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { Radio } from '@repo/ui';
 
 const meta: Meta<typeof Radio.Group> = {
-  title: 'UI/Radio/Group',
+  title: 'Data Entry/Radio/Group',
   component: Radio.Group,
   parameters: {
     layout: 'centered',
