@@ -18,7 +18,7 @@ import { Button, Card, Tag, Typography } from '@repo/ui';
 
 const GITHUB_URL = 'https://github.com/pjb0811/ui-kit';
 const NPM_URL = 'https://www.npmjs.com/package/@jbpark/ui-kit';
-const DOCS_URL = 'https://ui-kit-docs.vercel.app';
+const DOCS_URL = 'https://ui-kit-docs-lab.vercel.app';
 const INSTALL_COMMAND = 'npm install @jbpark/ui-kit';
 
 type Theme = 'light' | 'dark';
