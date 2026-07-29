@@ -8,7 +8,7 @@ import { ColorPicker } from '@repo/ui';
 import { cn } from '@repo/ui/utils';
 
 const meta: Meta<typeof ColorPicker> = {
-  title: 'UI/ColorPicker',
+  title: 'Data Entry/ColorPicker',
   component: ColorPicker,
   parameters: {
     layout: 'centered',

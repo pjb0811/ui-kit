@@ -4,7 +4,7 @@ import { Splitter, Typography } from '@repo/ui';
 import { cn } from '@repo/ui/utils';
 
 const meta: Meta<typeof Splitter> = {
-  title: 'UI/Splitter',
+  title: 'Layout/Splitter',
   component: Splitter,
   parameters: {
     layout: 'fullscreen',

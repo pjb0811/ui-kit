@@ -4,7 +4,7 @@ import { Marquees } from '@repo/ui';
 import { cn } from '@repo/ui/utils';
 
 const meta: Meta<typeof Marquees> = {
-  title: 'UI/Marquees',
+  title: 'Data Display/Marquees',
   component: Marquees,
   parameters: {
     layout: 'fullscreen',

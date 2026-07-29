@@ -4,7 +4,7 @@ import { Button, Popover } from '@repo/ui';
 import { cn } from '@repo/ui/utils';
 
 const meta: Meta<typeof Popover> = {
-  title: 'UI/Popover',
+  title: 'Data Display/Popover',
   component: Popover,
   parameters: {
     layout: 'centered',

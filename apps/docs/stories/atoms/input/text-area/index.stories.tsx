@@ -8,7 +8,7 @@ import { Input } from '@repo/ui';
 import { cn } from '@repo/ui/utils';
 
 const meta: Meta<typeof Input.TextArea> = {
-  title: 'UI/Input/TextArea',
+  title: 'Data Entry/Input/TextArea',
   component: Input.TextArea,
   parameters: {
     layout: 'centered',

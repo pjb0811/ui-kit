@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { Progress } from '@repo/ui';
 
 const meta: Meta<typeof Progress> = {
-  title: 'UI/Progress',
+  title: 'Feedback/Progress',
   component: Progress,
   parameters: {
     layout: 'centered',

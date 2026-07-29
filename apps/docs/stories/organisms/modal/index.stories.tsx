@@ -5,7 +5,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { Button, Modal } from '@repo/ui';
 
 const meta: Meta<typeof Modal> = {
-  title: 'UI/Modal',
+  title: 'Feedback/Modal',
   component: Modal,
   parameters: {
     layout: 'centered',

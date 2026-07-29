@@ -17,7 +17,7 @@ const defaultData: Item[] = [
 ];
 
 const meta: Meta<typeof List<Item>> = {
-  title: 'UI/List',
+  title: 'Data Display/List',
   component: List,
   parameters: {
     layout: 'centered',

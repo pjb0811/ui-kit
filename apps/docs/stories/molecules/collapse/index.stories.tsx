@@ -6,7 +6,7 @@ import { ChevronDown, Plus } from 'lucide-react';
 import { Collapse } from '@repo/ui';
 
 const meta: Meta<typeof Collapse> = {
-  title: 'UI/Collapse',
+  title: 'Data Display/Collapse',
   component: Collapse,
   parameters: {
     layout: 'centered',

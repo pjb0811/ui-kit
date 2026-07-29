@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { Button, Space } from '@repo/ui';
 
 const meta: Meta<typeof Space> = {
-  title: 'UI/Space',
+  title: 'General/Space',
   component: Space,
   parameters: {
     layout: 'centered',

@@ -8,7 +8,7 @@ import { Upload, type UploadFile } from '@repo/ui';
 import { cn } from '@repo/ui/utils';
 
 const meta: Meta<typeof Upload> = {
-  title: 'UI/Upload',
+  title: 'Data Entry/Upload',
   component: Upload,
   parameters: {
     layout: 'centered',

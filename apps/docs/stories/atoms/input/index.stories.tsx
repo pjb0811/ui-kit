@@ -8,7 +8,7 @@ import { Input } from '@repo/ui';
 import { cn } from '@repo/ui/utils';
 
 const meta: Meta<typeof Input> = {
-  title: 'UI/Input',
+  title: 'Data Entry/Input',
   component: Input,
   parameters: {
     layout: 'centered',

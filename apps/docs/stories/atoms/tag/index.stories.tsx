@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { Tag } from '@repo/ui';
 
 const meta: Meta<typeof Tag> = {
-  title: 'UI/Tag',
+  title: 'General/Tag',
   component: Tag,
   parameters: {
     layout: 'centered',

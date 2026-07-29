@@ -4,7 +4,7 @@ import { Switch } from '@repo/ui';
 import { cn } from '@repo/ui/utils';
 
 const meta: Meta<typeof Switch> = {
-  title: 'UI/Switch',
+  title: 'Data Entry/Switch',
   component: Switch,
   parameters: {
     layout: 'centered',

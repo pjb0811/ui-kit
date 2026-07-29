@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { Card } from '@repo/ui';
 
 const meta: Meta<typeof Card> = {
-  title: 'UI/Card',
+  title: 'Data Display/Card',
   component: Card,
   parameters: {
     layout: 'centered',

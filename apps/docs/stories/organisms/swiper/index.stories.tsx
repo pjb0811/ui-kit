@@ -24,7 +24,7 @@ const defaultData: Item[] = [
 ];
 
 const meta: Meta<typeof Swiper<Item>> = {
-  title: 'UI/Swiper',
+  title: 'Data Display/Swiper',
   component: Swiper,
   parameters: {
     layout: 'centered',

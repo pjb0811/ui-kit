@@ -5,7 +5,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { Checkbox } from '@repo/ui';
 
 const meta: Meta<typeof Checkbox.Group> = {
-  title: 'UI/Checkbox/Group',
+  title: 'Data Entry/Checkbox/Group',
   component: Checkbox.Group,
   parameters: {
     layout: 'centered',

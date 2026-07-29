@@ -4,7 +4,7 @@ import { ChevronDown } from 'lucide-react';
 import { Button, Dropdown } from '@repo/ui';
 
 const meta: Meta<typeof Dropdown> = {
-  title: 'UI/Dropdown',
+  title: 'Navigation/Dropdown',
   component: Dropdown,
   parameters: {
     layout: 'centered',
