@@ -38,7 +38,7 @@ jobs:
       - name: Check for existing changeset
         id: existing
         run: |
-          if compgen -G ".changeset/pr-${{ github.event.pull_request.number }}.md" > /dev/null; then
+          if compgen -G ".changeset/pr-${{ github.event.pull_request.number }}*.md" > /dev/null; then
             echo "exists=true" >> "$GITHUB_OUTPUT"
           else
             echo "exists=false" >> "$GITHUB_OUTPUT"
@@ -65,5 +65,5 @@ jobs:
             git commit -m "📝 docs: draft changeset for PR #${{ github.event.pull_request.number }}"
             git push origin "HEAD:${{ github.event.pull_request.head.ref }}"
           else
-            echo "No changeset produced (nothing under packages/ui, or model found no user-facing change) — skipping commit."
+            echo "No changeset produced (no tracked package changed, or model found no notable change) — skipping commit."
           fi
