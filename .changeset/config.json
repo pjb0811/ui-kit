@@ -5,7 +5,8 @@
   "fixed": [],
   "linked": [],
   "access": "public",
-  "baseBranch": "develop",
+  "baseBranch": "main",
   "updateInternalDependencies": "patch",
-  "ignore": ["web", "docs"]
+  "ignore": [],
+  "privatePackages": { "version": true, "tag": false }
 }

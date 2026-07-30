@@ -1,10 +1,11 @@
 #!/usr/bin/env node
-// Drafts a .changeset/pr-<number>.md file by asking GitHub Models to
-// summarize this PR's diff to packages/ui as a semver bump + one-paragraph
-// description, in changesets' own file format. Runs once per PR (the
-// calling workflow skips this script entirely if a changeset file for this
-// PR already exists), so it never overwrites something a human already
-// wrote or edited.
+// Drafts .changeset/pr-<number>[-<suffix>].md file(s) by asking GitHub
+// Models to summarize this PR's diff to each tracked package as a semver
+// bump + one-paragraph description, in changesets' own file format. Runs
+// once per PR (the calling workflow skips this script entirely if any
+// changeset file for this PR already exists), so it never overwrites
+// something a human already wrote or edited. One file is written per
+// package that actually changed, since each needs its own bump + summary.
 
 import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
@@ -12,8 +13,30 @@ import fs from 'node:fs';
 const MODEL = process.env.GITHUB_MODELS_MODEL || 'openai/gpt-4o-mini';
 const API_URL = 'https://models.github.ai/inference/chat/completions';
 const MAX_DIFF_CHARS = 12000;
-const PACKAGE_NAME = '@repo/ui';
-const PACKAGE_DIR = 'packages/ui';
+
+// `fileSuffix: ''` for @repo/ui keeps its existing `pr-<number>.md`
+// filename unchanged, since that's the one publish.yml/release notes
+// actually key off of.
+const PACKAGES = [
+  {
+    name: '@repo/ui',
+    dir: 'packages/ui',
+    fileSuffix: '',
+    kind: 'React component library, published to npm',
+  },
+  {
+    name: 'web',
+    dir: 'apps/web',
+    fileSuffix: '-web',
+    kind: 'Next.js marketing site, deployed but not published to npm',
+  },
+  {
+    name: 'docs',
+    dir: 'apps/docs',
+    fileSuffix: '-docs',
+    kind: 'Storybook/docs site, deployed but not published to npm',
+  },
+];
 
 function requireEnv(name) {
   const value = process.env[name];
@@ -21,12 +44,11 @@ function requireEnv(name) {
   return value;
 }
 
-function diffBetween(base, head) {
-  return execFileSync(
-    'git',
-    ['diff', `${base}...${head}`, '--', PACKAGE_DIR],
-    { encoding: 'utf8', maxBuffer: 1024 * 1024 * 20 },
-  );
+function diffBetween(base, head, dir) {
+  return execFileSync('git', ['diff', `${base}...${head}`, '--', dir], {
+    encoding: 'utf8',
+    maxBuffer: 1024 * 1024 * 20,
+  });
 }
 
 function extractJson(content) {
@@ -35,22 +57,21 @@ function extractJson(content) {
   return JSON.parse(raw.trim());
 }
 
-async function main() {
-  const token = requireEnv('GITHUB_TOKEN');
-  const baseSha = requireEnv('BASE_SHA');
-  const headSha = requireEnv('HEAD_SHA');
-  const prNumber = requireEnv('PR_NUMBER');
-
+async function draftFor(pkg, { token, baseSha, headSha, prNumber }) {
   let diff;
   try {
-    diff = diffBetween(baseSha, headSha);
+    diff = diffBetween(baseSha, headSha, pkg.dir);
   } catch (err) {
-    console.log(`Could not diff ${baseSha}...${headSha}: ${err.message}`);
+    console.log(
+      `Could not diff ${baseSha}...${headSha} for ${pkg.dir}: ${err.message}`,
+    );
     return;
   }
 
   if (!diff.trim()) {
-    console.log(`No changes under ${PACKAGE_DIR} — skipping changeset draft.`);
+    console.log(
+      `No changes under ${pkg.dir} — skipping changeset draft for ${pkg.name}.`,
+    );
     return;
   }
 
@@ -60,19 +81,19 @@ async function main() {
       : diff;
 
   const systemPrompt = [
-    'You are a release-notes assistant for a React component library',
-    `(npm package "${PACKAGE_NAME}") that uses changesets for versioning.`,
+    `You are a release-notes assistant for "${pkg.name}" (a ${pkg.kind})`,
+    'that uses changesets for versioning.',
     'You will be given a git diff for one pull request.',
     'Respond with ONLY a JSON object, no prose, no markdown code fences,',
     "matching: { \"bump\": \"major\" | \"minor\" | \"patch\", \"summary\": string }.",
-    'bump: major = breaking API change, minor = new backward-compatible',
-    'feature/prop/export, patch = bug fix, internal refactor, docs, or',
-    'other non-breaking change.',
+    'bump: major = breaking change or major user-facing redesign, minor =',
+    'new backward-compatible feature/page/export, patch = bug fix, internal',
+    'refactor, docs, or other non-breaking change.',
     'summary: one short paragraph (1-3 sentences), imperative present',
     'tense, describing the user-facing effect of this change — this text',
     'is used verbatim as a changelog entry, so do not include prose about',
     'the diff itself, file names, or meta-commentary.',
-    'If the diff has no user-facing or API-relevant effect (pure test/story/',
+    'If the diff has no user-facing or notable effect (pure test/story/',
     'internal-only noise), respond with { "bump": "patch", "summary": "" }.',
   ].join(' ');
 
@@ -96,33 +117,35 @@ async function main() {
 
   if (!response.ok) {
     throw new Error(
-      `GitHub Models request failed: ${response.status} ${response.statusText} — ${await response.text()}`,
+      `GitHub Models request failed for ${pkg.name}: ${response.status} ${response.statusText} — ${await response.text()}`,
     );
   }
 
   const body = await response.json();
   const content = body.choices?.[0]?.message?.content;
   if (!content) {
-    throw new Error('GitHub Models response missing choices[0].message.content');
+    throw new Error(
+      `GitHub Models response missing choices[0].message.content for ${pkg.name}`,
+    );
   }
 
   const result = extractJson(content);
   if (!result || typeof result !== 'object') {
-    throw new Error('Model response is not an object');
+    throw new Error(`Model response is not an object for ${pkg.name}`);
   }
   if (!['major', 'minor', 'patch'].includes(result.bump)) {
-    throw new Error(`Invalid bump type "${result.bump}"`);
+    throw new Error(`Invalid bump type "${result.bump}" for ${pkg.name}`);
   }
 
   if (!result.summary || !result.summary.trim()) {
-    console.log('Model reported no user-facing change — nothing to do.');
+    console.log(`Model reported no notable change for ${pkg.name} — nothing to do.`);
     return;
   }
 
-  const filePath = `.changeset/pr-${prNumber}.md`;
+  const filePath = `.changeset/pr-${prNumber}${pkg.fileSuffix}.md`;
   const fileContent = [
     '---',
-    `'${PACKAGE_NAME}': ${result.bump}`,
+    `'${pkg.name}': ${result.bump}`,
     '---',
     '',
     result.summary.trim(),
@@ -131,6 +154,17 @@ async function main() {
 
   fs.writeFileSync(filePath, fileContent);
   console.log(`Wrote ${filePath} (${result.bump}): ${result.summary}`);
+}
+
+async function main() {
+  const token = requireEnv('GITHUB_TOKEN');
+  const baseSha = requireEnv('BASE_SHA');
+  const headSha = requireEnv('HEAD_SHA');
+  const prNumber = requireEnv('PR_NUMBER');
+
+  for (const pkg of PACKAGES) {
+    await draftFor(pkg, { token, baseSha, headSha, prNumber });
+  }
 }
 
 main().catch(err => {
