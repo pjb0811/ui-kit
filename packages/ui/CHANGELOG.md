@@ -1,5 +1,11 @@
 # @repo/ui
 
+## 3.3.0
+
+### Minor Changes
+
+- 4687e9e: Add a new Toast organism component with a shadcn/sonner-style notification card, using ui-kit's existing imperative stack+portal mechanism (matching Modal's pattern). Exposes `Toast.info()`, `.success()`, `.error()`, and `.warning()` trigger functions plus a controlled `<Toast>` component.
+
 ## 3.2.1
 
 ### Patch Changes
