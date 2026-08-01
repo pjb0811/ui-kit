@@ -1,5 +1,11 @@
 # @repo/ui
 
+## 3.2.1
+
+### Patch Changes
+
+- 061c902: Fix Drawer close button not working: it was rendered via `renderConditional`, which short-circuits on already-valid React elements and skipped the `onClick={onClose}` wrapper, leaving a click handler-less icon.
+
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
