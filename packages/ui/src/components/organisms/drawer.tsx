@@ -161,6 +161,7 @@ const Drawer = ({
         }}
       >
         <DrawerHeader
+          data-vaul-no-drag
           className={cn(
             classNames?.header,
             !title && 'p-0',
@@ -200,7 +201,9 @@ const Drawer = ({
           {children}
         </div>
         {renderConditional(footer, v => (
-          <DrawerFooter className={cn(classNames?.footer)}>{v}</DrawerFooter>
+          <DrawerFooter data-vaul-no-drag className={cn(classNames?.footer)}>
+            {v}
+          </DrawerFooter>
         ))}
       </DrawerContent>
     </DrawerCore>
