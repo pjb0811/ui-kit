@@ -168,17 +168,17 @@ const Drawer = ({
           )}
         >
           <div className="flex items-start gap-2">
-            {renderConditional(closable ? closeIcon || <X /> : null, v => (
+            {closable && (
               <Button
                 type="text"
                 shape="circle"
                 size="small"
                 aria-label="닫기"
-                icon={v}
+                icon={closeIcon || <X />}
                 onClick={onClose}
                 className={cn(classNames?.close)}
               />
-            ))}
+            )}
             <div className="flex flex-1 items-start justify-between gap-2">
               <DrawerTitle className={cn(classNames?.title)}>
                 {title}
