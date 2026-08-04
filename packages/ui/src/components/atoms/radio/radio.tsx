@@ -91,6 +91,7 @@ const Radio = ({
         hidden
         type="radio"
         checked={checked}
+        disabled={disabled}
         onChange={e => {
           onChange(e.target.checked);
         }}
@@ -102,12 +103,12 @@ const Radio = ({
         tabIndex={disabled ? -1 : 0}
         className={cn(cursorClassName, disabled && 'opacity-50')}
         onClick={() => {
-          document.getElementById(id)?.click();
+          onChange(true);
         }}
         onKeyDown={e => {
           if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();
-            document.getElementById(id)?.click();
+            onChange(true);
           }
         }}
       >
