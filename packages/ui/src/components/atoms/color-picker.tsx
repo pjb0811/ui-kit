@@ -11,6 +11,7 @@ interface Props {
   defaultValue?: string;
   value?: string;
   showText?: boolean;
+  disabled?: boolean;
   onChange?: (color: string) => void;
 }
 
@@ -18,6 +19,7 @@ const ColorPicker = ({
   defaultValue,
   value: _value,
   showText,
+  disabled,
   onChange: _onChange = () => {},
 }: Props) => {
   const [uncontrolledValue, setUncontrolledValue] = useState<string>(
@@ -28,6 +30,9 @@ const ColorPicker = ({
   const value = controlled ? _value : uncontrolledValue;
 
   const onChange = (color: string) => {
+    if (disabled) {
+      return;
+    }
     if (!controlled) {
       setUncontrolledValue(color);
     }
@@ -41,13 +46,22 @@ const ColorPicker = ({
     >
       <div
         role="button"
-        tabIndex={0}
+        tabIndex={disabled ? -1 : 0}
+        aria-disabled={disabled}
         className={cn(
           'inline-flex items-center',
           'rounded border p-0.5',
-          //
+          disabled && 'cursor-not-allowed opacity-50',
         )}
+        onClick={e => {
+          if (disabled) {
+            e.preventDefault();
+          }
+        }}
         onKeyDown={e => {
+          if (disabled) {
+            return;
+          }
           if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();
             e.currentTarget.click();
@@ -56,9 +70,9 @@ const ColorPicker = ({
       >
         <div
           className={cn(
-            'size-6 cursor-pointer rounded border',
+            'size-6 rounded border',
             'shadow-sm',
-            //
+            disabled ? 'cursor-not-allowed' : 'cursor-pointer',
           )}
           style={{ backgroundColor: value }}
         />

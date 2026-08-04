@@ -18,6 +18,7 @@ interface Props {
   value?: Date;
   placeholder?: string;
   className?: string;
+  disabled?: boolean;
   onChange?: (date: Date | undefined) => void;
 }
 
@@ -26,6 +27,7 @@ const DatePicker = ({
   value: _value,
   placeholder = 'Pick a date',
   className,
+  disabled,
   onChange: _onChange = () => {},
 }: Props) => {
   const [uncontrolledValue, setUncontrolledValue] = useState<Date | undefined>(
@@ -51,6 +53,7 @@ const DatePicker = ({
         type="default"
         icon={<CalendarIcon />}
         data-empty={!value}
+        disabled={disabled}
         className={cn(
           'w-full justify-start text-left font-normal',
           'data-[empty=true]:text-muted-foreground',
