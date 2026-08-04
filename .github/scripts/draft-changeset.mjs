@@ -126,55 +126,67 @@ async function draftFor(pkg, { apiKey, baseSha, headSha, prNumber }) {
     'internal-only noise), respond with bump "patch" and an empty summary.',
   ].join(' ');
 
-  const response = await fetchWithRetry(API_URL, {
-    method: 'POST',
-    headers: {
-      'x-goog-api-key': apiKey,
-      'content-type': 'application/json',
-    },
-    body: JSON.stringify({
-      systemInstruction: { parts: [{ text: systemPrompt }] },
-      contents: [
-        {
-          role: 'user',
-          parts: [{ text: `\`\`\`diff\n${truncatedDiff}\n\`\`\`` }],
-        },
-      ],
-      generationConfig: {
-        temperature: 0,
-        responseMimeType: 'application/json',
-        responseSchema: {
-          type: 'OBJECT',
-          properties: {
-            bump: { type: 'STRING', enum: ['major', 'minor', 'patch'] },
-            summary: { type: 'STRING' },
-          },
-          required: ['bump', 'summary'],
-        },
+  // A drafted changeset is a nice-to-have, not something worth failing the
+  // required "draft" check over — if Gemini is unavailable even after
+  // retries, skip this package (other packages still get a chance) instead
+  // of blocking the PR. A human can always add a changeset by hand.
+  let result;
+  try {
+    const response = await fetchWithRetry(API_URL, {
+      method: 'POST',
+      headers: {
+        'x-goog-api-key': apiKey,
+        'content-type': 'application/json',
       },
-    }),
-  });
+      body: JSON.stringify({
+        systemInstruction: { parts: [{ text: systemPrompt }] },
+        contents: [
+          {
+            role: 'user',
+            parts: [{ text: `\`\`\`diff\n${truncatedDiff}\n\`\`\`` }],
+          },
+        ],
+        generationConfig: {
+          temperature: 0,
+          responseMimeType: 'application/json',
+          responseSchema: {
+            type: 'OBJECT',
+            properties: {
+              bump: { type: 'STRING', enum: ['major', 'minor', 'patch'] },
+              summary: { type: 'STRING' },
+            },
+            required: ['bump', 'summary'],
+          },
+        },
+      }),
+    });
 
-  if (!response.ok) {
-    throw new Error(
-      `Gemini API request failed for ${pkg.name}: ${response.status} ${response.statusText} — ${await response.text()}`,
+    if (!response.ok) {
+      throw new Error(
+        `Gemini API request failed for ${pkg.name}: ${response.status} ${response.statusText} — ${await response.text()}`,
+      );
+    }
+
+    const body = await response.json();
+    const text = body.candidates?.[0]?.content?.parts?.[0]?.text;
+    if (!text) {
+      const blockReason = body.promptFeedback?.blockReason;
+      throw new Error(
+        blockReason
+          ? `Gemini blocked the request for ${pkg.name}: ${blockReason}`
+          : `Gemini response missing candidates[0].content.parts[0].text for ${pkg.name}`,
+      );
+    }
+
+    result = JSON.parse(text);
+    if (!['major', 'minor', 'patch'].includes(result.bump)) {
+      throw new Error(`Invalid bump type "${result.bump}" for ${pkg.name}`);
+    }
+  } catch (err) {
+    console.log(
+      `Gemini unavailable, skipping changeset draft for ${pkg.name}: ${err.message}`,
     );
-  }
-
-  const body = await response.json();
-  const text = body.candidates?.[0]?.content?.parts?.[0]?.text;
-  if (!text) {
-    const blockReason = body.promptFeedback?.blockReason;
-    throw new Error(
-      blockReason
-        ? `Gemini blocked the request for ${pkg.name}: ${blockReason}`
-        : `Gemini response missing candidates[0].content.parts[0].text for ${pkg.name}`,
-    );
-  }
-
-  const result = JSON.parse(text);
-  if (!['major', 'minor', 'patch'].includes(result.bump)) {
-    throw new Error(`Invalid bump type "${result.bump}" for ${pkg.name}`);
+    return;
   }
 
   if (!result.summary || !result.summary.trim()) {
