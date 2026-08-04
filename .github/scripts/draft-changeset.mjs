@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-// Drafts .changeset/pr-<number>[-<suffix>].md file(s) by asking GitHub
-// Models to summarize this PR's diff to each tracked package as a semver
+// Drafts .changeset/pr-<number>[-<suffix>].md file(s) by asking Gemini
+// to summarize this PR's diff to each tracked package as a semver
 // bump + one-paragraph description, in changesets' own file format. Runs
 // once per PR (the calling workflow skips this script entirely if any
 // changeset file for this PR already exists), so it never overwrites
@@ -10,8 +10,13 @@
 import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 
-const MODEL = process.env.GITHUB_MODELS_MODEL || 'openai/gpt-4o-mini';
-const API_URL = 'https://models.github.ai/inference/chat/completions';
+// "-latest" alias: Google keeps this pointed at their current lightest/
+// cheapest Flash model, so this stays valid across model retirements
+// (unlike a dated model id, which can 404 once Google sunsets it — as
+// happened to live-editor's previous gemini-2.5-flash-lite pin, and as
+// happened here when GitHub Models itself was fully retired).
+const MODEL = process.env.GEMINI_MODEL || 'gemini-flash-lite-latest';
+const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`;
 const MAX_DIFF_CHARS = 12000;
 
 // `fileSuffix: ''` for @repo/ui keeps its existing `pr-<number>.md`
@@ -51,13 +56,7 @@ function diffBetween(base, head, dir) {
   });
 }
 
-function extractJson(content) {
-  const fenced = content.match(/```(?:json)?\s*([\s\S]*?)```/);
-  const raw = fenced ? fenced[1] : content;
-  return JSON.parse(raw.trim());
-}
-
-async function draftFor(pkg, { token, baseSha, headSha, prNumber }) {
+async function draftFor(pkg, { apiKey, baseSha, headSha, prNumber }) {
   let diff;
   try {
     diff = diffBetween(baseSha, headSha, pkg.dir);
@@ -84,8 +83,6 @@ async function draftFor(pkg, { token, baseSha, headSha, prNumber }) {
     `You are a release-notes assistant for "${pkg.name}" (a ${pkg.kind})`,
     'that uses changesets for versioning.',
     'You will be given a git diff for one pull request.',
-    'Respond with ONLY a JSON object, no prose, no markdown code fences,',
-    "matching: { \"bump\": \"major\" | \"minor\" | \"patch\", \"summary\": string }.",
     'bump: major = breaking change or major user-facing redesign, minor =',
     'new backward-compatible feature/page/export, patch = bug fix, internal',
     'refactor, docs, or other non-breaking change.',
@@ -94,45 +91,56 @@ async function draftFor(pkg, { token, baseSha, headSha, prNumber }) {
     'is used verbatim as a changelog entry, so do not include prose about',
     'the diff itself, file names, or meta-commentary.',
     'If the diff has no user-facing or notable effect (pure test/story/',
-    'internal-only noise), respond with { "bump": "patch", "summary": "" }.',
+    'internal-only noise), respond with bump "patch" and an empty summary.',
   ].join(' ');
 
   const response = await fetch(API_URL, {
     method: 'POST',
     headers: {
-      Authorization: `Bearer ${token}`,
-      Accept: 'application/vnd.github+json',
-      'Content-Type': 'application/json',
-      'X-GitHub-Api-Version': '2022-11-28',
+      'x-goog-api-key': apiKey,
+      'content-type': 'application/json',
     },
     body: JSON.stringify({
-      model: MODEL,
-      temperature: 0,
-      messages: [
-        { role: 'system', content: systemPrompt },
-        { role: 'user', content: `\`\`\`diff\n${truncatedDiff}\n\`\`\`` },
+      systemInstruction: { parts: [{ text: systemPrompt }] },
+      contents: [
+        {
+          role: 'user',
+          parts: [{ text: `\`\`\`diff\n${truncatedDiff}\n\`\`\`` }],
+        },
       ],
+      generationConfig: {
+        temperature: 0,
+        responseMimeType: 'application/json',
+        responseSchema: {
+          type: 'OBJECT',
+          properties: {
+            bump: { type: 'STRING', enum: ['major', 'minor', 'patch'] },
+            summary: { type: 'STRING' },
+          },
+          required: ['bump', 'summary'],
+        },
+      },
     }),
   });
 
   if (!response.ok) {
     throw new Error(
-      `GitHub Models request failed for ${pkg.name}: ${response.status} ${response.statusText} — ${await response.text()}`,
+      `Gemini API request failed for ${pkg.name}: ${response.status} ${response.statusText} — ${await response.text()}`,
     );
   }
 
   const body = await response.json();
-  const content = body.choices?.[0]?.message?.content;
-  if (!content) {
+  const text = body.candidates?.[0]?.content?.parts?.[0]?.text;
+  if (!text) {
+    const blockReason = body.promptFeedback?.blockReason;
     throw new Error(
-      `GitHub Models response missing choices[0].message.content for ${pkg.name}`,
+      blockReason
+        ? `Gemini blocked the request for ${pkg.name}: ${blockReason}`
+        : `Gemini response missing candidates[0].content.parts[0].text for ${pkg.name}`,
     );
   }
 
-  const result = extractJson(content);
-  if (!result || typeof result !== 'object') {
-    throw new Error(`Model response is not an object for ${pkg.name}`);
-  }
+  const result = JSON.parse(text);
   if (!['major', 'minor', 'patch'].includes(result.bump)) {
     throw new Error(`Invalid bump type "${result.bump}" for ${pkg.name}`);
   }
@@ -157,13 +165,13 @@ async function draftFor(pkg, { token, baseSha, headSha, prNumber }) {
 }
 
 async function main() {
-  const token = requireEnv('GITHUB_TOKEN');
+  const apiKey = requireEnv('GEMINI_API_KEY');
   const baseSha = requireEnv('BASE_SHA');
   const headSha = requireEnv('HEAD_SHA');
   const prNumber = requireEnv('PR_NUMBER');
 
   for (const pkg of PACKAGES) {
-    await draftFor(pkg, { token, baseSha, headSha, prNumber });
+    await draftFor(pkg, { apiKey, baseSha, headSha, prNumber });
   }
 }
 
