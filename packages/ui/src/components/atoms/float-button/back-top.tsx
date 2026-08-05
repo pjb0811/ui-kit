@@ -1,6 +1,6 @@
 'use client';
 
-import { MouseEvent } from 'react';
+import { type MouseEvent, useRef } from 'react';
 
 import { useWindowScroll } from '@jbpark/use-hooks';
 import { ArrowUp } from 'lucide-react';
@@ -16,15 +16,32 @@ export interface Props extends ButtonProps {
 }
 
 const BackTop = ({
+  ref,
   visibilityHeight = 450,
   className,
   onClick,
   ...props
 }: Props) => {
-  const { y } = useWindowScroll();
+  const buttonRef = useRef<HTMLButtonElement>(null);
+
+  // Track/scroll whichever window actually renders this button — not
+  // necessarily the host `window`, since this can be portaled into an
+  // iframe (e.g. live-editor's Renderer).
+  const { y } = useWindowScroll(buttonRef);
+
+  const setRefs = (node: HTMLButtonElement | null) => {
+    buttonRef.current = node;
+
+    if (typeof ref === 'function') {
+      ref(node);
+    } else if (ref) {
+      ref.current = node;
+    }
+  };
 
   return (
     <FloatButton
+      ref={setRefs}
       aria-label="맨 위로"
       icon={<ArrowUp />}
       className={cn(
@@ -33,7 +50,8 @@ const BackTop = ({
         //
       )}
       onClick={e => {
-        window.scrollTo({ left: 0, top: 0, behavior: 'smooth' });
+        const view = buttonRef.current?.ownerDocument.defaultView ?? window;
+        view.scrollTo({ left: 0, top: 0, behavior: 'smooth' });
         onClick?.(e);
       }}
       {...props}
