@@ -1,7 +1,8 @@
 'use client';
 
-import { useContext, useId, useState } from 'react';
+import { useContext, useId } from 'react';
 
+import { useControllableState } from '@jbpark/use-hooks';
 import { Circle, CircleCheck } from 'lucide-react';
 
 import { field, radio } from '@repo/ui/core';
@@ -45,15 +46,15 @@ const Radio = ({
   onChange: _onChange = () => {},
   ...props
 }: Props) => {
-  const [uncontrolledChecked, setUncontrolledChecked] = useState<boolean>(
-    defaultChecked || false,
-  );
+  const [checked, setChecked] = useControllableState<boolean>({
+    value: _checked,
+    defaultValue: defaultChecked ?? false,
+    onChange: _onChange,
+  });
 
   const generatedId = useId();
   const id = _id ?? generatedId;
   const grouped = useContext(RadioGroupContext);
-  const controlled = _checked !== undefined;
-  const checked = controlled ? _checked : uncontrolledChecked;
 
   const cursorClassName = disabled ? 'cursor-not-allowed' : 'cursor-pointer';
 
@@ -62,10 +63,7 @@ const Radio = ({
       return;
     }
 
-    if (!controlled) {
-      setUncontrolledChecked(next);
-    }
-    _onChange(next);
+    setChecked(next);
   };
 
   // When rendered inside a `RadioGroup`, the group owns the single shared

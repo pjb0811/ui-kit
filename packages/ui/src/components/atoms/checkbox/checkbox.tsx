@@ -1,7 +1,8 @@
 'use client';
 
-import { useId, useState } from 'react';
+import { useId } from 'react';
 
+import { useControllableState } from '@jbpark/use-hooks';
 import { Square, SquareCheck } from 'lucide-react';
 
 import { checkbox, label } from '@repo/ui/core';
@@ -38,13 +39,13 @@ const Checkbox = ({
   onChange: _onChange = () => {},
   ...props
 }: Props) => {
-  const [uncontrolledChecked, setUncontrolledChecked] = useState<boolean>(
-    defaultChecked || false,
-  );
+  const [checked, setChecked] = useControllableState<boolean>({
+    value: _checked,
+    defaultValue: defaultChecked ?? false,
+    onChange: _onChange,
+  });
 
   const id = useId();
-  const controlled = _checked !== undefined;
-  const checked = controlled ? _checked : uncontrolledChecked;
 
   const cursorClassName = disabled ? 'cursor-not-allowed' : 'cursor-pointer';
 
@@ -53,10 +54,7 @@ const Checkbox = ({
       return;
     }
 
-    if (!controlled) {
-      setUncontrolledChecked(next);
-    }
-    _onChange(next);
+    setChecked(next);
   };
 
   const renderContent = icons ? (

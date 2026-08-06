@@ -1,6 +1,8 @@
 'use client';
 
-import { useId, useState } from 'react';
+import { useId } from 'react';
+
+import { useControllableState } from '@jbpark/use-hooks';
 
 import { radio } from '@repo/ui/core';
 import { cn } from '@repo/ui/utils';
@@ -53,12 +55,11 @@ const RadioGroup = ({
   onChange: _onChange = () => {},
   ...props
 }: Props) => {
-  const [uncontrolledValue, setUncontrolledValue] = useState<
-    OptionValue | undefined
-  >(defaultValue);
-
-  const controlled = _value !== undefined;
-  const value = controlled ? _value : uncontrolledValue;
+  const [value, setValue] = useControllableState<OptionValue>({
+    value: _value,
+    defaultValue,
+    onChange: _onChange,
+  });
 
   const options: Option[] = _options.map(item =>
     typeof item === 'object'
@@ -75,10 +76,7 @@ const RadioGroup = ({
     if (!checked) {
       return;
     }
-    if (!controlled) {
-      setUncontrolledValue(optionValue);
-    }
-    _onChange(optionValue);
+    setValue(optionValue);
   };
 
   // A single Radix radiogroup root owns every option so that arrow keys move

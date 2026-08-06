@@ -1,7 +1,6 @@
 'use client';
 
-import { useState } from 'react';
-
+import { useControllableState } from '@jbpark/use-hooks';
 import { format } from 'date-fns';
 import { CalendarIcon } from 'lucide-react';
 
@@ -30,19 +29,11 @@ const DatePicker = ({
   disabled,
   onChange: _onChange = () => {},
 }: Props) => {
-  const [uncontrolledValue, setUncontrolledValue] = useState<Date | undefined>(
+  const [value, onChange] = useControllableState<Date | undefined>({
+    value: _value,
     defaultValue,
-  );
-
-  const controlled = _value !== undefined;
-  const value = controlled ? _value : uncontrolledValue;
-
-  const onChange = (date: Date | undefined) => {
-    if (!controlled) {
-      setUncontrolledValue(date);
-    }
-    _onChange(date);
-  };
+    onChange: _onChange,
+  });
 
   return (
     <Popover

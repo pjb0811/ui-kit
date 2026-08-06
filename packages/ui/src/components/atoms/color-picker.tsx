@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
 import { HexColorPicker } from 'react-colorful';
+
+import { useControllableState } from '@jbpark/use-hooks';
 
 import { cn } from '@repo/ui/utils';
 
@@ -22,21 +23,17 @@ const ColorPicker = ({
   disabled,
   onChange: _onChange = () => {},
 }: Props) => {
-  const [uncontrolledValue, setUncontrolledValue] = useState<string>(
-    defaultValue || '#fff',
-  );
-
-  const controlled = _value !== undefined;
-  const value = controlled ? _value : uncontrolledValue;
+  const [value, setValue] = useControllableState<string>({
+    value: _value,
+    defaultValue: defaultValue ?? '#fff',
+    onChange: _onChange,
+  });
 
   const onChange = (color: string) => {
     if (disabled) {
       return;
     }
-    if (!controlled) {
-      setUncontrolledValue(color);
-    }
-    _onChange(color);
+    setValue(color);
   };
 
   return (
