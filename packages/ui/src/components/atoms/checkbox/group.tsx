@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useControllableState } from '@jbpark/use-hooks';
 
 import { cn } from '@repo/ui/utils';
 
@@ -40,12 +40,11 @@ const Group = ({
   onChange: _onChange = () => {},
   ...props
 }: Props) => {
-  const [uncontrolledValue, setUncontrolledValue] = useState<OptionValue[]>(
-    defaultValue || [],
-  );
-
-  const controlled = _value !== undefined;
-  const value = controlled ? _value : uncontrolledValue;
+  const [value, setValue] = useControllableState<OptionValue[]>({
+    value: _value,
+    defaultValue: defaultValue ?? [],
+    onChange: _onChange,
+  });
 
   const options: Option[] = _options.map(item =>
     typeof item === 'object'
@@ -61,10 +60,7 @@ const Group = ({
       ? [...value, optionValue]
       : value.filter(v => v !== optionValue);
 
-    if (!controlled) {
-      setUncontrolledValue(nextValue);
-    }
-    _onChange(nextValue);
+    setValue(nextValue);
   };
 
   return (

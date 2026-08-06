@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useControllableState } from '@jbpark/use-hooks';
 
 import { switchComponent } from '@repo/ui/core';
 import { cn } from '@repo/ui/utils';
@@ -58,19 +58,11 @@ const Switch = ({
   unCheckedChildren,
   ...props
 }: Props) => {
-  const [uncontrolledChecked, setUncontrolledChecked] = useState<boolean>(
-    defaultChecked || false,
-  );
-
-  const controlled = _checked !== undefined;
-  const checked = controlled ? _checked : uncontrolledChecked;
-
-  const onChange = (next: boolean) => {
-    if (!controlled) {
-      setUncontrolledChecked(next);
-    }
-    _onChange(next);
-  };
+  const [checked, onChange] = useControllableState<boolean>({
+    value: _checked,
+    defaultValue: defaultChecked ?? false,
+    onChange: _onChange,
+  });
 
   const hasChildren = !!(checkedChildren || unCheckedChildren);
   const config = sizeConfig[size];
