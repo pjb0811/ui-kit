@@ -24,7 +24,7 @@ export interface Props extends Omit<
   /** Native form field name — participates in `FormData` when set. */
   name?: string;
   disabled?: boolean;
-  icons?: { checked: React.ReactNode; unchecked: React.ReactNode };
+  icons?: Partial<{ checked: React.ReactNode; unchecked: React.ReactNode }>;
   children?: React.ReactNode;
   onChange?: (checked: boolean) => void;
 }

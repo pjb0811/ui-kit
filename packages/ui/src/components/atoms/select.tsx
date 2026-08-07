@@ -27,7 +27,10 @@ const isGroup = (option: Option | OptionGroup): option is OptionGroup => {
   return 'options' in option && Array.isArray(option.options);
 };
 
-interface Props extends React.ComponentProps<typeof Core> {
+export interface Props extends Omit<
+  React.ComponentProps<typeof Core>,
+  'onValueChange'
+> {
   placeholder?: string;
   className?: string;
   options?: (Option | OptionGroup)[];
