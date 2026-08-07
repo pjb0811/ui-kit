@@ -126,8 +126,14 @@ const RadioGroup = ({
                   disabled={disabled || item.disabled}
                   className={cn(
                     'rounded-none',
-                    index === 0 && 'rounded-l-lg',
-                    index === options.length - 1 && 'rounded-r-lg',
+                    index === 0 &&
+                      (orientation === 'vertical'
+                        ? 'rounded-t-lg'
+                        : 'rounded-l-lg'),
+                    index === options.length - 1 &&
+                      (orientation === 'vertical'
+                        ? 'rounded-b-lg'
+                        : 'rounded-r-lg'),
                     checked && buttonStyle === 'outlined' && 'border-primary',
                   )}
                 >
