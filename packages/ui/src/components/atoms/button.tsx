@@ -29,8 +29,19 @@ export interface Props extends Omit<ButtonProps, 'size' | 'variant' | 'type'> {
   danger?: boolean;
   disabled?: boolean;
   size?: 'small' | 'middle' | 'large';
+  /**
+   * antd-style visual preset. Maps to a `variant` internally — passing
+   * both `type` and `variant` lets `variant` win, so it can override the
+   * preset for one-off cases without needing every value duplicated here.
+   */
   type?: 'primary' | 'default' | 'dashed' | 'text' | 'link';
   variant?: 'solid' | 'outlined' | 'dashed' | 'filled' | 'text' | 'link';
+  /**
+   * Native `<button>` `type` (`button`/`submit`/`reset`), kept separate
+   * from the antd-style `type` above. Defaults to `'button'` so a Button
+   * placed inside a `<form>` doesn't submit it unless explicitly opted in.
+   */
+  htmlType?: 'button' | 'submit' | 'reset';
   shape?: 'default' | 'circle' | 'round';
   color?: PresetColors | 'default' | 'primary' | 'danger';
   loading?: boolean | { icon: React.ReactNode };
@@ -88,6 +99,7 @@ const Button = ({
   className,
   type = 'default',
   variant,
+  htmlType = 'button',
   size = 'middle',
   color = 'default',
   shape = 'default',
@@ -103,6 +115,7 @@ const Button = ({
   const computedColor = danger ? 'danger' : color;
   const colored = computedColor && computedColor !== 'default';
   const resolvedVariant = variant ?? typeToVariant[type] ?? 'solid';
+  const isLoading = !!loading;
 
   const displayIcon = loading ? (
     typeof loading === 'object' ? (
@@ -116,7 +129,9 @@ const Button = ({
 
   return (
     <Core
-      disabled={disabled}
+      type={htmlType}
+      disabled={disabled || isLoading}
+      aria-busy={isLoading}
       variant="default"
       data-color={computedColor}
       className={cn(
