@@ -4,17 +4,16 @@ import { useControllableState } from '@jbpark/use-hooks';
 
 import { cn } from '@repo/ui/utils';
 
+import {
+  type Option,
+  type OptionGroupClassNames,
+  type OptionValue,
+  type Options,
+  normalizeOptions,
+} from '../option-group';
 import Checkbox from './checkbox';
 
-export type OptionValue = string | number | boolean;
-
-type Option = {
-  label: string;
-  value: OptionValue;
-  disabled?: boolean;
-};
-
-type Options = string[] | number[] | boolean[] | Option[];
+export type { OptionValue };
 
 export interface Props extends Omit<
   React.ComponentPropsWithoutRef<'ul'>,
@@ -23,7 +22,7 @@ export interface Props extends Omit<
   options?: Options;
   orientation?: 'vertical' | 'horizontal';
   placement?: 'left' | 'right';
-  classNames?: Record<string, string>;
+  classNames?: OptionGroupClassNames;
   defaultValue?: OptionValue[];
   value?: OptionValue[];
   onChange?: (values: OptionValue[]) => void;
@@ -46,14 +45,7 @@ const Group = ({
     onChange: _onChange,
   });
 
-  const options: Option[] = _options.map(item =>
-    typeof item === 'object'
-      ? item
-      : {
-          label: `${item}`,
-          value: item,
-        },
-  );
+  const options: Option[] = normalizeOptions(_options);
 
   const onChange = (checked: boolean, optionValue: OptionValue) => {
     const nextValue = checked
