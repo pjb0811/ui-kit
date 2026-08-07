@@ -31,7 +31,7 @@ export interface Props extends Omit<
    * single Radix root can address each option.
    */
   id?: string;
-  icons?: { checked: React.ReactNode; unchecked: React.ReactNode };
+  icons?: Partial<{ checked: React.ReactNode; unchecked: React.ReactNode }>;
   onChange?: (checked: boolean) => void;
 }
 

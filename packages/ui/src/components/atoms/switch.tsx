@@ -30,7 +30,7 @@ const sizeConfig = {
   },
 };
 
-interface Props extends Omit<
+export interface Props extends Omit<
   React.ComponentPropsWithoutRef<'button'>,
   'onChange'
 > {

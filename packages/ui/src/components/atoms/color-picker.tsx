@@ -8,7 +8,10 @@ import { cn } from '@repo/ui/utils';
 
 import Popover from './popover';
 
-interface Props {
+export interface Props extends Omit<
+  React.ComponentPropsWithoutRef<'div'>,
+  'onChange' | 'defaultValue' | 'value' | 'onClick' | 'onKeyDown'
+> {
   defaultValue?: string;
   value?: string;
   showText?: boolean;
@@ -21,7 +24,9 @@ const ColorPicker = ({
   value: _value,
   showText,
   disabled,
+  className,
   onChange: _onChange = () => {},
+  ...props
 }: Props) => {
   const [value, setValue] = useControllableState<string>({
     value: _value,
@@ -49,7 +54,9 @@ const ColorPicker = ({
           'inline-flex items-center',
           'rounded border p-0.5',
           disabled && 'cursor-not-allowed opacity-50',
+          className,
         )}
+        {...props}
         onClick={e => {
           if (disabled) {
             e.preventDefault();

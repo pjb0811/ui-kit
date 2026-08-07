@@ -27,6 +27,7 @@ export interface Props extends Omit<
   value?: OptionValue[];
   /** Native form field name, shared across every option's checkbox. */
   name?: string;
+  disabled?: boolean;
   onChange?: (values: OptionValue[]) => void;
 }
 
@@ -37,6 +38,7 @@ const Group = ({
   classNames = {},
   options: _options = [],
   name,
+  disabled,
   defaultValue,
   value: _value,
   onChange: _onChange = () => {},
@@ -80,7 +82,7 @@ const Group = ({
               name={name}
               value={item.value}
               checked={checked}
-              disabled={item.disabled}
+              disabled={disabled || item.disabled}
               onChange={checked => onChange(checked, item.value)}
             >
               {item.label}
