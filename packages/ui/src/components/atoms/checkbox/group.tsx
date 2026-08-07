@@ -25,6 +25,8 @@ export interface Props extends Omit<
   classNames?: OptionGroupClassNames;
   defaultValue?: OptionValue[];
   value?: OptionValue[];
+  /** Native form field name, shared across every option's checkbox. */
+  name?: string;
   onChange?: (values: OptionValue[]) => void;
 }
 
@@ -34,6 +36,7 @@ const Group = ({
   className,
   classNames = {},
   options: _options = [],
+  name,
   defaultValue,
   value: _value,
   onChange: _onChange = () => {},
@@ -74,6 +77,7 @@ const Group = ({
             <Checkbox
               placement={placement}
               className={cn(classNames?.item)}
+              name={name}
               value={item.value}
               checked={checked}
               disabled={item.disabled}
