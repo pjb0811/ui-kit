@@ -21,6 +21,8 @@ export interface Props extends Omit<
   defaultChecked?: boolean;
   checked?: boolean;
   value?: OptionValue;
+  /** Native form field name — participates in `FormData` when set. */
+  name?: string;
   disabled?: boolean;
   icons?: { checked: React.ReactNode; unchecked: React.ReactNode };
   children?: React.ReactNode;
@@ -36,6 +38,7 @@ const Checkbox = ({
   disabled,
   defaultChecked,
   checked: _checked,
+  name,
   onChange: _onChange = () => {},
   ...props
 }: Props) => {
@@ -46,6 +49,7 @@ const Checkbox = ({
   });
 
   const id = useId();
+  const itemValue = String(_value);
 
   const cursorClassName = disabled ? 'cursor-not-allowed' : 'cursor-pointer';
 
@@ -63,6 +67,8 @@ const Checkbox = ({
         id={id}
         hidden
         type="checkbox"
+        name={name}
+        value={itemValue}
         checked={checked}
         disabled={disabled}
         onChange={e => {
@@ -102,6 +108,8 @@ const Checkbox = ({
     <>
       <CoreCheckbox
         id={id}
+        name={name}
+        value={itemValue}
         checked={checked}
         disabled={disabled}
         className={cn(cursorClassName)}

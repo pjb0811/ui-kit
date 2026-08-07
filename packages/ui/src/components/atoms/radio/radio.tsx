@@ -22,6 +22,8 @@ export interface Props extends Omit<
   defaultChecked?: boolean;
   checked?: boolean;
   value?: OptionValue;
+  /** Native form field name — participates in `FormData` when set. */
+  name?: string;
   disabled?: boolean;
   /**
    * Id shared by the underlying control and its label. Generated internally
@@ -43,6 +45,7 @@ const Radio = ({
   defaultChecked,
   checked: _checked,
   id: _id,
+  name,
   onChange: _onChange = () => {},
   ...props
 }: Props) => {
@@ -54,6 +57,10 @@ const Radio = ({
 
   const generatedId = useId();
   const id = _id ?? generatedId;
+  // Radix identifies/submits an item by its `value`, which is separate from
+  // `id` (used only for the DOM id/label pairing) — stringified since Radix
+  // requires a string, while `OptionValue` also allows number/boolean.
+  const itemValue = String(_value);
   const grouped = useContext(RadioGroupContext);
 
   const cursorClassName = disabled ? 'cursor-not-allowed' : 'cursor-pointer';
@@ -75,7 +82,7 @@ const Radio = ({
       className={cn('flex gap-2', placement === 'right' && 'flex-row-reverse')}
       data-disabled={disabled}
     >
-      <Item value={id} id={id} checked={checked} disabled={disabled} />
+      <Item value={itemValue} id={id} checked={checked} disabled={disabled} />
       <FieldLabel htmlFor={id} className={cursorClassName}>
         {children}
       </FieldLabel>
@@ -88,6 +95,8 @@ const Radio = ({
         id={id}
         hidden
         type="radio"
+        name={name}
+        value={itemValue}
         checked={checked}
         disabled={disabled}
         onChange={e => {
@@ -126,7 +135,11 @@ const Radio = ({
   ) : grouped ? (
     renderField
   ) : (
-    <Core value={checked ? id : ''} onValueChange={() => onChange(true)}>
+    <Core
+      name={name}
+      value={checked ? itemValue : ''}
+      onValueChange={() => onChange(true)}
+    >
       {renderField}
     </Core>
   );

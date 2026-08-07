@@ -32,6 +32,8 @@ export interface Props extends Omit<
   classNames?: OptionGroupClassNames;
   defaultValue?: OptionValue;
   value?: OptionValue;
+  /** Native form field name — participates in `FormData` when set. */
+  name?: string;
   optionType?: 'default' | 'button';
   buttonStyle?: 'solid' | 'outlined';
   size?: 'small' | 'middle' | 'large';
@@ -45,6 +47,7 @@ const RadioGroup = ({
   className,
   classNames = {},
   options: _options = [],
+  name,
   optionType = 'default',
   buttonStyle = 'solid',
   size,
@@ -72,15 +75,15 @@ const RadioGroup = ({
   };
 
   // A single Radix radiogroup root owns every option so that arrow keys move
-  // focus across the whole group. Radix addresses items by string value, so
-  // each option gets a deterministic id derived from a stable base id.
+  // focus across the whole group. `id` stays index-derived (for DOM
+  // id/label pairing), but Radix itself now addresses/submits items by
+  // their real (stringified) `value` — see radio.tsx.
   const baseId = useId();
   const getOptionId = (index: number) => `${baseId}-${index}`;
-  const checkedIndex = options.findIndex(item => item.value === value);
-  const checkedId = checkedIndex === -1 ? '' : getOptionId(checkedIndex);
+  const checkedItemValue = value === undefined ? '' : String(value);
 
-  const onValueChange = (optionId: string) => {
-    const item = options.find((_, index) => getOptionId(index) === optionId);
+  const onValueChange = (itemValue: string) => {
+    const item = options.find(option => String(option.value) === itemValue);
 
     if (!item) {
       return;
@@ -149,7 +152,12 @@ const RadioGroup = ({
 
   return (
     <RadioGroupContext.Provider value={true}>
-      <Core className="block" value={checkedId} onValueChange={onValueChange}>
+      <Core
+        className="block"
+        name={name}
+        value={checkedItemValue}
+        onValueChange={onValueChange}
+      >
         {list}
       </Core>
     </RadioGroupContext.Provider>
