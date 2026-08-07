@@ -1,5 +1,7 @@
 'use client';
 
+import { useState } from 'react';
+
 import { useControllableState } from '@jbpark/use-hooks';
 import { format } from 'date-fns';
 import { CalendarIcon } from 'lucide-react';
@@ -34,11 +36,23 @@ const DatePicker = ({
     defaultValue,
     onChange: _onChange,
   });
+  const [open, setOpen] = useState(false);
 
   return (
     <Popover
       placement="bottomLeft"
-      content={<Calendar mode="single" selected={value} onSelect={onChange} />}
+      open={open}
+      onOpenChange={setOpen}
+      content={
+        <Calendar
+          mode="single"
+          selected={value}
+          onSelect={date => {
+            onChange(date);
+            setOpen(false);
+          }}
+        />
+      }
     >
       <Button
         type="default"
