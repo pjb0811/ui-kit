@@ -8,20 +8,19 @@ import { radio } from '@repo/ui/core';
 import { cn } from '@repo/ui/utils';
 
 import Button from '../button';
+import {
+  type Option,
+  type OptionGroupClassNames,
+  type OptionValue,
+  type Options,
+  normalizeOptions,
+} from '../option-group';
 import { RadioGroupContext } from './context';
 import Radio from './radio';
 
 const { RadioGroup: Core } = radio;
 
-export type OptionValue = string | number | boolean;
-
-type Option = {
-  label: string;
-  value: OptionValue;
-  disabled?: boolean;
-};
-
-type Options = string[] | number[] | boolean[] | Option[];
+export type { OptionValue };
 
 export interface Props extends Omit<
   React.ComponentPropsWithoutRef<'ul'>,
@@ -30,7 +29,7 @@ export interface Props extends Omit<
   options?: Options;
   orientation?: 'vertical' | 'horizontal';
   placement?: 'left' | 'right';
-  classNames?: Record<string, string>;
+  classNames?: OptionGroupClassNames;
   defaultValue?: OptionValue;
   value?: OptionValue;
   optionType?: 'default' | 'button';
@@ -61,14 +60,7 @@ const RadioGroup = ({
     onChange: _onChange,
   });
 
-  const options: Option[] = _options.map(item =>
-    typeof item === 'object'
-      ? item
-      : {
-          label: `${item}`,
-          value: item,
-        },
-  );
+  const options: Option[] = normalizeOptions(_options);
 
   const isButton = optionType === 'button';
 
