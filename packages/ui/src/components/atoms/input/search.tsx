@@ -24,8 +24,10 @@ const Search = ({
   className,
   defaultValue,
   value,
+  disabled,
   allowClear = true,
   onChange,
+  onKeyDown: _onKeyDown,
   onSearch: _onSearch,
   ...props
 }: Props) => {
@@ -55,13 +57,13 @@ const Search = ({
       setUncontrolledHasValue(false);
     }
 
-    const event = {
-      target: { value: '' },
-    } as React.ChangeEvent<HTMLInputElement>;
-    onChange?.(event);
+    onChange?.({ target: { value: '' } });
   };
 
   const onSearch = () => {
+    if (disabled) {
+      return;
+    }
     if (inputRef.current) {
       _onSearch?.(inputRef.current.value);
     }
@@ -84,10 +86,12 @@ const Search = ({
         )}
       >
         <Core
+          {...props}
           ref={setRefs}
           inputMode="search"
           type="search"
           enterKeyHint="search"
+          disabled={disabled}
           className={cn(
             'rounded-r-none',
             '[&::-webkit-search-cancel-button]:hidden',
@@ -103,18 +107,20 @@ const Search = ({
             onChange?.(e);
           }}
           onKeyDown={e => {
+            _onKeyDown?.(e);
             if (e.key === 'Enter') {
               onSearch();
             }
           }}
-          {...props}
         />
         <button
           type="button"
           aria-label="지우기"
+          disabled={disabled}
           className={cn(
             'absolute right-2',
             'shrink-0 cursor-pointer',
+            'disabled:cursor-not-allowed disabled:opacity-50',
             (!allowClear || !hasValue) && 'hidden',
           )}
           onClick={onClear}
@@ -124,6 +130,7 @@ const Search = ({
       </div>
       <Button
         icon={<SearchOutlined />}
+        disabled={disabled}
         className={cn(
           'rounded-l-none',
           'size-9',
