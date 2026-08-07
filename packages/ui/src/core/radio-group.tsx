@@ -22,8 +22,24 @@ function RadioGroup({
 
 function RadioGroupItem({
   className,
+  asChild,
+  children,
   ...props
-}: React.ComponentProps<typeof RadioGroupPrimitive.Item>) {
+}: React.ComponentProps<typeof RadioGroupPrimitive.Item> & {
+  asChild?: boolean;
+}) {
+  // `asChild` hands the rendered element to `children` entirely (e.g. a
+  // `Button`), so the default dot indicator doesn't apply — Radix clones
+  // its own role/aria-checked/keyboard handling onto that single child
+  // instead of onto its own `<button>`.
+  if (asChild) {
+    return (
+      <RadioGroupPrimitive.Item asChild data-slot="radio-group-item" {...props}>
+        {children}
+      </RadioGroupPrimitive.Item>
+    );
+  }
+
   return (
     <RadioGroupPrimitive.Item
       data-slot="radio-group-item"

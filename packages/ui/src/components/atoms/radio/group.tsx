@@ -18,7 +18,7 @@ import {
 import { RadioGroupContext } from './context';
 import Radio from './radio';
 
-const { RadioGroup: Core } = radio;
+const { RadioGroup: Core, RadioGroupItem: Item } = radio;
 
 export type { OptionValue };
 
@@ -111,20 +111,29 @@ const RadioGroup = ({
             className={cn('flex', classNames?.wrapper)}
           >
             {isButton ? (
-              <Button
-                variant={checked ? buttonStyle : 'outlined'}
-                size={size}
-                className={cn(
-                  'rounded-none',
-                  index === 0 && 'rounded-l-lg',
-                  index === options.length - 1 && 'rounded-r-lg',
-                  checked && buttonStyle === 'outlined' && 'border-primary',
-                )}
+              // `asChild` gives the Button real radio semantics (role,
+              // aria-checked, roving tabindex, arrow-key nav, click/keyboard
+              // selection via the shared Core's onValueChange below) instead
+              // of a plain list of buttons with none of that.
+              <Item
+                asChild
+                value={String(item.value)}
                 disabled={disabled || item.disabled}
-                onClick={() => onChange(true, item.value)}
               >
-                {item.label}
-              </Button>
+                <Button
+                  variant={checked ? buttonStyle : 'outlined'}
+                  size={size}
+                  disabled={disabled || item.disabled}
+                  className={cn(
+                    'rounded-none',
+                    index === 0 && 'rounded-l-lg',
+                    index === options.length - 1 && 'rounded-r-lg',
+                    checked && buttonStyle === 'outlined' && 'border-primary',
+                  )}
+                >
+                  {item.label}
+                </Button>
+              </Item>
             ) : (
               <Radio
                 id={getOptionId(index)}
@@ -143,12 +152,6 @@ const RadioGroup = ({
       })}
     </ul>
   );
-
-  // `optionType='button'` renders `Button`s instead of radios, so it keeps the
-  // plain list and stays out of the Radix radiogroup entirely.
-  if (isButton) {
-    return list;
-  }
 
   return (
     <RadioGroupContext.Provider value={true}>
