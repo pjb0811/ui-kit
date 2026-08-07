@@ -1,5 +1,26 @@
 # @repo/ui
 
+## 3.4.0
+
+### Minor Changes
+
+- 9f357fb: Color picker and date picker components now support a disabled state, preventing user interaction and visual changes to indicate the component is not interactive.
+- 27e0a38: The BackTop component now correctly tracks and scrolls the window that renders it, even when portaled into an iframe.
+- d4cb7aa: Update @jbpark/use-hooks to version 2.11.0.
+- dbac99b: Updated checkbox, radio, and switch components to use useControllableState for controlled and uncontrolled state management.
+- 04d4848: Add support for antd-style visual presets and native button types to the Button component.
+- 0137c09: Add support for option groups to checkbox and radio components, enabling users to group related options together.
+- dcb6851: The DatePicker component now supports a controlled open state, allowing users to customize the display of the date picker.
+- 4dbba22: Add native form field names to checkboxes and radios, enabling participation in FormData when set.
+- 66d42a6: Add support for disabled state to checkbox and radio components, and color picker and select components.
+- a6c9944: Add support for ref to the Input component.
+- 97682bb: RadioGroup components now support rendering Button elements as radio buttons, enabling real radio semantics and improved accessibility.
+- e31008d: Skeleton and Spin components now support custom class names and styles.
+
+### Patch Changes
+
+- c49a0a1: Fix internal event handling in Checkbox and Radio components to trigger state changes directly without relying on DOM element IDs.
+
 ## 3.3.0
 
 ### Minor Changes
