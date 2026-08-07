@@ -125,7 +125,16 @@ const RadioGroup = ({
                   size={size}
                   disabled={disabled || item.disabled}
                   className={cn(
-                    'rounded-none',
+                    // The `solid` variant (the checked item, by default)
+                    // renders no border at all while `outlined` (every
+                    // unchecked item) renders a 1px one — reserving the
+                    // border unconditionally keeps every option's box the
+                    // same size regardless of which variant it's in.
+                    'rounded-none border',
+                    checked &&
+                      (buttonStyle === 'outlined'
+                        ? 'border-primary'
+                        : 'border-transparent'),
                     index === 0 &&
                       (orientation === 'vertical'
                         ? 'rounded-t-lg'
@@ -134,7 +143,6 @@ const RadioGroup = ({
                       (orientation === 'vertical'
                         ? 'rounded-b-lg'
                         : 'rounded-r-lg'),
-                    checked && buttonStyle === 'outlined' && 'border-primary',
                   )}
                 >
                   {item.label}
