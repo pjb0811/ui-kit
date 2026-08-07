@@ -46,6 +46,12 @@ const Skeleton = ({
   children,
   ...props
 }: Props) => {
+  // Not wrapping `children` here (unlike Spin's overlay mode) — Skeleton
+  // is meant to swap in arbitrary real content once loading finishes,
+  // which can include elements with strict parent requirements (e.g. a
+  // `<tr>`), so adding a wrapper div could produce invalid markup.
+  // `className`/`style`/rest props only ever describe the skeleton's own
+  // placeholder markup, so there's nothing for them to apply to here.
   if (!loading) {
     return children ?? null;
   }
@@ -54,10 +60,7 @@ const Skeleton = ({
     <div
       role="status"
       aria-label="로딩 중"
-      className={cn(
-        'flex items-center gap-3',
-        //
-      )}
+      className={cn('flex items-center gap-3', className)}
       {...props}
     >
       {avatar && (
@@ -91,7 +94,6 @@ const Skeleton = ({
                 'rounded-md',
                 !active && 'animate-none',
                 SIZES[size],
-                className,
                 classNames.item,
                 //
               )}
