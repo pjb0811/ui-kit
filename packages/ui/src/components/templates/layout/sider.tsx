@@ -6,6 +6,8 @@ import { PanelLeftClose, PanelLeftOpen } from 'lucide-react';
 
 import { cn } from '@repo/ui/utils';
 
+import { useRegisterSider } from './sider-context';
+
 export interface Props extends Omit<
   React.ComponentPropsWithoutRef<'aside'>,
   'onCollapse'
@@ -41,6 +43,8 @@ const Sider = ({
   onCollapse: _onCollapse = () => {},
   ...props
 }: Props) => {
+  useRegisterSider();
+
   const [uncontrolledCollapsed, setUncontrolledCollapsed] =
     useState(defaultCollapsed);
 
