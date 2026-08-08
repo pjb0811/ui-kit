@@ -10,13 +10,16 @@ import Popover from './popover';
 
 export interface Props extends Omit<
   React.ComponentPropsWithoutRef<'div'>,
-  'onChange' | 'defaultValue' | 'value' | 'onClick' | 'onKeyDown'
+  'onChange' | 'defaultValue' | 'value' | 'onClick' | 'onKeyDown' | 'open'
 > {
   defaultValue?: string;
   value?: string;
   showText?: boolean;
   disabled?: boolean;
   onChange?: (color: string) => void;
+  open?: boolean;
+  defaultOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
 }
 
 const ColorPicker = ({
@@ -26,12 +29,20 @@ const ColorPicker = ({
   disabled,
   className,
   onChange: _onChange = () => {},
+  open: _open,
+  defaultOpen,
+  onOpenChange,
   ...props
 }: Props) => {
   const [value, setValue] = useControllableState<string>({
     value: _value,
     defaultValue: defaultValue ?? '#fff',
     onChange: _onChange,
+  });
+  const [open, setOpen] = useControllableState<boolean>({
+    value: _open,
+    defaultValue: defaultOpen ?? false,
+    onChange: onOpenChange,
   });
 
   const onChange = (color: string) => {
@@ -44,6 +55,8 @@ const ColorPicker = ({
   return (
     <Popover
       placement="bottomLeft"
+      open={open}
+      onOpenChange={setOpen}
       content={<HexColorPicker color={value} onChange={onChange} />}
     >
       <div
