@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Root, createRoot } from 'react-dom/client';
 
+import { useTimeout } from '@jbpark/use-hooks';
 import { Check, Info, OctagonAlert, OctagonX, X } from 'lucide-react';
 import { v4 as uuid } from 'uuid';
 
@@ -153,15 +154,7 @@ const StaticToast = ({
     }, 200);
   };
 
-  useEffect(() => {
-    if (!duration) {
-      return;
-    }
-
-    const timer = setTimeout(close, duration);
-    return () => clearTimeout(timer);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [duration]);
+  useTimeout(close, duration || null);
 
   if (!isBrowser) {
     return null;
