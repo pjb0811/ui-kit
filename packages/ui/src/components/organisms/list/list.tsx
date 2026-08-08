@@ -106,14 +106,6 @@ const List = <T,>({
     );
   }
 
-  if (!data?.length && empty) {
-    return (
-      <div className={cn(className)} {...props}>
-        {empty}
-      </div>
-    );
-  }
-
   return (
     <div
       className={cn(
@@ -136,15 +128,17 @@ const List = <T,>({
       ))}
       <div className={cn(classNames?.header)}>{header}</div>
       <div role="list" className={cn('space-y-2', classNames?.body)}>
-        {data?.map((item, i) =>
-          itemKey ? (
-            <React.Fragment key={itemKey(item, i)}>
-              {renderItem(item, i)}
-            </React.Fragment>
-          ) : (
-            renderItem(item, i)
-          ),
-        )}
+        {!data?.length && empty
+          ? empty
+          : data?.map((item, i) =>
+              itemKey ? (
+                <React.Fragment key={itemKey(item, i)}>
+                  {renderItem(item, i)}
+                </React.Fragment>
+              ) : (
+                renderItem(item, i)
+              ),
+            )}
         {scroll?.loading &&
           (scroll?.loader ?? (
             <Skeleton.Node count={10} gap={10} {...loaderProps} />
