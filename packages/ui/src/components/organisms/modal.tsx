@@ -120,6 +120,7 @@ const Modal = ({
   classNames,
   style,
   title,
+  content,
   footer,
   container,
   children,
@@ -177,7 +178,9 @@ const Modal = ({
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription className="hidden" />
         </DialogHeader>
-        <div className={cn('break-all', classNames?.body)}>{children}</div>
+        <div className={cn('break-all', classNames?.body)}>
+          {children ?? content}
+        </div>
         {footer !== null && (
           <DialogFooter
             className={cn('flex-row justify-end gap-x-2', classNames?.footer)}
