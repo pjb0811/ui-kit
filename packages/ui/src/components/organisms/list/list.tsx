@@ -60,7 +60,7 @@ const List = <T,>({
   itemKey,
   ...props
 }: Props<T>) => {
-  const [loaderRef, entry] = useIntersectionObserver({
+  const [loaderRef, { isIntersecting }] = useIntersectionObserver({
     threshold: 0,
     root: null,
     rootMargin: '0px',
@@ -84,11 +84,11 @@ const List = <T,>({
       return;
     }
 
-    if (entry?.isIntersecting && scroll.hasMore && !fetchingRef.current) {
+    if (isIntersecting && scroll.hasMore && !fetchingRef.current) {
       fetchingRef.current = true;
       scroll.next();
     }
-  }, [entry, scroll]);
+  }, [isIntersecting, scroll]);
 
   if (loading) {
     return (
