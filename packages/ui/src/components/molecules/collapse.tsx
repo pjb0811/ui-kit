@@ -67,7 +67,7 @@ const Collapse = ({
 
   return (
     <Accordion {...props} className={className} {...accordionProps}>
-      {items.map(({ label, children, disabled }, key) => (
+      {items.map(({ key, label, children, disabled }) => (
         <AccordionItem
           key={key}
           value={`${key}`}
