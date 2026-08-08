@@ -91,48 +91,97 @@ const fillColorBySide: Record<Side, string> = {
   right: 'after:border-r-8 after:border-r-popover',
 };
 
-// `side` picks which edge of the content the arrow sits against; `align`
-// slides it along that edge. The offset axis (x for top/bottom, y for
-// left/right) is perpendicular to `side` — `align: 'center'` centers the
-// arrow with a translate, while `start`/`end` pin it 16px from that edge.
-const offsetAxisBySide: Record<Side, 'x' | 'y'> = {
-  top: 'x',
-  bottom: 'x',
-  left: 'y',
-  right: 'y',
+// Tailwind v4 only extracts class candidates that appear as *literal*
+// strings in source — none of these ever do if built via
+// `` `${side}-full` `` style interpolation, so they'd silently never make
+// it into the generated CSS. This table exists purely so every class the
+// arrow can need appears literally somewhere in this file.
+const POSITION_CLASSES: Record<
+  Side,
+  Record<Align, { wrapper: string; before: string; after: string }>
+> = {
+  top: {
+    start: {
+      wrapper: 'top-full left-4',
+      before: 'before:top-0 before:left-0',
+      after: 'after:-top-px after:left-px',
+    },
+    center: {
+      wrapper: 'top-full left-1/2 -translate-x-1/2',
+      before: 'before:top-0 before:left-1/2 before:-translate-x-1/2',
+      after: 'after:-top-px after:left-1/2 after:-translate-x-1/2',
+    },
+    end: {
+      wrapper: 'top-full right-4',
+      before: 'before:top-0 before:right-0',
+      after: 'after:-top-px after:right-px',
+    },
+  },
+  bottom: {
+    start: {
+      wrapper: 'bottom-full left-4',
+      before: 'before:bottom-0 before:left-0',
+      after: 'after:-bottom-px after:left-px',
+    },
+    center: {
+      wrapper: 'bottom-full left-1/2 -translate-x-1/2',
+      before: 'before:bottom-0 before:left-1/2 before:-translate-x-1/2',
+      after: 'after:-bottom-px after:left-1/2 after:-translate-x-1/2',
+    },
+    end: {
+      wrapper: 'bottom-full right-4',
+      before: 'before:bottom-0 before:right-0',
+      after: 'after:-bottom-px after:right-px',
+    },
+  },
+  left: {
+    start: {
+      wrapper: 'left-full top-4',
+      before: 'before:left-0 before:top-0',
+      after: 'after:-left-px after:top-px',
+    },
+    center: {
+      wrapper: 'left-full top-1/2 -translate-y-1/2',
+      before: 'before:left-0 before:top-1/2 before:-translate-y-1/2',
+      after: 'after:-left-px after:top-1/2 after:-translate-y-1/2',
+    },
+    end: {
+      wrapper: 'left-full bottom-4',
+      before: 'before:left-0 before:bottom-0',
+      after: 'after:-left-px after:bottom-px',
+    },
+  },
+  right: {
+    start: {
+      wrapper: 'right-full top-4',
+      before: 'before:right-0 before:top-0',
+      after: 'after:-right-px after:top-px',
+    },
+    center: {
+      wrapper: 'right-full top-1/2 -translate-y-1/2',
+      before: 'before:right-0 before:top-1/2 before:-translate-y-1/2',
+      after: 'after:-right-px after:top-1/2 after:-translate-y-1/2',
+    },
+    end: {
+      wrapper: 'right-full bottom-4',
+      before: 'before:right-0 before:bottom-0',
+      after: 'after:-right-px after:bottom-px',
+    },
+  },
 };
-const startEdgeByAxis = { x: 'left', y: 'top' } as const;
-const endEdgeByAxis = { x: 'right', y: 'bottom' } as const;
 
 const getArrowClassName = (side: Side, align: Align) => {
-  const axis = offsetAxisBySide[side];
-  const alignEdge =
-    align === 'start'
-      ? startEdgeByAxis[axis]
-      : align === 'end'
-        ? endEdgeByAxis[axis]
-        : null;
-
-  const positionAlign = alignEdge
-    ? `${alignEdge}-4`
-    : `${startEdgeByAxis[axis]}-1/2 -translate-${axis}-1/2`;
-  const beforeAlign = alignEdge
-    ? `before:${alignEdge}-0`
-    : `before:${startEdgeByAxis[axis]}-1/2 before:-translate-${axis}-1/2`;
-  const afterAlign = alignEdge
-    ? `after:${alignEdge}-px`
-    : `after:${startEdgeByAxis[axis]}-1/2 after:-translate-${axis}-1/2`;
+  const { wrapper, before, after } = POSITION_CLASSES[side][align];
 
   return cn(
-    `absolute ${positionAlign} ${side}-full`,
+    'absolute',
+    wrapper,
     beforeBase,
-    `before:${side}-0`,
-    beforeAlign,
+    before,
     borderShapeBySide[side],
     borderColorBySide[side],
     afterBase,
-    `after:-${side}-px`,
-    afterAlign,
+    after,
     fillShapeBySide[side],
     fillColorBySide[side],
   );
