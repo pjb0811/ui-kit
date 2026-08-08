@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 
 import { useGSAP } from '@gsap/react';
+import { useEventListener } from '@jbpark/use-hooks';
 import { gsap } from 'gsap';
 
 export interface ItemProps {
@@ -133,25 +134,17 @@ const Item = ({
     );
   }, [autoFill]);
 
-  useEffect(() => {
-    const onResize = () => {
-      if (!tweenRef.current || !containerRef.current) {
-        return;
-      }
+  useEventListener('resize', () => {
+    if (!tweenRef.current || !containerRef.current) {
+      return;
+    }
 
-      if (isPaused) {
-        tweenRef.current.pause();
-      } else {
-        tweenRef.current.play();
-      }
-    };
-
-    window.addEventListener('resize', onResize);
-
-    return () => {
-      window.removeEventListener('resize', onResize);
-    };
-  }, [isPaused]);
+    if (isPaused) {
+      tweenRef.current.pause();
+    } else {
+      tweenRef.current.play();
+    }
+  });
 
   return (
     <div

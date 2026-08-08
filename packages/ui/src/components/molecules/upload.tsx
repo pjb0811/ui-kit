@@ -1,8 +1,12 @@
 'use client';
 
-import { useId, useState } from 'react';
+import { useId } from 'react';
 
-import { useFileToDataUrl } from '@jbpark/use-hooks';
+import {
+  useControllableState,
+  useFileDrop,
+  useFileToDataUrl,
+} from '@jbpark/use-hooks';
 import { Upload as UploadIcon, X } from 'lucide-react';
 
 import { cn } from '@repo/ui/utils';
@@ -48,22 +52,13 @@ const Upload = ({
 }: Props) => {
   const inputId = useId();
   const readAsDataUrl = useFileToDataUrl();
-  const [isDragOver, setIsDragOver] = useState(false);
-  const [uncontrolledValue, setUncontrolledValue] =
-    useState<UploadFile[]>(defaultValue);
+  const [files, setFiles] = useControllableState<UploadFile[]>({
+    value: _value,
+    defaultValue,
+    onChange: _onChange,
+  });
 
-  const controlled = _value !== undefined;
-  const files = controlled ? _value : uncontrolledValue;
-
-  const onChange = (next: UploadFile[]) => {
-    if (!controlled) {
-      setUncontrolledValue(next);
-    }
-    _onChange(next);
-  };
-
-  const addFiles = async (fileList: FileList) => {
-    const incoming = Array.from(fileList);
+  const addFiles = async (incoming: File[]) => {
     const remaining =
       typeof maxCount === 'number'
         ? Math.max(0, maxCount - files.length)
@@ -79,12 +74,19 @@ const Upload = ({
       })),
     );
 
-    onChange([...files, ...uploaded]);
+    setFiles([...files, ...uploaded]);
   };
 
   const removeFile = (uid: string) => {
-    onChange(files.filter(file => file.uid !== uid));
+    setFiles(files.filter(file => file.uid !== uid));
   };
+
+  const { dropRef, isDragging } = useFileDrop<HTMLLabelElement>({
+    accept,
+    multiple,
+    disabled,
+    onDrop: addFiles,
+  });
 
   return (
     <div
@@ -95,32 +97,14 @@ const Upload = ({
       )}
     >
       <label
+        ref={dropRef}
         htmlFor={inputId}
-        onDragOver={e => {
-          e.preventDefault();
-          if (!disabled) {
-            setIsDragOver(true);
-          }
-        }}
-        onDragLeave={() => setIsDragOver(false)}
-        onDrop={e => {
-          e.preventDefault();
-          setIsDragOver(false);
-
-          if (disabled) {
-            return;
-          }
-
-          if (e.dataTransfer.files.length) {
-            addFiles(e.dataTransfer.files);
-          }
-        }}
         className={cn(
           'flex cursor-pointer flex-col items-center justify-center gap-2',
           'rounded-md border border-dashed p-6 text-center',
           'text-muted-foreground text-sm',
           'transition-colors',
-          isDragOver && 'border-primary bg-accent',
+          isDragging && 'border-primary bg-accent',
           disabled && 'pointer-events-none cursor-not-allowed opacity-50',
           classNames?.dropzone,
           //
@@ -137,7 +121,7 @@ const Upload = ({
           className="hidden"
           onChange={e => {
             if (e.target.files?.length) {
-              addFiles(e.target.files);
+              addFiles(Array.from(e.target.files));
             }
             e.target.value = '';
           }}

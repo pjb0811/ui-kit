@@ -2,7 +2,7 @@
 
 import { type MouseEvent, useRef } from 'react';
 
-import { useWindowScroll } from '@jbpark/use-hooks';
+import { useMergedRef, useWindowScroll } from '@jbpark/use-hooks';
 import { ArrowUp } from 'lucide-react';
 
 import { cn } from '@repo/ui/utils';
@@ -29,19 +29,11 @@ const BackTop = ({
   // iframe (e.g. live-editor's Renderer).
   const { y } = useWindowScroll(buttonRef);
 
-  const setRefs = (node: HTMLButtonElement | null) => {
-    buttonRef.current = node;
-
-    if (typeof ref === 'function') {
-      ref(node);
-    } else if (ref) {
-      ref.current = node;
-    }
-  };
+  const mergedRef = useMergedRef(buttonRef, ref);
 
   return (
     <FloatButton
-      ref={setRefs}
+      ref={mergedRef}
       aria-label="맨 위로"
       icon={<ArrowUp />}
       className={cn(

@@ -2,6 +2,7 @@
 
 import { useRef, useState } from 'react';
 
+import { useMergedRef } from '@jbpark/use-hooks';
 import { CircleX, Search as SearchOutlined } from 'lucide-react';
 
 import { input } from '@repo/ui/core';
@@ -33,15 +34,7 @@ const Search = ({
 }: Props) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const setRefs = (node: HTMLInputElement | null) => {
-    inputRef.current = node;
-
-    if (typeof ref === 'function') {
-      ref(node);
-    } else if (ref) {
-      ref.current = node;
-    }
-  };
+  const mergedRef = useMergedRef(inputRef, ref);
 
   const [uncontrolledHasValue, setUncontrolledHasValue] =
     useState(!!defaultValue);
@@ -87,7 +80,7 @@ const Search = ({
       >
         <Core
           {...props}
-          ref={setRefs}
+          ref={mergedRef}
           inputMode="search"
           type="search"
           enterKeyHint="search"
