@@ -7,6 +7,7 @@ const Header = ({ children, className, ...props }: Props) => {
     <header
       className={cn(
         'sticky top-0 z-50',
+        'bg-background',
         'flex h-16 w-full items-center px-5',
         className,
         //
