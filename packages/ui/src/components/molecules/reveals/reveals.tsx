@@ -27,14 +27,24 @@ const Reveals = ({
   cascade = CASCADE,
   duration = DURATION,
   delay = DELAY,
+  effect,
+  once,
+  viewport,
+  variants,
+  transition,
   ...props
 }: Props) => {
   const renderItems = (items: ItemProps[]) =>
     items.map((item, index) => (
       <Item
         key={index}
+        effect={effect}
         duration={duration}
         delay={delay + cascade * index}
+        once={once}
+        viewport={viewport}
+        variants={variants}
+        transition={transition}
         {...item}
         className={cn(
           item.className,
