@@ -1,5 +1,7 @@
 'use client';
 
+import { cloneElement, isValidElement } from 'react';
+
 import { Swiper as SwiperCore, SwiperProps } from 'swiper/react';
 import { SwiperModule, SwiperOptions } from 'swiper/types';
 
@@ -78,7 +80,16 @@ const Swiper = <T,>({
       style={{ ...initialStyle, ...style }}
       {...props}
     >
-      {data.map((item: T, i) => renderItem(item, i))}
+      {data.map((item: T, i) => {
+        const node = renderItem(item, i);
+        // Fall back to an index key only when the consumer's renderItem
+        // didn't already set one — cloning (rather than wrapping in a
+        // Fragment) keeps the returned element a direct child of
+        // SwiperCore, which swiper/react's slide detection relies on.
+        return isValidElement(node) && node.key == null
+          ? cloneElement(node, { key: i })
+          : node;
+      })}
     </SwiperCore>
   );
 };

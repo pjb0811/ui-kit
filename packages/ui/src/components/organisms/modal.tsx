@@ -72,6 +72,7 @@ type ContainerState = {
 };
 
 const containerStates = new Map<HTMLElement, ContainerState>();
+const modalRootElements = new WeakMap<HTMLElement, HTMLElement>();
 
 const getContainerState = (container: HTMLElement): ContainerState => {
   let state = containerStates.get(container);
@@ -84,24 +85,27 @@ const getContainerState = (container: HTMLElement): ContainerState => {
   return state;
 };
 
+// No `role`/`aria-modal` here — this element is only a mount point for the
+// imperative stack, not the dialog itself. Radix already renders its own
+// `role="dialog"`/`aria-modal="true"` on the actual `DialogContent` via
+// portal once a modal is open. Setting it here as well would (a) leave
+// `aria-modal="true"` on the page permanently, even with zero modals open,
+// hiding the rest of the document from screen readers, and (b) duplicate
+// Radix's own dialog role once one is open.
 const createModalRoot = (container?: HTMLElement) => {
   if (!isBrowser) {
     return null;
   }
 
   const targetContainer = container || document.body;
-  let rootEl = targetContainer.querySelector(
-    '#modal-root',
-  ) as HTMLElement | null;
+  let rootEl = modalRootElements.get(targetContainer);
 
   if (!rootEl) {
     rootEl = document.createElement('div');
-    rootEl.setAttribute('id', 'modal-root');
-    rootEl.setAttribute('role', 'dialog');
-    rootEl.setAttribute('aria-modal', 'true');
     rootEl.style.zIndex = '10000';
     rootEl.style.position = 'absolute';
     targetContainer.appendChild(rootEl);
+    modalRootElements.set(targetContainer, rootEl);
   }
 
   return rootEl;
@@ -116,6 +120,7 @@ const Modal = ({
   classNames,
   style,
   title,
+  content,
   footer,
   container,
   children,
@@ -173,7 +178,9 @@ const Modal = ({
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription className="hidden" />
         </DialogHeader>
-        <div className={cn('break-all', classNames?.body)}>{children}</div>
+        <div className={cn('break-all', classNames?.body)}>
+          {children ?? content}
+        </div>
         {footer !== null && (
           <DialogFooter
             className={cn('flex-row justify-end gap-x-2', classNames?.footer)}
@@ -285,7 +292,7 @@ const StaticModal = ({
         </p>
       }
       container={container}
-      onCancel={() => closeModal(onOk)}
+      onCancel={() => closeModal(onCancel)}
       {...props}
     >
       {content}
@@ -346,7 +353,11 @@ Modal.destroy = (id?: string) => {
       state.stack = [];
       state.update?.();
     });
-    modalRoots.forEach(root => root.unmount());
+    modalRoots.forEach((root, container) => {
+      root.unmount();
+      modalRootElements.get(container)?.remove();
+      modalRootElements.delete(container);
+    });
     modalRoots.clear();
     containerStates.clear();
     return;
@@ -364,6 +375,8 @@ Modal.destroy = (id?: string) => {
       modalRoots.get(container)?.unmount();
       modalRoots.delete(container);
       containerStates.delete(container);
+      modalRootElements.get(container)?.remove();
+      modalRootElements.delete(container);
     }
   });
 };

@@ -40,6 +40,7 @@ type ContainerState = {
 };
 
 const containerStates = new Map<HTMLElement, ContainerState>();
+const toastRootElements = new WeakMap<HTMLElement, HTMLElement>();
 
 const getContainerState = (container: HTMLElement): ContainerState => {
   let state = containerStates.get(container);
@@ -58,13 +59,10 @@ const createToastRoot = (container?: HTMLElement) => {
   }
 
   const targetContainer = container || document.body;
-  let rootEl = targetContainer.querySelector(
-    '#toast-root',
-  ) as HTMLElement | null;
+  let rootEl = toastRootElements.get(targetContainer);
 
   if (!rootEl) {
     rootEl = document.createElement('div');
-    rootEl.setAttribute('id', 'toast-root');
     rootEl.setAttribute('role', 'region');
     rootEl.setAttribute('aria-label', 'Notifications');
     rootEl.style.zIndex = '10000';
@@ -77,6 +75,7 @@ const createToastRoot = (container?: HTMLElement) => {
     rootEl.style.padding = '16px';
     rootEl.style.pointerEvents = 'none';
     targetContainer.appendChild(rootEl);
+    toastRootElements.set(targetContainer, rootEl);
   }
 
   return rootEl;
@@ -225,7 +224,11 @@ Toast.destroy = (id?: string) => {
       state.stack = [];
       state.update?.();
     });
-    toastRoots.forEach(root => root.unmount());
+    toastRoots.forEach((root, container) => {
+      root.unmount();
+      toastRootElements.get(container)?.remove();
+      toastRootElements.delete(container);
+    });
     toastRoots.clear();
     containerStates.clear();
     return;
@@ -243,6 +246,8 @@ Toast.destroy = (id?: string) => {
       toastRoots.get(container)?.unmount();
       toastRoots.delete(container);
       containerStates.delete(container);
+      toastRootElements.get(container)?.remove();
+      toastRootElements.delete(container);
     }
   });
 };
