@@ -1,5 +1,15 @@
 # @repo/ui
 
+## 3.5.0
+
+### Minor Changes
+
+- 9b629da: Update @jbpark/use-hooks to version 3.0.0 and rename `isIntersecting` to `isIntersecting` in the `useIntersectionObserver` hook.
+
+### Patch Changes
+
+- d7fab2d: Adopt more `@jbpark/use-hooks` 3.0.0 hooks: `useMergedRef` (BackTop/Search), `useFileDrop` + `useControllableState` (Upload), `useTimeout` (Toast — fixes a stale-closure bug in the auto-dismiss timer), `useEventListener` (Marquee Item). Also removes the unused `react-use` dependency.
+
 ## 3.4.0
 
 ### Minor Changes
