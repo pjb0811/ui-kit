@@ -58,6 +58,18 @@ interface Props {
 const Config = ({ theme = {}, className, children }: Props) => {
   const parent = useConfig();
 
+  // `theme` is typically a fresh inline object literal at the call site
+  // (and `parent.theme` inherits the same problem from its own Config
+  // ancestor), so depending on them directly meant mergedTheme/contextValue
+  // got a new identity on every render regardless of whether the actual
+  // values changed — every useConfig() consumer in the tree re-rendered on
+  // every render of whatever's above this Config, which for the common
+  // app-root usage is everything. Depend on a serialized key instead so
+  // the memo only invalidates when the content actually changes; these
+  // are small, string/boolean-only objects, so JSON.stringify is cheap.
+  const themeKey = JSON.stringify(theme);
+  const parentThemeKey = JSON.stringify(parent.theme);
+
   const mergedTheme = useMemo<ThemeConfig>(
     () => ({
       ...parent.theme,
@@ -67,7 +79,8 @@ const Config = ({ theme = {}, className, children }: Props) => {
         ...theme.token,
       },
     }),
-    [parent.theme, theme],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [parentThemeKey, themeKey],
   );
 
   const contextValue = useMemo(() => ({ theme: mergedTheme }), [mergedTheme]);
@@ -86,7 +99,20 @@ const Config = ({ theme = {}, className, children }: Props) => {
       {needsWrapper ? (
         <div
           className={cn(mergedTheme.dark && 'dark', className)}
-          style={hasCssVars ? cssVars : undefined}
+          style={{
+            ...(hasCssVars ? cssVars : undefined),
+            // Keeps this element out of the layout box tree — so it
+            // doesn't intercept flex/grid child relationships or break
+            // height chains like min-h-screen — while custom properties
+            // and the `dark` class selector still cascade to children
+            // normally (inheritance and box generation are separate
+            // mechanisms in CSS). Note this means className shouldn't be
+            // used here for anything that needs a real box (padding,
+            // background, borders); Config's className is meant for
+            // theming hooks (the `dark` class, arbitrary selector hooks),
+            // not layout.
+            display: 'contents',
+          }}
         >
           {children}
         </div>
