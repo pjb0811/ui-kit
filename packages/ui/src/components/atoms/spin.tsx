@@ -27,23 +27,25 @@ const Spin = ({ spinning, className, children, ...props }: Props) => {
     );
   }
 
-  // `className`/rest props always land on this one wrapper regardless of
-  // `spinning`, instead of applying to the icon in one branch and being
-  // dropped entirely in another.
+  // Idle: return children as-is rather than inserting a wrapper div, same
+  // policy Skeleton follows and for the same reason — a wrapper here could
+  // produce invalid markup (e.g. inside a <tr>/<li>) or break flex/grid
+  // child layout. className/props only ever describe the spinning overlay
+  // below, so there's nothing for them to apply to while idle.
+  if (!spinning) {
+    return children;
+  }
+
   return (
     <div className={cn('relative', className)} {...props}>
-      <div className={cn(spinning && 'pointer-events-none opacity-50')}>
-        {children}
+      <div className="pointer-events-none opacity-50">{children}</div>
+      <div
+        role="status"
+        aria-label="로딩 중"
+        className="absolute inset-0 flex items-center justify-center"
+      >
+        <Loader2 className="animate-spin" />
       </div>
-      {spinning && (
-        <div
-          role="status"
-          aria-label="로딩 중"
-          className="absolute inset-0 flex items-center justify-center"
-        >
-          <Loader2 className="animate-spin" />
-        </div>
-      )}
     </div>
   );
 };
