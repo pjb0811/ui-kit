@@ -196,8 +196,8 @@ importers:
         specifier: ^2.1.2
         version: 2.1.2(gsap@3.15.0)(react@19.2.3)
       '@jbpark/use-hooks':
-        specifier: ^2.11.0
-        version: 2.11.0(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+        specifier: ^3.0.0
+        version: 3.0.0(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       '@radix-ui/react-accordion':
         specifier: ^1.2.12
         version: 1.2.12(@types/react-dom@19.1.1(@types/react@19.1.0))(@types/react@19.1.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
@@ -880,8 +880,8 @@ packages:
     resolution: {integrity: sha512-O8jcjabXaleOG9DQ0+ARXWZBTfnP4WNAqzuiJK7ll44AmxGKv/J2M4TPjxjY3znBCfvBXFzucm1twdyFybFqEA==}
     engines: {node: '>=12'}
 
-  '@jbpark/use-hooks@2.11.0':
-    resolution: {integrity: sha512-9bqfkOqgxjcud0NB/i5hShGiCfihkNhc5fQD9yTjVnN/I+YEvsO646QVS/quP2E6B6ca8pBZ+l0fQwv1rIB0VA==}
+  '@jbpark/use-hooks@3.0.0':
+    resolution: {integrity: sha512-anqXEbjtzPgmUss2o6+AueEU7aMs0/5qGFUJScEuyLZ7auEP/PpkrFmwh287qa2/HLB+wHDjqJeQAAUKbiS49Q==}
     peerDependencies:
       react: ^19.1.1
       react-dom: ^19.1.1
@@ -5522,7 +5522,7 @@ snapshots:
       wrap-ansi: 8.1.0
       wrap-ansi-cjs: wrap-ansi@7.0.0
 
-  '@jbpark/use-hooks@2.11.0(react-dom@19.2.3(react@19.2.3))(react@19.2.3)':
+  '@jbpark/use-hooks@3.0.0(react-dom@19.2.3(react@19.2.3))(react@19.2.3)':
     dependencies:
       react: 19.2.3
       react-dom: 19.2.3(react@19.2.3)
