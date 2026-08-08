@@ -1,5 +1,12 @@
 # @repo/ui
 
+## 3.6.0
+
+### Minor Changes
+
+- fcec8af: Added support for multiple mask-less overlays opening at once, improved accessibility for modals and toasts, and fixed issues with list rendering and swiper slide detection.
+- 01f6f9c: Added support for customizing the appearance of skeleton elements with the `classNames` prop.
+
 ## 3.5.0
 
 ### Minor Changes
