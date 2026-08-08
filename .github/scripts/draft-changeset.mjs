@@ -1,9 +1,9 @@
 #!/usr/bin/env node
-// Drafts .changeset/pr-<number>[-<suffix>].md file(s) by asking an LLM
+// Drafts .changeset/<branch-slug>[-<suffix>].md file(s) by asking an LLM
 // to summarize this PR's diff to each tracked package as a semver
 // bump + one-paragraph description, in changesets' own file format. Runs
 // once per PR (the calling workflow skips this script entirely if any
-// changeset file for this PR already exists), so it never overwrites
+// changeset file for this branch already exists), so it never overwrites
 // something a human already wrote or edited. One file is written per
 // package that actually changed, since each needs its own bump + summary.
 //
@@ -17,8 +17,8 @@ const MODEL = process.env.NVIDIA_MODEL || 'meta/llama-3.1-8b-instruct';
 const API_URL = 'https://integrate.api.nvidia.com/v1/chat/completions';
 const MAX_DIFF_CHARS = 12000;
 
-// `fileSuffix: ''` for @repo/ui keeps its existing `pr-<number>.md`
-// filename unchanged, since that's the one publish.yml/release notes
+// `fileSuffix: ''` for @repo/ui keeps its filename as just the branch
+// slug (`<slug>.md`), since that's the one publish.yml/release notes
 // actually key off of.
 const PACKAGES = [
   {
@@ -95,7 +95,7 @@ function diffBetween(base, head, dir) {
   });
 }
 
-async function draftFor(pkg, { apiKey, baseSha, headSha, prNumber }) {
+async function draftFor(pkg, { apiKey, baseSha, headSha, branchSlug }) {
   let diff;
   try {
     diff = diffBetween(baseSha, headSha, pkg.dir);
@@ -190,7 +190,7 @@ async function draftFor(pkg, { apiKey, baseSha, headSha, prNumber }) {
     return;
   }
 
-  const filePath = `.changeset/pr-${prNumber}${pkg.fileSuffix}.md`;
+  const filePath = `.changeset/${branchSlug}${pkg.fileSuffix}.md`;
   const fileContent = [
     '---',
     `'${pkg.name}': ${result.bump}`,
@@ -208,10 +208,10 @@ async function main() {
   const apiKey = requireEnv('NVIDIA_API_KEY');
   const baseSha = requireEnv('BASE_SHA');
   const headSha = requireEnv('HEAD_SHA');
-  const prNumber = requireEnv('PR_NUMBER');
+  const branchSlug = requireEnv('BRANCH_SLUG');
 
   for (const pkg of PACKAGES) {
-    await draftFor(pkg, { apiKey, baseSha, headSha, prNumber });
+    await draftFor(pkg, { apiKey, baseSha, headSha, branchSlug });
   }
 }
 
