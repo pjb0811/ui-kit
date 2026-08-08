@@ -130,15 +130,11 @@ const List = <T,>({
       <div role="list" className={cn('space-y-2', classNames?.body)}>
         {!data?.length && empty
           ? empty
-          : data?.map((item, i) =>
-              itemKey ? (
-                <React.Fragment key={itemKey(item, i)}>
-                  {renderItem(item, i)}
-                </React.Fragment>
-              ) : (
-                renderItem(item, i)
-              ),
-            )}
+          : data?.map((item, i) => (
+              <React.Fragment key={itemKey ? itemKey(item, i) : i}>
+                {renderItem(item, i)}
+              </React.Fragment>
+            ))}
         {scroll?.loading &&
           (scroll?.loader ?? (
             <Skeleton.Node count={10} gap={10} {...loaderProps} />
