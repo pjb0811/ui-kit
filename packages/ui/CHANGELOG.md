@@ -1,5 +1,16 @@
 # @repo/ui
 
+## 3.7.0
+
+### Minor Changes
+
+- 55cd85c: Upload component now generates unique IDs for uploaded files to prevent key collisions when removing files.
+
+### Patch Changes
+
+- 8ec0f37: Fixed four Layout bugs: `Sider` wrapped in a Fragment or a custom component is now detected so the layout switches to a row correctly, `Header` now has a default background so scrolled content no longer shows through it, `Sider`'s z-index no longer outranks a sticky `Header`, and `Sider`'s `trigger={null}` now actually hides the built-in trigger icon.
+- 8ec0f37: `Config`'s wrapper element now uses `display: contents` so it no longer breaks flex/grid layouts or height chains in the wrapped subtree, and its theme memoization is now keyed off the serialized theme value instead of object identity, fixing unnecessary re-renders of every `useConfig()` consumer whenever an ancestor re-rendered.
+
 ## 3.6.0
 
 ### Minor Changes
