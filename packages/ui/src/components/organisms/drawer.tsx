@@ -65,6 +65,15 @@ const SIZES: Record<string, string> = {
   full: '90%',
 };
 
+// Rounds the edge facing into the viewport — the opposite edge from
+// whichever side the drawer is anchored to.
+const ROUNDED_CLASSES: Record<'top' | 'bottom' | 'left' | 'right', string> = {
+  top: 'rounded-b-[30px]!',
+  bottom: 'rounded-t-[30px]!',
+  left: 'rounded-r-[30px]!',
+  right: 'rounded-l-[30px]!',
+};
+
 const getSizeStyles = (
   direction: 'top' | 'bottom' | 'left' | 'right',
   size: string,
@@ -139,7 +148,7 @@ const Drawer = ({
       <DrawerContent
         className={cn(
           'border-none outline-none',
-          rounded ? 'rounded-t-[30px]!' : 'rounded-none!',
+          rounded ? ROUNDED_CLASSES[direction] : 'rounded-none!',
           classNames?.content,
           className,
           //
