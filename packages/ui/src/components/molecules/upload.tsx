@@ -8,6 +8,7 @@ import {
   useFileToDataUrl,
 } from '@jbpark/use-hooks';
 import { Upload as UploadIcon, X } from 'lucide-react';
+import { v4 as uuid } from 'uuid';
 
 import { cn } from '@repo/ui/utils';
 
@@ -33,6 +34,11 @@ export interface Props {
     item?: string;
   };
   onChange?: (files: UploadFile[]) => void;
+  /**
+   * Called once per file that didn't make it in — either bumped by
+   * `maxCount` or failed to read.
+   */
+  onReject?: (info: { file: File; reason: 'max-count' | 'read-error' }) => void;
 }
 
 const isImage = (file: UploadFile) =>
@@ -49,6 +55,7 @@ const Upload = ({
   className,
   classNames,
   onChange: _onChange = () => {},
+  onReject,
 }: Props) => {
   const inputId = useId();
   const readAsDataUrl = useFileToDataUrl();
@@ -65,14 +72,39 @@ const Upload = ({
         : incoming.length;
 
     const accepted = incoming.slice(0, remaining);
+    const rejected = incoming.slice(remaining);
 
-    const uploaded = await Promise.all(
-      accepted.map(async file => ({
-        uid: `${file.name}-${file.lastModified}-${file.size}`,
-        name: file.name,
-        url: await readAsDataUrl(file),
-      })),
-    );
+    rejected.forEach(file => onReject?.({ file, reason: 'max-count' }));
+
+    if (accepted.length === 0) {
+      return;
+    }
+
+    const uploaded = (
+      await Promise.all(
+        accepted.map(async file => {
+          try {
+            return {
+              // `uuid()` guarantees uniqueness even for the same file
+              // added twice (identical name/lastModified/size), which
+              // name+lastModified+size alone can't — a collision there
+              // corrupted React's item keys and made removeFile's
+              // uid-based filter delete both copies at once.
+              uid: `${file.name}-${file.lastModified}-${file.size}-${uuid()}`,
+              name: file.name,
+              url: await readAsDataUrl(file),
+            };
+          } catch {
+            onReject?.({ file, reason: 'read-error' });
+            return null;
+          }
+        }),
+      )
+    ).filter((file): file is UploadFile => file !== null);
+
+    if (uploaded.length === 0) {
+      return;
+    }
 
     setFiles([...files, ...uploaded]);
   };

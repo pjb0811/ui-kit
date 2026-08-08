@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from 'react';
 
 import { useGSAP } from '@gsap/react';
-import { useEventListener } from '@jbpark/use-hooks';
 import { gsap } from 'gsap';
 
 export interface ItemProps {
@@ -20,6 +19,15 @@ export interface Props
   width: string | number;
 }
 
+// `autoFill={true}` (the default on `Marquees`) needs *some* repeat count
+// before the item can be measured and the real count computed — this is
+// only ever visible for that one render, but rendering 100 copies (200
+// with the 2x loop duplication) up front was needlessly heavy for the
+// common case. A modest guess still avoids visible gaps for typical
+// item/container width ratios while cutting the worst-case default
+// render by ~90%.
+const INITIAL_AUTO_FILL_GUESS = 10;
+
 const Item = ({
   width: _width,
   speed = 100,
@@ -35,7 +43,11 @@ const Item = ({
   const [width, setWidth] = useState<string | number>(_width);
   const [pause, setPause] = useState(false);
   const [repeatCount, setRepeatCount] = useState(
-    autoFill ? (typeof autoFill === 'boolean' ? 100 : autoFill) : 0,
+    autoFill
+      ? typeof autoFill === 'boolean'
+        ? INITIAL_AUTO_FILL_GUESS
+        : autoFill
+      : 0,
   );
 
   const isPaused = _pause || pause;
@@ -130,21 +142,13 @@ const Item = ({
 
   useEffect(() => {
     setRepeatCount(
-      autoFill ? (typeof autoFill === 'boolean' ? 100 : autoFill) : 0,
+      autoFill
+        ? typeof autoFill === 'boolean'
+          ? INITIAL_AUTO_FILL_GUESS
+          : autoFill
+        : 0,
     );
   }, [autoFill]);
-
-  useEventListener('resize', () => {
-    if (!tweenRef.current || !containerRef.current) {
-      return;
-    }
-
-    if (isPaused) {
-      tweenRef.current.pause();
-    } else {
-      tweenRef.current.play();
-    }
-  });
 
   return (
     <div

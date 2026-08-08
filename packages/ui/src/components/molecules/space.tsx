@@ -55,7 +55,15 @@ const Space = ({
   const count = Children.count(children);
 
   if (loading) {
-    return <div className={cn(className)}>{loader || <Skeleton />}</div>;
+    return (
+      <div
+        className={cn(hidden && 'hidden', className)}
+        style={style}
+        {...props}
+      >
+        {loader || <Skeleton />}
+      </div>
+    );
   }
 
   return (
