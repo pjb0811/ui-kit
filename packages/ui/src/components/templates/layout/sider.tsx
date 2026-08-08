@@ -95,7 +95,7 @@ const Sider = ({
             //
           )}
         >
-          {trigger ?? <TriggerIcon className="size-4" />}
+          {trigger === undefined ? <TriggerIcon className="size-4" /> : trigger}
         </button>
       )}
     </aside>
