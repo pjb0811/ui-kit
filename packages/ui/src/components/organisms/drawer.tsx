@@ -18,13 +18,27 @@ const {
   DrawerTitle,
 } = drawer;
 
-// `document.body.style.pointerEvents` is global state, so several mask-less
-// overlays opening at once would otherwise race: each instance would capture
-// whatever the previous one had already written and the last cleanup would
-// restore a stale value. Reference counting makes only the first instance
-// capture the original value and only the last one restore it.
-let maskLessOverlayCount = 0;
-let originalBodyPointerEvents: string | null = null;
+// `body.style.pointerEvents` is global state (per document), so several
+// mask-less overlays opening at once would otherwise race: each instance
+// would capture whatever the previous one had already written and the
+// last cleanup would restore a stale value. Reference counting makes only
+// the first instance capture the original value and only the last one
+// restore it. Keyed by document (not a single module-level counter) so
+// drawers portaled into different documents — e.g. live-editor's iframe
+// Renderer — don't share state with the host document.
+type MaskLessState = { count: number; originalPointerEvents: string | null };
+const maskLessStates = new WeakMap<Document, MaskLessState>();
+
+const getMaskLessState = (doc: Document): MaskLessState => {
+  let state = maskLessStates.get(doc);
+
+  if (!state) {
+    state = { count: 0, originalPointerEvents: null };
+    maskLessStates.set(doc, state);
+  }
+
+  return state;
+};
 
 export interface Props {
   open: boolean;
@@ -112,25 +126,30 @@ const Drawer = ({
       return;
     }
 
-    if (maskLessOverlayCount === 0) {
-      originalBodyPointerEvents = document.body.style.pointerEvents;
-    }
-    maskLessOverlayCount += 1;
+    const targetDocument = container?.ownerDocument ?? document;
+    const targetWindow = targetDocument.defaultView ?? window;
+    const body = targetDocument.body;
+    const state = getMaskLessState(targetDocument);
 
-    const raf = window.requestAnimationFrame(() => {
-      document.body.style.pointerEvents = 'auto';
+    if (state.count === 0) {
+      state.originalPointerEvents = body.style.pointerEvents;
+    }
+    state.count += 1;
+
+    const raf = targetWindow.requestAnimationFrame(() => {
+      body.style.pointerEvents = 'auto';
     });
 
     return () => {
-      window.cancelAnimationFrame(raf);
-      maskLessOverlayCount -= 1;
+      targetWindow.cancelAnimationFrame(raf);
+      state.count -= 1;
 
-      if (maskLessOverlayCount === 0) {
-        document.body.style.pointerEvents = originalBodyPointerEvents ?? '';
-        originalBodyPointerEvents = null;
+      if (state.count === 0) {
+        body.style.pointerEvents = state.originalPointerEvents ?? '';
+        state.originalPointerEvents = null;
       }
     };
-  }, [open, mask]);
+  }, [open, mask, container]);
 
   return (
     <DrawerCore
