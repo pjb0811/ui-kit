@@ -66,7 +66,12 @@ const Sider = ({
   return (
     <aside
       className={cn(
-        'z-100 flex h-full shrink-0 flex-col overflow-hidden',
+        // Below Header's z-50 (and every other floating/overlay primitive
+        // in this library, which all use z-50) — Sider is a static layout
+        // column, not floating chrome, and previously outranked Header
+        // with an arbitrary z-100, covering it once Header stuck to the
+        // viewport top on scroll.
+        'z-10 flex h-full shrink-0 flex-col overflow-hidden',
         'transition-[width] duration-200',
         className,
         //
