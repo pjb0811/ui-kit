@@ -285,7 +285,7 @@ const StaticModal = ({
         </p>
       }
       container={container}
-      onCancel={() => closeModal(onOk)}
+      onCancel={() => closeModal(onCancel)}
       {...props}
     >
       {content}
