@@ -1,8 +1,7 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
-import { Root, createRoot } from 'react-dom/client';
 
 import {
   Check,
@@ -11,12 +10,16 @@ import {
   OctagonAlert,
   OctagonX,
 } from 'lucide-react';
-import { v4 as uuid } from 'uuid';
 
 import { dialog } from '@repo/ui/core';
 import { cn } from '@repo/ui/utils';
 
 import Button from '../atoms/button';
+import {
+  type ImperativeStack,
+  createImperativeStack,
+  isBrowser,
+} from './imperative-stack';
 
 const {
   Dialog,
@@ -62,54 +65,6 @@ interface StaticProps extends Props {
   icon?: React.ReactNode;
   container?: HTMLElement;
 }
-
-const isBrowser =
-  typeof window !== 'undefined' && typeof document !== 'undefined';
-
-type ContainerState = {
-  stack: StaticProps[];
-  update: (() => void) | null;
-};
-
-const containerStates = new Map<HTMLElement, ContainerState>();
-const modalRootElements = new WeakMap<HTMLElement, HTMLElement>();
-
-const getContainerState = (container: HTMLElement): ContainerState => {
-  let state = containerStates.get(container);
-
-  if (!state) {
-    state = { stack: [], update: null };
-    containerStates.set(container, state);
-  }
-
-  return state;
-};
-
-// No `role`/`aria-modal` here — this element is only a mount point for the
-// imperative stack, not the dialog itself. Radix already renders its own
-// `role="dialog"`/`aria-modal="true"` on the actual `DialogContent` via
-// portal once a modal is open. Setting it here as well would (a) leave
-// `aria-modal="true"` on the page permanently, even with zero modals open,
-// hiding the rest of the document from screen readers, and (b) duplicate
-// Radix's own dialog role once one is open.
-const createModalRoot = (container?: HTMLElement) => {
-  if (!isBrowser) {
-    return null;
-  }
-
-  const targetContainer = container || document.body;
-  let rootEl = modalRootElements.get(targetContainer);
-
-  if (!rootEl) {
-    rootEl = document.createElement('div');
-    rootEl.style.zIndex = '10000';
-    rootEl.style.position = 'absolute';
-    targetContainer.appendChild(rootEl);
-    modalRootElements.set(targetContainer, rootEl);
-  }
-
-  return rootEl;
-};
 
 const Modal = ({
   open = false,
@@ -209,25 +164,25 @@ const STATIC_ICONS = {
 };
 
 const StaticModal = ({
+  id,
   type,
   title,
   content,
   okText = 'OK',
   cancelText = 'Cancel',
-  id,
   container,
   icon,
   onOk,
   onCancel,
   ...props
-}: StaticProps) => {
+}: StaticProps & { id: string }): React.ReactPortal | null => {
   const [open, setOpen] = useState(true);
 
   const closeModal = (callback?: () => void) => {
     callback?.();
     setOpen(false);
     setTimeout(() => {
-      Modal.destroy(id);
+      modalStack.destroy(id);
     }, 200);
   };
 
@@ -297,101 +252,43 @@ const StaticModal = ({
     >
       {content}
     </Modal>,
-    createModalRoot(container)!,
+    modalStack.getRootElement(container)!,
   );
 };
 
-const ModalStackRenderer = ({ container }: { container: HTMLElement }) => {
-  const [, forceUpdate] = useState({});
-
-  useEffect(() => {
-    const state = getContainerState(container);
-    state.update = () => forceUpdate({});
-    return () => {
-      state.update = null;
-    };
-  }, [container]);
-
-  const { stack } = getContainerState(container);
-
-  return (
-    <>
-      {stack.map(({ id, ...props }) => (
-        <StaticModal key={id} id={id} {...props} />
-      ))}
-    </>
-  );
-};
-
-const modalRoots = new Map<HTMLElement, Root>();
-
-const renderModal = (props: StaticProps) => {
-  if (!isBrowser) {
-    return;
-  }
-
-  const targetContainer = props.container || document.body;
-  const rootElement = createModalRoot(targetContainer)!;
-
-  if (!modalRoots.has(targetContainer)) {
-    const root = createRoot(rootElement);
-    modalRoots.set(targetContainer, root);
-    root.render(<ModalStackRenderer container={targetContainer} />);
-  }
-
-  const state = getContainerState(targetContainer);
-  const id = props.id || uuid();
-  state.stack.push({ ...props, id });
-  state.update?.();
-
-  return id;
-};
-
-Modal.destroy = (id?: string) => {
-  if (!id) {
-    containerStates.forEach(state => {
-      state.stack = [];
-      state.update?.();
-    });
-    modalRoots.forEach((root, container) => {
-      root.unmount();
-      modalRootElements.get(container)?.remove();
-      modalRootElements.delete(container);
-    });
-    modalRoots.clear();
-    containerStates.clear();
-    return;
-  }
-
-  containerStates.forEach((state, container) => {
-    if (!state.stack.some(modal => modal.id === id)) {
-      return;
-    }
-
-    state.stack = state.stack.filter(modal => modal.id !== id);
-    state.update?.();
-
-    if (!state.stack.length) {
-      modalRoots.get(container)?.unmount();
-      modalRoots.delete(container);
-      containerStates.delete(container);
-      modalRootElements.get(container)?.remove();
-      modalRootElements.delete(container);
-    }
+// No `role`/`aria-modal` here — this element is only a mount point for the
+// imperative stack, not the dialog itself. Radix already renders its own
+// `role="dialog"`/`aria-modal="true"` on the actual `DialogContent` via
+// portal once a modal is open. Setting it here as well would (a) leave
+// `aria-modal="true"` on the page permanently, even with zero modals open,
+// hiding the rest of the document from screen readers, and (b) duplicate
+// Radix's own dialog role once one is open.
+const modalStack: ImperativeStack<StaticProps> =
+  createImperativeStack<StaticProps>({
+    createRootElement: () => {
+      const el = document.createElement('div');
+      el.style.zIndex = '10000';
+      el.style.position = 'absolute';
+      return el;
+    },
+    StackItem: StaticModal,
   });
-};
+
+Modal.destroy = modalStack.destroy;
 
 Modal.destroyAll = () => {
-  Modal.destroy();
+  modalStack.destroy();
 };
 
-Modal.info = (props: StaticProps) => renderModal({ type: 'info', ...props });
+Modal.info = (props: StaticProps) =>
+  modalStack.render({ type: 'info', ...props });
 Modal.success = (props: StaticProps) =>
-  renderModal({ type: 'success', ...props });
-Modal.error = (props: StaticProps) => renderModal({ type: 'error', ...props });
+  modalStack.render({ type: 'success', ...props });
+Modal.error = (props: StaticProps) =>
+  modalStack.render({ type: 'error', ...props });
 Modal.warning = (props: StaticProps) =>
-  renderModal({ type: 'warning', ...props });
+  modalStack.render({ type: 'warning', ...props });
 Modal.confirm = (props: StaticProps) =>
-  renderModal({ type: 'confirm', ...props });
+  modalStack.render({ type: 'confirm', ...props });
 
 export default Modal;
