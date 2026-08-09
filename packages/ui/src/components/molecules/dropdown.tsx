@@ -1,5 +1,7 @@
 'use client';
 
+import { useId, useRef } from 'react';
+
 import { useControllableState } from '@jbpark/use-hooks';
 import { AnimatePresence, motion } from 'motion/react';
 
@@ -11,7 +13,7 @@ type ChangeEventHandler = (open: boolean) => void;
 
 export interface Props extends React.ComponentPropsWithoutRef<'div'> {
   open?: boolean;
-  trigger?: string;
+  trigger?: 'hover' | 'click';
   menu?: MenuProps;
   onOpenChange?: ChangeEventHandler;
 }
@@ -34,12 +36,15 @@ const Dropdown = ({
   });
 
   const isClickTrigger = trigger === 'click';
+  const menuId = useId();
+  const containerRef = useRef<HTMLDivElement>(null);
 
   return (
     <div
       {...props}
+      ref={containerRef}
       className={cn(
-        'relative z-0',
+        'relative',
         'inline-block cursor-pointer',
         className,
         //
@@ -60,8 +65,11 @@ const Dropdown = ({
       }}
     >
       <div
+        role={isClickTrigger ? 'button' : undefined}
+        tabIndex={isClickTrigger ? 0 : undefined}
         aria-haspopup="menu"
         aria-expanded={open}
+        aria-controls={open ? menuId : undefined}
         onClick={() => {
           if (!isClickTrigger) {
             return;
@@ -74,12 +82,25 @@ const Dropdown = ({
           }
           onOpenChange(true);
         }}
-        onBlur={() => {
-          onOpenChange(false);
+        onBlur={e => {
+          // Without this check, moving focus from the trigger into the
+          // menu itself (e.g. via Tab) closed the dropdown before the
+          // user could ever reach it — the mouse path avoided the same
+          // bug only by way of onMouseDown's preventDefault below, which
+          // does nothing for keyboard focus. Mirrors the containment
+          // check menu/item/item.tsx already uses for the same reason.
+          if (!containerRef.current?.contains(e.relatedTarget as Node)) {
+            onOpenChange(false);
+          }
         }}
         onKeyDown={e => {
           if (e.key === 'Escape') {
             onOpenChange(false);
+            return;
+          }
+          if (isClickTrigger && (e.key === 'Enter' || e.key === ' ')) {
+            e.preventDefault();
+            onOpenChange(!open);
           }
         }}
       >
@@ -99,6 +120,7 @@ const Dropdown = ({
           >
             <Menu
               {...menu}
+              id={menuId}
               onMouseDown={e => {
                 e.preventDefault();
               }}
