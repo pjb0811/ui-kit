@@ -6,3 +6,5 @@ export type {
   HeaderProps,
   SiderProps,
 } from './layout';
+export { Row, Col } from './grid';
+export type { RowProps, ColProps } from './grid';
