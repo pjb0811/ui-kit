@@ -131,15 +131,18 @@ const List = <T,>({
         {!data?.length && empty
           ? empty
           : data?.map((item, i) => (
-              <React.Fragment key={itemKey ? itemKey(item, i) : i}>
+              <div role="listitem" key={itemKey ? itemKey(item, i) : i}>
                 {renderItem(item, i)}
-              </React.Fragment>
+              </div>
             ))}
-        {scroll?.loading &&
-          (scroll?.loader ?? (
-            <Skeleton.Node count={10} gap={10} {...loaderProps} />
-          ))}
-        {scroll && <div ref={loaderRef} />}
+        {scroll?.loading && (
+          <div role="presentation">
+            {scroll?.loader ?? (
+              <Skeleton.Node count={10} gap={10} {...loaderProps} />
+            )}
+          </div>
+        )}
+        {scroll && <div ref={loaderRef} role="none" />}
       </div>
     </div>
   );
