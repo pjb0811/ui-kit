@@ -1,0 +1,2 @@
+export { default, useConfig, DEFAULT_LOCALE } from './config';
+export type { Props, Locale, ThemeConfig, ThemeToken } from './config';

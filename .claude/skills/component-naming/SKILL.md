@@ -61,6 +61,7 @@ export type { Props };
 1. `packages/ui/src/components/{tier}/` 하위 컴포넌트명이 전부 kebab-case인지. 서브컴포넌트가 없는 컴포넌트는 폴더 없이 `{tier}/{kebab-case-name}.tsx` 파일로만 존재하므로 디렉토리와 파일명을 모두 감사해야 한다:
    - 디렉토리(조합 컴포넌트/서브컴포넌트): `find packages/ui/src/components -mindepth 2 -type d`로 PascalCase 잔존 여부 체크
    - 파일(flat 컴포넌트): `find packages/ui/src/components -mindepth 2 -maxdepth 2 -name '*.tsx' ! -name 'index.tsx'`로 flat 컴포넌트 파일명이 kebab-case인지 체크
+   - `src/providers/**`도 같은 기준으로 감사 대상이다 — 컴포넌트가 아니라는 이유로 범위에서 빠지기 쉽지만(2026-08-09에 `providers/Config/` → `providers/config/` 로 뒤늦게 전환한 사례 참고), 동일한 kebab-case 폴더/PascalCase export 규칙이 적용된다: `find src -mindepth 1 -type d | grep -E '/[A-Z]'`로 `src` 트리 전체에서 PascalCase 디렉토리가 남아있지 않은지 체크
 2. `apps/docs/stories/{tier}/` 하위 디렉토리명이 packages/ui의 컴포넌트명(파일이든 폴더든)과 kebab-case 기준으로 1:1 대응하는지 — stories는 컴포넌트 구조와 무관하게 항상 폴더 + `index.stories.tsx` 형태를 유지하므로, packages/ui 쪽이 flat 파일이어도 stories 쪽엔 여전히 폴더가 있다
 3. 각 컴포넌트 파일의 `export default`/`export type { Props }` 식별자가 PascalCase인지 (폴더/파일명과 별개로 유지돼야 함)
 4. 계층 `index.ts`의 재export 문에서 alias는 PascalCase, `from '...'` 경로는 kebab-case인지
