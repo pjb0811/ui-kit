@@ -1,10 +1,22 @@
+import { Slot } from '@radix-ui/react-slot';
+
 import { cn } from '@repo/ui/utils';
 
-export interface Props extends React.ComponentProps<'main'> {}
+export interface Props extends React.ComponentProps<'main'> {
+  asChild?: boolean;
+}
 
-const Content = ({ children, className, ...props }: Props) => {
+const Content = ({ children, className, asChild = false, ...props }: Props) => {
+  // Only one <main> landmark should exist per page — a Layout nested
+  // inside a page that already has its own <main> (or a Content nested
+  // inside another Content) needs a way to opt out of rendering a second
+  // one. asChild + Slot (same pattern as core/button.tsx and
+  // core/badge.tsx) merges these props/classes onto the caller's own
+  // element instead.
+  const Comp = asChild ? Slot : 'main';
+
   return (
-    <main
+    <Comp
       className={cn(
         'min-w-0 shrink grow basis-auto',
         // basis-auto (not basis-0) sizes Content from its actual content
@@ -21,7 +33,7 @@ const Content = ({ children, className, ...props }: Props) => {
       {...props}
     >
       {children}
-    </main>
+    </Comp>
   );
 };
 
