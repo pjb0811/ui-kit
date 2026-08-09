@@ -38,5 +38,8 @@ jobs:
       - name: Type check
         run: pnpm run check-types
 
+      - name: Check for dynamically-constructed Tailwind classes
+        run: pnpm run check-dynamic-classes
+
       - name: Build
         run: pnpm exec turbo run build

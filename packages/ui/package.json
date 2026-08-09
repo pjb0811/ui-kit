@@ -55,6 +55,7 @@
   "scripts": {
     "build": "tsdown",
     "lint": "eslint .",
+    "check-dynamic-classes": "node scripts/check-dynamic-tailwind-classes.mjs",
     "generate:component": "turbo gen react-component",
     "check-types": "tsc -b",
     "prepublishOnly": "node scripts/prepare-publish.mjs",
