@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useId, useState } from 'react';
 
 import { PanelLeftClose, PanelLeftOpen } from 'lucide-react';
 
@@ -9,7 +9,7 @@ import { cn } from '@repo/ui/utils';
 import { useRegisterSider } from './sider-context';
 
 export interface Props extends Omit<
-  React.ComponentPropsWithoutRef<'aside'>,
+  React.ComponentProps<'aside'>,
   'onCollapse'
 > {
   width?: number | string;
@@ -45,6 +45,7 @@ const Sider = ({
 }: Props) => {
   useRegisterSider();
 
+  const contentId = useId();
   const [uncontrolledCollapsed, setUncontrolledCollapsed] =
     useState(defaultCollapsed);
 
@@ -82,11 +83,15 @@ const Sider = ({
       }}
       {...props}
     >
-      <div className="min-h-0 flex-1 overflow-auto">{children}</div>
+      <div id={contentId} className="min-h-0 flex-1 overflow-auto">
+        {children}
+      </div>
       {collapsible && (
         <button
           type="button"
           aria-label={collapsed ? '펼치기' : '접기'}
+          aria-expanded={!collapsed}
+          aria-controls={contentId}
           onClick={onCollapse}
           className={cn(
             'flex w-full shrink-0 items-center justify-center py-2',

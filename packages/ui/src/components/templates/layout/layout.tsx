@@ -12,7 +12,7 @@ import { cn } from '@repo/ui/utils';
 import Sider from './sider';
 import { SiderRegistryContext } from './sider-context';
 
-export interface Props extends React.ComponentPropsWithoutRef<'div'> {}
+export interface Props extends React.ComponentProps<'div'> {}
 
 const LayoutNestedContext = createContext(false);
 
