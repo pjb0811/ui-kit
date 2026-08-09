@@ -10,7 +10,7 @@ import Menu, { MenuProps } from './menu';
 
 type ChangeEventHandler = (open: boolean) => void;
 
-interface Props extends React.ComponentPropsWithoutRef<'div'> {
+export interface Props extends React.ComponentPropsWithoutRef<'div'> {
   open?: boolean;
   trigger?: string;
   menu?: MenuProps;
