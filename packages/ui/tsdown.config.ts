@@ -16,6 +16,7 @@ export default defineConfig({
     Layout: 'src/components/templates/layout/index.ts',
     utils: 'src/lib/utils/index.ts',
     core: 'src/core/index.ts',
+    providers: 'src/providers/index.ts',
     style: 'src/globals.css',
   },
   outDir: 'dist',
