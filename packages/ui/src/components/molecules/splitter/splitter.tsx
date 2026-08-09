@@ -1,6 +1,6 @@
 'use client';
 
-import { Children, Fragment } from 'react';
+import { Children, Fragment, isValidElement } from 'react';
 
 import { resizable } from '@repo/ui/core';
 import { cn } from '@repo/ui/utils';
@@ -51,7 +51,9 @@ const Splitter = ({
       {...props}
     >
       {panels.map((panel, index) => (
-        <Fragment key={index}>
+        <Fragment
+          key={isValidElement(panel) && panel.key != null ? panel.key : index}
+        >
           {panel}
           {index < panels.length - 1 && (
             <ResizableHandle

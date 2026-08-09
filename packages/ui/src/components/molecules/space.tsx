@@ -4,7 +4,7 @@ import { cn } from '@repo/ui/utils';
 
 import Skeleton from '../atoms/skeleton';
 
-interface Props extends React.ComponentPropsWithRef<'div'> {
+export interface Props extends React.ComponentPropsWithRef<'div'> {
   loading?: boolean;
   loader?: React.ReactNode;
   orientation?: 'horizontal' | 'vertical';

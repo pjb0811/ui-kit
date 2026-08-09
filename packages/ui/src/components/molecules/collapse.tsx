@@ -15,7 +15,7 @@ interface Item {
   children: React.ReactNode;
 }
 
-interface Props extends Omit<
+export interface Props extends Omit<
   React.ComponentPropsWithoutRef<'div'>,
   'onChange' | 'defaultValue' | 'value' | 'dir'
 > {

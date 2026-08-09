@@ -1,6 +1,8 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
+
+import { useControllableState } from '@jbpark/use-hooks';
 
 import { cn } from '@repo/ui/utils';
 
@@ -26,14 +28,12 @@ export interface Props {
     subMenu?: string;
     item?: string;
     label?: string;
-    // open?: string;
   };
   styles?: {
     rootItem?: React.CSSProperties;
     subMenu?: React.CSSProperties;
     item?: React.CSSProperties;
     label?: React.CSSProperties;
-    // open?: React.CSSProperties;
   };
   onClick?: ClickEventHandler;
   onSelect?: ClickEventHandler;
@@ -115,14 +115,10 @@ const Menu = ({
   onSelect: _onSelect,
   ...props
 }: MenuProps) => {
-  const controlled = _selectedKeys !== undefined;
-  const [uncontrolledSelectedKeys, setUncontrolledSelectedKeys] = useState<
-    React.Key[]
-  >(defaultSelectedKeys ?? []);
-
-  const selectedKeys = controlled
-    ? (_selectedKeys as React.Key[])
-    : uncontrolledSelectedKeys;
+  const [selectedKeys, setSelectedKeys] = useControllableState<React.Key[]>({
+    value: _selectedKeys,
+    defaultValue: defaultSelectedKeys ?? [],
+  });
 
   const selectedKeysSet = useMemo(
     () => new Set<React.Key>(selectedKeys ?? []),
@@ -140,9 +136,7 @@ const Menu = ({
     keyPath: React.Key[];
     item: MenuItem;
   }) => {
-    if (!controlled) {
-      setUncontrolledSelectedKeys([params.key]);
-    }
+    setSelectedKeys([params.key]);
     _onSelect?.(params);
   };
 
@@ -156,14 +150,14 @@ const Menu = ({
       )}
       {...props}
     >
-      {items?.map(item => (
+      {items?.map((item, index) => (
         <Item
           root
           {...item}
           key={item.key}
           itemKey={item.key}
           keyPath={[item.key]}
-          selectedKeys={selectedKeys}
+          index={index}
           selectionMap={selectionMap}
           mode={mode}
           classNames={classNames}
