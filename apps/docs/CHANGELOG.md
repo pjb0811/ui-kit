@@ -1,5 +1,24 @@
 # docs
 
+## 0.2.8
+
+### Patch Changes
+
+- Updated dependencies [5595db9]
+- Updated dependencies [7bbf8d3]
+- Updated dependencies [7efd0ec]
+- Updated dependencies [91dec7d]
+- Updated dependencies [f912e4a]
+- Updated dependencies [69cf10f]
+- Updated dependencies [6219b09]
+- Updated dependencies [51e0dde]
+- Updated dependencies [4c7f653]
+- Updated dependencies [83c519c]
+- Updated dependencies [52aa0e9]
+- Updated dependencies [7dd9da6]
+- Updated dependencies [2d033c4]
+  - @repo/ui@4.0.0
+
 ## 0.2.7
 
 ### Patch Changes
