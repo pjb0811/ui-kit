@@ -58,7 +58,6 @@ const Item = ({
   mode,
   label,
   children,
-  selectedKeys = [],
   selectionMap,
   classNames,
   styles,
@@ -250,7 +249,6 @@ const Item = ({
                   keyPath={[...keyPath, child.key]}
                   selectionMap={selectionMap}
                   mode={mode}
-                  selectedKeys={selectedKeys}
                   classNames={classNames}
                   styles={styles}
                   offset={offset}

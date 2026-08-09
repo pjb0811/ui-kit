@@ -26,14 +26,12 @@ export interface Props {
     subMenu?: string;
     item?: string;
     label?: string;
-    // open?: string;
   };
   styles?: {
     rootItem?: React.CSSProperties;
     subMenu?: React.CSSProperties;
     item?: React.CSSProperties;
     label?: React.CSSProperties;
-    // open?: React.CSSProperties;
   };
   onClick?: ClickEventHandler;
   onSelect?: ClickEventHandler;
@@ -163,7 +161,6 @@ const Menu = ({
           key={item.key}
           itemKey={item.key}
           keyPath={[item.key]}
-          selectedKeys={selectedKeys}
           selectionMap={selectionMap}
           mode={mode}
           classNames={classNames}
