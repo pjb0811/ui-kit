@@ -100,7 +100,7 @@ const Toast = ({
 }: Props) => {
   return (
     <div
-      role="status"
+      role={type === 'error' ? 'alert' : 'status'}
       className={cn(
         'pointer-events-auto flex w-80 items-start gap-3 rounded-lg',
         'bg-background text-foreground border p-4 shadow-lg',
@@ -153,7 +153,7 @@ const StaticToast = ({
     }, 200);
   };
 
-  useTimeout(close, duration || null);
+  const { reset, clear } = useTimeout(close, duration || null);
 
   if (!isBrowser) {
     return null;
@@ -165,6 +165,14 @@ const StaticToast = ({
         'transition-all duration-200',
         visible ? 'opacity-100' : 'translate-x-2 opacity-0',
       )}
+      // Without this, a toast with a closable/action button (or one the
+      // user is mid-read on) could auto-dismiss itself out from under
+      // them — hovering or focusing anything inside pauses the timer,
+      // moving away restarts it from the full duration.
+      onMouseEnter={clear}
+      onMouseLeave={reset}
+      onFocus={clear}
+      onBlur={reset}
     >
       <Toast {...props} onClose={close} />
     </div>,
