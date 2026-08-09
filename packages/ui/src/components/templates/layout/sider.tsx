@@ -1,7 +1,8 @@
 'use client';
 
-import { useId, useState } from 'react';
+import { useId } from 'react';
 
+import { useControllableState } from '@jbpark/use-hooks';
 import { PanelLeftClose, PanelLeftOpen } from 'lucide-react';
 
 import { cn } from '@repo/ui/utils';
@@ -40,25 +41,20 @@ const Sider = ({
   collapsed: _collapsed,
   reverseArrow = false,
   trigger,
-  onCollapse: _onCollapse = () => {},
+  onCollapse,
   ...props
 }: Props) => {
   useRegisterSider();
 
   const contentId = useId();
-  const [uncontrolledCollapsed, setUncontrolledCollapsed] =
-    useState(defaultCollapsed);
+  const [collapsed, setCollapsed] = useControllableState<boolean>({
+    value: _collapsed,
+    defaultValue: defaultCollapsed,
+    onChange: onCollapse,
+  });
 
-  const controlled = _collapsed !== undefined;
-  const collapsed = controlled ? _collapsed : uncontrolledCollapsed;
-
-  const onCollapse = () => {
-    const next = !collapsed;
-
-    if (!controlled) {
-      setUncontrolledCollapsed(next);
-    }
-    _onCollapse(next);
+  const onTriggerClick = () => {
+    setCollapsed(!collapsed);
   };
 
   const TriggerIcon =
@@ -92,7 +88,7 @@ const Sider = ({
           aria-label={collapsed ? '펼치기' : '접기'}
           aria-expanded={!collapsed}
           aria-controls={contentId}
-          onClick={onCollapse}
+          onClick={onTriggerClick}
           className={cn(
             'flex w-full shrink-0 items-center justify-center py-2',
             'cursor-pointer transition-colors hover:bg-black/5',
