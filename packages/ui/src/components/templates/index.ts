@@ -6,3 +6,5 @@ export type {
   HeaderProps,
   SiderProps,
 } from './layout';
+export { default as Empty } from './empty';
+export type { Props as EmptyProps } from './empty';
