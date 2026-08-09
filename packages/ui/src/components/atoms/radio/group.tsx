@@ -14,6 +14,7 @@ import {
   type OptionValue,
   type Options,
   normalizeOptions,
+  warnOnDuplicateOptionValues,
 } from '../option-group';
 import { RadioGroupContext } from './context';
 import Radio from './radio';
@@ -64,6 +65,7 @@ const RadioGroup = ({
   });
 
   const options: Option[] = normalizeOptions(_options);
+  warnOnDuplicateOptionValues(options, 'Radio.Group');
 
   const isButton = optionType === 'button';
 
@@ -107,7 +109,7 @@ const RadioGroup = ({
 
         return (
           <li
-            key={String(item.value)}
+            key={`${index}-${String(item.value)}`}
             className={cn('flex', classNames?.wrapper)}
           >
             {isButton ? (

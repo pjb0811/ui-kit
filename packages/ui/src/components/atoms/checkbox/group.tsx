@@ -10,6 +10,7 @@ import {
   type OptionValue,
   type Options,
   normalizeOptions,
+  warnOnDuplicateOptionValues,
 } from '../option-group';
 import Checkbox from './checkbox';
 
@@ -51,6 +52,7 @@ const Group = ({
   });
 
   const options: Option[] = normalizeOptions(_options);
+  warnOnDuplicateOptionValues(options, 'Checkbox.Group');
 
   const onChange = (checked: boolean, optionValue: OptionValue) => {
     const nextValue = checked
@@ -68,12 +70,12 @@ const Group = ({
         className,
       )}
     >
-      {options.map((item: Option) => {
+      {options.map((item: Option, index) => {
         const checked = value.includes(item.value);
 
         return (
           <li
-            key={String(item.value)}
+            key={`${index}-${String(item.value)}`}
             className={cn('flex', classNames?.wrapper)}
           >
             <Checkbox
