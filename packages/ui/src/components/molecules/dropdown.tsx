@@ -1,7 +1,6 @@
 'use client';
 
-import { useState } from 'react';
-
+import { useControllableState } from '@jbpark/use-hooks';
 import { AnimatePresence, motion } from 'motion/react';
 
 import { cn } from '@repo/ui/utils';
@@ -28,19 +27,13 @@ const Dropdown = ({
   onMouseLeave,
   ...props
 }: Props) => {
-  const [uncontrolledOpen, setUncontrolledOpen] = useState<boolean>(false);
-
-  const controlled = _open !== undefined;
-  const open = controlled ? _open : uncontrolledOpen;
+  const [open, onOpenChange] = useControllableState<boolean>({
+    value: _open,
+    defaultValue: false,
+    onChange: _onOpenChange,
+  });
 
   const isClickTrigger = trigger === 'click';
-
-  const onOpenChange = (nextOpen: boolean) => {
-    if (!controlled) {
-      setUncontrolledOpen(nextOpen);
-    }
-    _onOpenChange(nextOpen);
-  };
 
   return (
     <div

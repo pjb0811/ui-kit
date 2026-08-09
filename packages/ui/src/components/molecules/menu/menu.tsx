@@ -1,6 +1,8 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
+
+import { useControllableState } from '@jbpark/use-hooks';
 
 import { cn } from '@repo/ui/utils';
 
@@ -113,14 +115,10 @@ const Menu = ({
   onSelect: _onSelect,
   ...props
 }: MenuProps) => {
-  const controlled = _selectedKeys !== undefined;
-  const [uncontrolledSelectedKeys, setUncontrolledSelectedKeys] = useState<
-    React.Key[]
-  >(defaultSelectedKeys ?? []);
-
-  const selectedKeys = controlled
-    ? (_selectedKeys as React.Key[])
-    : uncontrolledSelectedKeys;
+  const [selectedKeys, setSelectedKeys] = useControllableState<React.Key[]>({
+    value: _selectedKeys,
+    defaultValue: defaultSelectedKeys ?? [],
+  });
 
   const selectedKeysSet = useMemo(
     () => new Set<React.Key>(selectedKeys ?? []),
@@ -138,9 +136,7 @@ const Menu = ({
     keyPath: React.Key[];
     item: MenuItem;
   }) => {
-    if (!controlled) {
-      setUncontrolledSelectedKeys([params.key]);
-    }
+    setSelectedKeys([params.key]);
     _onSelect?.(params);
   };
 
