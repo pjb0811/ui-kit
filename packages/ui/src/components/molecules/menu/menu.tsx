@@ -150,13 +150,14 @@ const Menu = ({
       )}
       {...props}
     >
-      {items?.map(item => (
+      {items?.map((item, index) => (
         <Item
           root
           {...item}
           key={item.key}
           itemKey={item.key}
           keyPath={[item.key]}
+          index={index}
           selectionMap={selectionMap}
           mode={mode}
           classNames={classNames}

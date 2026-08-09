@@ -14,6 +14,7 @@ interface ItemProps extends Props, MenuItem {
   itemKey: React.Key;
   keyPath: React.Key[];
   root?: boolean;
+  index: number;
 }
 const OFFSET: [number, number] = [8, 8];
 const INLINE_OFFSET = 16;
@@ -55,6 +56,7 @@ const Item = ({
   itemKey,
   keyPath,
   root = false,
+  index,
   mode,
   label,
   children,
@@ -114,6 +116,46 @@ const Item = ({
     }
   };
 
+  // Roving tabindex (WAI-ARIA menu pattern): only the first item in each
+  // menu/submenu level is a Tab stop (below); arrow keys move real DOM
+  // focus between sibling <li>s within that same level, which is what
+  // ends up mattering for actual keyboard use even though — unlike a
+  // fully state-tracked implementation — focus resets to the first item
+  // if the user Tabs out and back in rather than resuming where they left
+  // off.
+  const handleKeyDown = (domEvent: React.KeyboardEvent) => {
+    if (domEvent.key === 'Enter' || domEvent.key === ' ') {
+      domEvent.preventDefault();
+      handleSelect(domEvent);
+      return;
+    }
+
+    if (domEvent.key === 'Escape') {
+      if (children?.length && open) {
+        domEvent.stopPropagation();
+        setOpen(false);
+      }
+      return;
+    }
+
+    const isNext = isHorizontal
+      ? domEvent.key === 'ArrowRight'
+      : domEvent.key === 'ArrowDown';
+    const isPrev = isHorizontal
+      ? domEvent.key === 'ArrowLeft'
+      : domEvent.key === 'ArrowUp';
+
+    if (!isNext && !isPrev) {
+      return;
+    }
+
+    domEvent.preventDefault();
+    const sibling = isNext
+      ? itemRef.current?.nextElementSibling
+      : itemRef.current?.previousElementSibling;
+    sibling?.querySelector<HTMLElement>('[role="menuitem"]')?.focus();
+  };
+
   const childrenContainerClassNames = cn(
     isInline ? 'relative overflow-hidden' : 'absolute min-w-[200px]',
     !isInline && root && isHorizontal
@@ -138,6 +180,7 @@ const Item = ({
   return (
     <li
       ref={itemRef}
+      role="none"
       className={cn(
         'group',
         'relative',
@@ -172,10 +215,10 @@ const Item = ({
     >
       <div
         role="menuitem"
-        tabIndex={0}
+        tabIndex={index === 0 ? 0 : -1}
         aria-expanded={children?.length ? open : undefined}
         aria-haspopup={children?.length ? 'menu' : undefined}
-        aria-selected={selected}
+        aria-current={selected ? true : undefined}
         className={cn(
           itemClassNames,
           ...(selected
@@ -189,12 +232,7 @@ const Item = ({
         )}
         style={root ? styles?.rootItem : styles?.item}
         onClick={handleSelect}
-        onKeyDown={e => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            handleSelect(e);
-          }
-        }}
+        onKeyDown={handleKeyDown}
       >
         <div
           className={cn(
@@ -233,6 +271,7 @@ const Item = ({
             transition={{ duration: 0.2 }}
           >
             <ul
+              role="menu"
               className={cn(
                 MENU_CLASSNAMES,
                 isInline && 'shadow-none',
@@ -241,12 +280,13 @@ const Item = ({
               )}
               style={styles?.subMenu}
             >
-              {children.map(child => (
+              {children.map((child, childIndex) => (
                 <Item
                   {...child}
                   key={child.key}
                   itemKey={child.key}
                   keyPath={[...keyPath, child.key]}
+                  index={childIndex}
                   selectionMap={selectionMap}
                   mode={mode}
                   classNames={classNames}
