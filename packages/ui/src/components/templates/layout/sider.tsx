@@ -5,6 +5,7 @@ import { useId, useLayoutEffect } from 'react';
 import { useControllableState, useResponsiveSize } from '@jbpark/use-hooks';
 import { PanelLeftClose, PanelLeftOpen } from 'lucide-react';
 
+import { DEFAULT_LOCALE, useConfig } from '@repo/ui/providers';
 import { cn } from '@repo/ui/utils';
 
 import { useRegisterSider } from './sider-context';
@@ -60,6 +61,7 @@ const Sider = ({
 }: Props) => {
   useRegisterSider();
 
+  const { locale } = useConfig();
   const contentId = useId();
   const [collapsed, setCollapsed] = useControllableState<boolean>({
     value: _collapsed,
@@ -127,7 +129,11 @@ const Sider = ({
       {collapsible && (
         <button
           type="button"
-          aria-label={collapsed ? '펼치기' : '접기'}
+          aria-label={
+            collapsed
+              ? (locale.expand ?? DEFAULT_LOCALE.expand)
+              : (locale.collapse ?? DEFAULT_LOCALE.collapse)
+          }
           aria-expanded={!collapsed}
           aria-controls={contentId}
           onClick={onTriggerClick}

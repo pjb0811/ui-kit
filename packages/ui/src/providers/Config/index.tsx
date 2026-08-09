@@ -4,8 +4,8 @@ import { useMemo } from 'react';
 
 import { cn } from '@repo/ui/utils';
 
-import { Context, useConfig } from './context';
-import type { ThemeConfig, ThemeToken } from './types';
+import { Context, DEFAULT_LOCALE, useConfig } from './context';
+import type { Locale, ThemeConfig, ThemeToken } from './types';
 
 const tokenToCssVar: Record<keyof ThemeToken, string> = {
   colorPrimary: '--primary',
@@ -51,11 +51,12 @@ const buildCssVars = (token?: ThemeToken): React.CSSProperties => {
 
 interface Props {
   theme?: ThemeConfig;
+  locale?: Locale;
   className?: string;
   children: React.ReactNode;
 }
 
-const Config = ({ theme = {}, className, children }: Props) => {
+const Config = ({ theme = {}, locale = {}, className, children }: Props) => {
   const parent = useConfig();
 
   // `theme` is typically a fresh inline object literal at the call site
@@ -69,6 +70,8 @@ const Config = ({ theme = {}, className, children }: Props) => {
   // are small, string/boolean-only objects, so JSON.stringify is cheap.
   const themeKey = JSON.stringify(theme);
   const parentThemeKey = JSON.stringify(parent.theme);
+  const localeKey = JSON.stringify(locale);
+  const parentLocaleKey = JSON.stringify(parent.locale);
 
   const mergedTheme = useMemo<ThemeConfig>(
     () => ({
@@ -83,7 +86,19 @@ const Config = ({ theme = {}, className, children }: Props) => {
     [parentThemeKey, themeKey],
   );
 
-  const contextValue = useMemo(() => ({ theme: mergedTheme }), [mergedTheme]);
+  const mergedLocale = useMemo<Locale>(
+    () => ({
+      ...parent.locale,
+      ...locale,
+    }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [parentLocaleKey, localeKey],
+  );
+
+  const contextValue = useMemo(
+    () => ({ theme: mergedTheme, locale: mergedLocale }),
+    [mergedTheme, mergedLocale],
+  );
 
   const cssVars = useMemo(
     () => buildCssVars(mergedTheme.token),
@@ -124,5 +139,5 @@ const Config = ({ theme = {}, className, children }: Props) => {
 };
 
 export default Config;
-export { useConfig };
-export type { Props, ThemeConfig, ThemeToken };
+export { useConfig, DEFAULT_LOCALE };
+export type { Props, Locale, ThemeConfig, ThemeToken };
