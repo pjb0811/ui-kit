@@ -1,5 +1,16 @@
 # @repo/ui
 
+## 3.8.0
+
+### Minor Changes
+
+- 3b8fcef: Add a new feature to check for dynamically-constructed class strings in cn() calls, and warn when duplicate option values are found in Radio.Group and Checkbox.Group components.
+- 92f2db3: New backward-compatible features and exports have been added to the UI component library.
+
+### Patch Changes
+
+- e32b2cb: **Migration note for 3.4.0:** `Button`'s `htmlType` now defaults to `'button'` instead of the browser's native default of `'submit'`. This was shipped in 3.4.0 without a migration note — if your `<Button>` was relying on the old implicit-submit behavior inside a `<form>` (i.e. you never passed `type`/`onClick` and expected clicking it to submit the form), add `htmlType="submit"` explicitly to restore that behavior.
+
 ## 3.7.0
 
 ### Minor Changes
