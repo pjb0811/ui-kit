@@ -8,3 +8,4 @@ const List = ListImpl as ListComponent;
 List.Item = Item;
 
 export default List;
+export type { Props as ListProps } from './list';

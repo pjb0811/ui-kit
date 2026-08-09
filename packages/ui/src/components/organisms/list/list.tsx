@@ -9,7 +9,7 @@ import { cn, renderConditional } from '@repo/ui/utils';
 import Skeleton from '../../atoms/skeleton';
 import { Title } from '../../atoms/typography';
 
-interface Props<T> extends Omit<
+export interface Props<T> extends Omit<
   React.ComponentPropsWithoutRef<'div'>,
   'title'
 > {
@@ -92,17 +92,19 @@ const List = <T,>({
 
   if (loading) {
     return (
-      loader || (
-        <div className={cn(className)} {...props}>
-          <div className={cn(classNames?.title)}>{title && <Skeleton />}</div>
-          <div className={cn(classNames?.header)}>
-            {header && <Skeleton size="small" />}
-          </div>
-          <div className={cn('space-y-2', classNames?.body)}>
-            <Skeleton.Node count={10} gap={10} {...loaderProps} />
-          </div>
-        </div>
-      )
+      <div className={cn(className)} {...props}>
+        {loader ?? (
+          <>
+            <div className={cn(classNames?.title)}>{title && <Skeleton />}</div>
+            <div className={cn(classNames?.header)}>
+              {header && <Skeleton size="small" />}
+            </div>
+            <div className={cn('space-y-2', classNames?.body)}>
+              <Skeleton.Node count={10} gap={10} {...loaderProps} />
+            </div>
+          </>
+        )}
+      </div>
     );
   }
 

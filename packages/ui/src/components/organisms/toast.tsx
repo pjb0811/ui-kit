@@ -1,16 +1,19 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { createPortal } from 'react-dom';
-import { Root, createRoot } from 'react-dom/client';
 
 import { useTimeout } from '@jbpark/use-hooks';
 import { Check, Info, OctagonAlert, OctagonX, X } from 'lucide-react';
-import { v4 as uuid } from 'uuid';
 
 import { cn } from '@repo/ui/utils';
 
 import Button from '../atoms/button';
+import {
+  type ImperativeStack,
+  createImperativeStack,
+  isBrowser,
+} from './imperative-stack';
 
 type ToastType = 'info' | 'success' | 'error' | 'warning';
 
@@ -30,56 +33,6 @@ interface StaticProps extends Props {
   duration?: number;
   container?: HTMLElement;
 }
-
-const isBrowser =
-  typeof window !== 'undefined' && typeof document !== 'undefined';
-
-type ContainerState = {
-  stack: StaticProps[];
-  update: (() => void) | null;
-};
-
-const containerStates = new Map<HTMLElement, ContainerState>();
-const toastRootElements = new WeakMap<HTMLElement, HTMLElement>();
-
-const getContainerState = (container: HTMLElement): ContainerState => {
-  let state = containerStates.get(container);
-
-  if (!state) {
-    state = { stack: [], update: null };
-    containerStates.set(container, state);
-  }
-
-  return state;
-};
-
-const createToastRoot = (container?: HTMLElement) => {
-  if (!isBrowser) {
-    return null;
-  }
-
-  const targetContainer = container || document.body;
-  let rootEl = toastRootElements.get(targetContainer);
-
-  if (!rootEl) {
-    rootEl = document.createElement('div');
-    rootEl.setAttribute('role', 'region');
-    rootEl.setAttribute('aria-label', 'Notifications');
-    rootEl.style.zIndex = '10000';
-    rootEl.style.position = 'fixed';
-    rootEl.style.right = '0';
-    rootEl.style.bottom = '0';
-    rootEl.style.display = 'flex';
-    rootEl.style.flexDirection = 'column-reverse';
-    rootEl.style.gap = '8px';
-    rootEl.style.padding = '16px';
-    rootEl.style.pointerEvents = 'none';
-    targetContainer.appendChild(rootEl);
-    toastRootElements.set(targetContainer, rootEl);
-  }
-
-  return rootEl;
-};
 
 const TYPE_ICONS: Record<ToastType, React.ReactNode> = {
   info: <Info className="text-blue-400" />,
@@ -142,14 +95,14 @@ const StaticToast = ({
   container,
   onClose,
   ...props
-}: StaticProps) => {
+}: StaticProps & { id: string }): React.ReactPortal | null => {
   const [visible, setVisible] = useState(true);
 
   const close = () => {
     onClose?.();
     setVisible(false);
     setTimeout(() => {
-      Toast.destroy(id);
+      toastStack.destroy(id);
     }, 200);
   };
 
@@ -176,104 +129,46 @@ const StaticToast = ({
     >
       <Toast {...props} onClose={close} />
     </div>,
-    createToastRoot(container)!,
+    toastStack.getRootElement(container)!,
   );
 };
 
-const ToastStackRenderer = ({ container }: { container: HTMLElement }) => {
-  const [, forceUpdate] = useState({});
-
-  useEffect(() => {
-    const state = getContainerState(container);
-    state.update = () => forceUpdate({});
-    return () => {
-      state.update = null;
-    };
-  }, [container]);
-
-  const { stack } = getContainerState(container);
-
-  return (
-    <>
-      {stack.map(({ id, ...props }) => (
-        <StaticToast key={id} id={id} {...props} />
-      ))}
-    </>
-  );
-};
-
-const toastRoots = new Map<HTMLElement, Root>();
-
-const renderToast = (props: StaticProps) => {
-  if (!isBrowser) {
-    return;
-  }
-
-  const targetContainer = props.container || document.body;
-  const rootElement = createToastRoot(targetContainer)!;
-
-  if (!toastRoots.has(targetContainer)) {
-    const root = createRoot(rootElement);
-    toastRoots.set(targetContainer, root);
-    root.render(<ToastStackRenderer container={targetContainer} />);
-  }
-
-  const state = getContainerState(targetContainer);
-  const id = props.id || uuid();
-  state.stack.push({ ...props, id });
-  state.update?.();
-
-  return id;
-};
-
-Toast.destroy = (id?: string) => {
-  if (!id) {
-    containerStates.forEach(state => {
-      state.stack = [];
-      state.update?.();
-    });
-    toastRoots.forEach((root, container) => {
-      root.unmount();
-      toastRootElements.get(container)?.remove();
-      toastRootElements.delete(container);
-    });
-    toastRoots.clear();
-    containerStates.clear();
-    return;
-  }
-
-  containerStates.forEach((state, container) => {
-    if (!state.stack.some(toast => toast.id === id)) {
-      return;
-    }
-
-    state.stack = state.stack.filter(toast => toast.id !== id);
-    state.update?.();
-
-    if (!state.stack.length) {
-      toastRoots.get(container)?.unmount();
-      toastRoots.delete(container);
-      containerStates.delete(container);
-      toastRootElements.get(container)?.remove();
-      toastRootElements.delete(container);
-    }
+const toastStack: ImperativeStack<StaticProps> =
+  createImperativeStack<StaticProps>({
+    createRootElement: () => {
+      const el = document.createElement('div');
+      el.setAttribute('role', 'region');
+      el.setAttribute('aria-label', 'Notifications');
+      el.style.zIndex = '10000';
+      el.style.position = 'fixed';
+      el.style.right = '0';
+      el.style.bottom = '0';
+      el.style.display = 'flex';
+      el.style.flexDirection = 'column-reverse';
+      el.style.gap = '8px';
+      el.style.padding = '16px';
+      el.style.pointerEvents = 'none';
+      return el;
+    },
+    StackItem: StaticToast,
   });
-};
+
+Toast.destroy = toastStack.destroy;
 
 Toast.destroyAll = () => {
-  Toast.destroy();
+  toastStack.destroy();
 };
 
 type TriggerOptions = Omit<StaticProps, 'type' | 'title'>;
 
 Toast.info = (title: React.ReactNode, props?: TriggerOptions) =>
-  renderToast({ type: 'info', title, ...props });
+  toastStack.render({ type: 'info', title, ...props });
 Toast.success = (title: React.ReactNode, props?: TriggerOptions) =>
-  renderToast({ type: 'success', title, ...props });
+  toastStack.render({ type: 'success', title, ...props });
 Toast.error = (title: React.ReactNode, props?: TriggerOptions) =>
-  renderToast({ type: 'error', title, ...props });
+  toastStack.render({ type: 'error', title, ...props });
 Toast.warning = (title: React.ReactNode, props?: TriggerOptions) =>
-  renderToast({ type: 'warning', title, ...props });
+  toastStack.render({ type: 'warning', title, ...props });
 
 export default Toast;
 export type { StaticProps as ToastOptions };
