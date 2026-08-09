@@ -1,13 +1,21 @@
 'use client';
 
-import { useId } from 'react';
+import { useId, useLayoutEffect } from 'react';
 
-import { useControllableState } from '@jbpark/use-hooks';
+import { useControllableState, useResponsiveSize } from '@jbpark/use-hooks';
 import { PanelLeftClose, PanelLeftOpen } from 'lucide-react';
 
 import { cn } from '@repo/ui/utils';
 
 import { useRegisterSider } from './sider-context';
+
+type Breakpoint = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
+
+// Order matters here, not the values — used to compare the current
+// viewport tier against the configured `breakpoint` ordinally, since
+// `useResponsiveSize` reports which named tier the viewport is currently
+// in rather than a raw pixel width.
+const BREAKPOINT_ORDER: Breakpoint[] = ['xs', 'sm', 'md', 'lg', 'xl', '2xl'];
 
 export interface Props extends Omit<
   React.ComponentProps<'aside'>,
@@ -23,7 +31,9 @@ export interface Props extends Omit<
   classNames?: {
     trigger?: string;
   };
+  breakpoint?: Breakpoint;
   onCollapse?: (collapsed: boolean) => void;
+  onBreakpoint?: (broken: boolean) => void;
 }
 
 const toCssSize = (value: number | string) =>
@@ -41,7 +51,9 @@ const Sider = ({
   collapsed: _collapsed,
   reverseArrow = false,
   trigger,
+  breakpoint,
   onCollapse,
+  onBreakpoint,
   ...props
 }: Props) => {
   useRegisterSider();
@@ -52,6 +64,23 @@ const Sider = ({
     defaultValue: defaultCollapsed,
     onChange: onCollapse,
   });
+
+  const { breakpoint: viewportBreakpoint } = useResponsiveSize({
+    viewport: true,
+  });
+  const broken = breakpoint
+    ? BREAKPOINT_ORDER.indexOf(viewportBreakpoint.current) <
+      BREAKPOINT_ORDER.indexOf(breakpoint)
+    : false;
+
+  useLayoutEffect(() => {
+    if (!breakpoint) {
+      return;
+    }
+
+    setCollapsed(broken);
+    onBreakpoint?.(broken);
+  }, [broken, breakpoint, setCollapsed, onBreakpoint]);
 
   const onTriggerClick = () => {
     setCollapsed(!collapsed);
