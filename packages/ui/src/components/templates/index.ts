@@ -6,3 +6,5 @@ export type {
   HeaderProps,
   SiderProps,
 } from './layout';
+export { default as Result } from './result';
+export type { Props as ResultProps } from './result';
