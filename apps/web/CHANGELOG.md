@@ -1,5 +1,14 @@
 # web
 
+## 0.2.7
+
+### Patch Changes
+
+- Updated dependencies [e32b2cb]
+- Updated dependencies [3b8fcef]
+- Updated dependencies [92f2db3]
+  - @repo/ui@3.8.0
+
 ## 0.2.6
 
 ### Patch Changes
