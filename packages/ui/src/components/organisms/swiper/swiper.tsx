@@ -60,14 +60,21 @@ const Swiper = <T,>({
   modules = [],
   data = [],
   style,
+  className,
   renderItem,
   loadingClassName,
   ...props
 }: Props<T>) => {
   if (loading) {
+    // `{...props}` isn't spread here (unlike the non-loading branch) —
+    // SwiperProps carries a lot of Swiper.js-specific config/callbacks
+    // (spaceBetween, slidesPerView, onSwiper, etc.) that aren't valid DOM
+    // attributes, so blindly spreading them onto a plain placeholder div
+    // would trigger React's unknown-DOM-attribute warnings. className/
+    // style are the two that actually matter for this div and are safe.
     return (
-      <div className={cn('h-32', loadingClassName)}>
-        {loader || <Spin spinning />}
+      <div className={cn('h-32', className, loadingClassName)} style={style}>
+        {loader ?? <Spin spinning />}
       </div>
     );
   }
@@ -78,6 +85,7 @@ const Swiper = <T,>({
       {...initialOptions}
       {...options}
       style={{ ...initialStyle, ...style }}
+      className={className}
       {...props}
     >
       {data.map((item: T, i) => {
