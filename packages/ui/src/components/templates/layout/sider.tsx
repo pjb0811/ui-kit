@@ -9,7 +9,7 @@ import { cn } from '@repo/ui/utils';
 import { useRegisterSider } from './sider-context';
 
 export interface Props extends Omit<
-  React.ComponentPropsWithoutRef<'aside'>,
+  React.ComponentProps<'aside'>,
   'onCollapse'
 > {
   width?: number | string;

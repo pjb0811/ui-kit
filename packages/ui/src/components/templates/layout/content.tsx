@@ -1,6 +1,6 @@
 import { cn } from '@repo/ui/utils';
 
-export interface Props extends React.ComponentPropsWithoutRef<'main'> {}
+export interface Props extends React.ComponentProps<'main'> {}
 
 const Content = ({ children, className, ...props }: Props) => {
   return (

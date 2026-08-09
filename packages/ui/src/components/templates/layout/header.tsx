@@ -1,6 +1,6 @@
 import { cn } from '@repo/ui/utils';
 
-export interface Props extends React.ComponentPropsWithoutRef<'header'> {
+export interface Props extends React.ComponentProps<'header'> {
   position?: 'sticky' | 'static' | 'fixed';
 }
 

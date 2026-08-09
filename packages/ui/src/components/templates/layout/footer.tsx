@@ -1,6 +1,6 @@
 import { cn } from '@repo/ui/utils';
 
-export interface Props extends React.ComponentPropsWithoutRef<'footer'> {}
+export interface Props extends React.ComponentProps<'footer'> {}
 
 const Footer = ({ children, className, ...props }: Props) => {
   return (
