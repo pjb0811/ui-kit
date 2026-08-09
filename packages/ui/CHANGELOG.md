@@ -1,5 +1,31 @@
 # @repo/ui
 
+## 4.0.0
+
+### Major Changes
+
+- 7dd9da6: **Breaking:** `packages/ui`'s `peerDependencies` now require `react`/`react-dom` `^19.0.0` (React 18 support dropped). This is needed so `Layout`/`Header`/`Content`/`Footer`/`Sider` can forward `ref` to their root DOM element via React 19's automatic ref-as-prop (no `forwardRef` needed) — under React 18, a plain function component silently drops `ref` without `forwardRef`, so supporting both would have meant either shipping broken ref support on React 18 or wrapping every component in `forwardRef`.
+
+  Also in this release:
+  - `Sider`'s collapse trigger now has `aria-expanded`/`aria-controls` for assistive tech
+  - `Header` gains a `position?: 'sticky' | 'static' | 'fixed'` prop (defaults to the previous `sticky` behavior)
+  - `templates/index.ts` now re-exports `LayoutProps`/`ContentProps`/`FooterProps`/`HeaderProps`/`SiderProps`
+
+### Minor Changes
+
+- 5595db9: All UI components now support localization with internationalized labels for accessibility and user experience.
+- 7bbf8d3: Use the reusable Container component to standardize the mx-auto max-w-7xl px-4 wrapper for app content.
+- 7efd0ec: Add support for rendering a Content component as a child element, allowing for nested layouts and improved accessibility.
+- 91dec7d: Add a reusable Empty component for displaying placeholder content when no data is available.
+- f912e4a: Add grid layout components, including Row and Col, for building responsive UI templates.
+- 69cf10f: Add a reusable PageHeader component for displaying title, subtitle, and extra content with a back button.
+- 6219b09: Add a Result component for full-page success/failure/404/403 state screens.
+- 51e0dde: Add support for responsive sider component with customizable breakpoint.
+- 4c7f653: Add support for placing a sider on the right side of the layout.
+- 83c519c: Add ARIA attributes to list items and toast notifications for improved accessibility.
+- 52aa0e9: Create a reusable imperative stack component for rendering and destroying container-scoped React roots, used by Modal and Toast components.
+- 2d033c4: Add a controlled state to the Sider component, allowing users to customize the collapse behavior with the onCollapse prop.
+
 ## 3.8.0
 
 ### Minor Changes
