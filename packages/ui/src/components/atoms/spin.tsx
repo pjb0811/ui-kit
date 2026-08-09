@@ -1,5 +1,8 @@
+'use client';
+
 import { Loader2 } from 'lucide-react';
 
+import { DEFAULT_LOCALE, useConfig } from '@repo/ui/providers';
 import { cn } from '@repo/ui/utils';
 
 export interface Props extends React.ComponentPropsWithoutRef<'div'> {
@@ -7,6 +10,9 @@ export interface Props extends React.ComponentPropsWithoutRef<'div'> {
 }
 
 const Spin = ({ spinning, className, children, ...props }: Props) => {
+  const { locale } = useConfig();
+  const loadingLabel = locale.loading ?? DEFAULT_LOCALE.loading;
+
   // With no children there's nothing to render at all while idle — unlike
   // the branch below, there's no wrapper for `className`/`props` to land
   // on regardless, so returning null here isn't the same bug.
@@ -18,7 +24,7 @@ const Spin = ({ spinning, className, children, ...props }: Props) => {
     return (
       <div
         role="status"
-        aria-label="로딩 중"
+        aria-label={loadingLabel}
         className={cn('flex h-full items-center justify-center', className)}
         {...props}
       >
@@ -41,7 +47,7 @@ const Spin = ({ spinning, className, children, ...props }: Props) => {
       <div className="pointer-events-none opacity-50">{children}</div>
       <div
         role="status"
-        aria-label="로딩 중"
+        aria-label={loadingLabel}
         className="absolute inset-0 flex items-center justify-center"
       >
         <Loader2 className="animate-spin" />

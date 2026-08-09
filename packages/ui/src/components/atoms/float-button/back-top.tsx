@@ -5,6 +5,7 @@ import { type MouseEvent, useRef } from 'react';
 import { useMergedRef, useWindowScroll } from '@jbpark/use-hooks';
 import { ArrowUp } from 'lucide-react';
 
+import { DEFAULT_LOCALE, useConfig } from '@repo/ui/providers';
 import { cn } from '@repo/ui/utils';
 
 import { type Props as ButtonProps } from '../button';
@@ -22,6 +23,7 @@ const BackTop = ({
   onClick,
   ...props
 }: Props) => {
+  const { locale } = useConfig();
   const buttonRef = useRef<HTMLButtonElement>(null);
 
   // Track/scroll whichever window actually renders this button — not
@@ -34,7 +36,7 @@ const BackTop = ({
   return (
     <FloatButton
       ref={mergedRef}
-      aria-label="맨 위로"
+      aria-label={locale.backToTop ?? DEFAULT_LOCALE.backToTop}
       icon={<ArrowUp />}
       className={cn(
         className,

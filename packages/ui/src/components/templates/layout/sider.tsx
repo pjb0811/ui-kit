@@ -5,6 +5,7 @@ import { useId, useLayoutEffect } from 'react';
 import { useControllableState, useResponsiveSize } from '@jbpark/use-hooks';
 import { PanelLeftClose, PanelLeftOpen } from 'lucide-react';
 
+import { DEFAULT_LOCALE, useConfig } from '@repo/ui/providers';
 import { cn } from '@repo/ui/utils';
 
 import { useRegisterSider } from './sider-context';
@@ -26,6 +27,7 @@ export interface Props extends Omit<
   collapsible?: boolean;
   defaultCollapsed?: boolean;
   collapsed?: boolean;
+  placement?: 'left' | 'right';
   reverseArrow?: boolean;
   trigger?: React.ReactNode;
   classNames?: {
@@ -49,6 +51,7 @@ const Sider = ({
   collapsible = false,
   defaultCollapsed = false,
   collapsed: _collapsed,
+  placement = 'left',
   reverseArrow = false,
   trigger,
   breakpoint,
@@ -58,6 +61,7 @@ const Sider = ({
 }: Props) => {
   useRegisterSider();
 
+  const { locale } = useConfig();
   const contentId = useId();
   const [collapsed, setCollapsed] = useControllableState<boolean>({
     value: _collapsed,
@@ -86,8 +90,14 @@ const Sider = ({
     setCollapsed(!collapsed);
   };
 
+  // A right-placed Sider's collapse icon should default to pointing the
+  // opposite way from a left-placed one (it's opening/closing a panel on
+  // the other side of the content), so `placement` flips the effective
+  // direction on top of whatever `reverseArrow` already requests —
+  // `reverseArrow` still layers on as a manual override either way.
+  const effectiveReverseArrow = reverseArrow !== (placement === 'right');
   const TriggerIcon =
-    collapsed !== reverseArrow ? PanelLeftOpen : PanelLeftClose;
+    collapsed !== effectiveReverseArrow ? PanelLeftOpen : PanelLeftClose;
 
   return (
     <aside
@@ -99,6 +109,11 @@ const Sider = ({
         // viewport top on scroll.
         'z-10 flex h-full shrink-0 flex-col overflow-hidden',
         'transition-[width] duration-200',
+        // Lets a Sider visually sit on the right without needing to
+        // reorder JSX/children — useful since Sider's presence is
+        // detected via context (sider-context.ts) rather than requiring
+        // it to be a specific direct child in a specific position.
+        placement === 'right' && 'order-last',
         className,
         //
       )}
@@ -114,7 +129,11 @@ const Sider = ({
       {collapsible && (
         <button
           type="button"
-          aria-label={collapsed ? '펼치기' : '접기'}
+          aria-label={
+            collapsed
+              ? (locale.expand ?? DEFAULT_LOCALE.expand)
+              : (locale.collapse ?? DEFAULT_LOCALE.collapse)
+          }
           aria-expanded={!collapsed}
           aria-controls={contentId}
           onClick={onTriggerClick}
