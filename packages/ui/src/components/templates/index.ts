@@ -6,3 +6,5 @@ export type {
   HeaderProps,
   SiderProps,
 } from './layout';
+export { default as PageHeader } from './page-header';
+export type { Props as PageHeaderProps } from './page-header';
