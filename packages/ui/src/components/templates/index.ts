@@ -6,3 +6,5 @@ export type {
   HeaderProps,
   SiderProps,
 } from './layout';
+export { default as Container } from './container';
+export type { Props as ContainerProps } from './container';
