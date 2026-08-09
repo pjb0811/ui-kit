@@ -1,5 +1,5 @@
 ---
-'@repo/ui': minor
+'@repo/ui': patch
 ---
 
-Export configuration and types from the new config provider.
+Internal refactor: `src/providers/Config/` renamed to `src/providers/config/` (kebab-case, matching every other directory under `src`), with its implementation moved from `index.tsx` into `config.tsx` so `index.ts` is a pure re-export barrel. No public API or behavior change — `Config`/`useConfig`/`DEFAULT_LOCALE` and their exported types are unaffected.
