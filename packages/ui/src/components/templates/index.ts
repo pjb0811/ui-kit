@@ -14,3 +14,5 @@ export { default as Result } from './result';
 export type { Props as ResultProps } from './result';
 export { default as PageHeader } from './page-header';
 export type { Props as PageHeaderProps } from './page-header';
+export { Row, Col } from './grid';
+export type { RowProps, ColProps } from './grid';
