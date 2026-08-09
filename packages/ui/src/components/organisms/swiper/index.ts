@@ -9,3 +9,4 @@ Swiper.Slide = Slide;
 
 export default Swiper;
 export { initialOptions };
+export type { Props as SwiperProps } from './swiper';

@@ -9,7 +9,7 @@ import { cn, renderConditional } from '@repo/ui/utils';
 import Skeleton from '../../atoms/skeleton';
 import { Title } from '../../atoms/typography';
 
-interface Props<T> extends Omit<
+export interface Props<T> extends Omit<
   React.ComponentPropsWithoutRef<'div'>,
   'title'
 > {

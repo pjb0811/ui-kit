@@ -27,7 +27,7 @@ const {
   DialogTitle,
 } = dialog;
 
-interface Props {
+export interface Props {
   open?: boolean;
   maskClosable?: boolean;
   closable?:

@@ -29,7 +29,7 @@ export const initialOptions: SwiperOptions = {
 
 const initialStyle = { width: '100%', maxWidth: '100vw', overflow: 'hidden' };
 
-interface Props<T> extends SwiperProps {
+export interface Props<T> extends SwiperProps {
   loading?: boolean;
   loader?: React.ReactNode;
   loadingClassName?: string;
