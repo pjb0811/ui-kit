@@ -6,6 +6,7 @@ import { useMergedRef } from '@jbpark/use-hooks';
 import { CircleX, Search as SearchOutlined } from 'lucide-react';
 
 import { input } from '@repo/ui/core';
+import { DEFAULT_LOCALE, useConfig } from '@repo/ui/providers';
 import { cn } from '@repo/ui/utils';
 
 import Button from '../button';
@@ -32,6 +33,7 @@ const Search = ({
   onSearch: _onSearch,
   ...props
 }: Props) => {
+  const { locale } = useConfig();
   const inputRef = useRef<HTMLInputElement>(null);
 
   const mergedRef = useMergedRef(inputRef, ref);
@@ -108,7 +110,7 @@ const Search = ({
         />
         <button
           type="button"
-          aria-label="지우기"
+          aria-label={locale.clear ?? DEFAULT_LOCALE.clear}
           disabled={disabled}
           className={cn(
             'absolute right-2',

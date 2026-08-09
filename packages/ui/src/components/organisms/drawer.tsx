@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import { X } from 'lucide-react';
 
 import { drawer } from '@repo/ui/core';
+import { DEFAULT_LOCALE, useConfig } from '@repo/ui/providers';
 import { cn, renderConditional } from '@repo/ui/utils';
 
 import Button from '../atoms/button';
@@ -121,6 +122,8 @@ const Drawer = ({
   onClose,
   ...props
 }: Props) => {
+  const { locale } = useConfig();
+
   useEffect(() => {
     if (!open || mask) {
       return;
@@ -201,7 +204,7 @@ const Drawer = ({
                 type="text"
                 shape="circle"
                 size="small"
-                aria-label="닫기"
+                aria-label={locale.close ?? DEFAULT_LOCALE.close}
                 icon={closeIcon || <X />}
                 onClick={onClose}
                 className={cn(classNames?.close)}

@@ -1,4 +1,7 @@
+'use client';
+
 import { skeleton } from '@repo/ui/core';
+import { DEFAULT_LOCALE, useConfig } from '@repo/ui/providers';
 import { cn } from '@repo/ui/utils';
 
 const { Skeleton: Core } = skeleton;
@@ -46,6 +49,8 @@ const Skeleton = ({
   children,
   ...props
 }: Props) => {
+  const { locale } = useConfig();
+
   // Not wrapping `children` here (unlike Spin's overlay mode) — Skeleton
   // is meant to swap in arbitrary real content once loading finishes,
   // which can include elements with strict parent requirements (e.g. a
@@ -59,7 +64,7 @@ const Skeleton = ({
   return (
     <div
       role="status"
-      aria-label="로딩 중"
+      aria-label={locale.loading ?? DEFAULT_LOCALE.loading}
       className={cn('flex items-center gap-3', className)}
       {...props}
     >
