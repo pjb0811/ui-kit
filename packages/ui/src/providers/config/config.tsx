@@ -55,6 +55,7 @@ interface Props {
   getContainer?: () => HTMLElement;
   componentSize?: ComponentSize;
   className?: string;
+  style?: React.CSSProperties;
   children: React.ReactNode;
 }
 
@@ -64,6 +65,7 @@ const Config = ({
   getContainer,
   componentSize,
   className,
+  style,
   children,
 }: Props) => {
   const parent = useConfig();
@@ -112,7 +114,7 @@ const Config = ({
 
   const hasCssVars = Object.keys(cssVars).length > 0;
   const hasDarkMode = mergedTheme.dark !== undefined;
-  const needsWrapper = hasCssVars || hasDarkMode || className;
+  const needsWrapper = hasCssVars || hasDarkMode || !!className || !!style;
 
   // Resolution order: an explicit `getContainer` prop on this Config wins;
   // otherwise, if this Config renders its own themed wrapper below, that's
@@ -152,16 +154,20 @@ const Config = ({
           className={cn(mergedTheme.dark && 'dark', className)}
           style={{
             ...(hasCssVars ? cssVars : undefined),
+            ...style,
             // Keeps this element out of the layout box tree — so it
             // doesn't intercept flex/grid child relationships or break
             // height chains like min-h-screen — while custom properties
             // and the `dark` class selector still cascade to children
             // normally (inheritance and box generation are separate
-            // mechanisms in CSS). Note this means className shouldn't be
-            // used here for anything that needs a real box (padding,
-            // background, borders); Config's className is meant for
-            // theming hooks (the `dark` class, arbitrary selector hooks),
-            // not layout.
+            // mechanisms in CSS). Note this means className/style
+            // shouldn't be used here for anything that needs a real box
+            // (padding, background, borders); Config's className/style are
+            // meant for theming hooks (the `dark` class, arbitrary
+            // selector hooks, custom properties), not layout — spread
+            // after the caller's `style` so it can't be overridden into
+            // something that reintroduces the layout-breaking wrapper this
+            // was added to fix in the first place.
             display: 'contents',
           }}
         >
