@@ -2,6 +2,8 @@
 
 import { useCallback, useMemo, useState, useSyncExternalStore } from 'react';
 
+import { DirectionProvider } from '@radix-ui/react-direction';
+
 import { cn } from '@repo/ui/utils';
 
 import { Context, DEFAULT_LOCALE, useConfig } from './context';
@@ -107,6 +109,7 @@ interface Props {
   locale?: Locale;
   getContainer?: () => HTMLElement;
   componentSize?: ComponentSize;
+  direction?: 'ltr' | 'rtl';
   className?: string;
   style?: React.CSSProperties;
   children: React.ReactNode;
@@ -117,6 +120,7 @@ const Config = ({
   locale = {},
   getContainer,
   componentSize,
+  direction,
   className,
   style,
   children,
@@ -184,7 +188,8 @@ const Config = ({
 
   const hasCssVars = Object.keys(cssVars).length > 0;
   const hasDarkMode = mergedTheme.dark !== undefined;
-  const needsWrapper = hasCssVars || hasDarkMode || !!className || !!style;
+  const needsWrapper =
+    hasCssVars || hasDarkMode || !!className || !!style || !!direction;
 
   // Resolution order: an explicit `getContainer` prop on this Config wins;
   // otherwise, if this Config renders its own themed wrapper below, that's
@@ -205,6 +210,7 @@ const Config = ({
   }, [getContainer, needsWrapper, wrapperEl, parent]);
 
   const resolvedComponentSize = componentSize ?? parent.componentSize;
+  const resolvedDirection = direction ?? parent.direction;
 
   const contextValue = useMemo(
     () => ({
@@ -212,16 +218,24 @@ const Config = ({
       locale: mergedLocale,
       getContainer: resolvedGetContainer,
       componentSize: resolvedComponentSize,
+      direction: resolvedDirection,
       isConfigured: true,
     }),
-    [mergedTheme, mergedLocale, resolvedGetContainer, resolvedComponentSize],
+    [
+      mergedTheme,
+      mergedLocale,
+      resolvedGetContainer,
+      resolvedComponentSize,
+      resolvedDirection,
+    ],
   );
 
-  return (
+  const content = (
     <Context.Provider value={contextValue}>
       {needsWrapper ? (
         <div
           ref={setWrapperEl}
+          dir={direction}
           className={cn(isDarkActive && 'dark', className)}
           style={{
             ...(hasCssVars ? cssVars : undefined),
@@ -248,6 +262,23 @@ const Config = ({
         children
       )}
     </Context.Provider>
+  );
+
+  // DirectionProvider is Radix's own mechanism (@radix-ui/react-direction)
+  // for propagating `dir` to every primitive that calls its useDirection()
+  // internally — Select, Menu (Dropdown/Menu), Accordion (Collapse),
+  // RadioGroup, ScrollArea all pick up RTL automatically this way, no
+  // per-component wiring needed. Only wraps when this Config's own
+  // `direction` prop is set (not the merely-inherited resolved value) —
+  // context already cascades on its own, so re-wrapping at every nested
+  // Config that doesn't override direction would just be redundant.
+  // Components with hardcoded LTR-only layout logic that Radix's Direction
+  // context doesn't reach (Popover placement, Splitter, Sider, Drawer)
+  // aren't covered by this and would need dedicated follow-up work.
+  return direction ? (
+    <DirectionProvider dir={direction}>{content}</DirectionProvider>
+  ) : (
+    content
   );
 };
 

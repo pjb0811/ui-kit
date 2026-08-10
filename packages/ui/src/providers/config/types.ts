@@ -98,6 +98,7 @@ export type ComponentSize = 'small' | 'middle' | 'large';
 export interface ContextValue {
   theme: ThemeConfig;
   locale: Locale;
+  direction?: 'ltr' | 'rtl';
   // Resolves, in order: an explicit `getContainer` prop on the nearest
   // Config, that Config's own themed wrapper element (if it renders one —
   // see needsWrapper in config.tsx), or the parent Config's resolution.
