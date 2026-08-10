@@ -1,5 +1,21 @@
 # docs
 
+## 0.3.0
+
+### Minor Changes
+
+- 774442c: Added support for system dark mode, allowing users to toggle their OS/browser dark mode setting to see the updated theme live.
+
+### Patch Changes
+
+- Updated dependencies [9bec162]
+- Updated dependencies [3a8a383]
+- Updated dependencies [809f220]
+- Updated dependencies [d4310c9]
+- Updated dependencies [07e183f]
+- Updated dependencies [774442c]
+  - @repo/ui@5.0.0
+
 ## 0.2.9
 
 ### Patch Changes
