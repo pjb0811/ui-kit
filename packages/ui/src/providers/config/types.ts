@@ -60,6 +60,11 @@ export interface ThemeToken {
 
 export interface ThemeConfig {
   token?: ThemeToken;
+  // Applied on top of `token` (per-key override, not a full replacement)
+  // only while dark mode is actually active — lets an app specify "this
+  // one color should differ in dark mode" without needing a second nested
+  // Config just to swap a single token.
+  darkToken?: ThemeToken;
   // 'system' follows prefers-color-scheme and re-evaluates live on change.
   // Unlike the old boolean, an explicit 'light'/'dark' here also doubles
   // as how a nested Config opts out of an ancestor's dark mode — merging

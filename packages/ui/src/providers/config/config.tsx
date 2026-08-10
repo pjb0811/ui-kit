@@ -146,6 +146,10 @@ const Config = ({
         ...parent.theme.token,
         ...theme.token,
       },
+      darkToken: {
+        ...parent.theme.darkToken,
+        ...theme.darkToken,
+      },
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [parentThemeKey, themeKey],
@@ -160,16 +164,23 @@ const Config = ({
     [parentLocaleKey, localeKey],
   );
 
-  const cssVars = useMemo(
-    () => buildCssVars(mergedTheme.token),
-    [mergedTheme.token],
-  );
-
   const systemPrefersDark = useSystemPrefersDark();
   const isDarkActive =
     mergedTheme.dark === 'system'
       ? systemPrefersDark
       : mergedTheme.dark === 'dark';
+
+  // `darkToken` overrides individual keys of `token` (not a full swap)
+  // only while dark mode is actually active.
+  const cssVars = useMemo(
+    () =>
+      buildCssVars(
+        isDarkActive
+          ? { ...mergedTheme.token, ...mergedTheme.darkToken }
+          : mergedTheme.token,
+      ),
+    [mergedTheme.token, mergedTheme.darkToken, isDarkActive],
+  );
 
   const hasCssVars = Object.keys(cssVars).length > 0;
   const hasDarkMode = mergedTheme.dark !== undefined;
