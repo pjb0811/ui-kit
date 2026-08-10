@@ -55,11 +55,29 @@ export const DarkMode: Story = {
         <Button>Button</Button>
       </div>
 
-      <Config theme={{ dark: true }}>
+      <Config theme={{ dark: 'dark' }}>
         <div
           className={cn('bg-background text-foreground rounded-lg border p-4')}
         >
           <p className={cn('mb-2 text-sm')}>Dark</p>
+          <Button>Button</Button>
+        </div>
+      </Config>
+    </div>
+  ),
+};
+
+export const SystemDarkMode: Story = {
+  render: () => (
+    <div className={cn('flex gap-4')}>
+      <Config theme={{ dark: 'system' }}>
+        <div
+          className={cn('bg-background text-foreground rounded-lg border p-4')}
+        >
+          <p className={cn('mb-2 text-sm')}>
+            Follows prefers-color-scheme — toggle your OS/browser dark mode
+            setting to see this update live.
+          </p>
           <Button>Button</Button>
         </div>
       </Config>

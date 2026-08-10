@@ -1,11 +1,40 @@
 'use client';
 
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState, useSyncExternalStore } from 'react';
 
 import { cn } from '@repo/ui/utils';
 
 import { Context, DEFAULT_LOCALE, useConfig } from './context';
 import type { ComponentSize, Locale, ThemeConfig, ThemeToken } from './types';
+
+const DARK_MEDIA_QUERY = '(prefers-color-scheme: dark)';
+
+const subscribeToSystemColorScheme = (callback: () => void) => {
+  if (typeof window === 'undefined') {
+    return () => {};
+  }
+
+  const mql = window.matchMedia(DARK_MEDIA_QUERY);
+  mql.addEventListener('change', callback);
+  return () => mql.removeEventListener('change', callback);
+};
+
+const getSystemPrefersDark = () =>
+  typeof window !== 'undefined' && window.matchMedia(DARK_MEDIA_QUERY).matches;
+
+// No `window` during SSR, so there's no way to know the visitor's actual
+// preference before hydration — assume light (the conservative default)
+// and let useSyncExternalStore correct it client-side once matchMedia is
+// available, same flash-of-incorrect-guess tradeoff already accepted for
+// Sider's breakpoint prop elsewhere in this library.
+const getServerSnapshot = () => false;
+
+const useSystemPrefersDark = () =>
+  useSyncExternalStore(
+    subscribeToSystemColorScheme,
+    getSystemPrefersDark,
+    getServerSnapshot,
+  );
 
 const tokenToCssVar: Record<keyof ThemeToken, string> = {
   colorPrimary: '--primary',
@@ -27,6 +56,30 @@ const tokenToCssVar: Record<keyof ThemeToken, string> = {
   colorInput: '--input',
   colorRing: '--ring',
   borderRadius: '--radius',
+
+  btnBackground: '--btn-bg',
+  btnBackgroundHover: '--btn-bg-hover',
+  btnBackgroundActive: '--btn-bg-active',
+  btnBorder: '--btn-border',
+  btnForeground: '--btn-fg',
+
+  sidebar: '--sidebar',
+  sidebarForeground: '--sidebar-foreground',
+  sidebarPrimary: '--sidebar-primary',
+  sidebarPrimaryForeground: '--sidebar-primary-foreground',
+  sidebarAccent: '--sidebar-accent',
+  sidebarAccentForeground: '--sidebar-accent-foreground',
+  sidebarBorder: '--sidebar-border',
+  sidebarRing: '--sidebar-ring',
+
+  chart1: '--chart-1',
+  chart2: '--chart-2',
+  chart3: '--chart-3',
+  chart4: '--chart-4',
+  chart5: '--chart-5',
+
+  fontSans: '--font-sans',
+  fontMono: '--font-mono',
 };
 
 const buildCssVars = (token?: ThemeToken): React.CSSProperties => {
@@ -112,6 +165,12 @@ const Config = ({
     [mergedTheme.token],
   );
 
+  const systemPrefersDark = useSystemPrefersDark();
+  const isDarkActive =
+    mergedTheme.dark === 'system'
+      ? systemPrefersDark
+      : mergedTheme.dark === 'dark';
+
   const hasCssVars = Object.keys(cssVars).length > 0;
   const hasDarkMode = mergedTheme.dark !== undefined;
   const needsWrapper = hasCssVars || hasDarkMode || !!className || !!style;
@@ -142,6 +201,7 @@ const Config = ({
       locale: mergedLocale,
       getContainer: resolvedGetContainer,
       componentSize: resolvedComponentSize,
+      isConfigured: true,
     }),
     [mergedTheme, mergedLocale, resolvedGetContainer, resolvedComponentSize],
   );
@@ -151,7 +211,7 @@ const Config = ({
       {needsWrapper ? (
         <div
           ref={setWrapperEl}
-          className={cn(mergedTheme.dark && 'dark', className)}
+          className={cn(isDarkActive && 'dark', className)}
           style={{
             ...(hasCssVars ? cssVars : undefined),
             ...style,
