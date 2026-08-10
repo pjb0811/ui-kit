@@ -103,7 +103,7 @@ const Button = ({
   htmlType = 'button',
   size,
   color = 'default',
-  shape = 'default',
+  shape,
   block = false,
   disabled,
   loading,
@@ -112,8 +112,12 @@ const Button = ({
   onMouseDown,
   ...props
 }: Props) => {
-  const { componentSize } = useConfig();
+  const { componentSize, defaultProps } = useConfig();
+  const buttonDefaults = defaultProps?.button as
+    | Partial<Pick<Props, 'shape'>>
+    | undefined;
   const resolvedSize = size ?? componentSize ?? 'middle';
+  const resolvedShape = shape ?? buttonDefaults?.shape ?? 'default';
   const iconOnly = icon && !children;
   const computedColor = danger ? 'danger' : color;
   const colored = computedColor && computedColor !== 'default';
@@ -146,7 +150,7 @@ const Button = ({
         variantClasses[resolvedVariant],
         sizesClasses[resolvedSize],
         iconOnly && ['p-0', iconClasses[resolvedSize]],
-        shapesClasses[shape || 'default'],
+        shapesClasses[resolvedShape],
         block && 'w-full',
         colored &&
           (resolvedVariant === 'solid'

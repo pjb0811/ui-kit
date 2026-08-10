@@ -7,7 +7,13 @@ import { DirectionProvider } from '@radix-ui/react-direction';
 import { cn } from '@repo/ui/utils';
 
 import { Context, DEFAULT_LOCALE, useConfig } from './context';
-import type { ComponentSize, Locale, ThemeConfig, ThemeToken } from './types';
+import type {
+  ComponentSize,
+  DefaultProps,
+  Locale,
+  ThemeConfig,
+  ThemeToken,
+} from './types';
 
 const DARK_MEDIA_QUERY = '(prefers-color-scheme: dark)';
 
@@ -110,6 +116,7 @@ interface Props {
   getContainer?: () => HTMLElement;
   componentSize?: ComponentSize;
   direction?: 'ltr' | 'rtl';
+  defaultProps?: DefaultProps;
   className?: string;
   style?: React.CSSProperties;
   children: React.ReactNode;
@@ -121,6 +128,7 @@ const Config = ({
   getContainer,
   componentSize,
   direction,
+  defaultProps,
   className,
   style,
   children,
@@ -212,6 +220,18 @@ const Config = ({
   const resolvedComponentSize = componentSize ?? parent.componentSize;
   const resolvedDirection = direction ?? parent.direction;
 
+  const defaultPropsKey = JSON.stringify(defaultProps);
+  const parentDefaultPropsKey = JSON.stringify(parent.defaultProps);
+
+  const mergedDefaultProps = useMemo<DefaultProps | undefined>(
+    () =>
+      parent.defaultProps || defaultProps
+        ? { ...parent.defaultProps, ...defaultProps }
+        : undefined,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [parentDefaultPropsKey, defaultPropsKey],
+  );
+
   const contextValue = useMemo(
     () => ({
       theme: mergedTheme,
@@ -219,6 +239,7 @@ const Config = ({
       getContainer: resolvedGetContainer,
       componentSize: resolvedComponentSize,
       direction: resolvedDirection,
+      defaultProps: mergedDefaultProps,
       isConfigured: true,
     }),
     [
@@ -227,6 +248,7 @@ const Config = ({
       resolvedGetContainer,
       resolvedComponentSize,
       resolvedDirection,
+      mergedDefaultProps,
     ],
   );
 
@@ -284,4 +306,11 @@ const Config = ({
 
 export default Config;
 export { useConfig, DEFAULT_LOCALE };
-export type { Props, ComponentSize, Locale, ThemeConfig, ThemeToken };
+export type {
+  Props,
+  ComponentSize,
+  DefaultProps,
+  Locale,
+  ThemeConfig,
+  ThemeToken,
+};

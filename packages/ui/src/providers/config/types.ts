@@ -95,6 +95,18 @@ export interface Locale {
 // explicitly, instead of each hardcoding its own default.
 export type ComponentSize = 'small' | 'middle' | 'large';
 
+// Per-component default props (e.g. { button: { shape: 'round' } }), keyed
+// by an informal lowercase component name each opting-in component reads
+// itself (e.g. Button reads defaultProps?.button). Deliberately untyped
+// beyond this shape rather than importing every component's real Props
+// type here: Config lives in providers/, several components already import
+// useConfig from providers/ (for componentSize/locale/etc), so importing
+// their Props back into this file would be circular. Each component casts
+// its own slice locally instead. Merges shallowly per outer key, same as
+// theme/locale/componentSize — a nested Config's own `button` entry (if
+// set at all) fully replaces the parent's, it doesn't deep-merge the two.
+export type DefaultProps = Record<string, Record<string, unknown>>;
+
 export interface ContextValue {
   theme: ThemeConfig;
   locale: Locale;
@@ -110,6 +122,7 @@ export interface ContextValue {
   // callers fall back to their own normal default (document.body).
   getContainer: () => HTMLElement | undefined;
   componentSize?: ComponentSize;
+  defaultProps?: DefaultProps;
   // False for the raw context default (no <Config> ancestor) — every
   // <Config>, even one rendering with no props at all, sets this true, so
   // `useConfig().isConfigured` tells a consumer whether the values it got
