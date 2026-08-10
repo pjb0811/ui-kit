@@ -5,7 +5,7 @@ import { useCallback, useMemo, useState } from 'react';
 import { cn } from '@repo/ui/utils';
 
 import { Context, DEFAULT_LOCALE, useConfig } from './context';
-import type { Locale, ThemeConfig, ThemeToken } from './types';
+import type { ComponentSize, Locale, ThemeConfig, ThemeToken } from './types';
 
 const tokenToCssVar: Record<keyof ThemeToken, string> = {
   colorPrimary: '--primary',
@@ -53,6 +53,7 @@ interface Props {
   theme?: ThemeConfig;
   locale?: Locale;
   getContainer?: () => HTMLElement;
+  componentSize?: ComponentSize;
   className?: string;
   children: React.ReactNode;
 }
@@ -61,6 +62,7 @@ const Config = ({
   theme = {},
   locale = {},
   getContainer,
+  componentSize,
   className,
   children,
 }: Props) => {
@@ -130,13 +132,16 @@ const Config = ({
     return parent.getContainer();
   }, [getContainer, needsWrapper, wrapperEl, parent]);
 
+  const resolvedComponentSize = componentSize ?? parent.componentSize;
+
   const contextValue = useMemo(
     () => ({
       theme: mergedTheme,
       locale: mergedLocale,
       getContainer: resolvedGetContainer,
+      componentSize: resolvedComponentSize,
     }),
-    [mergedTheme, mergedLocale, resolvedGetContainer],
+    [mergedTheme, mergedLocale, resolvedGetContainer, resolvedComponentSize],
   );
 
   return (
@@ -171,4 +176,4 @@ const Config = ({
 
 export default Config;
 export { useConfig, DEFAULT_LOCALE };
-export type { Props, Locale, ThemeConfig, ThemeToken };
+export type { Props, ComponentSize, Locale, ThemeConfig, ThemeToken };

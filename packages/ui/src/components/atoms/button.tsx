@@ -3,6 +3,7 @@
 import { LoaderCircle } from 'lucide-react';
 
 import { button } from '@repo/ui/core';
+import { useConfig } from '@repo/ui/providers';
 import { cn } from '@repo/ui/utils';
 
 const Core = button.Button;
@@ -100,7 +101,7 @@ const Button = ({
   type = 'default',
   variant,
   htmlType = 'button',
-  size = 'middle',
+  size,
   color = 'default',
   shape = 'default',
   block = false,
@@ -111,6 +112,8 @@ const Button = ({
   onMouseDown,
   ...props
 }: Props) => {
+  const { componentSize } = useConfig();
+  const resolvedSize = size ?? componentSize ?? 'middle';
   const iconOnly = icon && !children;
   const computedColor = danger ? 'danger' : color;
   const colored = computedColor && computedColor !== 'default';
@@ -141,8 +144,8 @@ const Button = ({
         'h-auto py-0',
         'transition-all',
         variantClasses[resolvedVariant],
-        sizesClasses[size],
-        iconOnly && ['p-0', iconClasses[size]],
+        sizesClasses[resolvedSize],
+        iconOnly && ['p-0', iconClasses[resolvedSize]],
         shapesClasses[shape || 'default'],
         block && 'w-full',
         colored &&

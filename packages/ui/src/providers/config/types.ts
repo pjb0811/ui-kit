@@ -42,6 +42,11 @@ export interface Locale {
   collapse?: string;
 }
 
+// antd's componentSize equivalent — components with a `size` prop (e.g.
+// Button) read this as their fallback when the caller doesn't pass one
+// explicitly, instead of each hardcoding its own default.
+export type ComponentSize = 'small' | 'middle' | 'large';
+
 export interface ContextValue {
   theme: ThemeConfig;
   locale: Locale;
@@ -55,4 +60,5 @@ export interface ContextValue {
   // Returns undefined when nothing in the tree renders a wrapper, so
   // callers fall back to their own normal default (document.body).
   getContainer: () => HTMLElement | undefined;
+  componentSize?: ComponentSize;
 }
