@@ -1,5 +1,25 @@
 # @repo/ui
 
+## 5.0.0
+
+### Major Changes
+
+- 774442c: **Breaking:** `ThemeConfig.dark` is now `'light' | 'dark' | 'system'` instead of `boolean`. Migration: `dark: true` → `dark: 'dark'`, `dark: false` → `dark: 'light'`. Passing the old boolean silently resolves to "not dark" instead of erroring, so this needs a manual update, not just a type-check catch.
+  - `'system'` follows `prefers-color-scheme` live via `useSyncExternalStore`
+  - Unlike the old boolean, an explicit `'light'`/`'dark'` on a nested `Config` now also correctly opts out of an ancestor `Config`'s dark mode (previously impossible, since shallow theme merging couldn't distinguish "child didn't set dark" from "child wants it off")
+
+  Also in this release:
+  - `useConfig().isConfigured` distinguishes "no `Config` ancestor" from "wrapped in a `Config`, even one with no props set"
+  - `ThemeToken` gains `--btn-*`/`--sidebar-*`/`--chart-*`/`--font-*` mappings
+
+### Minor Changes
+
+- 9bec162: Buttons now respect the global component size configuration.
+- 3a8a383: Dark mode theme tokens can now be overridden on a per-key basis, allowing for more fine-grained control over dark mode styling.
+- 809f220: Added support for per-component default props, allowing components to customize their default behavior.
+- d4310c9: Added support for right-to-left (RTL) layouts, allowing components to automatically adapt to RTL direction.
+- 07e183f: You can now pass a style object to the Config component.
+
 ## 4.1.0
 
 ### Minor Changes
