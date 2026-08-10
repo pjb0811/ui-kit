@@ -1,5 +1,15 @@
 # @repo/ui
 
+## 4.1.0
+
+### Minor Changes
+
+- 879ba7b: All portal-based primitives (Dialog, Drawer, Popover, Select) now inherit their container from the nearest Config, allowing them to be themed and dark-mode aware.
+
+### Patch Changes
+
+- 8e6e350: Internal refactor: `src/providers/Config/` renamed to `src/providers/config/` (kebab-case, matching every other directory under `src`), with its implementation moved from `index.tsx` into `config.tsx` so `index.ts` is a pure re-export barrel. No public API or behavior change — `Config`/`useConfig`/`DEFAULT_LOCALE` and their exported types are unaffected.
+
 ## 4.0.0
 
 ### Major Changes
