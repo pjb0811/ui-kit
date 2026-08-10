@@ -17,6 +17,7 @@ export const Context = createContext<ContextValue>({
   theme: {},
   locale: DEFAULT_LOCALE,
   getContainer: () => undefined,
+  isConfigured: false,
 });
 
 export const useConfig = () => useContext(Context);

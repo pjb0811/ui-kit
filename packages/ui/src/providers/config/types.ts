@@ -19,13 +19,56 @@ export interface ThemeToken {
   colorInput?: string;
   colorRing?: string;
 
-  // Border Radius
+  // Border Radius — only the base `--radius` is a real, independently-set
+  // CSS custom property. Tailwind v4 inlines every derived scale
+  // (`rounded-sm`/`rounded-lg`/etc) as `calc(var(--radius) ± Npx)` at each
+  // utility class's own point of use rather than defining intermediate
+  // `--radius-sm`/`--radius-lg` custom properties — verified in the
+  // compiled output — so overriding `borderRadius` here already
+  // propagates to the entire derived scale with nothing more needed.
   borderRadius?: string;
+
+  // Button color presets (Button's color prop reads these — see
+  // button.tsx's `bg-(--btn-bg)` etc)
+  btnBackground?: string;
+  btnBackgroundHover?: string;
+  btnBackgroundActive?: string;
+  btnBorder?: string;
+  btnForeground?: string;
+
+  // Sidebar
+  sidebar?: string;
+  sidebarForeground?: string;
+  sidebarPrimary?: string;
+  sidebarPrimaryForeground?: string;
+  sidebarAccent?: string;
+  sidebarAccentForeground?: string;
+  sidebarBorder?: string;
+  sidebarRing?: string;
+
+  // Charts
+  chart1?: string;
+  chart2?: string;
+  chart3?: string;
+  chart4?: string;
+  chart5?: string;
+
+  // Fonts
+  fontSans?: string;
+  fontMono?: string;
 }
 
 export interface ThemeConfig {
   token?: ThemeToken;
-  dark?: boolean;
+  // 'system' follows prefers-color-scheme and re-evaluates live on change.
+  // Unlike the old boolean, an explicit 'light'/'dark' here also doubles
+  // as how a nested Config opts out of an ancestor's dark mode — merging
+  // is shallow (`{...parent.theme, ...theme}`), so there was previously
+  // no way to distinguish "child didn't set dark" (inherit) from "child
+  // wants it off" (override), since plain `undefined` on an omitted key
+  // doesn't survive the spread either way. Every explicit value here now
+  // means what it says; only actually omitting the key means "inherit."
+  dark?: 'light' | 'dark' | 'system';
 }
 
 // Every hardcoded Korean UI string in the library (Drawer's close button,
@@ -61,4 +104,9 @@ export interface ContextValue {
   // callers fall back to their own normal default (document.body).
   getContainer: () => HTMLElement | undefined;
   componentSize?: ComponentSize;
+  // False for the raw context default (no <Config> ancestor) — every
+  // <Config>, even one rendering with no props at all, sets this true, so
+  // `useConfig().isConfigured` tells a consumer whether the values it got
+  // are real app configuration or just the library's built-in fallbacks.
+  isConfigured: boolean;
 }
