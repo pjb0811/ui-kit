@@ -5,6 +5,7 @@ import * as React from 'react';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { XIcon } from 'lucide-react';
 
+import { useConfig } from '@repo/ui/providers';
 import { cn } from '@repo/ui/utils';
 
 import Button from '../components/atoms/button';
@@ -67,6 +68,9 @@ function DialogContent({
   container,
   ...props
 }: React.ComponentProps<typeof DialogPrimitive.Content> & CustomContentProps) {
+  const { getContainer } = useConfig();
+  const resolvedContainer = container ?? getContainer();
+
   const closeIcon = (
     <DialogPrimitive.Close
       data-slot="dialog-close"
@@ -84,7 +88,7 @@ function DialogContent({
   );
 
   return (
-    <DialogPortal data-slot="dialog-portal" container={container}>
+    <DialogPortal data-slot="dialog-portal" container={resolvedContainer}>
       <DialogOverlay className={cn(classNames?.mask)} />
       <DialogPrimitive.Content
         data-slot="dialog-content"

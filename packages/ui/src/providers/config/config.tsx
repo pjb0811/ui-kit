@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 import { cn } from '@repo/ui/utils';
 
@@ -52,12 +52,20 @@ const buildCssVars = (token?: ThemeToken): React.CSSProperties => {
 interface Props {
   theme?: ThemeConfig;
   locale?: Locale;
+  getContainer?: () => HTMLElement;
   className?: string;
   children: React.ReactNode;
 }
 
-const Config = ({ theme = {}, locale = {}, className, children }: Props) => {
+const Config = ({
+  theme = {},
+  locale = {},
+  getContainer,
+  className,
+  children,
+}: Props) => {
   const parent = useConfig();
+  const [wrapperEl, setWrapperEl] = useState<HTMLDivElement | null>(null);
 
   // `theme` is typically a fresh inline object literal at the call site
   // (and `parent.theme` inherits the same problem from its own Config
@@ -95,11 +103,6 @@ const Config = ({ theme = {}, locale = {}, className, children }: Props) => {
     [parentLocaleKey, localeKey],
   );
 
-  const contextValue = useMemo(
-    () => ({ theme: mergedTheme, locale: mergedLocale }),
-    [mergedTheme, mergedLocale],
-  );
-
   const cssVars = useMemo(
     () => buildCssVars(mergedTheme.token),
     [mergedTheme.token],
@@ -109,10 +112,38 @@ const Config = ({ theme = {}, locale = {}, className, children }: Props) => {
   const hasDarkMode = mergedTheme.dark !== undefined;
   const needsWrapper = hasCssVars || hasDarkMode || className;
 
+  // Resolution order: an explicit `getContainer` prop on this Config wins;
+  // otherwise, if this Config renders its own themed wrapper below, that's
+  // the default (portaled content appended into it still inherits its CSS
+  // custom properties and matches the `.dark` selector — `display:
+  // contents` only removes the element from the layout box tree, not from
+  // the DOM/cascade); otherwise defer to the parent Config's resolution,
+  // so an inner Config that only sets e.g. `locale` doesn't shadow an
+  // outer one's theme container.
+  const resolvedGetContainer = useCallback((): HTMLElement | undefined => {
+    if (getContainer) {
+      return getContainer();
+    }
+    if (needsWrapper && wrapperEl) {
+      return wrapperEl;
+    }
+    return parent.getContainer();
+  }, [getContainer, needsWrapper, wrapperEl, parent]);
+
+  const contextValue = useMemo(
+    () => ({
+      theme: mergedTheme,
+      locale: mergedLocale,
+      getContainer: resolvedGetContainer,
+    }),
+    [mergedTheme, mergedLocale, resolvedGetContainer],
+  );
+
   return (
     <Context.Provider value={contextValue}>
       {needsWrapper ? (
         <div
+          ref={setWrapperEl}
           className={cn(mergedTheme.dark && 'dark', className)}
           style={{
             ...(hasCssVars ? cssVars : undefined),

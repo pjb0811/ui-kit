@@ -4,6 +4,7 @@ import * as React from 'react';
 
 import { Drawer as DrawerPrimitive } from 'vaul';
 
+import { useConfig } from '@repo/ui/providers';
 import { cn } from '@repo/ui/utils';
 
 interface CustomProps {
@@ -12,12 +13,16 @@ interface CustomProps {
 
 function Drawer({
   draggable,
+  container,
   ...props
 }: React.ComponentProps<typeof DrawerPrimitive.Root> & CustomProps) {
+  const { getContainer } = useConfig();
+
   return (
     <DrawerPrimitive.Root
       data-slot="drawer"
       handleOnly={!draggable}
+      container={container ?? getContainer()}
       {...props}
     />
   );

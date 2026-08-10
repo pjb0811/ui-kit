@@ -5,6 +5,7 @@ import * as React from 'react';
 import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from 'lucide-react';
 import { Select as SelectPrimitive } from 'radix-ui';
 
+import { useConfig } from '@repo/ui/providers';
 import { cn } from '@repo/ui/utils';
 
 function Select({
@@ -68,10 +69,15 @@ function SelectContent({
   children,
   position = 'item-aligned',
   align = 'center',
+  container,
   ...props
-}: React.ComponentProps<typeof SelectPrimitive.Content>) {
+}: React.ComponentProps<typeof SelectPrimitive.Content> & {
+  container?: HTMLElement;
+}) {
+  const { getContainer } = useConfig();
+
   return (
-    <SelectPrimitive.Portal>
+    <SelectPrimitive.Portal container={container ?? getContainer()}>
       <SelectPrimitive.Content
         data-slot="select-content"
         className={cn(
