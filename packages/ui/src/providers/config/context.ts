@@ -16,6 +16,7 @@ export const DEFAULT_LOCALE: Required<Locale> = {
 export const Context = createContext<ContextValue>({
   theme: {},
   locale: DEFAULT_LOCALE,
+  getContainer: () => undefined,
 });
 
 export const useConfig = () => useContext(Context);

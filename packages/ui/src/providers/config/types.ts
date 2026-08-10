@@ -45,4 +45,14 @@ export interface Locale {
 export interface ContextValue {
   theme: ThemeConfig;
   locale: Locale;
+  // Resolves, in order: an explicit `getContainer` prop on the nearest
+  // Config, that Config's own themed wrapper element (if it renders one —
+  // see needsWrapper in config.tsx), or the parent Config's resolution.
+  // Portal-based primitives (Dialog/Popover/Select/Drawer) call this as
+  // their default `container` so themed/dark-mode content they render
+  // (via Radix/vaul portals to document.body by default) stays a DOM
+  // descendant of the themed wrapper instead of an unthemed sibling.
+  // Returns undefined when nothing in the tree renders a wrapper, so
+  // callers fall back to their own normal default (document.body).
+  getContainer: () => HTMLElement | undefined;
 }
