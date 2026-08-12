@@ -1,6 +1,6 @@
 'use client';
 
-import { useId, useLayoutEffect } from 'react';
+import { useEffect, useId, useRef } from 'react';
 
 import { useControllableState, useResponsiveSize } from '@jbpark/use-hooks';
 import { PanelLeftClose, PanelLeftOpen } from 'lucide-react';
@@ -77,14 +77,62 @@ const Sider = ({
       BREAKPOINT_ORDER.indexOf(breakpoint)
     : false;
 
-  useLayoutEffect(() => {
+  const latestBrokenRef = useRef(broken);
+  const previousBrokenRef = useRef<boolean | null>(null);
+  const microtaskScheduledRef = useRef(false);
+  const onBreakpointRef = useRef(onBreakpoint);
+
+  useEffect(() => {
+    onBreakpointRef.current = onBreakpoint;
+  });
+
+  // `useResponsiveSize`'s own initial measurement resolves through its own
+  // layout effect, which (since it's called earlier in this component)
+  // commits and — if the real viewport differs from its SSR-safe 'xs'
+  // placeholder default — triggers a synchronous corrective re-render, all
+  // before the browser paints. Both the placeholder-derived render and the
+  // corrected one get their own effect pass (React doesn't coalesce
+  // same-tick synchronous re-commits into a single effect flush), so
+  // reacting to `broken` directly — in a layout or passive effect either
+  // way — fires once with the wrong placeholder value, then again with the
+  // corrected one.
+  //
+  // Coalescing through a microtask sidesteps that: every effect pass just
+  // records its `broken` into a ref and schedules (at most once) a
+  // microtask that reads whatever ended up latest once the synchronous
+  // cascade has fully settled, and acts on that single, correct value.
+  //
+  // The `previousBrokenRef` guard is the separate fix for #227 point 3:
+  // without it, an inline `onCollapse`/`onBreakpoint` (a fresh identity
+  // every render) would change `setCollapsed`'s own identity and re-run
+  // this effect on every unrelated parent re-render, reapplying `broken`
+  // and undoing a user's manual toggle. Only a genuine change should act.
+  useEffect(() => {
     if (!breakpoint) {
       return;
     }
 
-    setCollapsed(broken);
-    onBreakpoint?.(broken);
-  }, [broken, breakpoint, setCollapsed, onBreakpoint]);
+    latestBrokenRef.current = broken;
+
+    if (microtaskScheduledRef.current) {
+      return;
+    }
+    microtaskScheduledRef.current = true;
+
+    queueMicrotask(() => {
+      microtaskScheduledRef.current = false;
+
+      const settledBroken = latestBrokenRef.current;
+
+      if (previousBrokenRef.current === settledBroken) {
+        return;
+      }
+
+      previousBrokenRef.current = settledBroken;
+      setCollapsed(settledBroken);
+      onBreakpointRef.current?.(settledBroken);
+    });
+  }, [broken, breakpoint, setCollapsed]);
 
   const onTriggerClick = () => {
     setCollapsed(!collapsed);
@@ -126,7 +174,7 @@ const Sider = ({
       <div id={contentId} className="min-h-0 flex-1 overflow-auto">
         {children}
       </div>
-      {collapsible && (
+      {collapsible && trigger !== null && (
         <button
           type="button"
           aria-label={

@@ -2,6 +2,8 @@ import { Slot } from '@radix-ui/react-slot';
 
 import { cn } from '@repo/ui/utils';
 
+import { SiderRegistryContext } from './sider-context';
+
 export interface Props extends React.ComponentProps<'main'> {
   asChild?: boolean;
 }
@@ -32,7 +34,14 @@ const Content = ({ children, className, asChild = false, ...props }: Props) => {
       )}
       {...props}
     >
-      {children}
+      {/* Reset the registry to null so a `Sider` used inside `Content`
+          (e.g. a detail page's own sub-navigation) doesn't register
+          against the ancestor `Layout` and flip its axis to flex-row —
+          a genuinely nested `Layout` already gets its own fresh registry,
+          this only guards the "Sider with no intervening Layout" case. */}
+      <SiderRegistryContext.Provider value={null}>
+        {children}
+      </SiderRegistryContext.Provider>
     </Comp>
   );
 };
