@@ -6,6 +6,7 @@ import { createPortal } from 'react-dom';
 import { useTimeout } from '@jbpark/use-hooks';
 import { Check, Info, OctagonAlert, OctagonX, X } from 'lucide-react';
 
+import { DEFAULT_LOCALE, useConfig } from '@repo/ui/providers';
 import { cn } from '@repo/ui/utils';
 
 import Button from '../atoms/button';
@@ -51,6 +52,8 @@ const Toast = ({
   className,
   onClose,
 }: Props) => {
+  const { locale } = useConfig();
+
   return (
     <div
       role={type === 'error' ? 'alert' : 'status'}
@@ -78,7 +81,7 @@ const Toast = ({
           type="text"
           shape="circle"
           size="small"
-          aria-label="Close"
+          aria-label={locale.close ?? DEFAULT_LOCALE.close}
           icon={<X />}
           onClick={onClose}
         />
@@ -138,6 +141,9 @@ const toastStack: ImperativeStack<StaticProps> =
     createRootElement: () => {
       const el = document.createElement('div');
       el.setAttribute('role', 'region');
+      // Plain DOM, created outside any React tree — no Config to read a
+      // locale override from until #226 gives the imperative stack a way
+      // to inherit one.
       el.setAttribute('aria-label', 'Notifications');
       el.style.zIndex = '10000';
       el.style.position = 'fixed';
