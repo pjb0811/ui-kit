@@ -66,6 +66,7 @@ const Skeleton = ({
       role="status"
       aria-label={locale.loading ?? DEFAULT_LOCALE.loading}
       className={cn('flex items-center gap-3', className)}
+      style={style}
       {...props}
     >
       {avatar && (
@@ -103,7 +104,6 @@ const Skeleton = ({
                 //
               )}
               style={{
-                ...style,
                 width: itemWidth,
                 height: itemHeight,
               }}

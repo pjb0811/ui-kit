@@ -88,6 +88,9 @@ export interface Locale {
   loading?: string;
   expand?: string;
   collapse?: string;
+  back?: string;
+  ok?: string;
+  cancel?: string;
 }
 
 // antd's componentSize equivalent — components with a `size` prop (e.g.

@@ -59,6 +59,7 @@ const Space = ({
       <div
         className={cn(hidden && 'hidden', className)}
         style={style}
+        hidden={hidden}
         {...props}
       >
         {loader || <Skeleton />}
@@ -88,6 +89,7 @@ const Space = ({
           : undefined,
         ...style,
       }}
+      hidden={hidden}
       {...props}
     >
       {Children.map(children, (child, i) => (

@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 
 import { dialog } from '@repo/ui/core';
+import { DEFAULT_LOCALE, useConfig } from '@repo/ui/providers';
 import { cn } from '@repo/ui/utils';
 
 import Button from '../atoms/button';
@@ -79,12 +80,14 @@ const Modal = ({
   footer,
   container,
   children,
-  okText = 'OK',
-  cancelText = 'Cancel',
+  okText,
+  cancelText,
   onOk,
   onCancel,
   ...props
 }: Props) => {
+  const { locale } = useConfig();
+
   if (typeof window === 'undefined') {
     return null;
   }
@@ -142,9 +145,11 @@ const Modal = ({
           >
             {footer || (
               <>
-                <Button onClick={onOk}>{okText}</Button>
+                <Button onClick={onOk}>
+                  {okText ?? locale.ok ?? DEFAULT_LOCALE.ok}
+                </Button>
                 <Button variant="outlined" onClick={onCancel}>
-                  {cancelText}
+                  {cancelText ?? locale.cancel ?? DEFAULT_LOCALE.cancel}
                 </Button>
               </>
             )}
@@ -168,15 +173,19 @@ const StaticModal = ({
   type,
   title,
   content,
-  okText = 'OK',
-  cancelText = 'Cancel',
+  okText,
+  cancelText,
   container,
   icon,
   onOk,
   onCancel,
   ...props
 }: StaticProps & { id: string }): React.ReactPortal | null => {
+  const { locale } = useConfig();
   const [open, setOpen] = useState(true);
+  const resolvedOkText = okText ?? locale.ok ?? DEFAULT_LOCALE.ok;
+  const resolvedCancelText =
+    cancelText ?? locale.cancel ?? DEFAULT_LOCALE.cancel;
 
   const closeModal = (callback?: () => void) => {
     callback?.();
@@ -194,10 +203,10 @@ const StaticModal = ({
           className="col-span-2"
           onClick={() => closeModal(onCancel)}
         >
-          {cancelText}
+          {resolvedCancelText}
         </Button>
         <Button className="col-span-3" onClick={() => closeModal(onOk)}>
-          {okText}
+          {resolvedOkText}
         </Button>
       </div>
     ) : (
@@ -208,7 +217,7 @@ const StaticModal = ({
         )}
         onClick={() => closeModal(onOk)}
       >
-        {okText}
+        {resolvedOkText}
       </Button>
     );
 

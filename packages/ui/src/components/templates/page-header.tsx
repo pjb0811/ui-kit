@@ -2,6 +2,7 @@
 
 import { ArrowLeft } from 'lucide-react';
 
+import { DEFAULT_LOCALE, useConfig } from '@repo/ui/providers';
 import { cn, renderConditional } from '@repo/ui/utils';
 
 import Button from '../atoms/button';
@@ -23,12 +24,6 @@ export interface Props extends Omit<React.ComponentProps<'div'>, 'title'> {
 // Title + back button + extra action area — same shape as Drawer's header
 // (title/extra/closable), which this borrows the layout from wholesale;
 // PageHeader just swaps Drawer's close button for a back button.
-//
-// TODO: the back button's aria-label ("뒤로가기") is hardcoded the same
-// way every other component's was before #210 (Config's `locale` slot)
-// existed. Wire it up to `useConfig().locale` once that PR merges, adding
-// a `back` key to Locale/DEFAULT_LOCALE — left out here to avoid this PR
-// depending on an unmerged one.
 const PageHeader = ({
   title,
   subTitle,
@@ -40,6 +35,8 @@ const PageHeader = ({
   children,
   ...props
 }: Props) => {
+  const { locale } = useConfig();
+
   return (
     <div className={cn('flex flex-col gap-2', className)} {...props}>
       <div className="flex items-start gap-2">
@@ -48,7 +45,7 @@ const PageHeader = ({
             type="text"
             shape="circle"
             size="small"
-            aria-label="뒤로가기"
+            aria-label={locale.back ?? DEFAULT_LOCALE.back}
             icon={backIcon || <ArrowLeft />}
             onClick={onBack}
             className={cn(classNames?.back)}

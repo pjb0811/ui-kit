@@ -110,7 +110,7 @@ const Dropdown = ({
         {open && (
           <motion.div
             className={cn(
-              'absolute top-full pt-2',
+              'absolute top-full z-50 pt-2',
               //
             )}
             initial={{ opacity: 0, y: -10 }}

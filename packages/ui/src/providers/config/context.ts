@@ -11,6 +11,9 @@ export const DEFAULT_LOCALE: Required<Locale> = {
   loading: '로딩 중',
   expand: '펼치기',
   collapse: '접기',
+  back: '뒤로가기',
+  ok: 'OK',
+  cancel: 'Cancel',
 };
 
 export const Context = createContext<ContextValue>({
