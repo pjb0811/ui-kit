@@ -5,6 +5,8 @@ import { Root, createRoot } from 'react-dom/client';
 
 import { v4 as uuid } from 'uuid';
 
+import { ConfigSnapshotProvider, getRootConfigValue } from '@repo/ui/providers';
+
 // Shared machinery behind Modal.info/success/error/warning/confirm and
 // Toast.info/success/error/warning — both used to independently
 // reimplement ~120 near-identical lines of this (container-scoped stack,
@@ -64,12 +66,24 @@ export function createImperativeStack<
     return state;
   };
 
+  // Shared by `render` and `getRootElement` so both agree on the same
+  // target container whenever the caller doesn't pass one explicitly — the
+  // stack's React root (created once, in `render`) and the DOM node a
+  // `StackItem` (e.g. StaticToast) later portals into (calling
+  // `getRootElement` again with the same, possibly-undefined `container`)
+  // would otherwise resolve two different containers here, splitting the
+  // React tree (correctly under the root Config, via ConfigSnapshotProvider
+  // above) from the actual visible DOM (silently back under `document.body`,
+  // outside the Config's themed wrapper — undoing this fix's whole point).
+  const resolveContainer = (container?: HTMLElement): HTMLElement =>
+    container || getRootConfigValue()?.getContainer() || document.body;
+
   const getRootElement = (container?: HTMLElement): HTMLElement | null => {
     if (!isBrowser) {
       return null;
     }
 
-    const targetContainer = container || document.body;
+    const targetContainer = resolveContainer(container);
     let rootEl = rootElements.get(targetContainer);
 
     if (!rootEl) {
@@ -95,11 +109,11 @@ export function createImperativeStack<
     const { stack } = getContainerState(container);
 
     return (
-      <>
+      <ConfigSnapshotProvider>
         {stack.map(({ id, ...props }) => (
           <StackItem key={id} id={id} {...(props as TProps)} />
         ))}
-      </>
+      </ConfigSnapshotProvider>
     );
   };
 
@@ -108,7 +122,13 @@ export function createImperativeStack<
       return;
     }
 
-    const targetContainer = props.container || document.body;
+    // An explicit `container` prop always wins (it may be chosen for
+    // layout reasons unrelated to theming); otherwise mount into the root
+    // Config's own themed wrapper element (if one renders — see
+    // `needsWrapper` in config.tsx) so CSS custom properties and the
+    // `.dark` class cascade to this stack via normal DOM inheritance, not
+    // just `document.body` sitting as an unthemed sibling of it.
+    const targetContainer = resolveContainer(props.container);
     const rootElement = getRootElement(targetContainer)!;
 
     if (!reactRoots.has(targetContainer)) {

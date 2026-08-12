@@ -1,12 +1,19 @@
 'use client';
 
-import { useCallback, useMemo, useState, useSyncExternalStore } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+  useSyncExternalStore,
+} from 'react';
 
 import { DirectionProvider } from '@radix-ui/react-direction';
 
 import { cn } from '@repo/ui/utils';
 
 import { Context, DEFAULT_LOCALE, useConfig } from './context';
+import { registerRootConfig } from './registry';
 import type {
   ComponentSize,
   DefaultProps,
@@ -136,6 +143,10 @@ const Config = ({
   const parent = useConfig();
   const [wrapperEl, setWrapperEl] = useState<HTMLDivElement | null>(null);
 
+  // Only a Config with no Config ancestor of its own registers for the
+  // imperative stack (Modal.*/Toast.*) to inherit — see registry.tsx.
+  const isRoot = !parent.isConfigured;
+
   // `theme` is typically a fresh inline object literal at the call site
   // (and `parent.theme` inherits the same problem from its own Config
   // ancestor), so depending on them directly meant mergedTheme/contextValue
@@ -251,6 +262,13 @@ const Config = ({
       mergedDefaultProps,
     ],
   );
+
+  useEffect(() => {
+    if (!isRoot) {
+      return;
+    }
+    return registerRootConfig(contextValue);
+  }, [isRoot, contextValue]);
 
   const content = (
     <Context.Provider value={contextValue}>
