@@ -1,8 +1,8 @@
 'use client';
 
-import { useId } from 'react';
+import { useId, useRef } from 'react';
 
-import { useControllableState } from '@jbpark/use-hooks';
+import { useControllableState, useKeyPress } from '@jbpark/use-hooks';
 import { Square, SquareCheck } from 'lucide-react';
 
 import { checkbox, label } from '@repo/ui/core';
@@ -61,6 +61,17 @@ const Checkbox = ({
     setChecked(next);
   };
 
+  const iconTriggerRef = useRef<HTMLSpanElement>(null);
+
+  useKeyPress(
+    ['Enter', 'space'],
+    event => {
+      event.preventDefault();
+      onChange(!checked);
+    },
+    { target: iconTriggerRef, enabled: !!icons && !disabled },
+  );
+
   const renderContent = icons ? (
     <>
       <input
@@ -76,6 +87,7 @@ const Checkbox = ({
         }}
       />
       <span
+        ref={iconTriggerRef}
         role="checkbox"
         aria-checked={checked}
         aria-disabled={disabled}
@@ -83,12 +95,6 @@ const Checkbox = ({
         className={cn(cursorClassName, disabled && 'opacity-50')}
         onClick={() => {
           onChange(!checked);
-        }}
-        onKeyDown={e => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            onChange(!checked);
-          }
         }}
       >
         {checked

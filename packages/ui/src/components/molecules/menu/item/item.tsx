@@ -123,6 +123,17 @@ const Item = ({
   // fully state-tracked implementation — focus resets to the first item
   // if the user Tabs out and back in rather than resuming where they left
   // off.
+  //
+  // Deliberately not `useKeyPress` (unlike dropdown.tsx's trigger and
+  // radio.tsx/checkbox.tsx's icon mode, #229's action item 5): that hook
+  // is a static combo -> handler binding, one listener per combo. This
+  // handler is a single stateful branch — Enter/Space select, Escape
+  // conditionally closes a submenu and stops the event from also closing
+  // an ancestor Dropdown, and the arrow-key branch reads `itemRef` at
+  // fire time to focus a *sibling* `<li>`. Splitting that into 3-4
+  // separate useKeyPress calls (each its own listener) per menu item
+  // wouldn't fix a bug — the existing logic is already correct — it would
+  // just multiply listeners across every item in a menu for no benefit.
   const handleKeyDown = (domEvent: React.KeyboardEvent) => {
     if (domEvent.key === 'Enter' || domEvent.key === ' ') {
       domEvent.preventDefault();
