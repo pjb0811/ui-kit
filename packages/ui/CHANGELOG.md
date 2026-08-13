@@ -1,5 +1,14 @@
 # @repo/ui
 
+## 5.1.0
+
+### Minor Changes
+
+- 0934544: Components now support internationalization with locale-aware text and aria-labels.
+- 0e98d57: Imperative stack components now inherit theme and locale from the root Config, allowing for consistent styling and behavior across the app.
+- e088884: A sider component now correctly handles nested layouts and sider components without intervening layouts.
+- f05e281: Added support for responsive grid layout with mobile-first cascade, allowing for dynamic column and offset values based on breakpoint tiers.
+
 ## 5.0.0
 
 ### Major Changes
