@@ -2,7 +2,7 @@
 
 import { useId, useRef } from 'react';
 
-import { useControllableState } from '@jbpark/use-hooks';
+import { useControllableState, useKeyPress } from '@jbpark/use-hooks';
 import { AnimatePresence, motion } from 'motion/react';
 
 import { cn } from '@repo/ui/utils';
@@ -38,6 +38,24 @@ const Dropdown = ({
   const isClickTrigger = trigger === 'click';
   const menuId = useId();
   const containerRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLDivElement>(null);
+
+  useKeyPress(
+    'esc',
+    () => {
+      onOpenChange(false);
+    },
+    { target: triggerRef },
+  );
+
+  useKeyPress(
+    ['Enter', 'space'],
+    event => {
+      event.preventDefault();
+      onOpenChange(!open);
+    },
+    { target: triggerRef, enabled: isClickTrigger },
+  );
 
   return (
     <div
@@ -65,6 +83,7 @@ const Dropdown = ({
       }}
     >
       <div
+        ref={triggerRef}
         role={isClickTrigger ? 'button' : undefined}
         tabIndex={isClickTrigger ? 0 : undefined}
         aria-haspopup="menu"
@@ -91,16 +110,6 @@ const Dropdown = ({
           // check menu/item/item.tsx already uses for the same reason.
           if (!containerRef.current?.contains(e.relatedTarget as Node)) {
             onOpenChange(false);
-          }
-        }}
-        onKeyDown={e => {
-          if (e.key === 'Escape') {
-            onOpenChange(false);
-            return;
-          }
-          if (isClickTrigger && (e.key === 'Enter' || e.key === ' ')) {
-            e.preventDefault();
-            onOpenChange(!open);
           }
         }}
       >

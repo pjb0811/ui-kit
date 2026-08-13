@@ -1,8 +1,8 @@
 'use client';
 
-import { useContext, useId } from 'react';
+import { useContext, useId, useRef } from 'react';
 
-import { useControllableState } from '@jbpark/use-hooks';
+import { useControllableState, useKeyPress } from '@jbpark/use-hooks';
 import { Circle, CircleCheck } from 'lucide-react';
 
 import { field, radio } from '@repo/ui/core';
@@ -73,6 +73,17 @@ const Radio = ({
     setChecked(next);
   };
 
+  const iconTriggerRef = useRef<HTMLSpanElement>(null);
+
+  useKeyPress(
+    ['Enter', 'space'],
+    event => {
+      event.preventDefault();
+      onChange(true);
+    },
+    { target: iconTriggerRef, enabled: !!icons && !disabled },
+  );
+
   // When rendered inside a `RadioGroup`, the group owns the single shared
   // `Core` (Radix radiogroup root) so that arrow keys move focus across every
   // option. A standalone `Radio` still has to provide its own root.
@@ -104,6 +115,7 @@ const Radio = ({
         }}
       />
       <span
+        ref={iconTriggerRef}
         role="radio"
         aria-checked={checked}
         aria-disabled={disabled}
@@ -111,12 +123,6 @@ const Radio = ({
         className={cn(cursorClassName, disabled && 'opacity-50')}
         onClick={() => {
           onChange(true);
-        }}
-        onKeyDown={e => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            onChange(true);
-          }
         }}
       >
         {checked
