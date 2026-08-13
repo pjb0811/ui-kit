@@ -1,5 +1,16 @@
 # docs
 
+## 0.4.0
+
+### Minor Changes
+
+- a2ef5d5: New UI components and templates for layout, data display, navigation, and feedback have been added to the Storybook documentation site.
+
+### Patch Changes
+
+- Updated dependencies [b33322e]
+  - @repo/ui@5.2.0
+
 ## 0.3.1
 
 ### Patch Changes

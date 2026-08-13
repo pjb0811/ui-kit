@@ -1,5 +1,11 @@
 # @repo/ui
 
+## 5.2.0
+
+### Minor Changes
+
+- b33322e: Radio and checkbox components now support keyboard navigation with Enter and space keys.
+
 ## 5.1.0
 
 ### Minor Changes
