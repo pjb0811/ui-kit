@@ -29,13 +29,54 @@ export interface Props extends React.ComponentProps<'div'> {
 const resolveColSpan = (value: ColSpanProp | undefined) =>
   typeof value === 'number' ? { span: value } : value;
 
+// Mobile-first cascade, run once per breakpoint tier (not just the
+// "current" one) — each tier's entry is what a `<Col span={24} md={12} />`
+// effectively resolves to *at and above* that tier, letting each defined
+// prop override the last. `globals.css`'s `[data-slot='col']` rules read
+// one of these six values per tier, switched by a real `@media` query —
+// see the comment on the returned CSS custom properties below for why.
+const resolveEffectiveValuesByTier = (
+  span: number,
+  offset: number,
+  responsiveProps: Partial<Record<Breakpoint, ColSpanProp | undefined>>,
+) => {
+  let effectiveSpan = span;
+  let effectiveOffset = offset;
+  const spans = {} as Record<Breakpoint, number>;
+  const offsets = {} as Record<Breakpoint, number>;
+
+  for (const bp of BREAKPOINT_ORDER) {
+    const resolved = resolveColSpan(responsiveProps[bp]);
+
+    if (resolved?.span !== undefined) {
+      effectiveSpan = resolved.span;
+    }
+    if (resolved?.offset !== undefined) {
+      effectiveOffset = resolved.offset;
+    }
+
+    spans[bp] = effectiveSpan;
+    offsets[bp] = effectiveOffset;
+  }
+
+  return { spans, offsets };
+};
+
 // 24-column system (matches Ant Design's Row/Col, a familiar mental model
-// for anyone coming from it) implemented with plain percentage widths
-// rather than Tailwind's col-span-* utilities — those utilities need a
-// literal, statically-scannable class per (breakpoint, span) combination,
-// and 6 breakpoints x 24 spans is 144 combinations, most of which would
-// never be used. Percentage math scales to any span/breakpoint
-// combination with one code path instead.
+// for anyone coming from it). The actual `flex-basis`/`max-width`/
+// `margin-left` math lives in `globals.css` (`[data-slot='col']`), driven
+// by real `@media` queries — this component's only job is resolving each
+// breakpoint tier's effective span/offset (pure prop math, no `window`
+// access) and handing them over as CSS custom properties. That's what
+// makes the responsive behavior work from the very first (server-rendered)
+// paint: previously this picked one "current" tier via `useResponsiveSize`
+// (which measures the viewport client-side, so it can't know the real
+// value until after mount) and baked only *that* into an inline style,
+// so SSR output — and the first client paint, before that measurement
+// effect ran — was always the same-as-`useResponsiveSize`'s SSR-safe 'xs'
+// guess, regardless of the real viewport. Handing over all six tiers and
+// letting CSS pick lets the browser resolve the right one immediately,
+// with no JS and no resize listener needed at all.
 const Col = ({
   span = TOTAL_COLUMNS,
   offset = 0,
@@ -50,43 +91,38 @@ const Col = ({
   children,
   ...props
 }: Props) => {
-  const { gutterX, breakpoint } = useRowContext();
+  const { gutterX } = useRowContext();
 
   const responsiveProps: Partial<Record<Breakpoint, ColSpanProp | undefined>> =
     { xs, sm, md, lg, xl, '2xl': xxl };
 
-  let effectiveSpan = span;
-  let effectiveOffset = offset;
+  const { spans, offsets } = resolveEffectiveValuesByTier(
+    span,
+    offset,
+    responsiveProps,
+  );
 
-  // Mobile-first cascade: walk breakpoints up to (and including) the
-  // current one, letting each defined prop override the last — so
-  // `<Col span={24} md={12} />` is 24 below md and 12 from md upward, with
-  // no need to also specify lg/xl/2xl for the value to keep applying.
-  for (const bp of BREAKPOINT_ORDER) {
-    if (BREAKPOINT_ORDER.indexOf(bp) > BREAKPOINT_ORDER.indexOf(breakpoint)) {
-      break;
-    }
-
-    const resolved = resolveColSpan(responsiveProps[bp]);
-
-    if (resolved?.span !== undefined) {
-      effectiveSpan = resolved.span;
-    }
-    if (resolved?.offset !== undefined) {
-      effectiveOffset = resolved.offset;
-    }
-  }
-
-  const widthPercent = (effectiveSpan / TOTAL_COLUMNS) * 100;
-  const offsetPercent = (effectiveOffset / TOTAL_COLUMNS) * 100;
+  const cssVars = {
+    '--col-span-xs': spans.xs,
+    '--col-span-sm': spans.sm,
+    '--col-span-md': spans.md,
+    '--col-span-lg': spans.lg,
+    '--col-span-xl': spans.xl,
+    '--col-span-2xl': spans['2xl'],
+    '--col-offset-xs': offsets.xs,
+    '--col-offset-sm': offsets.sm,
+    '--col-offset-md': offsets.md,
+    '--col-offset-lg': offsets.lg,
+    '--col-offset-xl': offsets.xl,
+    '--col-offset-2xl': offsets['2xl'],
+  } as React.CSSProperties;
 
   return (
     <div
+      data-slot="col"
       className={cn('box-border shrink-0 grow-0', className)}
       style={{
-        flexBasis: `${widthPercent}%`,
-        maxWidth: `${widthPercent}%`,
-        marginLeft: offsetPercent ? `${offsetPercent}%` : undefined,
+        ...cssVars,
         paddingLeft: gutterX ? gutterX / 2 : undefined,
         paddingRight: gutterX ? gutterX / 2 : undefined,
         ...style,

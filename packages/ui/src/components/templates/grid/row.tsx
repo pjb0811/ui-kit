@@ -2,8 +2,6 @@
 
 import { useMemo } from 'react';
 
-import { useResponsiveSize } from '@jbpark/use-hooks';
-
 import { cn } from '@repo/ui/utils';
 
 import { RowContext } from './row-context';
@@ -31,9 +29,6 @@ export interface Props extends React.ComponentProps<'div'> {
   wrap?: boolean;
 }
 
-// The breakpoint tier is resolved once here (not per-Col) so N columns
-// share a single resize listener instead of each mounting its own via
-// useResponsiveSize — matters once a grid has more than a couple Cols.
 const Row = ({
   gutter = 0,
   align,
@@ -45,11 +40,10 @@ const Row = ({
   ...props
 }: Props) => {
   const [gutterX, gutterY] = Array.isArray(gutter) ? gutter : [gutter, 0];
-  const { breakpoint } = useResponsiveSize({ viewport: true });
 
   const contextValue = useMemo(
-    () => ({ gutterX, gutterY, breakpoint: breakpoint.current }),
-    [gutterX, gutterY, breakpoint],
+    () => ({ gutterX, gutterY }),
+    [gutterX, gutterY],
   );
 
   return (

@@ -192,4 +192,53 @@
   [data-slot='button'][data-color='gold'] {
     --btn-bg: #f59e0b;
   }
+
+  /* Row/Col's 24-column responsive grid (templates/grid/col.tsx) — Col
+   * hands over one CSS custom property per breakpoint tier, already
+   * resolved via its own mobile-first cascade (pure prop math, no
+   * `window` access), and these rules pick the active tier via a real
+   * @media query. That's what makes the layout correct from the very
+   * first (server-rendered) paint, with no client JS needed for the
+   * responsive behavior itself. Breakpoints match Tailwind v4's own
+   * defaults (40/48/64/80/96rem). */
+  [data-slot='col'] {
+    flex-basis: calc(var(--col-span-xs) / 24 * 100%);
+    max-width: calc(var(--col-span-xs) / 24 * 100%);
+    margin-left: calc(var(--col-offset-xs, 0) / 24 * 100%);
+  }
+  @media (width >= 40rem) {
+    [data-slot='col'] {
+      flex-basis: calc(var(--col-span-sm) / 24 * 100%);
+      max-width: calc(var(--col-span-sm) / 24 * 100%);
+      margin-left: calc(var(--col-offset-sm, 0) / 24 * 100%);
+    }
+  }
+  @media (width >= 48rem) {
+    [data-slot='col'] {
+      flex-basis: calc(var(--col-span-md) / 24 * 100%);
+      max-width: calc(var(--col-span-md) / 24 * 100%);
+      margin-left: calc(var(--col-offset-md, 0) / 24 * 100%);
+    }
+  }
+  @media (width >= 64rem) {
+    [data-slot='col'] {
+      flex-basis: calc(var(--col-span-lg) / 24 * 100%);
+      max-width: calc(var(--col-span-lg) / 24 * 100%);
+      margin-left: calc(var(--col-offset-lg, 0) / 24 * 100%);
+    }
+  }
+  @media (width >= 80rem) {
+    [data-slot='col'] {
+      flex-basis: calc(var(--col-span-xl) / 24 * 100%);
+      max-width: calc(var(--col-span-xl) / 24 * 100%);
+      margin-left: calc(var(--col-offset-xl, 0) / 24 * 100%);
+    }
+  }
+  @media (width >= 96rem) {
+    [data-slot='col'] {
+      flex-basis: calc(var(--col-span-2xl) / 24 * 100%);
+      max-width: calc(var(--col-span-2xl) / 24 * 100%);
+      margin-left: calc(var(--col-offset-2xl, 0) / 24 * 100%);
+    }
+  }
 }
