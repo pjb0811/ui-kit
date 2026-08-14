@@ -49,6 +49,27 @@ const Item = ({
         : autoFill
       : 0,
   );
+  const [prevWidthProp, setPrevWidthProp] = useState(_width);
+  const [prevAutoFill, setPrevAutoFill] = useState(autoFill);
+
+  // Adjusted directly in render (React's "adjust state during render"
+  // pattern) instead of an effect, so `width`/`repeatCount` re-sync with
+  // the prop in the same render it changes rather than the render after.
+  if (_width !== prevWidthProp) {
+    setPrevWidthProp(_width);
+    setWidth(_width);
+  }
+
+  if (autoFill !== prevAutoFill) {
+    setPrevAutoFill(autoFill);
+    setRepeatCount(
+      autoFill
+        ? typeof autoFill === 'boolean'
+          ? INITIAL_AUTO_FILL_GUESS
+          : autoFill
+        : 0,
+    );
+  }
 
   const isPaused = _pause || pause;
 
@@ -93,10 +114,6 @@ const Item = ({
     setRepeatCount(repeatCount - 1);
   }, [autoFill, width, children]);
 
-  useEffect(() => {
-    setWidth(_width);
-  }, [_width]);
-
   useGSAP(
     () => {
       if (!containerRef.current || typeof width === 'string') {
@@ -139,16 +156,6 @@ const Item = ({
       tweenRef.current.play();
     }
   }, [isPaused]);
-
-  useEffect(() => {
-    setRepeatCount(
-      autoFill
-        ? typeof autoFill === 'boolean'
-          ? INITIAL_AUTO_FILL_GUESS
-          : autoFill
-        : 0,
-    );
-  }, [autoFill]);
 
   return (
     <div

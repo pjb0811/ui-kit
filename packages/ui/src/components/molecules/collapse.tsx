@@ -70,7 +70,7 @@ const Collapse = ({
       {items.map(({ key, label, children, disabled }) => (
         <AccordionItem
           key={key}
-          value={`${key}`}
+          value={String(key)}
           className={cn(
             'border-none',
             classNames?.item,
