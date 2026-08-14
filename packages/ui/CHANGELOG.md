@@ -1,5 +1,11 @@
 # @repo/ui
 
+## 5.3.0
+
+### Minor Changes
+
+- fc5318f: Update dependencies to latest versions.
+
 ## 5.2.0
 
 ### Minor Changes

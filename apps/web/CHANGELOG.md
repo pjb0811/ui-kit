@@ -1,5 +1,16 @@
 # web
 
+## 0.3.0
+
+### Minor Changes
+
+- fc5318f: Added a custom GitHub icon to replace the one removed by lucide-react in v1, allowing users to still access the GitHub repository.
+
+### Patch Changes
+
+- Updated dependencies [fc5318f]
+  - @repo/ui@5.3.0
+
 ## 0.2.12
 
 ### Patch Changes

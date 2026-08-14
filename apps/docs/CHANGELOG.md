@@ -1,5 +1,16 @@
 # docs
 
+## 0.5.0
+
+### Minor Changes
+
+- fc5318f: Update dependencies to latest versions.
+
+### Patch Changes
+
+- Updated dependencies [fc5318f]
+  - @repo/ui@5.3.0
+
 ## 0.4.0
 
 ### Minor Changes
