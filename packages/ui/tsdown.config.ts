@@ -26,7 +26,7 @@ export default defineConfig({
   sourcemap: true,
   treeshake: true,
   unbundle: true,
-  inlineOnly: ['gsap'],
+  deps: { onlyBundle: ['gsap'] },
   plugins: [
     postcss({
       extract: 'style.css',

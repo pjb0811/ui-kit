@@ -102,11 +102,16 @@ const Item = ({
       setOpen(!open);
     }
 
+    // Next.js's types pull in React's `react/experimental` augmentation
+    // (adding `useOptimistic`'s internal key symbol to `React.Key`), which
+    // widens `itemKey`/`item.key` here beyond what `ClickEventHandler`
+    // expects when this file is type-checked as part of a Next.js app —
+    // real menu item keys are always string/number, never that symbol.
     const params = {
       domEvent,
-      key: itemKey,
+      key: itemKey as Exclude<React.Key, symbol>,
       keyPath,
-      item,
+      item: item as unknown as MenuItem,
     };
 
     onClick?.(params);
