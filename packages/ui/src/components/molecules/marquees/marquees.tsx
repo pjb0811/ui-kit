@@ -2,7 +2,11 @@
 
 import { useEffect, useRef, useState } from 'react';
 
-import { useResponsiveSize, useThrottledValue } from '@jbpark/use-hooks';
+import {
+  useMergedRef,
+  useResponsiveSize,
+  useThrottledValue,
+} from '@jbpark/use-hooks';
 
 import { cn } from '@repo/ui/utils';
 
@@ -34,10 +38,7 @@ const Marquees = ({
 
   const { size, ref: responsiveRef } = useResponsiveSize<HTMLDivElement>();
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const setContainerRef = (node: HTMLDivElement | null) => {
-    containerRef.current = node;
-    responsiveRef(node);
-  };
+  const setContainerRef = useMergedRef(containerRef, responsiveRef);
   const hoverEvents = pauseOnHover
     ? {
         onMouseEnter: () => {
