@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useSyncExternalStore } from 'react';
 import { Root, createRoot } from 'react-dom/client';
 
 import { v4 as uuid } from 'uuid';
@@ -96,17 +96,23 @@ export function createImperativeStack<
   };
 
   const StackRenderer = ({ container }: { container: HTMLElement }) => {
-    const [, forceUpdate] = useState({});
+    const subscribe = useCallback(
+      (onStoreChange: () => void) => {
+        const state = getContainerState(container);
+        state.update = onStoreChange;
+        return () => {
+          state.update = null;
+        };
+      },
+      [container],
+    );
 
-    useEffect(() => {
-      const state = getContainerState(container);
-      state.update = () => forceUpdate({});
-      return () => {
-        state.update = null;
-      };
-    }, [container]);
+    const getSnapshot = useCallback(
+      () => getContainerState(container).stack,
+      [container],
+    );
 
-    const { stack } = getContainerState(container);
+    const stack = useSyncExternalStore(subscribe, getSnapshot, getSnapshot);
 
     return (
       <ConfigSnapshotProvider>
@@ -139,7 +145,7 @@ export function createImperativeStack<
 
     const state = getContainerState(targetContainer);
     const id = props.id || uuid();
-    state.stack.push({ ...props, id });
+    state.stack = [...state.stack, { ...props, id }];
     state.update?.();
 
     return id;
