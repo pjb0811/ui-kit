@@ -95,10 +95,12 @@ const Switch = ({
       {hasChildren && (
         <span
           className={cn(
-            `grid leading-none text-white transition-[margin] duration-200
+            `grid leading-none transition-[margin] duration-200
             will-change-[margin]`,
             config.fontSize,
-            checked ? config.marginChecked : config.marginUnchecked,
+            checked
+              ? [config.marginChecked, 'text-primary-foreground']
+              : [config.marginUnchecked, 'text-foreground'],
             //
           )}
         >
