@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 
-import { useResponsiveSize, useThrottle } from '@jbpark/use-hooks';
+import { useResponsiveSize, useThrottledValue } from '@jbpark/use-hooks';
 
 import { cn } from '@repo/ui/utils';
 
@@ -30,7 +30,7 @@ const Marquees = ({
   const [padding, setPadding] = useState(0);
   const [pause, setPause] = useState(false);
 
-  const throttledWidth = useThrottle(width, 200);
+  const throttledWidth = useThrottledValue(width, 200);
 
   const { size, ref: responsiveRef } = useResponsiveSize<HTMLDivElement>();
   const containerRef = useRef<HTMLDivElement | null>(null);
