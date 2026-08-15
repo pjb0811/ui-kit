@@ -11,6 +11,7 @@ import {
 import { cn } from '@repo/ui/utils';
 
 import Item, { type ItemProps } from './item';
+import usePauseOnHover from './use-pause-on-hover';
 
 export interface Props extends React.ComponentPropsWithoutRef<'div'> {
   speed?: number;
@@ -32,23 +33,13 @@ const Marquees = ({
     //
   );
   const [padding, setPadding] = useState(0);
-  const [pause, setPause] = useState(false);
+  const { pause, hoverEvents } = usePauseOnHover(pauseOnHover);
 
   const throttledWidth = useThrottledValue(width, 200);
 
   const { size, ref: responsiveRef } = useResponsiveSize<HTMLDivElement>();
   const containerRef = useRef<HTMLDivElement | null>(null);
   const setContainerRef = useMergedRef(containerRef, responsiveRef);
-  const hoverEvents = pauseOnHover
-    ? {
-        onMouseEnter: () => {
-          setPause(true);
-        },
-        onMouseLeave: () => {
-          setPause(false);
-        },
-      }
-    : {};
 
   useEffect(() => {
     if (!size.width || !containerRef.current) {

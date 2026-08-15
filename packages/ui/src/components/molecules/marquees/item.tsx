@@ -5,6 +5,8 @@ import { useEffect, useRef, useState } from 'react';
 import { useGSAP } from '@gsap/react';
 import { gsap } from 'gsap';
 
+import usePauseOnHover from './use-pause-on-hover';
+
 export interface ItemProps {
   key?: React.Key;
   speed?: number;
@@ -41,7 +43,7 @@ const Item = ({
   const tweenRef = useRef<gsap.core.Tween | null>(null);
 
   const [width, setWidth] = useState<string | number>(_width);
-  const [pause, setPause] = useState(false);
+  const { pause, hoverEvents } = usePauseOnHover(pauseOnHover);
   const [repeatCount, setRepeatCount] = useState(
     autoFill
       ? typeof autoFill === 'boolean'
@@ -72,17 +74,6 @@ const Item = ({
   }
 
   const isPaused = _pause || pause;
-
-  const hoverEvents = pauseOnHover
-    ? {
-        onMouseEnter: () => {
-          setPause(true);
-        },
-        onMouseLeave: () => {
-          setPause(false);
-        },
-      }
-    : {};
 
   useEffect(() => {
     if (
