@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 // Drafts .changeset/<branch-slug>[-<suffix>].md file(s) by asking an LLM
-// to summarize this PR's diff to each tracked package as a semver
-// bump + one-paragraph description, in changesets' own file format. Runs
-// once per PR (the calling workflow skips this script entirely if any
-// changeset file for this branch already exists), so it never overwrites
+// to summarize this PR's diff to each tracked package (minus each
+// package's own `exclude` list — see PACKAGES) as a semver bump +
+// one-paragraph description, in changesets' own file format. Runs once
+// per PR (the calling workflow skips this script entirely if a
+// changeset was already added in this PR), so it never overwrites
 // something a human already wrote or edited. One file is written per
 // package that actually changed, since each needs its own bump + summary.
 //
@@ -24,18 +25,34 @@ const PACKAGES = [
   {
     name: '@repo/ui',
     dir: 'packages/ui',
+    // README/CHANGELOG/AGENTS.md edits at the package root have zero
+    // effect on what actually publishes (files: ["dist"]) — excluded so
+    // a docs-wording-only PR doesn't get a changeset. Everything else
+    // under packages/ui (src/, package.json, build config) stays in
+    // scope: a dependency bump or build-config change can legitimately
+    // warrant one (e.g. 5.3.0's "Update dependencies to latest
+    // versions"), so this only excludes specific known-irrelevant files
+    // rather than narrowing wholesale to src/.
+    exclude: [
+      'packages/ui/README.md',
+      'packages/ui/README.ko.md',
+      'packages/ui/CHANGELOG.md',
+      'packages/ui/AGENTS.md',
+    ],
     fileSuffix: '',
     kind: 'React component library, published to npm',
   },
   {
     name: 'web',
     dir: 'apps/web',
+    exclude: [],
     fileSuffix: '-web',
     kind: 'Next.js marketing site, deployed but not published to npm',
   },
   {
     name: 'docs',
     dir: 'apps/docs',
+    exclude: [],
     fileSuffix: '-docs',
     kind: 'Storybook/docs site, deployed but not published to npm',
   },
@@ -88,17 +105,24 @@ function extractJson(content) {
   return JSON.parse(raw.trim());
 }
 
-function diffBetween(base, head, dir) {
-  return execFileSync('git', ['diff', `${base}...${head}`, '--', dir], {
-    encoding: 'utf8',
-    maxBuffer: 1024 * 1024 * 20,
-  });
+function diffBetween(base, head, dir, exclude = []) {
+  return execFileSync(
+    'git',
+    [
+      'diff',
+      `${base}...${head}`,
+      '--',
+      dir,
+      ...exclude.map(path => `:!${path}`),
+    ],
+    { encoding: 'utf8', maxBuffer: 1024 * 1024 * 20 },
+  );
 }
 
 async function draftFor(pkg, { apiKey, baseSha, headSha, branchSlug }) {
   let diff;
   try {
-    diff = diffBetween(baseSha, headSha, pkg.dir);
+    diff = diffBetween(baseSha, headSha, pkg.dir, pkg.exclude);
   } catch (err) {
     console.log(
       `Could not diff ${baseSha}...${headSha} for ${pkg.dir}: ${err.message}`,
