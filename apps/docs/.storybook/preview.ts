@@ -2,12 +2,11 @@ import type { Preview } from '@storybook/nextjs-vite';
 
 import '@repo/ui/style.css';
 
-// `@repo/ui/style.css` no longer ships Tailwind's preflight (it's a global
-// reset that shouldn't leak from a component library). Import the app's own
-// globals first — it runs Tailwind (`@import 'tailwindcss'`) and provides
-// preflight + base resets for the story canvas — then the ui-kit theme,
-// utilities and component styles. Mirrors how a real app consumes the package.
-import '../app/globals.css';
+// Tailwind (with preflight, in `@layer base`) first, then the ui-kit theme,
+// utilities and component styles. `@repo/ui/style.css` no longer ships
+// preflight, so `./tailwind.css` supplies it for the story canvas — see that
+// file for why the app's globals.css must NOT be used here.
+import './tailwind.css';
 
 const preview: Preview = {
   parameters: {

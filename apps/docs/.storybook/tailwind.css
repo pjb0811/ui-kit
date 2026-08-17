@@ -1,0 +1,12 @@
+/*
+ * Storybook-only Tailwind entry.
+ *
+ * `@repo/ui/style.css` no longer ships Tailwind's preflight (it's a global
+ * reset that shouldn't leak from a component library), so the story canvas
+ * needs its own. `@import 'tailwindcss'` puts preflight in `@layer base`, where
+ * it correctly loses to the component/utility layers — importing the app's
+ * globals.css instead would drag in its top-level (UN-layered) `* { margin:0;
+ * padding:0 }` reset, which beats every `@layer utilities` spacing class and
+ * flattens all component spacing.
+ */
+@import 'tailwindcss';
