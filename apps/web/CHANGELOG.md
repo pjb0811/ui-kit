@@ -1,5 +1,17 @@
 # web
 
+## 0.3.1
+
+### Patch Changes
+
+- Updated dependencies [12d3962]
+- Updated dependencies [83b3006]
+- Updated dependencies [05a2b1e]
+- Updated dependencies [35040fc]
+- Updated dependencies [4b8333c]
+- Updated dependencies [a880521]
+  - @repo/ui@5.4.0
+
 ## 0.3.0
 
 ### Minor Changes

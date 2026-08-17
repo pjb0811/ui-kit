@@ -1,5 +1,31 @@
 # @repo/ui
 
+## 5.4.0
+
+### Minor Changes
+
+- a880521: Stop shipping Tailwind's global preflight (and the global `body {}` rule) in `@repo/ui/style.css`.
+
+  `@import 'tailwindcss'` pulled in preflight — a document-wide reset (`*, ::before, ::after { margin: 0; box-sizing: border-box; border: 0 }` plus bare-tag resets on headings, lists, buttons, etc.). Because the library ships this compiled into `style.css`, importing the package flattened the spacing/typography of any host page (e.g. a Docusaurus/Infima docs site) — a leak, not the library's job. The `body { background/color }` rule leaked similarly, painting the host's `<body>`.
+
+  **What changed**
+
+  - `style.css` now imports only Tailwind's `theme` and `utilities` layers (no `preflight`).
+  - The `@layer base` now contains only the border/outline **color** defaults (`* { border-color; outline-color }`), which restore the design tokens for bare `border`/`outline` utilities. This is color-only, sits in the low-priority `base` layer, and never affects layout.
+
+  **Consumer impact / migration**
+
+  - Apps that run their own Tailwind (import `tailwindcss` themselves) are unaffected — they already provide preflight.
+  - Consumers that relied on `@repo/ui/style.css` alone for a CSS reset should add their own preflight (`@import 'tailwindcss'`, or `tailwindcss/preflight.css`) and set their own `body` colors. This repo's Storybook (`apps/docs`) and `apps/web` were updated accordingly.
+
+### Patch Changes
+
+- 12d3962: Fix `Modal`/`Toast`'s shared imperative stack renderer to use `useSyncExternalStore` instead of an effect-registered `forceUpdate`. Previously, updates pushed between a container's first render and its effect mount (a real gap, since the imperative API is called outside the React render cycle) could be silently dropped, and reading the external `stack` array directly in the render body risked tearing under concurrent rendering. Also fixed a related bug where `render()` mutated `state.stack` in place via `.push()`, which would have defeated `useSyncExternalStore`'s reference-equality change detection — pushes now produce a new array.
+- 83b3006: Replace `Marquees`' manual ref-merge (`containerRef.current = node; responsiveRef(node);`) with `useMergedRef`, matching the pattern used elsewhere (#185). Fixes the per-render new-function-identity churn that caused `useResponsiveSize`'s callback ref to detach/reattach on every render.
+- 05a2b1e: Extract `Marquees`' and `Item`'s duplicated pause-on-hover state/handlers into a shared `usePauseOnHover` hook, and add `onFocus`/`onBlur` alongside `onMouseEnter`/`onMouseLeave` so keyboard-focused users can also pause the marquee — previously only mouse hover could pause it, leaving keyboard users with no way to stop a marquee containing links or buttons.
+- 35040fc: Replace the deprecated `useThrottle` alias with `useThrottledValue` in `Marquees`. No behavior change — internal cleanup ahead of `@jbpark/use-hooks` removing the alias in a future major version.
+- 4b8333c: Fix Switch label text contrast against its track background. The label color is now conditional on checked state (`text-primary-foreground` when checked, `text-foreground` when unchecked) instead of a hardcoded `text-white`, which was unreadable against the light track color used in dark theme.
+
 ## 5.3.0
 
 ### Minor Changes
