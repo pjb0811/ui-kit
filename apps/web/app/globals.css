@@ -11,6 +11,10 @@ html.dark {
 }
 
 body {
+  /* Theme body colors used to come from `@repo/ui/style.css`; that global
+     `body {}` rule was removed from the library (a component lib shouldn't
+     paint the host body), so the app sets them itself now. */
+  @apply bg-background text-foreground;
   max-width: 100vw;
   overflow-x: hidden;
 }

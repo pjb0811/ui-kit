@@ -1,4 +1,20 @@
-@import 'tailwindcss';
+/*
+ * Import Tailwind WITHOUT its global preflight (base) layer.
+ *
+ * `@import 'tailwindcss'` also pulls in preflight — a document-wide reset
+ * (`*, ::before, ::after { margin: 0; box-sizing: border-box; border: 0 }`,
+ * bare-tag resets on headings/lists/buttons/etc). Shipping that in a component
+ * library's stylesheet flattens the spacing/typography of any host page that
+ * imports it (e.g. a Docusaurus/Infima site), which is a leak, not our job.
+ *
+ * Consumers that run their own Tailwind (the usual case — apps import
+ * `tailwindcss` themselves before this file) still get preflight from their own
+ * build, so components are unaffected. Non-Tailwind hosts simply don't get a
+ * global reset applied on their behalf.
+ */
+@layer theme, base, components, utilities;
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities.css' layer(utilities);
 
 @config "../tailwind.config.mjs";
 
@@ -117,11 +133,21 @@
 }
 
 @layer base {
+  /*
+   * Border/outline color defaults. Tailwind v4 defaults `border`/`outline`
+   * color to `currentColor`; this restores the design-system tokens so a bare
+   * `border`/`outline` utility on a component renders in the theme color. Kept
+   * global (not scoped to a wrapper) so components work without consumers
+   * adding a root marker — it only sets *color* (cosmetic), lives in the
+   * low-priority `base` layer (a host's own unlayered rules win), and never
+   * affects layout the way preflight did.
+   *
+   * The former `body { @apply bg-background text-foreground }` was removed: a
+   * component library shouldn't paint the host's <body>. Apps set their own
+   * body colors in their own globals.
+   */
   * {
     @apply border-border outline-ring/50;
-  }
-  body {
-    @apply bg-background text-foreground;
   }
 }
 
