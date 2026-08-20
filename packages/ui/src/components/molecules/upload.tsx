@@ -163,7 +163,7 @@ const Upload = ({
       {files.length > 0 && (
         <ul
           className={cn(
-            'flex flex-col gap-2',
+            'm-0 flex list-none flex-col gap-2 p-0',
             classNames?.list,
             //
           )}
