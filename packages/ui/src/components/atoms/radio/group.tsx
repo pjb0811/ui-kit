@@ -98,7 +98,7 @@ const RadioGroup = ({
     <ul
       {...props}
       className={cn(
-        'flex gap-4',
+        'm-0 flex list-none gap-4 p-0',
         className,
         orientation === 'vertical' && 'flex-col',
         isButton && 'gap-0',

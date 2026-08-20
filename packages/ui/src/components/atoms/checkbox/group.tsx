@@ -66,6 +66,7 @@ const Group = ({
     <ul
       {...props}
       className={cn(
+        'm-0 list-none p-0',
         orientation === 'vertical' ? 'space-y-2' : 'flex gap-2',
         className,
       )}

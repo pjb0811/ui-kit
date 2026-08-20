@@ -7,6 +7,7 @@ const Paragraph = ({ children, className, ...props }: Props) => {
     <p
       {...props}
       className={cn(
+        'm-0',
         className,
         //
       )}

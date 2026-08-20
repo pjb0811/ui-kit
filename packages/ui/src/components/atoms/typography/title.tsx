@@ -25,7 +25,7 @@ const Title = ({ children, level = 1, className, ...props }: Props) => {
 
   return (
     <Element
-      className={cn('leading-snug font-bold', styles[Element], className)}
+      className={cn('m-0 leading-snug font-bold', styles[Element], className)}
       {...props}
     >
       {children}
