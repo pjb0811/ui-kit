@@ -179,7 +179,7 @@ pnpm run build-storybook --filter=docs
 
 ### Apps
 
-- **`apps/web`**: Next.js 기반 웹 데모/서비스
+- **`apps/web`**: Docusaurus 기반 랜딩 페이지
 - **`apps/docs`**: Storybook 기반 컴포넌트 문서 사이트
 
 ### Packages

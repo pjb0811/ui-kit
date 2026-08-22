@@ -1,6 +1,6 @@
 # Web App
 
-Next.js demo app for the UI-Kit monorepo. It consumes `@repo/ui` as a workspace package.
+Docusaurus-based landing page for the ui-kit package. It consumes `@repo/ui` as a workspace package to render live components on the homepage.
 
 ## Getting Started
 

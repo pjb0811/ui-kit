@@ -10,7 +10,7 @@ pnpm + turborepo 기반 모노레포. `packages/ui`가 퍼블리시되는 React 
 ui-kit/
 ├── apps/
 │   ├── docs/          # Next.js + Storybook (port 3001 / storybook port 6006)
-│   └── web/           # Next.js 앱
+│   └── web/           # Docusaurus 랜딩 페이지 (port 3000)
 └── packages/
     ├── ui/            # @repo/ui — 퍼블리시 대상
     ├── eslint-config/
@@ -173,18 +173,14 @@ import { MyComponent } from '@repo/ui';
 const meta: Meta<typeof MyComponent> = {
   title: 'UI/MyComponent', // 'UI/' 프리픽스 유지
   component: MyComponent,
-  argTypes: {
-    /* ... */
-  },
+  argTypes: {/* ... */},
 };
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  args: {
-    /* ... */
-  },
+  args: {/* ... */},
 };
 ```
 
@@ -229,7 +225,7 @@ import './local';
 ### `/run`
 
 앱을 실제로 실행해서 변경 사항을 브라우저에서 확인할 때 사용.
-Storybook이나 Next.js 앱을 띄워 UI를 직접 검증한다.
+Storybook이나 apps/web(Docusaurus)을 띄워 UI를 직접 검증한다.
 
 ### `/verify`
 
