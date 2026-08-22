@@ -1,5 +1,17 @@
 # web
 
+## 1.0.0
+
+### Major Changes
+
+- 03a91d0: Migrated the landing page from Next.js to Docusaurus, keeping the same content and design. apps/docs (Storybook) is unaffected.
+
+### Patch Changes
+
+- a5910eb: Fix Tailwind preflight leaking into the Docusaurus theme (was resetting Infima's navbar/footer/heading styles), and update the production domain to ui-kit-web.vercel.app.
+- Updated dependencies [06b8e13]
+  - @repo/ui@5.4.2
+
 ## 0.3.2
 
 ### Patch Changes
