@@ -1,5 +1,12 @@
 # docs
 
+## 0.5.3
+
+### Patch Changes
+
+- Updated dependencies [06b8e13]
+  - @repo/ui@5.4.2
+
 ## 0.5.2
 
 ### Patch Changes
