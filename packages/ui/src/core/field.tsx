@@ -14,7 +14,7 @@ function FieldSet({ className, ...props }: React.ComponentProps<'fieldset'>) {
     <fieldset
       data-slot="field-set"
       className={cn(
-        'flex flex-col gap-6',
+        'm-0 flex flex-col gap-6 border-0 p-0',
         `has-[>[data-slot=checkbox-group]]:gap-3
         has-[>[data-slot=radio-group]]:gap-3`,
         className,
@@ -34,6 +34,7 @@ function FieldLegend({
       data-slot="field-legend"
       data-variant={variant}
       className={cn(
+        'p-0',
         'mb-3 font-medium',
         'data-[variant=legend]:text-base',
         'data-[variant=label]:text-sm',
@@ -222,7 +223,7 @@ function FieldError({
     }
 
     return (
-      <ul className="ml-4 flex list-disc flex-col gap-1">
+      <ul className="m-0 ml-4 flex list-disc flex-col gap-1 p-0">
         {uniqueErrors.map(
           (error, index) =>
             error?.message && <li key={index}>{error.message}</li>,
