@@ -6,13 +6,15 @@
 
 /*
  * `@repo/ui/style.css` resolves to the library's source globals.css inside
- * this workspace (theme tokens + utilities layer, no preflight — see that
- * file for why), so importing `tailwindcss` here is what actually turns
- * this page's own utility classes (`flex`, `max-w-5xl`, `grid-cols-3`, ...)
- * into real CSS; the `configurePostCss` hook in docusaurus.config.ts is
- * what runs the Tailwind build itself.
+ * this workspace, which already does `@import 'tailwindcss/theme.css'` +
+ * `@import 'tailwindcss/utilities.css'` (the `configurePostCss` hook in
+ * docusaurus.config.ts is what actually runs the Tailwind build, generating
+ * utility classes for this page's own JSX too, e.g. `flex`, `max-w-5xl`,
+ * `grid-cols-3`). Deliberately NOT `@import 'tailwindcss'` here — that also
+ * pulls in preflight, a document-wide reset that stomps Infima's own base
+ * styles (navbar/footer/headings) on this Docusaurus site. See the comment
+ * at the top of that file for the full reasoning.
  */
-@import 'tailwindcss';
 @import '@repo/ui/style.css';
 
 body {

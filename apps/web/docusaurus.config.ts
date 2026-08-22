@@ -32,9 +32,7 @@ const config: Config = {
   // Vercel is the deploy target (see vercel.json). `url` + `baseUrl` must
   // match it, since canonical <link> tags, sitemap.xml, and Open Graph URLs
   // are all derived from them.
-  // TODO: confirm this matches the actual Vercel production domain for
-  // this app once deployed.
-  url: 'https://ui-kit-web-lab.vercel.app',
+  url: 'https://ui-kit-web.vercel.app',
   baseUrl: '/',
 
   organizationName: 'pjb0811',
