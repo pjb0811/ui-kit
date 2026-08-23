@@ -21,6 +21,7 @@ const sidebars: SidebarsConfig = {
         'components/atoms/color-picker',
         'components/atoms/typography',
         'components/atoms/switch',
+        'components/atoms/skeleton',
       ],
     },
   ],

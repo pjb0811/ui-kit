@@ -1,0 +1,51 @@
+---
+sidebar_position: 10
+title: Skeleton
+---
+
+import DemoTheme from '@site/src/components/DemoTheme';
+import SkeletonDemo from '../../../src/demo/skeleton-demo';
+
+# Skeleton
+
+A placeholder that mimics the shape of content while it loads.
+`Skeleton.Button` and `Skeleton.Node` are preset shapes for common cases.
+
+```tsx
+import { Skeleton } from '@jbpark/ui-kit';
+
+<Skeleton loading={isLoading} avatar count={3}>
+  <RealContent />
+</Skeleton>;
+```
+
+<DemoTheme>
+
+<SkeletonDemo />
+
+</DemoTheme>
+
+## Props
+
+| Prop        | Type                                       | Default     |
+| ----------- | --------------------------------------------- | ----------- |
+| `loading`   | `boolean`                                     | `true`      |
+| `active`    | `boolean`                                      | `true`      |
+| `avatar`    | `boolean`                                      | -           |
+| `size`      | `'small' \| 'default' \| 'large'`             | `'default'` |
+| `count`     | `number`                                       | `1`         |
+| `gap`       | `number`                                       | `6`         |
+| `direction` | `'horizontal' \| 'vertical'`                  | `'vertical'` |
+| `width`     | `string \| number \| (string \| number)[]`    | -           |
+| `height`    | `string \| number \| (string \| number)[]`    | -           |
+| `classNames` | `{ wrapper?, avatar?, item?: string }`       | -           |
+| `children`  | `ReactNode`                                    | -           |
+
+When `loading` is `false`, `children` renders as-is (no wrapper). `active`
+toggles the shimmer animation. `width`/`height` accept an array to size
+each of the `count` placeholder items individually. `Skeleton` also accepts
+the rest of `React.ComponentPropsWithoutRef<'div'>`.
+
+`Skeleton.Button` and `Skeleton.Node` accept the same props (minus their own
+preset shape) as shortcuts for a button-sized and a large card-sized
+placeholder, respectively.
