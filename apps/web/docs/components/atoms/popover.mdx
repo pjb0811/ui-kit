@@ -1,0 +1,46 @@
+---
+sidebar_position: 13
+title: Popover
+---
+
+import DemoTheme from '@site/src/components/DemoTheme';
+import PopoverDemo from '../../../src/demo/popover-demo';
+
+# Popover
+
+A floating panel anchored to a trigger element, built on Radix UI's Popover
+primitive. Click each button below to open it.
+
+```tsx
+import { Button, Popover } from '@jbpark/ui-kit';
+
+<Popover title="Title" content={<p>Content</p>}>
+  <Button>Open</Button>
+</Popover>;
+```
+
+<DemoTheme>
+
+<PopoverDemo />
+
+</DemoTheme>
+
+## Props
+
+| Prop           | Type                        | Default |
+| -------------- | ------------------------------ | ------- |
+| `title`        | `ReactNode`                    | -       |
+| `content`      | `ReactNode`                    | -       |
+| `placement`    | placement name (see below)     | `'top'` |
+| `open`         | `boolean`                      | -       |
+| `defaultOpen`  | `boolean`                      | -       |
+| `onOpenChange` | `(open: boolean) => void`      | -       |
+| `children`     | `ReactNode` (the trigger)      | -       |
+
+`placement`: `'top' | 'left' | 'right' | 'bottom' | 'topLeft' | 'topRight' |
+'bottomLeft' | 'bottomRight' | 'leftTop' | 'leftBottom' | 'rightTop' |
+'rightBottom'`.
+
+Works both controlled (pass `open` + `onOpenChange`) and uncontrolled (pass
+`defaultOpen`, or neither). `Popover` also accepts the rest of
+`React.ComponentPropsWithoutRef<'div'>` (applied to the content panel).

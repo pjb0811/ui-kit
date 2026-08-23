@@ -15,10 +15,10 @@ npm install @jbpark/ui-kit
 
 ## Components
 
-Pages here are being added one component at a time, grouped by the same
-atomic-design tiers as the source (atoms/molecules/organisms/templates). For
-the full interactive catalog of every component right now, see
-[Storybook](https://ui-kit-docs-lab.vercel.app).
+Pages here are being added one component at a time, grouped the same way as
+Storybook and the landing page (General/Data Entry/Data Display/Feedback/
+Navigation/Layout). For the full interactive catalog of every component
+right now, see [Storybook](https://ui-kit-docs-lab.vercel.app).
 
 ## Links
 
