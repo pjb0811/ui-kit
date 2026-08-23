@@ -2,4 +2,4 @@
 'web': minor
 ---
 
-New UI components and documentation pages have been added, including Button, Checkbox, Float Button, Input, Popover, and Radio, with live demos and detailed prop documentation.
+Add docs pages for the last 6 atoms: Skeleton, Input, Button, Popover, Checkbox, and Radio — finishing every atom. Also regroup the docs sidebar by function (General/Data Entry/Data Display/Feedback/Navigation) instead of atomic-design tier.
