@@ -11,7 +11,7 @@ const sidebars: SidebarsConfig = {
       type: 'category',
       label: 'Atoms',
       collapsed: false,
-      items: ['components/atoms/tag'],
+      items: ['components/atoms/tag', 'components/atoms/progress'],
     },
   ],
 };

@@ -1,0 +1,34 @@
+---
+sidebar_position: 2
+title: Progress
+---
+
+import DemoTheme from '@site/src/components/DemoTheme';
+import ProgressDemo from '../../../src/demo/progress-demo';
+
+# Progress
+
+A bar that fills to a given percentage, horizontally or vertically.
+
+```tsx
+import { Progress } from '@jbpark/ui-kit';
+
+<Progress value={50} />;
+```
+
+<DemoTheme>
+
+<ProgressDemo />
+
+</DemoTheme>
+
+## Props
+
+| Prop         | Type                                       | Default        |
+| ------------ | ------------------------------------------- | -------------- |
+| `value`      | `number`                                    | -               |
+| `direction`  | `'horizontal' \| 'vertical'`               | `'horizontal'` |
+| `classNames` | `{ background?: string; bar?: string }`    | -               |
+| `className`  | `string`                                    | -               |
+
+`value` is clamped to `0`–`100`. `Progress` also accepts the rest of `React.ComponentPropsWithoutRef<'div'>`.
