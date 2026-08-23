@@ -1,5 +1,12 @@
 # web
 
+## 1.1.1
+
+### Patch Changes
+
+- Updated dependencies [d10bd91]
+  - @repo/ui@5.4.4
+
 ## 1.1.0
 
 ### Minor Changes
