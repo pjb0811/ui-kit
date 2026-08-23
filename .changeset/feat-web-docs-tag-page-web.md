@@ -2,4 +2,4 @@
 'web': minor
 ---
 
-A new UI component library, ui-kit, is now documented with a marketing landing page and component documentation, including interactive demos.
+Add a docs/ section (was disabled) with the first component page, Tag — description, live demo, and props table. More components will be added incrementally.
