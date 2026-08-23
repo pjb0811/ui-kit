@@ -1,0 +1,57 @@
+---
+sidebar_position: 4
+title: Select
+---
+
+import DemoTheme from '@site/src/components/DemoTheme';
+import SelectDemo from '../../../src/demo/select-demo';
+
+# Select
+
+A dropdown for choosing one value from a list, built on Radix UI's Select
+primitive. Options can be flat or grouped.
+
+```tsx
+import { Select } from '@jbpark/ui-kit';
+
+<Select
+  placeholder="Choose a framework"
+  options={[
+    { label: 'React', value: 'react' },
+    { label: 'Vue', value: 'vue' },
+  ]}
+  onChange={value => console.log(value)}
+/>;
+```
+
+<DemoTheme>
+
+<SelectDemo />
+
+</DemoTheme>
+
+## Props
+
+| Prop          | Type                        | Default |
+| ------------- | ----------------------------- | ------- |
+| `options`     | `(Option \| OptionGroup)[]`  | -       |
+| `placeholder` | `string`                      | -       |
+| `onChange`    | `(value: string) => void`     | -       |
+| `className`   | `string`                      | -       |
+
+```ts
+interface Option {
+  label: React.ReactNode;
+  value: string;
+}
+
+interface OptionGroup {
+  label: React.ReactNode;
+  options: Option[];
+}
+```
+
+An `OptionGroup` entry (an `options` array instead of `value`) renders as a
+labeled group. `Select` also accepts the rest of Radix UI's `Select` root
+props (e.g. `value`, `defaultValue`, `disabled`, `name`, `required`) except
+`onValueChange`, which is renamed to `onChange` above.

@@ -15,6 +15,7 @@ const sidebars: SidebarsConfig = {
         'components/atoms/tag',
         'components/atoms/progress',
         'components/atoms/spin',
+        'components/atoms/select',
       ],
     },
   ],
