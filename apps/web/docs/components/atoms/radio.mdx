@@ -1,0 +1,71 @@
+---
+sidebar_position: 15
+title: Radio
+---
+
+import DemoTheme from '@site/src/components/DemoTheme';
+import RadioDemo from '../../../src/demo/radio-demo';
+
+# Radio
+
+A single radio button, or `Radio.Group` for a mutually-exclusive list of
+options. `Radio.Group` also has a segmented-button style
+(`optionType="button"`).
+
+```tsx
+import { Radio } from '@jbpark/ui-kit';
+
+<Radio.Group
+  options={[
+    { label: 'Small', value: 'small' },
+    { label: 'Medium', value: 'medium' },
+  ]}
+  value={value}
+  onChange={setValue}
+/>;
+```
+
+<DemoTheme>
+
+<RadioDemo />
+
+</DemoTheme>
+
+## Radio {/* #radio */}
+
+| Prop             | Type                                            | Default  |
+| ---------------- | -------------------------------------------------- | -------- |
+| `checked`        | `boolean`                                          | -        |
+| `defaultChecked` | `boolean`                                          | `false`  |
+| `value`          | `string \| number \| boolean`                     | -        |
+| `name`           | `string`                                           | -        |
+| `placement`      | `'left' \| 'right'`                                | `'left'` |
+| `disabled`       | `boolean`                                          | -        |
+| `icons`          | `{ checked?: ReactNode; unchecked?: ReactNode }`  | -        |
+| `onChange`       | `(checked: boolean) => void`                       | -        |
+
+A standalone `Radio` (not inside `Radio.Group`) manages its own single-item
+group, so `checked`/`onChange` behave like a checkbox rather than
+participating in a shared selection.
+
+## Radio.Group {/* #radio-group */}
+
+| Prop           | Type                                        | Default        |
+| -------------- | ---------------------------------------------- | -------------- |
+| `options`      | `(string \| number \| boolean \| Option)[]`    | `[]`           |
+| `value`        | `OptionValue`                                   | -              |
+| `defaultValue` | `OptionValue`                                   | -              |
+| `orientation`  | `'vertical' \| 'horizontal'`                   | `'horizontal'` |
+| `placement`    | `'left' \| 'right'`                             | `'left'`       |
+| `optionType`   | `'default' \| 'button'`                         | `'default'`    |
+| `buttonStyle`  | `'solid' \| 'outlined'`                         | `'solid'`      |
+| `size`         | `'small' \| 'middle' \| 'large'`               | -              |
+| `name`         | `string`                                        | -              |
+| `disabled`     | `boolean`                                       | -              |
+| `classNames`   | `{ wrapper?: string; item?: string }`          | -              |
+| `onChange`     | `(value: OptionValue) => void`                  | -              |
+
+`optionType="button"` renders each option as a segmented `Button` (real
+radio semantics via Radix, not just styled buttons) instead of the default
+circle-and-label. `buttonStyle` only affects the checked option's variant in
+that mode.

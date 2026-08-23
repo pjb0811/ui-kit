@@ -32,6 +32,7 @@ const sidebars: SidebarsConfig = {
         'components/atoms/switch',
         'components/atoms/input',
         'components/atoms/checkbox',
+        'components/atoms/radio',
       ],
     },
     {
