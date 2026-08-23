@@ -1,0 +1,43 @@
+---
+sidebar_position: 3
+title: Spin
+---
+
+import DemoTheme from '@site/src/components/DemoTheme';
+import SpinDemo from '../../../src/demo/spin-demo';
+
+# Spin
+
+A loading indicator, either standalone or as an overlay on top of existing
+content.
+
+```tsx
+import { Spin } from '@jbpark/ui-kit';
+
+// standalone
+<Spin spinning />
+
+// overlay on content
+<Spin spinning={isLoading}>
+  <MyContent />
+</Spin>;
+```
+
+<DemoTheme>
+
+<SpinDemo />
+
+</DemoTheme>
+
+## Props
+
+| Prop        | Type      | Default |
+| ----------- | ---------- | ------- |
+| `spinning`  | `boolean` | -       |
+| `children`  | `ReactNode` | -     |
+| `className` | `string`  | -       |
+
+With `children`, `Spin` renders them dimmed underneath the spinner while
+`spinning` is true, and renders them as-is (no wrapper) while false. Without
+`children`, it renders nothing while `spinning` is false. `Spin` also
+accepts the rest of `React.ComponentPropsWithoutRef<'div'>`.
