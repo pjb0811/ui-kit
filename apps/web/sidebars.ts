@@ -20,6 +20,7 @@ const sidebars: SidebarsConfig = {
         'components/atoms/float-button',
         'components/atoms/color-picker',
         'components/atoms/typography',
+        'components/atoms/switch',
       ],
     },
   ],

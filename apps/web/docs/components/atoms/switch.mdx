@@ -1,0 +1,42 @@
+---
+sidebar_position: 9
+title: Switch
+---
+
+import DemoTheme from '@site/src/components/DemoTheme';
+import SwitchDemo from '../../../src/demo/switch-demo';
+
+# Switch
+
+A boolean on/off toggle.
+
+```tsx
+import { Switch } from '@jbpark/ui-kit';
+
+<Switch checked={checked} onChange={setChecked} />;
+```
+
+<DemoTheme>
+
+<SwitchDemo />
+
+</DemoTheme>
+
+## Props
+
+| Prop                | Type                        | Default    |
+| ------------------- | ------------------------------ | ---------- |
+| `checked`           | `boolean`                      | -          |
+| `defaultChecked`    | `boolean`                      | `false`    |
+| `size`               | `'small' \| 'medium'`         | `'medium'` |
+| `disabled`           | `boolean`                      | -          |
+| `onChange`           | `(checked: boolean) => void`   | -          |
+| `checkedChildren`    | `ReactNode`                    | -          |
+| `unCheckedChildren`  | `ReactNode`                    | -          |
+| `classNames`         | `{ track?: string; handle?: string }` | -   |
+| `className`          | `string`                       | -          |
+
+Works both controlled (pass `checked` + `onChange`) and uncontrolled (pass
+`defaultChecked`, or neither). `Switch` also accepts the rest of
+`React.ComponentPropsWithoutRef<'button'>` except `onChange` (renamed to the
+boolean-callback form above).
