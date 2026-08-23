@@ -49,7 +49,10 @@ const config: Config = {
     [
       'classic',
       {
-        docs: false,
+        docs: {
+          sidebarPath: './sidebars.ts',
+          editUrl: 'https://github.com/pjb0811/ui-kit/tree/main/apps/web/',
+        },
         blog: false,
         theme: {
           customCss: './src/css/custom.css',
@@ -68,8 +71,14 @@ const config: Config = {
       title: 'ui-kit',
       items: [
         {
-          href: 'https://ui-kit-docs-lab.vercel.app',
+          type: 'docSidebar',
+          sidebarId: 'docsSidebar',
+          position: 'left',
           label: 'Docs',
+        },
+        {
+          href: 'https://ui-kit-docs-lab.vercel.app',
+          label: 'Storybook',
           position: 'left',
         },
         {
@@ -90,7 +99,8 @@ const config: Config = {
         {
           title: 'More',
           items: [
-            { label: 'Docs', href: 'https://ui-kit-docs-lab.vercel.app' },
+            { label: 'Docs', to: '/docs/intro' },
+            { label: 'Storybook', href: 'https://ui-kit-docs-lab.vercel.app' },
             { label: 'GitHub', href: 'https://github.com/pjb0811/ui-kit' },
             {
               label: 'npm',

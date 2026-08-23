@@ -1,0 +1,34 @@
+---
+sidebar_position: 1
+title: Tag
+---
+
+import DemoTheme from '@site/src/components/DemoTheme';
+import TagDemo from '../../../src/demo/tag-demo';
+
+# Tag
+
+A small labeled badge, typically used to categorize or highlight content.
+
+```tsx
+import { Tag } from '@jbpark/ui-kit';
+
+<Tag color="primary">primary</Tag>;
+```
+
+<DemoTheme>
+
+<TagDemo />
+
+</DemoTheme>
+
+## Props
+
+| Prop        | Type                                                                | Default     |
+| ----------- | -------------------------------------------------------------------- | ----------- |
+| `variant`   | `'default' \| 'outlined'`                                          | `'default'` |
+| `color`     | `'default' \| 'primary' \| 'success' \| 'warning' \| 'danger'`     | `'default'` |
+| `className` | `string`                                                              | -           |
+| `children`  | `ReactNode`                                                           | -           |
+
+`Tag` also accepts the rest of `React.ComponentProps<'span'>` (e.g. `onClick`, `style`).
