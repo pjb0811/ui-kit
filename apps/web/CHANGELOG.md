@@ -1,5 +1,19 @@
 # web
 
+## 1.1.0
+
+### Minor Changes
+
+- 40153d3: Add docs pages for 8 more atoms: Progress, Spin, Select, Date Picker, Float Button, Color Picker, Typography, and Switch.
+- 561b31e: Add docs pages for the last 6 atoms: Skeleton, Input, Button, Popover, Checkbox, and Radio — finishing every atom. Also regroup the docs sidebar by function (General/Data Entry/Data Display/Feedback/Navigation) instead of atomic-design tier.
+- ee7e661: Add a docs/ section (was disabled) with the first component page, Tag — description, live demo, and props table. More components will be added incrementally.
+
+### Patch Changes
+
+- 48dc397: Fix dark mode toggle not reaching `<body>` — the page background/text color stayed light while ui-kit components inside it went dark, because the `.dark` class was only applied to a wrapper nested inside the page content instead of `<html>`.
+- Updated dependencies [1285042]
+  - @repo/ui@5.4.3
+
 ## 1.0.0
 
 ### Major Changes
