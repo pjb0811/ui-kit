@@ -150,6 +150,41 @@
   * {
     @apply border-border outline-ring/50;
   }
+
+  /*
+   * Self-scoped normalize for the library's own components.
+   *
+   * We intentionally ship no global preflight (see the top of this file), which
+   * means bare interactive/form elements otherwise keep the host's UA defaults —
+   * a `<button>` renders with a 2px `outset` border, native `appearance`, and
+   * the UA button font (e.g. Arial) instead of the page font. Hosts that run
+   * their own Tailwind preflight (Next/Storybook) normalize this for us, but
+   * hosts that don't (e.g. Docusaurus, which imports only our theme+utilities)
+   * leave those defaults leaking into our components.
+   *
+   * Restore just the preflight bits our components rely on, scoped to the
+   * `[data-slot]` subtree so the host's own elements stay untouched (Infima
+   * etc. are unaffected). Border *width/style* only — color still comes from the
+   * `border-border` rule above / component utilities.
+   */
+  :where([data-slot], [data-slot] *) {
+    box-sizing: border-box;
+    border-width: 0;
+    border-style: solid;
+  }
+
+  :where(
+    button[data-slot],
+    [data-slot] button,
+    [data-slot] input,
+    [data-slot] select,
+    [data-slot] textarea
+  ) {
+    appearance: none;
+    background-color: transparent;
+    color: inherit;
+    font: inherit;
+  }
 }
 
 @layer components {
