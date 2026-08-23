@@ -1,0 +1,59 @@
+---
+sidebar_position: 8
+title: Typography
+---
+
+import DemoTheme from '@site/src/components/DemoTheme';
+import TypographyDemo from '../../../src/demo/typography-demo';
+
+# Typography
+
+`Typography.Title`, `Typography.Text`, `Typography.Paragraph`, and
+`Typography.Link` — text primitives for headings, inline emphasis,
+paragraphs, and links. `Typography` itself is a plain `<article>` wrapper.
+
+```tsx
+import { Typography } from '@jbpark/ui-kit';
+
+<Typography.Title level={2}>Heading</Typography.Title>
+<Typography.Paragraph>
+  Some <Typography.Text strong>strong</Typography.Text> text.
+</Typography.Paragraph>;
+```
+
+<DemoTheme>
+
+<TypographyDemo />
+
+</DemoTheme>
+
+## Title {/* #title */}
+
+Renders `h1`–`h6` depending on `level`.
+
+| Prop    | Type                       | Default |
+| ------- | ---------------------------- | ------- |
+| `level` | `1 \| 2 \| 3 \| 4 \| 5 \| 6` | `1`     |
+
+Also accepts the rest of `React.ComponentPropsWithoutRef<'h1'|...|'h6'>`.
+
+## Text {/* #text */}
+
+Renders a `span`.
+
+| Prop        | Type      | Default |
+| ----------- | ---------- | ------- |
+| `underline` | `boolean` | -       |
+| `strong`    | `boolean` | -       |
+
+Also accepts the rest of `React.ComponentPropsWithoutRef<'span'>`.
+
+## Paragraph {/* #paragraph */}
+
+Renders a `p`. No props beyond `React.ComponentPropsWithoutRef<'p'>`.
+
+## Link {/* #link */}
+
+Renders an `a`. No props beyond `React.ComponentPropsWithoutRef<'a'>` —
+`rel="noopener noreferrer"` is added automatically when `target="_blank"`
+and no `rel` is passed.

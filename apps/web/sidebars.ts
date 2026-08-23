@@ -11,7 +11,17 @@ const sidebars: SidebarsConfig = {
       type: 'category',
       label: 'Atoms',
       collapsed: false,
-      items: ['components/atoms/tag'],
+      items: [
+        'components/atoms/tag',
+        'components/atoms/progress',
+        'components/atoms/spin',
+        'components/atoms/select',
+        'components/atoms/date-picker',
+        'components/atoms/float-button',
+        'components/atoms/color-picker',
+        'components/atoms/typography',
+        'components/atoms/switch',
+      ],
     },
   ],
 };

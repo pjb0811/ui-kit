@@ -1,0 +1,37 @@
+---
+sidebar_position: 5
+title: Date Picker
+---
+
+import DemoTheme from '@site/src/components/DemoTheme';
+import DatePickerDemo from '../../../src/demo/date-picker-demo';
+
+# Date Picker
+
+A button that opens a calendar popover for picking a single date.
+
+```tsx
+import { DatePicker } from '@jbpark/ui-kit';
+
+<DatePicker onChange={date => console.log(date)} />;
+```
+
+<DemoTheme>
+
+<DatePickerDemo />
+
+</DemoTheme>
+
+## Props
+
+| Prop           | Type                              | Default        |
+| -------------- | ----------------------------------- | -------------- |
+| `value`        | `Date`                              | -               |
+| `defaultValue` | `Date`                              | -               |
+| `placeholder`  | `string`                            | `'Pick a date'` |
+| `disabled`     | `boolean`                           | -               |
+| `onChange`     | `(date: Date \| undefined) => void` | -               |
+| `className`    | `string`                            | -               |
+
+Works both controlled (pass `value` + `onChange`) and uncontrolled (pass
+`defaultValue`, or neither).

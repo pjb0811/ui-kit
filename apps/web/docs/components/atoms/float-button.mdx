@@ -1,0 +1,56 @@
+---
+sidebar_position: 6
+title: Float Button
+---
+
+import DemoTheme from '@site/src/components/DemoTheme';
+import FloatButtonDemo from '../../../src/demo/float-button-demo';
+import { FloatButton } from '@repo/ui';
+
+# Float Button
+
+A circular button fixed to a corner of the viewport, for a persistent
+floating action. `FloatButton.BackTop` is a ready-made variant that scrolls
+the page back to the top.
+
+```tsx
+import { FloatButton } from '@jbpark/ui-kit';
+
+<FloatButton icon={<Settings />} aria-label="Settings" />
+<FloatButton.BackTop />;
+```
+
+<DemoTheme>
+
+<FloatButtonDemo />
+
+</DemoTheme>
+
+`FloatButton` is `fixed`-positioned by design, so the box above overrides it
+to `absolute` just to keep this preview contained. `FloatButton.BackTop` is
+rendered for real below (`visibilityHeight={200}`, lower than its default
+`450`) — scroll this page down a bit and it appears in the actual bottom-right
+corner of your viewport; clicking it scrolls back to the top.
+
+<DemoTheme>
+
+<FloatButton.BackTop visibilityHeight={200} aria-label="Back to top" />
+
+</DemoTheme>
+
+## Props
+
+`FloatButton` accepts the same props as `Button` (icon, loading, shape,
+color, etc. — see its own docs page once added), plus fixed
+positioning/size/shape styling applied by default (all overridable via
+`className`).
+
+`FloatButton.BackTop` additionally accepts:
+
+| Prop                | Type                              | Default |
+| ------------------- | ------------------------------------ | ------- |
+| `visibilityHeight`  | `number`                             | `450`   |
+| `onClick`           | `(e: MouseEvent<HTMLElement>) => void` | -     |
+
+`BackTop` hides itself (`display: none`) until the page has scrolled past
+`visibilityHeight`.
