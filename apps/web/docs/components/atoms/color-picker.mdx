@@ -1,0 +1,41 @@
+---
+sidebar_position: 7
+title: Color Picker
+---
+
+import DemoTheme from '@site/src/components/DemoTheme';
+import ColorPickerDemo from '../../../src/demo/color-picker-demo';
+
+# Color Picker
+
+A swatch that opens a popover for picking a hex color.
+
+```tsx
+import { ColorPicker } from '@jbpark/ui-kit';
+
+<ColorPicker value={color} onChange={setColor} showText />;
+```
+
+<DemoTheme>
+
+<ColorPickerDemo />
+
+</DemoTheme>
+
+## Props
+
+| Prop           | Type                      | Default   |
+| -------------- | --------------------------- | --------- |
+| `value`        | `string`                    | -         |
+| `defaultValue` | `string`                    | `'#fff'`  |
+| `showText`     | `boolean`                   | -         |
+| `disabled`     | `boolean`                   | -         |
+| `onChange`     | `(color: string) => void`   | -         |
+| `open`         | `boolean`                   | -         |
+| `defaultOpen`  | `boolean`                   | -         |
+| `onOpenChange` | `(open: boolean) => void`   | -         |
+| `className`    | `string`                    | -         |
+
+`showText` renders the current hex value next to the swatch. Works both
+controlled (pass `value` + `onChange`) and uncontrolled (pass
+`defaultValue`, or neither).

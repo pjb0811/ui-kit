@@ -18,6 +18,7 @@ const sidebars: SidebarsConfig = {
         'components/atoms/select',
         'components/atoms/date-picker',
         'components/atoms/float-button',
+        'components/atoms/color-picker',
       ],
     },
   ],
