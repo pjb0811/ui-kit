@@ -24,6 +24,7 @@ const sidebars: SidebarsConfig = {
         'components/atoms/skeleton',
         'components/atoms/input',
         'components/atoms/button',
+        'components/atoms/popover',
       ],
     },
   ],
