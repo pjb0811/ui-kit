@@ -2,4 +2,4 @@
 'web': minor
 ---
 
-Added new UI components, including Color Picker, Date Picker, Float Button, Progress, Select, Spin, and Switch, as well as Typography primitives.
+Add docs pages for 8 more atoms: Progress, Spin, Select, Date Picker, Float Button, Color Picker, Typography, and Switch.
