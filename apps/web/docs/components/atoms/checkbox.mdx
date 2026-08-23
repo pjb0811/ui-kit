@@ -1,0 +1,74 @@
+---
+sidebar_position: 14
+title: Checkbox
+---
+
+import DemoTheme from '@site/src/components/DemoTheme';
+import CheckboxDemo from '../../../src/demo/checkbox-demo';
+
+# Checkbox
+
+A single checkbox, or `Checkbox.Group` for a list of options with a shared
+selected-values array.
+
+```tsx
+import { Checkbox } from '@jbpark/ui-kit';
+
+<Checkbox checked={checked} onChange={setChecked}>
+  Label
+</Checkbox>
+<Checkbox.Group
+  options={[{ label: 'React', value: 'react' }]}
+  value={values}
+  onChange={setValues}
+/>;
+```
+
+<DemoTheme>
+
+<CheckboxDemo />
+
+</DemoTheme>
+
+## Checkbox {/* #checkbox */}
+
+| Prop             | Type                                            | Default  |
+| ---------------- | -------------------------------------------------- | -------- |
+| `checked`        | `boolean`                                          | -        |
+| `defaultChecked` | `boolean`                                          | `false`  |
+| `value`          | `string \| number \| boolean`                     | -        |
+| `name`           | `string`                                           | -        |
+| `placement`      | `'left' \| 'right'`                                | `'left'` |
+| `disabled`       | `boolean`                                          | -        |
+| `icons`          | `{ checked?: ReactNode; unchecked?: ReactNode }`  | -        |
+| `onChange`       | `(checked: boolean) => void`                       | -        |
+
+Works both controlled (pass `checked` + `onChange`) and uncontrolled (pass
+`defaultChecked`, or neither). `icons` swaps the default check-square icons
+for custom ones. Also accepts the rest of
+`React.ComponentPropsWithoutRef<'div'>` except `onChange`.
+
+## Checkbox.Group {/* #checkbox-group */}
+
+| Prop           | Type                                        | Default        |
+| -------------- | ---------------------------------------------- | -------------- |
+| `options`      | `(string \| number \| boolean \| Option)[]`    | `[]`           |
+| `value`        | `OptionValue[]`                                 | -              |
+| `defaultValue` | `OptionValue[]`                                 | `[]`           |
+| `orientation`  | `'vertical' \| 'horizontal'`                   | `'vertical'`   |
+| `placement`    | `'left' \| 'right'`                             | `'left'`       |
+| `name`         | `string`                                        | -              |
+| `disabled`     | `boolean`                                       | -              |
+| `classNames`   | `{ wrapper?: string; item?: string }`          | -              |
+| `onChange`     | `(values: OptionValue[]) => void`               | -              |
+
+```ts
+interface Option {
+  label: string;
+  value: string | number | boolean;
+  disabled?: boolean;
+}
+```
+
+A plain `string`/`number`/`boolean` in `options` is shorthand for
+`{ label: String(v), value: v }`.

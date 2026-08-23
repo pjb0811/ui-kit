@@ -31,6 +31,7 @@ const sidebars: SidebarsConfig = {
         'components/atoms/color-picker',
         'components/atoms/switch',
         'components/atoms/input',
+        'components/atoms/checkbox',
       ],
     },
     {
