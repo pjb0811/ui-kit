@@ -23,6 +23,7 @@ const sidebars: SidebarsConfig = {
         'components/atoms/switch',
         'components/atoms/skeleton',
         'components/atoms/input',
+        'components/atoms/button',
       ],
     },
   ],
