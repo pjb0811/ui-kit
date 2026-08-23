@@ -16,6 +16,7 @@ const sidebars: SidebarsConfig = {
         'components/atoms/progress',
         'components/atoms/spin',
         'components/atoms/select',
+        'components/atoms/date-picker',
       ],
     },
   ],
