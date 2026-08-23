@@ -1,0 +1,46 @@
+---
+sidebar_position: 11
+title: Input
+---
+
+import DemoTheme from '@site/src/components/DemoTheme';
+import InputDemo from '../../../src/demo/input-demo';
+
+# Input
+
+A text input. `Input.Search` adds a clear button and a search action;
+`Input.TextArea` is the multi-line variant.
+
+```tsx
+import { Input } from '@jbpark/ui-kit';
+
+<Input placeholder="Basic input" />
+<Input.Search placeholder="Search..." onSearch={value => console.log(value)} />
+<Input.TextArea placeholder="Text area" rows={3} />;
+```
+
+<DemoTheme>
+
+<InputDemo />
+
+</DemoTheme>
+
+## Input {/* #input */}
+
+A thin wrapper with no props beyond `React.ComponentPropsWithRef<'input'>`.
+
+## Input.Search {/* #input-search */}
+
+| Prop         | Type                                                | Default |
+| ------------ | ------------------------------------------------------ | ------- |
+| `allowClear` | `boolean`                                               | `true`  |
+| `onChange`   | `(e: ChangeEvent<HTMLInputElement> \| { target: { value: string } }) => void` | - |
+| `onSearch`   | `(value: string) => void`                               | -       |
+
+`onSearch` fires on pressing Enter or clicking the search button. Also
+accepts the rest of `React.ComponentPropsWithRef<'input'>`.
+
+## Input.TextArea {/* #input-textarea */}
+
+A thin wrapper with no props beyond
+`React.ComponentPropsWithRef<'textarea'>`.
