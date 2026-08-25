@@ -34,6 +34,7 @@ const sidebars: SidebarsConfig = {
         'components/atoms/input',
         'components/atoms/checkbox',
         'components/atoms/radio',
+        'components/molecules/upload',
       ],
     },
     {
