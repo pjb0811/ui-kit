@@ -46,6 +46,7 @@ const sidebars: SidebarsConfig = {
         'components/molecules/card',
         'components/molecules/collapse',
         'components/molecules/reveals',
+        'components/molecules/marquees',
       ],
     },
     {
