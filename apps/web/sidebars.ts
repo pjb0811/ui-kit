@@ -44,6 +44,7 @@ const sidebars: SidebarsConfig = {
         'components/atoms/popover',
         'components/molecules/card',
         'components/molecules/collapse',
+        'components/molecules/reveals',
       ],
     },
     {

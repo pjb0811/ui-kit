@@ -1,0 +1,43 @@
+---
+sidebar_position: 3
+title: Reveals
+---
+
+import DemoTheme from '@site/src/components/DemoTheme';
+import RevealsDemo from '../../../src/demo/reveals-demo';
+
+# Reveals
+
+Animates its children into view as they enter the viewport, staggering each one by `cascade` for a sequential reveal. Accepts either `children` or an `items` array.
+
+```tsx
+import { Reveals } from '@jbpark/ui-kit';
+
+<Reveals effect="fadeInUp" cascade={0.15}>
+  <div>First</div>
+  <div>Second</div>
+  <div>Third</div>
+</Reveals>;
+```
+
+<DemoTheme>
+
+<RevealsDemo />
+
+</DemoTheme>
+
+## Props
+
+| Prop         | Type                                       | Default      |
+| ------------ | ------------------------------------------ | ------------ |
+| `effect`     | `'fadeIn' \| 'fadeInUp' \| 'slideInUp'`    | `'fadeInUp'` |
+| `cascade`    | `number` (stagger between items, seconds)  | `0.1`        |
+| `duration`   | `number` (seconds)                         | `0.6`        |
+| `delay`      | `number` (seconds, before the first item)  | `0`          |
+| `once`       | `boolean` (animate only the first time)    | -            |
+| `items`      | `ItemProps[]`                              | `[]`         |
+| `classNames` | `{ root?: string; item?: string }`         | -            |
+| `className`  | `string`                                   | -            |
+| `children`   | `ReactNode`                                | -            |
+
+`viewport`, `variants`, and `transition` are forwarded to the underlying `motion` element for fine-grained control. `Reveals.Item` is also exported for composing a single animated item directly.
