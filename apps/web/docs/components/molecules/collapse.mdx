@@ -1,0 +1,44 @@
+---
+sidebar_position: 2
+title: Collapse
+---
+
+import DemoTheme from '@site/src/components/DemoTheme';
+import CollapseDemo from '../../../src/demo/collapse-demo';
+
+# Collapse
+
+A set of expandable panels, driven by an `items` array. Use `accordion` to keep only one panel open at a time.
+
+```tsx
+import { Collapse } from '@jbpark/ui-kit';
+
+<Collapse
+  defaultActiveKey={['0']}
+  items={[
+    { key: '0', label: 'What is this?', children: 'An answer.' },
+    { key: '1', label: 'How does it work?', children: 'Another answer.' },
+  ]}
+/>;
+```
+
+<DemoTheme>
+
+<CollapseDemo />
+
+</DemoTheme>
+
+## Props
+
+| Prop               | Type                                                  | Default |
+| ------------------ | ----------------------------------------------------- | ------- |
+| `items`            | `{ key: Key; label: ReactNode; children: ReactNode; disabled?: boolean }[]` | `[]` |
+| `accordion`        | `boolean`                                             | `false` |
+| `expandIcon`       | `ReactNode`                                           | -       |
+| `defaultActiveKey` | `string[] \| number[]`                                | -       |
+| `activeKey`        | `string[] \| number[]`                                | -       |
+| `onChange`         | `(keys: string[]) => void`                            | -       |
+| `classNames`       | `{ item?: string; header?: string; body?: string }`   | -       |
+| `className`        | `string`                                              | -       |
+
+Pass `activeKey` together with `onChange` for controlled usage; otherwise use `defaultActiveKey`. `Collapse` also accepts the rest of `React.ComponentProps<'div'>`.

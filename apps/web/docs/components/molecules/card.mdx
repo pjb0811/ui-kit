@@ -1,0 +1,35 @@
+---
+sidebar_position: 1
+title: Card
+---
+
+import DemoTheme from '@site/src/components/DemoTheme';
+import CardDemo from '../../../src/demo/card-demo';
+
+# Card
+
+A simple content container with an optional title, used to group related information.
+
+```tsx
+import { Card } from '@jbpark/ui-kit';
+
+<Card title="Card title">A card with an outlined border.</Card>;
+```
+
+<DemoTheme>
+
+<CardDemo />
+
+</DemoTheme>
+
+## Props
+
+| Prop         | Type                         | Default      |
+| ------------ | ---------------------------- | ------------ |
+| `title`      | `ReactNode`                  | -            |
+| `variant`    | `'outlined' \| 'borderless'` | `'outlined'` |
+| `classNames` | `{ title?: string; body?: string }` | -    |
+| `className`  | `string`                     | -            |
+| `children`   | `ReactNode`                  | -            |
+
+`Card` also accepts the rest of `React.ComponentProps<'div'>` (e.g. `onClick`, `style`), except `title`.

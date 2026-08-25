@@ -1,0 +1,43 @@
+---
+sidebar_position: 1
+title: Space
+---
+
+import DemoTheme from '@site/src/components/DemoTheme';
+import SpaceDemo from '../../../src/demo/space-demo';
+
+# Space
+
+Lays out its children in a row or column with consistent gaps, optional wrapping, and separators.
+
+```tsx
+import { Space, Tag } from '@jbpark/ui-kit';
+
+<Space size="middle">
+  <Tag>One</Tag>
+  <Tag>Two</Tag>
+</Space>;
+```
+
+<DemoTheme>
+
+<SpaceDemo />
+
+</DemoTheme>
+
+## Props
+
+| Prop          | Type                                                | Default        |
+| ------------- | --------------------------------------------------- | -------------- |
+| `orientation` | `'horizontal' \| 'vertical'`                        | `'horizontal'` |
+| `size`        | `'small' \| 'middle' \| 'large' \| number \| number[]` | `'middle'`  |
+| `align`       | `'start' \| 'end' \| 'center' \| 'baseline'`        | `'center'`     |
+| `wrap`        | `boolean`                                           | `false`        |
+| `split`       | `ReactNode`                                         | -              |
+| `grid`        | `{ rows?: number; cols?: number }`                  | -              |
+| `loading`     | `boolean`                                           | `false`        |
+| `loader`      | `ReactNode`                                         | `<Skeleton />` |
+| `className`   | `string`                                            | -              |
+| `children`    | `ReactNode`                                         | -              |
+
+`Space` also accepts the rest of `React.ComponentProps<'div'>` (e.g. `style`, `hidden`).
