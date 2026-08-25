@@ -1,0 +1,52 @@
+---
+sidebar_position: 2
+title: Menu
+---
+
+import DemoTheme from '@site/src/components/DemoTheme';
+import MenuDemo from '../../../src/demo/menu-demo';
+
+# Menu
+
+A navigation menu driven by an `items` array with nested submenus. Lay it out as a horizontal bar, a vertical list, or an `inline` tree that expands submenus in place.
+
+```tsx
+import { Menu } from '@jbpark/ui-kit';
+
+<Menu
+  mode="inline"
+  defaultSelectedKeys={['home']}
+  items={[
+    { key: 'home', label: 'Home' },
+    {
+      key: 'products',
+      label: 'Products',
+      children: [{ key: 'products-web', label: 'Web' }],
+    },
+  ]}
+/>;
+```
+
+<DemoTheme>
+
+<MenuDemo />
+
+</DemoTheme>
+
+## Props
+
+| Prop                  | Type                                        | Default        |
+| --------------------- | ------------------------------------------- | -------------- |
+| `items`               | `MenuItem[]`                                | -              |
+| `mode`                | `'horizontal' \| 'vertical' \| 'inline'`    | `'vertical'`   |
+| `selectedKeys`        | `Key[]` (controlled selection)              | -              |
+| `defaultSelectedKeys` | `Key[]`                                     | `[]`           |
+| `onClick`             | `(params) => void`                          | -              |
+| `onSelect`            | `(params) => void`                          | -              |
+| `offset`              | `[number, number]` (submenu popup offset)   | -              |
+| `inlineOffset`        | `number` (inline indent per depth)          | -              |
+| `classNames`          | `{ rootItem?; subMenu?; item?; label? }`    | -              |
+| `styles`              | `{ rootItem?; subMenu?; item?; label? }`    | -              |
+| `className`           | `string`                                    | -              |
+
+`MenuItem` is `{ key: Key; label: ReactNode; children?: MenuItem[] }`. The `onClick` / `onSelect` handlers receive `{ domEvent, key, keyPath, item }`. `Menu` also accepts the rest of `React.ComponentProps<'ul'>`.
