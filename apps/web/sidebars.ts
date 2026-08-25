@@ -19,6 +19,7 @@ const sidebars: SidebarsConfig = {
         'components/atoms/tag',
         'components/atoms/typography',
         'components/atoms/button',
+        'components/molecules/space',
       ],
     },
     {
@@ -39,7 +40,11 @@ const sidebars: SidebarsConfig = {
       type: 'category',
       label: 'Data Display',
       collapsed: false,
-      items: ['components/atoms/popover'],
+      items: [
+        'components/atoms/popover',
+        'components/molecules/card',
+        'components/molecules/collapse',
+      ],
     },
     {
       type: 'category',
