@@ -1,0 +1,57 @@
+---
+sidebar_position: 1
+title: Dropdown
+---
+
+import DemoTheme from '@site/src/components/DemoTheme';
+import DropdownDemo from '../../../src/demo/dropdown-demo';
+
+# Dropdown
+
+Wraps a trigger element and reveals a floating `Menu` on hover or click. Pass the trigger as `children` and the menu via the `menu` prop (its `items` support nested submenus).
+
+```tsx
+import { Button, Dropdown } from '@jbpark/ui-kit';
+
+<Dropdown
+  trigger="click"
+  menu={{
+    items: [
+      { key: 'edit', label: 'Edit' },
+      { key: 'delete', label: 'Delete' },
+    ],
+  }}
+>
+  <Button>Menu</Button>
+</Dropdown>;
+```
+
+<DemoTheme>
+
+<DropdownDemo />
+
+</DemoTheme>
+
+## Props
+
+| Prop           | Type                        | Default   |
+| -------------- | --------------------------- | --------- |
+| `trigger`      | `'hover' \| 'click'`        | `'hover'` |
+| `menu`         | `MenuProps`                 | -         |
+| `open`         | `boolean` (controlled)      | -         |
+| `onOpenChange` | `(open: boolean) => void`   | -         |
+| `className`    | `string`                    | -         |
+| `children`     | `ReactNode` (the trigger)   | -         |
+
+`Dropdown` also accepts the rest of `React.ComponentProps<'div'>`. Provide `open` together with `onOpenChange` for controlled usage.
+
+### `menu` (`MenuProps`)
+
+| Field       | Type                                              | Notes                          |
+| ----------- | ------------------------------------------------- | ------------------------------ |
+| `items`     | `MenuItem[]`                                      | `{ key, label, children? }`    |
+| `onClick`   | `(params) => void`                                | `params.key` / `keyPath` / `item` |
+| `mode`      | `'horizontal' \| 'vertical' \| 'inline'`          | -                              |
+| `classNames`| `{ rootItem?; subMenu?; item?; label? }`          | -                              |
+
+The `menu` prop is forwarded directly to the underlying `Menu` component, so any `MenuProps` are accepted (a dedicated Menu page will cover the full API).
