@@ -1,5 +1,17 @@
 # web
 
+## 1.2.0
+
+### Minor Changes
+
+- 1f910c4: New UI components, including Card, Collapse, and Space, have been added to the library, providing users with a set of reusable and customizable UI elements to enhance their application's user interface.
+- fafc621: Add a new Dropdown component with hover and click triggers, and a demo page showcasing its usage.
+- a62ea91: Add Marquees component for scrolling content and demo page to showcase its usage.
+- c20776a: Add a new Menu component with a navigation menu driven by an items array, and update the dropdown documentation to link to the new Menu page.
+- a2d6b2b: Add a new Reveals component for animating children into view as they enter the viewport, with customizable effects and staggering.
+- 42af265: Add a Splitter component for splitting areas into resizable panels with a draggable handle between each one.
+- 862db63: Add a new Upload component with a click-or-drag dropzone that reads selected files into data URLs and renders a removable list, with image previews.
+
 ## 1.1.1
 
 ### Patch Changes
