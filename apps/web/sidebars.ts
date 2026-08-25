@@ -61,7 +61,11 @@ const sidebars: SidebarsConfig = {
       type: 'category',
       label: 'Navigation',
       collapsed: false,
-      items: ['components/atoms/float-button', 'components/molecules/dropdown'],
+      items: [
+        'components/atoms/float-button',
+        'components/molecules/dropdown',
+        'components/molecules/menu',
+      ],
     },
     {
       type: 'category',
