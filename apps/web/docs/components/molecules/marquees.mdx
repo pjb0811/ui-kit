@@ -1,0 +1,38 @@
+---
+sidebar_position: 4
+title: Marquees
+---
+
+import DemoTheme from '@site/src/components/DemoTheme';
+import MarqueesDemo from '../../../src/demo/marquees-demo';
+
+# Marquees
+
+Scrolls each row of content horizontally in a continuous loop. Provide rows through the `items` array; each item's `children` is one scrolling track. By default it auto-fills the width and pauses on hover.
+
+```tsx
+import { Marquees } from '@jbpark/ui-kit';
+
+<Marquees
+  speed={40}
+  items={[{ key: 0, children: <div>Scrolling content</div> }]}
+/>;
+```
+
+<DemoTheme>
+
+<MarqueesDemo />
+
+</DemoTheme>
+
+## Props
+
+| Prop           | Type                  | Default |
+| -------------- | --------------------- | ------- |
+| `items`        | `ItemProps[]`         | -       |
+| `speed`        | `number` (px/second)  | `100`   |
+| `pauseOnHover` | `boolean`             | `true`  |
+| `autoFill`     | `boolean \| number`   | `true`  |
+| `className`    | `string`              | -       |
+
+Each `ItemProps` is `{ key?; children; speed?; autoFill?; pauseOnHover? }` — per-row overrides fall back to the values set on `Marquees`. `autoFill` repeats each row enough to cover the container (pass a number to force a specific repeat count). `Marquees.Item` is also exported for rendering a single track directly. `Marquees` forwards the rest of `React.ComponentProps<'div'>`.
