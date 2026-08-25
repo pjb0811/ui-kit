@@ -1,0 +1,59 @@
+---
+sidebar_position: 1
+title: Splitter
+---
+
+import DemoTheme from '@site/src/components/DemoTheme';
+import SplitterDemo from '../../../src/demo/splitter-demo';
+
+# Splitter
+
+Splits an area into resizable panels with a draggable handle between each one. Compose it from `Splitter.Panel` children; the handle is inserted automatically. Give the `Splitter` a sized container (it fills 100% height/width).
+
+```tsx
+import { Splitter } from '@jbpark/ui-kit';
+
+<div style={{ height: 256 }}>
+  <Splitter>
+    <Splitter.Panel defaultSize="30%" minSize="20%">
+      Sidebar
+    </Splitter.Panel>
+    <Splitter.Panel defaultSize="70%" minSize="30%">
+      Content
+    </Splitter.Panel>
+  </Splitter>
+</div>;
+```
+
+<DemoTheme>
+
+<SplitterDemo />
+
+</DemoTheme>
+
+## Props
+
+### `Splitter`
+
+| Prop              | Type                                | Default        |
+| ----------------- | ----------------------------------- | -------------- |
+| `orientation`     | `'horizontal' \| 'vertical'`        | `'horizontal'` |
+| `withHandle`      | `boolean` (show the grip on handles) | `true`        |
+| `handle`          | `ReactNode` (custom handle content) | -              |
+| `handleClassName` | `string`                            | -              |
+| `onResize`        | `(layout) => void` (during drag)    | -              |
+| `onResizeEnd`     | `(layout) => void` (drag finished)  | -              |
+| `className`       | `string`                            | -              |
+| `children`        | `ReactNode` (`Splitter.Panel`s)     | -              |
+
+### `Splitter.Panel`
+
+| Prop          | Type                | Default |
+| ------------- | ------------------- | ------- |
+| `defaultSize` | `string \| number`  | -       |
+| `minSize`     | `string \| number`  | -       |
+| `maxSize`     | `string \| number`  | -       |
+| `className`   | `string`            | -       |
+| `children`    | `ReactNode`         | -       |
+
+`Splitter.Panel` forwards the rest of the underlying resizable panel props. The handle between adjacent panels is added automatically — you only render the panels.

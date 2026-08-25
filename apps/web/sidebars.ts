@@ -63,6 +63,12 @@ const sidebars: SidebarsConfig = {
       collapsed: false,
       items: ['components/atoms/float-button'],
     },
+    {
+      type: 'category',
+      label: 'Layout',
+      collapsed: false,
+      items: ['components/molecules/splitter'],
+    },
   ],
 };
 
