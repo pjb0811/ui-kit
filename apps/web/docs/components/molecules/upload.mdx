@@ -1,0 +1,40 @@
+---
+sidebar_position: 1
+title: Upload
+---
+
+import DemoTheme from '@site/src/components/DemoTheme';
+import UploadDemo from '../../../src/demo/upload-demo';
+
+# Upload
+
+A click-or-drag dropzone that reads selected files into data URLs and renders a removable list, with image previews. Uncontrolled by default; pass `value` + `onChange` to control it.
+
+```tsx
+import { Upload } from '@jbpark/ui-kit';
+
+<Upload accept="image/*" maxCount={3} />;
+```
+
+<DemoTheme>
+
+<UploadDemo />
+
+</DemoTheme>
+
+## Props
+
+| Prop           | Type                                                    | Default     |
+| -------------- | ------------------------------------------------------- | ----------- |
+| `multiple`     | `boolean`                                               | `true`      |
+| `accept`       | `string` (input `accept`, e.g. `'image/*'`)             | `'image/*'` |
+| `maxCount`     | `number` (max files; omit for unlimited)                | -           |
+| `disabled`     | `boolean`                                               | -           |
+| `value`        | `UploadFile[]` (controlled)                             | -           |
+| `defaultValue` | `UploadFile[]`                                          | `[]`        |
+| `onChange`     | `(files: UploadFile[]) => void`                         | -           |
+| `onReject`     | `(info: { file: File; reason: 'max-count' \| 'read-error' }) => void` | - |
+| `classNames`   | `{ dropzone?: string; list?: string; item?: string }`   | -           |
+| `className`    | `string`                                                | -           |
+
+`UploadFile` is `{ uid: string; name: string; url: string }`, where `url` is a data URL. Files exceeding `maxCount` or that fail to read are surfaced through `onReject` rather than being added.
