@@ -63,6 +63,7 @@ const sidebars: SidebarsConfig = {
         'components/organisms/toast',
         'components/organisms/drawer',
         'components/organisms/modal',
+        'components/templates/result',
       ],
     },
     {

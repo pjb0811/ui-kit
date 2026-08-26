@@ -59,7 +59,7 @@ const CATEGORIES = [
   },
   {
     name: 'Feedback',
-    components: 'Modal, Drawer, Toast, Progress, Skeleton, Spin',
+    components: 'Modal, Drawer, Toast, Result, Progress, Skeleton, Spin',
   },
   {
     name: 'Navigation',
