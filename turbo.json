@@ -16,6 +16,15 @@
     "check-dynamic-classes": {
       "dependsOn": ["^check-dynamic-classes"]
     },
+    "check-regression-net": {
+      "dependsOn": ["build"],
+      "inputs": [
+        "dist/**",
+        "scripts/**",
+        "package.json",
+        "package.publish.json"
+      ]
+    },
     "dev": {
       "cache": false,
       "persistent": true

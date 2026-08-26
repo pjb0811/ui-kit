@@ -9,6 +9,7 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "turbo run check-types",
     "check-dynamic-classes": "turbo run check-dynamic-classes",
+  "check-regression-net": "turbo run check-regression-net",
     "prepare": "husky",
     "publish-ui": "cd packages/ui && npm publish"
   },
