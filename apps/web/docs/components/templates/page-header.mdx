@@ -1,0 +1,43 @@
+---
+sidebar_position: 3
+title: PageHeader
+---
+
+import DemoTheme from '@site/src/components/DemoTheme';
+import PageHeaderDemo from '../../../src/demo/page-header-demo';
+
+# PageHeader
+
+The header block at the top of a page or detail view — a title and subtitle, an optional back button (shown when `onBack` is provided), and an `extra` action area. Any `children` render below the header row.
+
+```tsx
+import { PageHeader } from '@jbpark/ui-kit';
+
+<PageHeader
+  title="Project settings"
+  subTitle="Manage your project configuration"
+  onBack={() => history.back()}
+  extra={<Button type="primary">Save</Button>}
+/>;
+```
+
+<DemoTheme>
+
+<PageHeaderDemo />
+
+</DemoTheme>
+
+## Props
+
+| Prop         | Type                                      | Default |
+| ------------ | ----------------------------------------- | ------- |
+| `title`      | `ReactNode`                               | -       |
+| `subTitle`   | `ReactNode`                               | -       |
+| `extra`      | `ReactNode` (action area, top-right)      | -       |
+| `onBack`     | `() => void` (renders the back button)    | -       |
+| `backIcon`   | `ReactNode`                               | arrow   |
+| `children`   | `ReactNode` (content below the header)    | -       |
+| `classNames` | `{ back?; title?; subTitle?; extra? }`    | -       |
+| `className`  | `string`                                  | -       |
+
+The back button only appears when `onBack` is set. All other `div` props are forwarded to the root.

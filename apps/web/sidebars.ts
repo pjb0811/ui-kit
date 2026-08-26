@@ -82,6 +82,7 @@ const sidebars: SidebarsConfig = {
       collapsed: false,
       items: [
         'components/templates/container',
+        'components/templates/page-header',
         'components/molecules/splitter',
       ],
     },
