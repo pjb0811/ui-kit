@@ -70,6 +70,32 @@ Radix가 이미 담당하는 영역(focus trap/management, 포털 마운트, `ar
 
 단, 이건 "Radix가 커버 못 하는 영역은 아예 다루지 않는다"는 뜻이 아니다. Radix에 대응 프리미티브가 없는 컴포넌트(예: 커스텀 인터랙션, 이 라이브러리만의 UX 패턴)는 필요하면 그대로 개발한다. 기준은 "Radix가 이미 잘 하는 걸 다시 만들지 말자"이지 "Radix 밖은 다루지 말자"가 아니다.
 
+#### 무엇이 `src/core`에 속하는가 (멤버십 기준)
+
+`src/core`에는 성격이 다른 두 종류의 모듈이 섞여 들어오기 쉽다. 하나만 남긴다:
+
+> **`src/core`에는 (a) 둘 이상의 파트를 조합·배선하는 모듈, 또는 (b) 무거운 서드파티 의존성(`react-day-picker`, `vaul`, `react-resizable-panels`)을 감싸는 래퍼만 둔다. DOM 요소 하나 + 클래스 문자열짜리는 그걸 소유한 atom에 둔다.**
+
+오늘 기준으로 적용하면:
+
+- **속함 (조합형)** — `select`, `dialog`, `drawer`, `resizable`, `accordion`, `popover`, `radio-group`, `checkbox`, `switch`, `progress`, `calendar`, `field`. 실제 Radix 파트 트리·포털·애니메이션 배선을 담당하므로 소비 atom이 override할 이유가 없다.
+- **속하지 않음 (단일 요소)** — `button`, `badge`, `input`, `textarea`, `skeleton`. DOM 요소 하나 + 클래스뿐이라 스타일 자체가 정체성이고, 소비 atom이 결국 그걸 덮어쓴다.
+- **경계선** — `label`, `separator` (Radix 파트 1개씩, 실질 기여는 `htmlFor` 배선 / `role="separator"`). 기본값으로 흘려보내지 말고 그때그때 명시적으로 판단한다.
+
+**왜**: 단일 요소 프리미티브는 스타일을 `core`에 위임할 수 없다 — 그런 컴포넌트는 스타일이 곧 정체성이라, 소비자가 반드시 override하게 되고 프리미티브는 간접 참조만 남긴다. 반면 다중 파트 프리미티브는 **구조·배선**을 위임하므로 소비자가 덮어쓸 이유가 없다 (그래서 `dialog`/`select`엔 이 문제가 없다). 이 기준이 없으면 새 컴포넌트가 죄다 "core 프리미티브를 감싼다"로 기본 수렴한다.
+
+#### smell 체크
+
+> **atom이 `core` 프리미티브의 `variant`를 하드코딩하고 있으면, 그 프리미티브는 잘못된 레이어에 있는 것이다.**
+
+기계적으로 감지 가능하다:
+
+```bash
+grep -rn 'variant="' packages/ui/src/components/ | grep -v 'resolvedVariant\|{variant}'
+```
+
+`core`로 직접 향하는 히트가 나오면 그 프리미티브를 소비 atom으로 흡수할 후보다. (`float-button`/`modal` 등이 **우리 자신의 `Button`**에 넘기는 `variant=`는 정상 — `core` 프리미티브로 곧장 가는 것만 문제다.)
+
 ### 컴포넌트 작성 패턴
 
 ```tsx
