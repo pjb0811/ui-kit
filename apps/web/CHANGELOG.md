@@ -1,5 +1,16 @@
 # web
 
+## 1.4.0
+
+### Minor Changes
+
+- 1a7c099: Add a new Container component for centering page content at a capped width with consistent responsive gutters, and update the documentation and demo to reflect this addition.
+- 8c55214: Add a new 'Empty' component for displaying the 'loaded, but there's nothing here' state, and include it in the documentation and demo.
+- f07b2a6: Add a 24-column responsive grid component, built from Row and Col, with mobile-first spans and per-breakpoint overrides.
+- 902911c: Add a new Layout component with customizable header, sider, content, and footer sections, allowing for flexible page composition and styling.
+- 5abde1a: Add a new PageHeader component with customizable title, subtitle, back button, and extra action area, along with a demo and documentation.
+- 145f77d: Add a full-page state screen for the outcome of an operation — success, failure, or a `404` / `403` / `500` page.
+
 ## 1.3.0
 
 ### Minor Changes
