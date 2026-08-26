@@ -1,0 +1,53 @@
+---
+sidebar_position: 5
+title: Drawer
+---
+
+import DemoTheme from '@site/src/components/DemoTheme';
+import DrawerDemo from '../../../src/demo/drawer-demo';
+
+# Drawer
+
+A controlled panel that slides in from any edge. Drive it with `open` + `onClose`. Supports four `direction`s, preset or custom `size`, an optional drag handle, a mask-less mode, and a `footer` slot.
+
+```tsx
+import { Drawer } from '@jbpark/ui-kit';
+
+const [open, setOpen] = useState(false);
+
+<Button onClick={() => setOpen(true)}>Open</Button>
+<Drawer open={open} onClose={() => setOpen(false)} title="Settings">
+  Content
+</Drawer>;
+```
+
+<DemoTheme>
+
+<DrawerDemo />
+
+</DemoTheme>
+
+## Props
+
+| Prop           | Type                                          | Default    |
+| -------------- | --------------------------------------------- | ---------- |
+| `open`         | `boolean`                                      | -          |
+| `onClose`      | `() => void`                                   | -          |
+| `title`        | `ReactNode`                                    | -          |
+| `children`     | `ReactNode` (body content)                     | -          |
+| `extra`        | `ReactNode` (top-right slot)                   | -          |
+| `footer`       | `ReactNode`                                    | -          |
+| `direction`    | `'top' \| 'bottom' \| 'left' \| 'right'`       | `'bottom'` |
+| `size`         | `'small' \| 'medium' \| 'large' \| 'full' \| string` | `'medium'` |
+| `closable`     | `boolean`                                      | `true`     |
+| `closeIcon`    | `ReactNode`                                    | -          |
+| `maskClosable` | `boolean`                                      | `true`     |
+| `mask`         | `boolean`                                      | `true`     |
+| `handlebar`    | `boolean`                                      | `true`     |
+| `draggable`    | `boolean`                                      | `false`    |
+| `rounded`      | `boolean`                                      | `false`    |
+| `container`    | `HTMLElement` (custom portal target)           | -          |
+| `classNames`   | `{ mask?; content?; handlebar?; header?; title?; close?; extra?; body?; footer? }` | - |
+| `className`    | `string`                                       | -          |
+
+`size` accepts the presets (`small` 30% / `medium` 50% / `large` 75% / `full` 90%) or any CSS length. Presets map to width for `left`/`right` and height for `top`/`bottom`.
