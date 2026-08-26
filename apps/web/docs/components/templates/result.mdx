@@ -1,0 +1,42 @@
+---
+sidebar_position: 7
+title: Result
+---
+
+import DemoTheme from '@site/src/components/DemoTheme';
+import ResultDemo from '../../../src/demo/result-demo';
+
+# Result
+
+A full-page state screen for the outcome of an operation — success, failure, or a `404` / `403` / `500` page. `Empty`'s larger, more prominent sibling: `Empty` says "nothing here yet" inline within a list; `Result` says "here's what happened" for an entire view. Each `status` renders a matching icon.
+
+```tsx
+import { Result } from '@jbpark/ui-kit';
+
+<Result
+  status="success"
+  title="Payment successful"
+  subTitle="Order #2024-0815 has been confirmed."
+  extra={<Button type="primary">Back home</Button>}
+/>;
+```
+
+<DemoTheme>
+
+<ResultDemo />
+
+</DemoTheme>
+
+## Props
+
+| Prop        | Type                                                              | Default  |
+| ----------- | ---------------------------------------------------------------- | -------- |
+| `status`    | `'success' \| 'error' \| 'info' \| 'warning' \| '404' \| '403' \| '500'` | `'info'` |
+| `icon`      | `ReactNode` (overrides the status icon)                          | -        |
+| `title`     | `ReactNode`                                                      | -        |
+| `subTitle`  | `ReactNode`                                                      | -        |
+| `extra`     | `ReactNode` (action area)                                        | -        |
+| `children`  | `ReactNode` (extra content below)                               | -        |
+| `className` | `string`                                                         | -        |
+
+The four shared statuses (`success` / `error` / `info` / `warning`) use the same icon set as [`Modal`](../organisms/modal)'s imperative variants, so a Result screen matches the tone of a `Modal.success()` / `error()` the user may have just seen.
