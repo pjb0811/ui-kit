@@ -1,0 +1,64 @@
+---
+sidebar_position: 5
+title: List
+---
+
+import DemoTheme from '@site/src/components/DemoTheme';
+import ListDemo from '../../../src/demo/list-demo';
+
+# List
+
+Renders a titled, accessible (`role="list"`) collection from a `data` array via `renderItem`. Handles loading skeletons, an empty state, and optional infinite scroll — pass a `scroll` object and `List` fetches the next page when a sentinel enters the viewport.
+
+```tsx
+import { List } from '@jbpark/ui-kit';
+
+<List
+  title="People"
+  data={people}
+  itemKey={item => item.id}
+  renderItem={item => <div>{item.name}</div>}
+/>;
+```
+
+<DemoTheme>
+
+<ListDemo />
+
+</DemoTheme>
+
+## Infinite scroll
+
+Provide `scroll` to load more as the user reaches the end. `List` calls `next()` when the sentinel intersects and `hasMore` is `true`. You **must** flip `scroll.loading` back to `false` when the fetch settles (including on failure) — otherwise `List` stops requesting further pages.
+
+```tsx
+<List
+  data={items}
+  renderItem={item => <Row {...item} />}
+  scroll={{
+    hasMore,
+    loading,
+    next: fetchMore,
+  }}
+/>;
+```
+
+## Props
+
+| Prop          | Type                                                     | Default |
+| ------------- | ------------------------------------------------------- | ------- |
+| `data`        | `T[]`                                                    | -       |
+| `renderItem`  | `(item: T, index: number) => ReactNode`                 | -       |
+| `itemKey`     | `(item: T, index: number) => Key`                       | index   |
+| `title`       | `ReactNode`                                             | -       |
+| `titleLevel`  | `1 \| 2 \| 3 \| 4 \| 5 \| 6`                             | `2`     |
+| `header`      | `ReactNode`                                             | -       |
+| `empty`       | `ReactNode` (shown when `data` is empty)                | -       |
+| `loading`     | `boolean` (renders skeletons)                           | -       |
+| `loader`      | `ReactNode` (custom loading node)                       | -       |
+| `loaderProps` | `ComponentProps<typeof Skeleton>`                       | -       |
+| `scroll`      | `{ hasMore; loading; next; loader?; options? }`         | -       |
+| `classNames`  | `{ title?; header?; body? }`                            | -       |
+| `className`   | `string`                                                | -       |
+
+`scroll.options` accepts an `IntersectionObserverInit` to tune the sentinel threshold/root. `List.Item` is also exported for composing a single row directly.

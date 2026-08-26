@@ -47,6 +47,7 @@ const sidebars: SidebarsConfig = {
         'components/molecules/collapse',
         'components/molecules/reveals',
         'components/molecules/marquees',
+        'components/organisms/list',
       ],
     },
     {
