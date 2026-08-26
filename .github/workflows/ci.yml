@@ -43,3 +43,6 @@ jobs:
 
       - name: Build
         run: pnpm exec turbo run build
+
+      - name: Regression net (API surface / preflight reset / SSR smoke)
+        run: pnpm exec turbo run check-regression-net
