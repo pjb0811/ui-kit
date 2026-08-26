@@ -1,0 +1,50 @@
+---
+sidebar_position: 4
+title: Grid
+---
+
+import DemoTheme from '@site/src/components/DemoTheme';
+import GridDemo from '../../../src/demo/grid-demo';
+
+# Grid
+
+A 24-column responsive grid built from `Row` and `Col` — the same mental model as Ant Design's grid. `Row` sets the gutter and alignment; each `Col` takes a `span` (out of 24) plus optional per-breakpoint overrides (`xs`…`2xl`). The responsive math is pure CSS, so it renders correctly from the first server paint with no resize listener.
+
+```tsx
+import { Row, Col } from '@jbpark/ui-kit';
+
+<Row gutter={16}>
+  <Col span={24} md={8}>Left</Col>
+  <Col span={24} md={8}>Middle</Col>
+  <Col span={24} md={8}>Right</Col>
+</Row>;
+```
+
+<DemoTheme>
+
+<GridDemo />
+
+</DemoTheme>
+
+## Responsive spans
+
+Each `Col` is mobile-first: `span` is the base, and each breakpoint prop overrides it at and above that tier. `<Col span={24} md={8}>` is full width on small screens and one-third from `md` up.
+
+## Row props
+
+| Prop      | Type                                    | Default |
+| --------- | --------------------------------------- | ------- |
+| `gutter`  | `number \| [horizontal, vertical]`      | `0`     |
+| `align`   | `'top' \| 'middle' \| 'bottom' \| 'stretch'` | -  |
+| `justify` | `'start' \| 'end' \| 'center' \| 'space-around' \| 'space-between' \| 'space-evenly'` | - |
+| `wrap`    | `boolean`                               | `true`  |
+
+## Col props
+
+| Prop                       | Type                            | Default |
+| -------------------------- | ------------------------------- | ------- |
+| `span`                     | `number` (0–24)                 | `24`    |
+| `offset`                   | `number` (0–24)                 | `0`     |
+| `xs` / `sm` / `md` / `lg` / `xl` / `2xl` | `number \| { span?; offset? }` | - |
+
+Both forward any other `div` props to their root element.
