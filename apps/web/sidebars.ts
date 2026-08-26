@@ -59,6 +59,7 @@ const sidebars: SidebarsConfig = {
         'components/atoms/progress',
         'components/atoms/spin',
         'components/atoms/skeleton',
+        'components/organisms/toast',
       ],
     },
     {
