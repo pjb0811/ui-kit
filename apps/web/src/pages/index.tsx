@@ -67,7 +67,7 @@ const CATEGORIES = [
   },
   {
     name: 'Layout',
-    components: 'Layout, Container, PageHeader, Splitter',
+    components: 'Layout, Container, Grid, PageHeader, Splitter',
   },
 ] as const;
 
