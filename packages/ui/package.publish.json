@@ -51,15 +51,15 @@
       "import": "./dist/utils.mjs",
       "default": "./dist/utils.mjs"
     },
-    "./enums": {
-      "types": "./dist/enums.d.mts",
-      "import": "./dist/enums.mjs",
-      "default": "./dist/enums.mjs"
-    },
     "./core": {
       "types": "./dist/core.d.mts",
       "import": "./dist/core.mjs",
       "default": "./dist/core.mjs"
+    },
+    "./providers": {
+      "types": "./dist/providers.d.mts",
+      "import": "./dist/providers.mjs",
+      "default": "./dist/providers.mjs"
     },
     "./style.css": {
       "import": "./dist/style.css",
