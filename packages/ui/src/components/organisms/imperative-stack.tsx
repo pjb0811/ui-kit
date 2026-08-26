@@ -3,9 +3,13 @@
 import { useCallback, useSyncExternalStore } from 'react';
 import { Root, createRoot } from 'react-dom/client';
 
-import { v4 as uuid } from 'uuid';
-
 import { ConfigSnapshotProvider, getRootConfigValue } from '@repo/ui/providers';
+
+// Monotonic per-session counter for stack item ids. These ids are internal
+// handles (React keys + destroy(id) lookups), not cryptographic, so a plain
+// counter is enough and avoids a runtime `uuid` dependency.
+let idCounter = 0;
+const nextId = () => `stack-${(idCounter += 1)}`;
 
 // Shared machinery behind Modal.info/success/error/warning/confirm and
 // Toast.info/success/error/warning — both used to independently
@@ -144,7 +148,7 @@ export function createImperativeStack<
     }
 
     const state = getContainerState(targetContainer);
-    const id = props.id || uuid();
+    const id = props.id || nextId();
     state.stack = [...state.stack, { ...props, id }];
     state.update?.();
 
