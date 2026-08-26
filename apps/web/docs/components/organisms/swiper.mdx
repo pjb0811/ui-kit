@@ -1,0 +1,62 @@
+---
+sidebar_position: 6
+title: Swiper
+---
+
+import DemoTheme from '@site/src/components/DemoTheme';
+import SwiperDemo from '../../../src/demo/swiper-demo';
+
+# Swiper
+
+A thin wrapper around [Swiper.js](https://swiperjs.com/) that renders a touch-friendly carousel from a `data` array via `renderItem`. Each item should return a `Swiper.Slide`. Feature modules (autoplay, navigation, pagination…) are opt-in — nothing is bundled by default.
+
+```tsx
+import { Swiper } from '@jbpark/ui-kit';
+
+<Swiper
+  data={slides}
+  options={{ slidesPerView: 'auto', spaceBetween: 12 }}
+  renderItem={item => (
+    <Swiper.Slide style={{ width: 160 }}>{item.title}</Swiper.Slide>
+  )}
+/>;
+```
+
+<DemoTheme>
+
+<SwiperDemo />
+
+</DemoTheme>
+
+## Feature modules
+
+Nothing is bundled by default to keep the base carousel light. Import the modules you need from `swiper/modules` together with their stylesheets and pass them via `modules`.
+
+```tsx
+import { Autoplay, Navigation } from 'swiper/modules';
+import 'swiper/css/autoplay';
+import 'swiper/css/navigation';
+
+<Swiper
+  modules={[Autoplay, Navigation]}
+  options={{ navigation: true, autoplay: { delay: 2500 } }}
+  data={slides}
+  renderItem={renderSlide}
+/>;
+```
+
+## Props
+
+| Prop               | Type                                    | Default |
+| ------------------ | --------------------------------------- | ------- |
+| `data`             | `T[]`                                    | `[]`    |
+| `renderItem`       | `(item: T, key: number) => ReactNode`   | -       |
+| `options`          | `SwiperOptions`                          | -       |
+| `modules`          | `SwiperModule[]`                         | `[]`    |
+| `loading`          | `boolean` (renders a `Spin` placeholder) | -       |
+| `loader`           | `ReactNode` (custom loading node)        | -       |
+| `loadingClassName` | `string`                                 | -       |
+| `className`        | `string`                                 | -       |
+| `style`            | `CSSProperties`                          | -       |
+
+Any other [Swiper React props](https://swiperjs.com/react) are forwarded to the underlying instance. `initialOptions` (the baseline config: `spaceBetween: 8`, `slidesPerView: 'auto'`) is also exported, and `Swiper.Slide` wraps `SwiperSlide` for composing individual slides.
