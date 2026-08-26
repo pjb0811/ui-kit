@@ -61,6 +61,7 @@ const sidebars: SidebarsConfig = {
         'components/atoms/skeleton',
         'components/organisms/toast',
         'components/organisms/drawer',
+        'components/organisms/modal',
       ],
     },
     {

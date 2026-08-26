@@ -1,0 +1,76 @@
+---
+sidebar_position: 6
+title: Modal
+---
+
+import DemoTheme from '@site/src/components/DemoTheme';
+import ModalDemo from '../../../src/demo/modal-demo';
+
+# Modal
+
+A dialog with two ways to use it: **controlled** (drive `open` yourself and handle `onOk` / `onCancel`) or **imperative** (`Modal.confirm`, `Modal.info`, … fire a self-managing modal from anywhere). The mask is not click-closable by default.
+
+```tsx
+import { Modal } from '@jbpark/ui-kit';
+
+const [open, setOpen] = useState(false);
+
+<Modal
+  open={open}
+  title="Title"
+  content="Body text"
+  onOk={() => setOpen(false)}
+  onCancel={() => setOpen(false)}
+/>;
+```
+
+<DemoTheme>
+
+<ModalDemo />
+
+</DemoTheme>
+
+## Imperative
+
+The static methods render a centered, type-styled modal and manage their own open state. `Modal.confirm` shows both OK/Cancel; the others show a single acknowledge button.
+
+```tsx
+Modal.confirm({
+  title: 'Delete this item?',
+  content: 'This action cannot be undone.',
+  onOk: handleDelete,
+});
+
+Modal.success({ title: 'Saved.' });
+```
+
+`Modal.destroy(id)` closes a specific one (each call returns an `id`); `Modal.destroyAll()` clears them all.
+
+## Props
+
+| Prop           | Type                                          | Default |
+| -------------- | --------------------------------------------- | ------- |
+| `open`         | `boolean`                                      | `false` |
+| `title`        | `ReactNode`                                    | -       |
+| `content`      | `ReactNode` (body; `children` also works)      | -       |
+| `footer`       | `ReactNode` (`null` hides the footer)          | -       |
+| `onOk`         | `() => void`                                   | -       |
+| `onCancel`     | `() => void`                                   | -       |
+| `okText`       | `string`                                       | locale  |
+| `cancelText`   | `string`                                       | locale  |
+| `closable`     | `boolean \| { closeIcon?; disabled? }`         | `false` |
+| `closeIcon`    | `ReactNode`                                    | -       |
+| `maskClosable` | `boolean`                                      | `false` |
+| `container`    | `HTMLElement` (custom portal target)           | -       |
+| `classNames`   | `{ mask?; header?; body?; footer? }`           | -       |
+| `className`    | `string`                                       | -       |
+
+### Imperative methods
+
+| Method                                            | Notes                              |
+| ------------------------------------------------- | ---------------------------------- |
+| `Modal.info` / `success` / `error` / `warning`    | single acknowledge button          |
+| `Modal.confirm`                                   | OK + Cancel                        |
+| `Modal.destroy(id)` / `Modal.destroyAll()`        | programmatic close                 |
+
+Each imperative type renders a matching icon next to the title.
