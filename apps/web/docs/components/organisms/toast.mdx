@@ -1,0 +1,60 @@
+---
+sidebar_position: 4
+title: Toast
+---
+
+import DemoTheme from '@site/src/components/DemoTheme';
+import ToastDemo from '../../../src/demo/toast-demo';
+
+# Toast
+
+Imperative, non-blocking notifications. Call `Toast.info` / `success` / `warning` / `error` from anywhere — each stacks in a fixed portal at the bottom-right and auto-dismisses after `duration` (default 4s). Hovering or focusing a toast pauses its timer so it can't disappear mid-read.
+
+```tsx
+import { Toast } from '@jbpark/ui-kit';
+
+Toast.success('Saved successfully.');
+Toast.error('Something went wrong', { description: 'Please try again.' });
+```
+
+<DemoTheme>
+
+<ToastDemo />
+
+</DemoTheme>
+
+## Dismissing
+
+Each trigger returns an `id` you can pass to `Toast.destroy(id)`, or clear everything with `Toast.destroyAll()`.
+
+```tsx
+const id = Toast.info('Uploading…', { duration: 0 }); // 0 = stays until dismissed
+// later
+Toast.destroy(id);
+```
+
+## API
+
+| Method                    | Signature                                          |
+| ------------------------- | -------------------------------------------------- |
+| `Toast.info`              | `(title, options?) => id`                           |
+| `Toast.success`           | `(title, options?) => id`                           |
+| `Toast.warning`           | `(title, options?) => id`                           |
+| `Toast.error`             | `(title, options?) => id`                           |
+| `Toast.destroy`           | `(id) => void`                                      |
+| `Toast.destroyAll`        | `() => void`                                        |
+
+### Options
+
+| Option        | Type                    | Default     |
+| ------------- | ----------------------- | ----------- |
+| `description` | `ReactNode`             | -           |
+| `duration`    | `number` (ms, `0` = sticky) | `4000`  |
+| `icon`        | `ReactNode` (overrides the type icon) | -   |
+| `closable`    | `boolean`               | `true`      |
+| `action`      | `ReactNode`             | -           |
+| `container`   | `HTMLElement` (custom mount target) | -     |
+| `className`   | `string`                | -           |
+| `onClose`     | `() => void`            | -           |
+
+Each type sets an accessible role automatically (`alert` for `error`, `status` otherwise) and a matching icon.
