@@ -80,7 +80,10 @@ const sidebars: SidebarsConfig = {
       type: 'category',
       label: 'Layout',
       collapsed: false,
-      items: ['components/molecules/splitter'],
+      items: [
+        'components/templates/container',
+        'components/molecules/splitter',
+      ],
     },
   ],
 };
