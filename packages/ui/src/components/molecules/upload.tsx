@@ -8,11 +8,18 @@ import {
   useFileToDataUrl,
 } from '@jbpark/use-hooks';
 import { Upload as UploadIcon, X } from 'lucide-react';
-import { v4 as uuid } from 'uuid';
 
 import { cn } from '@repo/ui/utils';
 
 import Button from '../atoms/button';
+
+// Monotonic per-session counter used as a uniqueness tiebreaker for file
+// uids. Guarantees a unique suffix even for the same file (identical
+// name/lastModified/size) added twice, which name+lastModified+size alone
+// can't. These uids are internal React keys, not cryptographic, so a plain
+// counter is enough — and it avoids a runtime `uuid` dependency.
+let uidCounter = 0;
+const nextUid = () => (uidCounter += 1);
 
 export interface UploadFile {
   uid: string;
@@ -85,12 +92,12 @@ const Upload = ({
         accepted.map(async file => {
           try {
             return {
-              // `uuid()` guarantees uniqueness even for the same file
+              // `nextUid()` guarantees uniqueness even for the same file
               // added twice (identical name/lastModified/size), which
               // name+lastModified+size alone can't — a collision there
               // corrupted React's item keys and made removeFile's
               // uid-based filter delete both copies at once.
-              uid: `${file.name}-${file.lastModified}-${file.size}-${uuid()}`,
+              uid: `${file.name}-${file.lastModified}-${file.size}-${nextUid()}`,
               name: file.name,
               url: await readAsDataUrl(file),
             };
