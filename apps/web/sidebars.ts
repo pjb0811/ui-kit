@@ -49,6 +49,7 @@ const sidebars: SidebarsConfig = {
         'components/molecules/marquees',
         'components/organisms/list',
         'components/organisms/swiper',
+        'components/templates/empty',
       ],
     },
     {

@@ -1,0 +1,39 @@
+---
+sidebar_position: 7
+title: Empty
+---
+
+import DemoTheme from '@site/src/components/DemoTheme';
+import EmptyDemo from '../../../src/demo/empty-demo';
+
+# Empty
+
+An inline placeholder for the "loaded, but there's nothing here" state — the counterpart to `Skeleton` (which covers "nothing loaded yet"). Pairs naturally with a `List`, table, or `Swiper`'s empty slot. Defaults to an inbox icon and a "No data" description.
+
+```tsx
+import { Empty } from '@jbpark/ui-kit';
+
+<Empty
+  title="No projects yet"
+  description="Create your first project to get started."
+  action={<Button type="primary">New project</Button>}
+/>;
+```
+
+<DemoTheme>
+
+<EmptyDemo />
+
+</DemoTheme>
+
+## Props
+
+| Prop          | Type        | Default     |
+| ------------- | ----------- | ----------- |
+| `icon`        | `ReactNode` | inbox icon  |
+| `title`       | `ReactNode` | -           |
+| `description` | `ReactNode` | `'No data'` |
+| `action`      | `ReactNode` | -           |
+| `className`   | `string`    | -           |
+
+Any other `div` props are forwarded to the root element (which carries `role="status"`).
