@@ -1,5 +1,15 @@
 # web
 
+## 1.3.0
+
+### Minor Changes
+
+- 13ee60a: Add a controlled panel that slides in from any edge, the Drawer component, with various customization options and a demo.
+- 1bd1741: Add a new List component for rendering titled, accessible collections with infinite scroll support.
+- f00ccc6: Add a new Modal component with controlled and imperative usage, including a demo and documentation.
+- be699ff: Add a Swiper component for rendering touch-friendly carousels from a data array.
+- b5e84ce: Add Toast component for imperative, non-blocking notifications with customizable options and API.
+
 ## 1.2.0
 
 ### Minor Changes
