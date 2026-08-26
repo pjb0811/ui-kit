@@ -81,6 +81,7 @@ const sidebars: SidebarsConfig = {
       label: 'Layout',
       collapsed: false,
       items: [
+        'components/templates/layout',
         'components/templates/container',
         'components/templates/grid',
         'components/templates/page-header',
