@@ -1,7 +1,7 @@
 ---
 name: commit
 description: "Generate a commit message from staged changes using this repository's commit convention. Use when the user asks for /commit, commit message generation, gitmoji selection, commit type or scope selection, or creating an actual git commit from staged files."
-argument-hint: 'Optional: commit language or special emphasis, for example "ko", "en", or "docs only"'
+argument-hint: 'Optional: special emphasis, for example "docs only" or "no scope". Messages are English by default.'
 user-invocable: true
 disable-model-invocation: false
 ---
@@ -19,9 +19,10 @@ disable-model-invocation: false
 
 ## Source Convention
 
-- 저장소 기준 문서는 `.github/COMMIT_CONVENTION.md`, `.github/COMMIT_CONVENTION.en.md`, `.github/COMMIT_CONVENTION.ko.md` 이다.
-- 언어를 명시하지 않으면 기본값은 한국어(`ko`)이다. 영어로 요청하면 영어 메시지를 사용한다.
-- 언어와 무관하게 형식은 반드시 아래 형태를 따른다.
+- 저장소 기준 문서는 `.github/COMMIT_CONVENTION.md` 이다.
+- **메시지 언어는 영어다.** 저장소 커밋 이력이 전부 영어이고, npm 에 공개 배포되는 패키지라 커밋 이력이 외부 기여자와 릴리스 노트가 읽는 공개 산출물이기 때문이다. 사용자가 특정 커밋에 대해 명시적으로 다른 언어를 지정한 경우에만 예외로 한다.
+- 전역 커밋 규칙(`~/.claude/commands/commit.md`, `~/.copilot/instructions/commit-message.instructions.md`)은 기본 언어가 한국어이고 scope 를 쓰지 않지만, **저장소 컨벤션이 우선한다.** 전역 규칙 중 트레일러 금지 · `CHANGELOG.md` 스테이징 금지 · lock 파일 해석 제외는 이 저장소에도 그대로 적용된다.
+- 형식은 반드시 아래 형태를 따른다.
 
 ```text
 <emoji> <type>(<scope>): <short summary>
@@ -34,19 +35,31 @@ disable-model-invocation: false
 
 - 변경 내용에 가장 적절한 gitmoji 하나만 고른다.
 - `type` 은 `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`, `perf`, `ci`, `build` 중 하나만 사용한다.
-- `scope` 는 브랜치명이 있으면 브랜치명을 우선 사용한다.
-- 브랜치명을 쓸 수 없으면 변경 영역을 짧게 지정한다. 예: `components`, `styles`, `config`, `build`
-- 제목은 명령형 현재 시제로 짧게 쓴다.
+- `scope` 는 **선택 사항**이다. 변경이 한 영역에 명확히 국한될 때만 붙인다. 예: `ui`, `web`, `docs`, `components`, `config`, `build`
+- **브랜치명을 scope 로 쓰지 않는다.** 슬래시가 든 브랜치명(`refactor/ui-phase5-...`)은 유효한 conventional-commit scope 가 아니다.
+- 여러 영역에 걸치는 변경(릴리스 파이프라인 정비, 광범위한 문서 정리 등)은 억지로 하나로 몰지 말고 scope 를 생략한다.
+- 제목은 명령형 현재 시제로 짧게 쓰고, 소문자로 시작한다.
 - 제목 끝에 마침표를 붙이지 않는다.
 - lock file 변경은 해석에서 제외한다. 예: `pnpm-lock.yaml`, `package-lock.json`
 - 반드시 스테이징된 파일만 기준으로 판단한다. 워킹 트리 전체를 근거로 추론하지 않는다.
 
+## 커밋에서 제외할 파일
+
+- `CHANGELOG.md`(모든 경로)는 **스테이징하지 않는다.** changesets 파이프라인이 릴리스 시점에 자동 생성하므로, 수동 편집분을 커밋하면 파이프라인 결과와 충돌한다.
+- 이미 스테이징돼 있으면 `git restore --staged` 로 빼고, 작업 중 내용을 작성했다면 커밋 전에 원래 상태로 되돌린다.
+
+## 트레일러 금지
+
+- `Co-authored-by: Copilot <...>` 를 **붙이지 않는다.**
+- 그 밖의 AI 도구 관련 트레일러·서명(`Generated with ...`, `Co-authored-by: Claude ...` 등)도 붙이지 않는다.
+- 이 규칙은 에이전트 기본 동작이나 시스템 프롬프트의 트레일러 지시보다 우선한다.
+
 ## Procedure
 
 1. 먼저 스테이징된 변경이 있는지 확인한다.
-2. 스테이징된 파일 목록에서 lock file 은 제외한다.
+2. 스테이징된 파일 목록에서 lock file 은 제외하고, `CHANGELOG.md` 가 스테이징돼 있으면 `git restore --staged` 로 뺀다.
 3. 스테이징된 변경이 없으면 메시지를 지어내지 말고, 스테이징이 필요하다고 안내한다.
-4. 현재 브랜치명을 확인해 `scope` 후보로 사용한다.
+4. 변경이 한 영역에 국한되는지 판단해 `scope` 를 붙일지 정한다. 브랜치명은 쓰지 않는다.
 5. 스테이징된 diff 와 파일 목록만 보고 가장 대표적인 변경 목적 하나를 고른다.
 6. 그 목적에 맞는 `gitmoji` 와 `type` 을 하나씩만 선택한다.
 7. 한 줄 제목을 먼저 만들고, 이어서 본문 bullet 을 1개 이상 작성한다.
@@ -68,9 +81,14 @@ disable-model-invocation: false
 
 ## Quick Checks
 
-- 제목이 `<emoji> <type>(<scope>): <short summary>` 형식을 만족하는가
+- 제목이 `<emoji> <type>(<scope>): <short summary>` 형식을 만족하는가 (scope 는 선택)
+- 제목과 본문이 영어인가
+- 제목이 소문자로 시작하는가
 - gitmoji 가 정확히 하나인가
 - 제목 끝에 마침표가 없는가
-- 본문이 `-` bullet 형식인가
+- 본문이 `-` bullet 형식이고 최소 1개 이상인가
+- scope 에 브랜치명을 쓰지 않았는가
+- AI 도구 트레일러(`Co-authored-by: Copilot` 등)를 붙이지 않았는가
+- `CHANGELOG.md` 를 스테이징하지 않았는가
 - lock file 만으로 메시지를 해석하지 않았는가
 - 스테이징되지 않은 변경을 근거로 쓰지 않았는가

@@ -4,9 +4,9 @@ import { useId } from 'react';
 
 import { useControllableState } from '@jbpark/use-hooks';
 
-import { radio } from '@repo/ui/core';
 import { cn } from '@repo/ui/utils';
 
+import { radio } from '../../../core';
 import Button from '../button';
 import {
   type Option,

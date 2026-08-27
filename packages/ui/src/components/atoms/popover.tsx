@@ -1,8 +1,8 @@
 import { useControllableState } from '@jbpark/use-hooks';
 
-import { popover } from '@repo/ui/core';
 import { cn, renderConditional } from '@repo/ui/utils';
 
+import { popover } from '../../core';
 import Typography from './typography';
 
 const { Popover: CorePopover, PopoverContent, PopoverTrigger } = popover;

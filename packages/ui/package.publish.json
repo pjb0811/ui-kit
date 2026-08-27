@@ -51,11 +51,6 @@
       "import": "./dist/utils.mjs",
       "default": "./dist/utils.mjs"
     },
-    "./core": {
-      "types": "./dist/core.d.mts",
-      "import": "./dist/core.mjs",
-      "default": "./dist/core.mjs"
-    },
     "./providers": {
       "types": "./dist/providers.d.mts",
       "import": "./dist/providers.mjs",

@@ -1,4 +1,4 @@
-import { input } from '@repo/ui/core';
+import { input } from '../../../core';
 
 const { Input: Core } = input;
 

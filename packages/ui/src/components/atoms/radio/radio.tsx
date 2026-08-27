@@ -5,9 +5,9 @@ import { useContext, useId, useRef } from 'react';
 import { useControllableState, useKeyPress } from '@jbpark/use-hooks';
 import { Circle, CircleCheck } from 'lucide-react';
 
-import { field, radio } from '@repo/ui/core';
 import { cn } from '@repo/ui/utils';
 
+import { field, radio } from '../../../core';
 import { RadioGroupContext } from './context';
 import { type OptionValue } from './group';
 

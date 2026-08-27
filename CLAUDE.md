@@ -58,13 +58,23 @@ src/components/
 
 ### 코어 프리미티브
 
-`src/core/`에 shadcn 스타일 Radix UI 래퍼가 있다. 컴포넌트는 이 코어를 직접 임포트해서 확장한다.
+`src/core/`에 shadcn 스타일 Radix UI 래퍼가 있다. 컴포넌트는 이 코어를 직접 임포트해서 확장하되, **반드시 상대경로로 임포트한다.**
 
 ```ts
-import { button } from '@repo/ui/core';
+import { button } from '../../core';
 
 const Core = button.Button;
 ```
+
+`src/core`는 **내부 전용**이다 — 패키지의 public export(`exports` 맵)에서 제거됐으므로(#278 ④) 외부 소비자는 `@jbpark/ui-kit/core`로 import할 수 없다.
+
+⚠️ **`@repo/ui/core` 스페시파이어는 쓰지 않는다.** tsconfig 별칭(`@repo/ui/*` → `./src/*`) 때문에 `check-types`·`lint`·`@repo/ui` 빌드까지는 전부 통과하지만, `@repo/ui`를 **소스에서 번들하는 앱**(Docusaurus 기반 `docs`/`web`)은 이 스페시파이어를 패키지 `exports` 맵으로 해석하기 때문에 앱 빌드 단계에서 터진다:
+
+```
+× Package subpath './core' is not defined by "exports" in packages/ui/package.json
+```
+
+`eslint.config.mjs`의 `no-restricted-imports` 규칙이 이걸 lint 단계에서 잡는다. `@repo/ui/utils`, `@repo/ui/providers`는 여전히 public export이므로 그대로 써도 된다.
 
 Radix가 이미 담당하는 영역(focus trap/management, 포털 마운트, `aria-*` 배선, 팝오버·드롭다운 위치 계산)은 직접 재구현하지 않는다 — 새 훅/컴포넌트를 만들 때 이 영역은 기본적으로 제외 대상으로 삼는다.
 

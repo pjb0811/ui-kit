@@ -6,9 +6,9 @@ import { useControllableState } from '@jbpark/use-hooks';
 import { format } from 'date-fns';
 import { CalendarIcon } from 'lucide-react';
 
-import { calendar } from '@repo/ui/core';
 import { cn } from '@repo/ui/utils';
 
+import { calendar } from '../../core';
 import Button from './button';
 import Popover from './popover';
 

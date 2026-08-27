@@ -2,8 +2,9 @@
 
 import { useControllableState } from '@jbpark/use-hooks';
 
-import { switchComponent } from '@repo/ui/core';
 import { cn } from '@repo/ui/utils';
+
+import { switchComponent } from '../../core';
 
 const { Switch: Core } = switchComponent;
 

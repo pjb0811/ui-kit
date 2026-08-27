@@ -9,7 +9,6 @@
     "./Space",
     "./Tag",
     "./Typography",
-    "./core",
     "./providers",
     "./style.css",
     "./utils"

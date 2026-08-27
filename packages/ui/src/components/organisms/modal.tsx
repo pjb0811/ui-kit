@@ -11,10 +11,10 @@ import {
   OctagonX,
 } from 'lucide-react';
 
-import { dialog } from '@repo/ui/core';
 import { DEFAULT_LOCALE, useConfig } from '@repo/ui/providers';
 import { cn } from '@repo/ui/utils';
 
+import { dialog } from '../../core';
 import Button from '../atoms/button';
 import {
   type ImperativeStack,

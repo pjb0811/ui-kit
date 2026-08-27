@@ -5,10 +5,10 @@ import { useRef, useState } from 'react';
 import { useMergedRef } from '@jbpark/use-hooks';
 import { CircleX, Search as SearchOutlined } from 'lucide-react';
 
-import { input } from '@repo/ui/core';
 import { DEFAULT_LOCALE, useConfig } from '@repo/ui/providers';
 import { cn } from '@repo/ui/utils';
 
+import { input } from '../../../core';
 import Button from '../button';
 
 const { Input: Core } = input;

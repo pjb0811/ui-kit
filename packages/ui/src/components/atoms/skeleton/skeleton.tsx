@@ -1,8 +1,9 @@
 'use client';
 
-import { skeleton } from '@repo/ui/core';
 import { DEFAULT_LOCALE, useConfig } from '@repo/ui/providers';
 import { cn } from '@repo/ui/utils';
+
+import { skeleton } from '../../../core';
 
 const { Skeleton: Core } = skeleton;
 
