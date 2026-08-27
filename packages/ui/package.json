@@ -54,7 +54,7 @@
   },
   "scripts": {
     "build": "tsdown",
-    "lint": "eslint .",
+    "lint": "eslint . --max-warnings 0",
     "check-dynamic-classes": "node scripts/check-dynamic-tailwind-classes.mjs",
     "check-api-surface": "node scripts/check-api-surface.mjs",
     "check-preflight-reset": "node scripts/check-preflight-reset.mjs",
