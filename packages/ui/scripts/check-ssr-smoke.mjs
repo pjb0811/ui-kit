@@ -26,6 +26,16 @@
 //      is a strict subset of Button's (a Tag isn't disableable) — a single
 //      shared list would false-positive on Tag.
 //
+//   4. generic preflight-reset slot (#301 follow-up): the non-Tailwind-host
+//      reset in globals.css is scoped generically to
+//      :where([data-slot], [data-slot] *) — it fires for ANY data-slot value,
+//      not just the color-keyed ones in contract #2. So an atom can drop its
+//      data-slot, keep every globals.css-keyed slot present elsewhere, PASS
+//      contract #2, and still regress bare-element UA defaults on hosts without
+//      their own preflight (Docusaurus etc. — the #253/#256 class). Tag is
+//      exactly this: its data-slot="badge" is load-bearing for the reset but is
+//      not individually keyed in globals.css. Asserted per named component.
+//
 // Run after `build`, via the css-stub loader (Swiper imports `.css`):
 //   node --import ./scripts/loaders/css-stub.mjs scripts/check-ssr-smoke.mjs
 
@@ -58,6 +68,16 @@ const COMMON_CHASSIS = [
 const CHASSIS = {
   Button: [...COMMON_CHASSIS, 'disabled:opacity-50', 'disabled:pointer-events-none'],
   Tag: [...COMMON_CHASSIS],
+};
+
+// Components whose root data-slot is load-bearing ONLY via the generic
+// non-Tailwind-host reset (:where([data-slot], [data-slot] *)) and is NOT
+// individually keyed in globals.css — so contract #2 can't see it (#301
+// follow-up). Button's data-slot="button" IS keyed, so #2 already covers it;
+// don't list it here or it double-reports. Add a component here if it grows a
+// generic-reset dependency without a keyed selector.
+const RESET_SLOTS = {
+  Tag: 'badge',
 };
 
 // Minimal valid props per component that needs them. Anything not listed is
@@ -183,6 +203,24 @@ for (const [name, expected] of Object.entries(CHASSIS)) {
   }
 }
 
+// 4. generic preflight-reset slot for components not keyed in globals.css.
+for (const [name, slot] of Object.entries(RESET_SLOTS)) {
+  const markup = markupByName[name];
+  if (markup == null) continue; // a render failure is already reported above
+  if (!markup.includes(`data-slot="${slot}"`)) {
+    errors.push(
+      `${name} preflight-reset slot: rendered output no longer has ` +
+        `data-slot="${slot}".\n` +
+        '    globals.css scopes the non-Tailwind-host reset generically to\n' +
+        '    :where([data-slot], [data-slot] *); dropping the attribute leaves the\n' +
+        '    bare element with UA defaults (2px outset border, UA font) on hosts\n' +
+        '    without their own preflight (#253/#256). This slot is not color-keyed\n' +
+        '    in globals.css, so contract #2 does not cover it — keep a data-slot on\n' +
+        '    the root through the Phase 4 absorb.',
+    );
+  }
+}
+
 if (errors.length) {
   console.error('✘ SSR smoke / rendered-output contract failed:\n');
   for (const e of errors) console.error('  - ' + e + '\n');
@@ -192,5 +230,6 @@ if (errors.length) {
 const passed = results.filter(r => r.ok);
 console.log(
   `✓ SSR smoke + contracts passed: ${passed.length} components render, ` +
-    `data-slot [${[...cssSlots].sort().join(', ')}] present, Button/Tag chassis intact.`,
+    `data-slot [${[...cssSlots].sort().join(', ')}] present, Button/Tag chassis intact, ` +
+    `reset-slot [${Object.values(RESET_SLOTS).sort().join(', ')}] present.`,
 );
