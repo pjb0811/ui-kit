@@ -1,5 +1,6 @@
-import { textarea } from '@repo/ui/core';
 import { cn } from '@repo/ui/utils';
+
+import { textarea } from '../../../core';
 
 const { Textarea: Core } = textarea;
 

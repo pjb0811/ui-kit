@@ -1,7 +1,8 @@
 import React from 'react';
 
-import { select } from '@repo/ui/core';
 import { cn } from '@repo/ui/utils';
+
+import { select } from '../../core';
 
 const {
   Select: Core,

@@ -66,6 +66,8 @@ import { button } from '@repo/ui/core';
 const Core = button.Button;
 ```
 
+`@repo/ui/core`는 **내부 전용**이다 — 패키지의 public export(`exports` 맵)에서 제거됐으므로(#278 ④) 외부 소비자는 `@jbpark/ui-kit/core`로 import할 수 없다. 위 임포트는 라이브러리 내부 소스에서만 tsconfig 별칭으로 해석된다.
+
 Radix가 이미 담당하는 영역(focus trap/management, 포털 마운트, `aria-*` 배선, 팝오버·드롭다운 위치 계산)은 직접 재구현하지 않는다 — 새 훅/컴포넌트를 만들 때 이 영역은 기본적으로 제외 대상으로 삼는다.
 
 단, 이건 "Radix가 커버 못 하는 영역은 아예 다루지 않는다"는 뜻이 아니다. Radix에 대응 프리미티브가 없는 컴포넌트(예: 커스텀 인터랙션, 이 라이브러리만의 UX 패턴)는 필요하면 그대로 개발한다. 기준은 "Radix가 이미 잘 하는 걸 다시 만들지 말자"이지 "Radix 밖은 다루지 말자"가 아니다.

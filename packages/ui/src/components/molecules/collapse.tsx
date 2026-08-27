@@ -2,8 +2,9 @@
 
 import React from 'react';
 
-import { accordion } from '@repo/ui/core';
 import { cn } from '@repo/ui/utils';
+
+import { accordion } from '../../core';
 
 const { Accordion, AccordionItem, AccordionTrigger, AccordionContent } =
   accordion;

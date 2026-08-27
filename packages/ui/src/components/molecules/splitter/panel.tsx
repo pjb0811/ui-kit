@@ -1,5 +1,6 @@
-import { resizable } from '@repo/ui/core';
 import { cn } from '@repo/ui/utils';
+
+import { resizable } from '../../../core';
 
 const { ResizablePanel } = resizable;
 

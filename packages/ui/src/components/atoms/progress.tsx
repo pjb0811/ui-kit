@@ -1,5 +1,6 @@
-import { progress } from '@repo/ui/core';
 import { cn } from '@repo/ui/utils';
+
+import { progress } from '../../core';
 
 const { Progress: Core } = progress;
 

@@ -5,9 +5,9 @@ import { useId, useRef } from 'react';
 import { useControllableState, useKeyPress } from '@jbpark/use-hooks';
 import { Square, SquareCheck } from 'lucide-react';
 
-import { checkbox, label } from '@repo/ui/core';
 import { cn } from '@repo/ui/utils';
 
+import { checkbox, label } from '../../../core';
 import { type OptionValue } from './group';
 
 const { Checkbox: CoreCheckbox } = checkbox;

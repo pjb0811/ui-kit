@@ -4,10 +4,10 @@ import { useEffect } from 'react';
 
 import { X } from 'lucide-react';
 
-import { drawer } from '@repo/ui/core';
 import { DEFAULT_LOCALE, useConfig } from '@repo/ui/providers';
 import { cn, renderConditional } from '@repo/ui/utils';
 
+import { drawer } from '../../core';
 import Button from '../atoms/button';
 
 const {

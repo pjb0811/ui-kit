@@ -2,8 +2,9 @@
 
 import { Children, Fragment, isValidElement } from 'react';
 
-import { resizable } from '@repo/ui/core';
 import { cn } from '@repo/ui/utils';
+
+import { resizable } from '../../../core';
 
 const { ResizableHandle, ResizablePanelGroup } = resizable;
 
