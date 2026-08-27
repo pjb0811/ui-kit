@@ -1,6 +1,6 @@
 {
   "name": "web",
-  "version": "1.4.3",
+  "version": "1.4.4",
   "private": true,
   "scripts": {
     "dev": "docusaurus start --port 3000",
