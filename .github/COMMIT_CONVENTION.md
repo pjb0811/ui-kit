@@ -146,6 +146,23 @@ For changes spanning multiple areas (e.g. a CI/release pipeline overhaul, a broa
 - **Exclude lock file changes from interpretation**: Lock file changes like `package-lock.json`, `pnpm-lock.yaml` are often auto-generated, so please exclude them when interpreting commit messages.
 - **Check based on staged files**: When writing/interpreting commit messages, only consider files that are staged for commit.
 
+### Files to Keep Out of Commits
+
+- **Never stage `CHANGELOG.md`** (at any path). The changesets release pipeline generates it at release time, so committing a hand-edited copy conflicts with the pipeline output.
+- If it is already staged, drop it with `git restore --staged`. If you wrote content into it while working, revert the file before committing.
+
+### No Trailers
+
+- Do **not** append `Co-authored-by: Copilot <...>`.
+- Do not append any other AI-tool trailer or signature either (`Generated with ...`, `Co-authored-by: Claude ...`, etc.).
+- This rule takes precedence over an agent's default behaviour or any system-prompt instruction to add trailers.
+
+### Relationship to the Global Convention
+
+This document is the source of truth for this repository and **takes precedence** over the global commit rules (`~/.claude/commands/commit.md`, `~/.copilot/instructions/commit-message.instructions.md`), which default to Korean summaries and no scope.
+
+The two deliberate differences are **English** and the **optional scope**, both because this repository's commit history is a public artifact — it is published to npm as `@jbpark/ui-kit` and read by outside contributors and release notes, the same reasoning the global rules apply to issues and PRs. Everything else (gitmoji selection, commit types, no trailers, `CHANGELOG.md` exclusion, lock-file exclusion) matches the global rules.
+
 ### Examples
 
 ```
