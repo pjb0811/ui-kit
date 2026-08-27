@@ -1,13 +1,18 @@
 'use client';
 
+import * as React from 'react';
+
+import { Slot } from '@radix-ui/react-slot';
 import { LoaderCircle } from 'lucide-react';
 
-import { button } from '@repo/ui/core';
 import { useConfig } from '@repo/ui/providers';
 import { cn } from '@repo/ui/utils';
 
-const Core = button.Button;
-type ButtonProps = button.Props;
+import { INTERACTIVE_CHASSIS } from '../../lib/chassis';
+
+type NativeButtonProps = React.ComponentProps<'button'> & {
+  asChild?: boolean;
+};
 
 type PresetColors =
   | 'blue'
@@ -24,7 +29,10 @@ type PresetColors =
   | 'lime'
   | 'gold';
 
-export interface Props extends Omit<ButtonProps, 'size' | 'variant' | 'type'> {
+export interface Props extends Omit<
+  NativeButtonProps,
+  'size' | 'variant' | 'type'
+> {
   icon?: React.ReactNode;
   block?: boolean;
   danger?: boolean;
@@ -48,8 +56,33 @@ export interface Props extends Omit<ButtonProps, 'size' | 'variant' | 'type'> {
   loading?: boolean | { icon: React.ReactNode };
 }
 
+// Chassis absorbed from core/button's cva base (#278 ③ / #294 Phase 4). The
+// shared focus/aria set lives in INTERACTIVE_CHASSIS; a Button additionally
+// disables and sizes its icons. Kept as constants so the absorb relocates this
+// treatment rather than dropping it (the #177 class of silent regression the
+// #300/#301 net guards).
+const BUTTON_CHASSIS = cn(
+  INTERACTIVE_CHASSIS,
+  'outline-none',
+  'disabled:pointer-events-none disabled:opacity-50',
+  "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+);
+
+// Presentation the atom builds on. The size/variant/shape classes below still
+// override the incidental leftovers exactly as they did when this wrapped
+// core/button, so the rendered output is unchanged (verified against a
+// pre-refactor render matrix).
+const BUTTON_BASE = cn(
+  BUTTON_CHASSIS,
+  'gap-2 whitespace-nowrap font-medium transition-all',
+  'has-[>svg]:px-3',
+);
+
 const variantClasses: Record<string, string> = {
-  solid: '',
+  // solid used to inherit its fill from core/button's default variant; carry it
+  // explicitly now that the primitive is absorbed. A colored solid overrides
+  // this with the --btn-* custom properties further down.
+  solid: cn('bg-primary text-primary-foreground', 'hover:bg-primary/90'),
   outlined: cn(
     'border border-[color-mix(in_oklch,var(--btn-border),transparent_50%)]',
     'bg-background text-foreground',
@@ -108,14 +141,14 @@ const Button = ({
   disabled,
   loading,
   danger,
+  asChild = false,
   children,
   onMouseDown,
   ...props
 }: Props) => {
   const { componentSize, defaultProps } = useConfig();
   const buttonDefaults = defaultProps?.button as
-    | Partial<Pick<Props, 'shape'>>
-    | undefined;
+    Partial<Pick<Props, 'shape'>> | undefined;
   const resolvedSize = size ?? componentSize ?? 'middle';
   const resolvedShape = shape ?? buttonDefaults?.shape ?? 'default';
   const iconOnly = icon && !children;
@@ -123,6 +156,8 @@ const Button = ({
   const colored = computedColor && computedColor !== 'default';
   const resolvedVariant = variant ?? typeToVariant[type] ?? 'solid';
   const isLoading = !!loading;
+
+  const Comp = asChild ? Slot : 'button';
 
   const displayIcon = loading ? (
     typeof loading === 'object' ? (
@@ -135,13 +170,12 @@ const Button = ({
   );
 
   return (
-    <Core
-      type={htmlType}
-      disabled={disabled || isLoading}
-      aria-busy={isLoading}
-      variant="default"
-      data-color={computedColor}
+    <Comp
+      data-slot="button"
+      data-variant="default"
+      data-size="default"
       className={cn(
+        BUTTON_BASE,
         'inline-flex items-center justify-center gap-x-2',
         'rounded-lg',
         'cursor-pointer',
@@ -169,6 +203,10 @@ const Button = ({
         className,
         //
       )}
+      type={htmlType}
+      disabled={disabled || isLoading}
+      aria-busy={isLoading}
+      data-color={computedColor}
       onMouseDown={e => {
         onMouseDown?.(e);
       }}
@@ -176,7 +214,7 @@ const Button = ({
     >
       {displayIcon}
       {children}
-    </Core>
+    </Comp>
   );
 };
 

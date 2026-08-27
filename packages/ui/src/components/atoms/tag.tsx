@@ -1,13 +1,34 @@
-import { badge } from '@repo/ui/core';
+import * as React from 'react';
+
+import { Slot } from '@radix-ui/react-slot';
+
 import { cn } from '@repo/ui/utils';
 
-const Core = badge.Badge;
-type BadgeProps = badge.Props;
+import { INTERACTIVE_CHASSIS } from '../../lib/chassis';
 
-export interface Props extends Omit<BadgeProps, 'variant'> {
+type NativeSpanProps = React.ComponentProps<'span'> & {
+  asChild?: boolean;
+};
+
+export interface Props extends Omit<NativeSpanProps, 'variant'> {
   variant?: 'default' | 'outlined';
   color?: 'default' | 'primary' | 'success' | 'warning' | 'danger';
 }
+
+// Base absorbed from core/badge's cva base + its `outline` variant, which Tag
+// always rendered as (#278 ③ / #294 Phase 4). The shared focus/aria/centering
+// set lives in INTERACTIVE_CHASSIS; a Tag adds badge geometry and its svg
+// sizing but — unlike Button — no `disabled:*` (a Tag is not disableable). The
+// rounded/padding leftovers are overridden by the atom classes below exactly as
+// before, so the rendered output is unchanged (verified against a pre-refactor
+// render matrix).
+const TAG_BASE = cn(
+  INTERACTIVE_CHASSIS,
+  'border w-fit whitespace-nowrap overflow-hidden',
+  'text-xs font-medium gap-1 transition-[color,box-shadow]',
+  '[&>svg]:size-3 [&>svg]:pointer-events-none',
+  'text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground',
+);
 
 const fillColorClasses: Record<string, string> = {
   default: 'border-transparent bg-muted text-muted-foreground',
@@ -31,13 +52,17 @@ const Tag = ({
   className,
   variant = 'default',
   color = 'default',
+  asChild = false,
   children,
   ...props
 }: Props) => {
+  const Comp = asChild ? Slot : 'span';
+
   return (
-    <Core
-      variant="outline"
+    <Comp
+      data-slot="badge"
       className={cn(
+        TAG_BASE,
         'rounded-full px-2.5 py-1',
         'text-xs font-medium',
         variant === 'default' && fillColorClasses[color],
@@ -48,7 +73,7 @@ const Tag = ({
       {...props}
     >
       {children}
-    </Core>
+    </Comp>
   );
 };
 
