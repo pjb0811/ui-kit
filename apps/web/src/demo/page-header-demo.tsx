@@ -6,7 +6,7 @@ export default function PageHeaderDemo() {
       title="Project settings"
       subTitle="Manage your project configuration"
       onBack={() => {}}
-      extra={<Button variant="solid">Save</Button>}
+      extra={<Button type="primary">Save</Button>}
     />
   );
 }

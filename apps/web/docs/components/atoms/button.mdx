@@ -11,7 +11,7 @@ import ButtonDemo from '../../../src/demo/button-demo';
 ```tsx
 import { Button } from '@jbpark/ui-kit';
 
-<Button variant="solid" onClick={() => console.log('clicked')}>
+<Button type="primary" onClick={() => console.log('clicked')}>
   Click me
 </Button>;
 ```
@@ -27,7 +27,7 @@ import { Button } from '@jbpark/ui-kit';
 | Prop        | Type                                                          | Default     |
 | ----------- | ----------------------------------------------------------------- | ----------- |
 | `variant`   | `'solid' \| 'outlined' \| 'dashed' \| 'filled' \| 'text' \| 'link'` | `'outlined'` |
-| ~~`type`~~  | `'primary' \| 'default' \| 'dashed' \| 'text' \| 'link'`         | -           |
+| `type`      | `'primary' \| 'default' \| 'dashed' \| 'text' \| 'link'`         | -           |
 | `size`      | `'small' \| 'middle' \| 'large'`                                  | `'middle'`  |
 | `shape`     | `'default' \| 'circle' \| 'round'`                                | `'default'` |
 | `color`     | preset color name (see below) `\| 'default' \| 'primary' \| 'danger'` | `'default'` |
@@ -39,20 +39,21 @@ import { Button } from '@jbpark/ui-kit';
 | `htmlType`  | `'button' \| 'submit' \| 'reset'`                                 | `'button'`  |
 | `className` | `string`                                                           | -           |
 
-`type` is **deprecated** — use `variant`. The two props address the same axis,
-and 3 of the 5 values (`dashed`, `text`, `link`) are spelled identically, so
-`<Button type="text">` and `<Button variant="text">` already render the same
-thing. `type` only adds the aliases `primary` → `solid` and `default` →
-`outlined`, while `variant` additionally offers `filled`. Passing both still
-lets `variant` win. `type` will be removed in the next major.
+`type` is syntactic sugar for a `(color, variant)` pair — it **follows `variant`
+and `color` when those are provided**, filling in only the axes you leave unset.
 
-| `type`    | use instead  |
-| --------- | ------------ |
-| `primary` | `solid`      |
-| `default` | `outlined` (the default, so it can just be omitted) |
-| `dashed`  | `dashed`     |
-| `text`    | `text`       |
-| `link`    | `link`       |
+| `type`    | equivalent to                        |
+| --------- | ------------------------------------ |
+| `primary` | `color="primary" variant="solid"`    |
+| `default` | `color="default" variant="outlined"` |
+| `dashed`  | `color="default" variant="dashed"`   |
+| `text`    | `color="default" variant="text"`     |
+| `link`    | `color="primary" variant="link"`     |
+
+So `<Button type="primary">` renders the same as
+`<Button color="primary" variant="solid">`, while
+`<Button type="primary" variant="filled">` keeps the primary color and renders
+filled instead. `danger` overrides the resolved color either way.
 
 Preset `color` names:
 `blue`, `purple`, `cyan`, `green`, `magenta`, `pink`, `red`, `orange`,

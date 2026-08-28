@@ -6,7 +6,7 @@ export default function ResultDemo() {
       status="success"
       title="Payment successful"
       subTitle="Order #2024-0815 has been confirmed."
-      extra={<Button variant="solid">Back home</Button>}
+      extra={<Button type="primary">Back home</Button>}
     />
   );
 }

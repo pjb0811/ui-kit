@@ -39,31 +39,26 @@ export interface Props extends Omit<
   disabled?: boolean;
   size?: 'small' | 'middle' | 'large';
   /**
-   * @deprecated Use `variant` instead. `type` is an alias kept for backwards
-   * compatibility and will be removed in the next major.
+   * Syntactic sugar for a `(color, variant)` pair. **Will follow `variant` and
+   * `color` if provided** — `type` only fills in the axes you leave unset.
    *
-   * The two props address the same axis, and 3 of the 5 values (`dashed`,
-   * `text`, `link`) are already spelled identically — `<Button type="text">`
-   * and `<Button variant="text">` render the same thing. The only values
-   * `type` contributes are the aliases `primary` → `solid` and
-   * `default` → `outlined`. `variant` additionally offers `filled`, which
-   * `type` cannot express.
+   * | `type`    | equivalent to                          |
+   * | --------- | -------------------------------------- |
+   * | `primary` | `color="primary" variant="solid"`      |
+   * | `default` | `color="default" variant="outlined"`   |
+   * | `dashed`  | `color="default" variant="dashed"`     |
+   * | `text`    | `color="default" variant="text"`       |
+   * | `link`    | `color="primary" variant="link"`       |
    *
-   * Migration:
-   * | `type`    | `variant`   |
-   * | --------- | ----------- |
-   * | `primary` | `solid`     |
-   * | `default` | `outlined`  |
-   * | `dashed`  | `dashed`    |
-   * | `text`    | `text`      |
-   * | `link`    | `link`      |
-   *
-   * Passing both still lets `variant` win.
+   * So `<Button type="primary">` is the same as
+   * `<Button color="primary" variant="solid">`, and
+   * `<Button type="primary" variant="filled">` keeps the primary color but
+   * renders filled. `danger` still overrides the resolved color.
    */
   type?: 'primary' | 'default' | 'dashed' | 'text' | 'link';
   /**
-   * Visual fill style. This is the canonical prop — prefer it over `type`.
-   * Defaults to `'outlined'` (matching the legacy `type="default"`).
+   * Visual fill style, independent of `color`. Defaults to `'outlined'`.
+   * Takes precedence over whatever `type` would have supplied.
    */
   variant?: 'solid' | 'outlined' | 'dashed' | 'filled' | 'text' | 'link';
   /**
@@ -73,6 +68,10 @@ export interface Props extends Omit<
    */
   htmlType?: 'button' | 'submit' | 'reset';
   shape?: 'default' | 'circle' | 'round';
+  /**
+   * Color, independent of `variant`. Defaults to `'default'`, or to whatever
+   * `type` maps to when `type` is set. `danger` overrides this.
+   */
   color?: PresetColors | 'default' | 'primary' | 'danger';
   loading?: boolean | { icon: React.ReactNode };
 }
@@ -123,12 +122,22 @@ const variantClasses: Record<string, string> = {
   ),
 };
 
-const typeToVariant: Record<string, string> = {
-  primary: 'solid',
-  default: 'outlined',
-  dashed: 'dashed',
-  text: 'text',
-  link: 'link',
+/**
+ * antd-style syntactic sugar: each `type` expands to a `(color, variant)` pair.
+ * Explicit `color`/`variant` props win over whatever the `type` maps to, so
+ * `type` only fills in the axes the caller left unset.
+ *
+ * Mirrors antd: `<Button type="primary">` ≡ `<Button color="primary" variant="solid">`.
+ */
+const typeToColorVariant: Record<
+  NonNullable<Props['type']>,
+  { color: NonNullable<Props['color']>; variant: NonNullable<Props['variant']> }
+> = {
+  primary: { color: 'primary', variant: 'solid' },
+  default: { color: 'default', variant: 'outlined' },
+  dashed: { color: 'default', variant: 'dashed' },
+  text: { color: 'default', variant: 'text' },
+  link: { color: 'primary', variant: 'link' },
 };
 
 const sizesClasses: Record<string, string> = {
@@ -156,7 +165,7 @@ const Button = ({
   variant,
   htmlType = 'button',
   size,
-  color = 'default',
+  color,
   shape,
   block = false,
   disabled,
@@ -173,14 +182,16 @@ const Button = ({
   const resolvedSize = size ?? componentSize ?? 'middle';
   const resolvedShape = shape ?? buttonDefaults?.shape ?? 'default';
   const iconOnly = icon && !children;
-  const computedColor = danger ? 'danger' : color;
-  const colored = computedColor && computedColor !== 'default';
-  // `variant` is canonical; `type` is a deprecated alias resolved through
-  // typeToVariant. The default lives here (not on the `type` parameter) so the
-  // deprecated prop stays off the default path — a Button with neither prop
-  // resolves straight to 'outlined'.
-  const resolvedVariant =
-    variant ?? (type ? typeToVariant[type] : undefined) ?? 'outlined';
+  // `type` is syntactic sugar that expands to a (color, variant) pair; explicit
+  // `color`/`variant` win over it, so `type` only fills the axes left unset.
+  // `danger` still trumps everything, matching antd. Defaults live here rather
+  // than on the parameters so `type` gets a chance to supply them first.
+  const typeDefaults = type ? typeToColorVariant[type] : undefined;
+  const resolvedVariant = variant ?? typeDefaults?.variant ?? 'outlined';
+  const computedColor = danger
+    ? 'danger'
+    : (color ?? typeDefaults?.color ?? 'default');
+  const colored = computedColor !== 'default';
   const isLoading = !!loading;
 
   const Comp = asChild ? Slot : 'button';
