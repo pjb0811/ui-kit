@@ -201,7 +201,7 @@ const Drawer = ({
           <div className="flex items-start gap-2">
             {closable && (
               <Button
-                type="text"
+                variant="text"
                 shape="circle"
                 size="small"
                 aria-label={locale.close ?? DEFAULT_LOCALE.close}

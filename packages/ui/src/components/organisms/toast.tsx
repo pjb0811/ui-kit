@@ -78,7 +78,7 @@ const Toast = ({
       </div>
       {closable && (
         <Button
-          type="text"
+          variant="text"
           shape="circle"
           size="small"
           aria-label={locale.close ?? DEFAULT_LOCALE.close}

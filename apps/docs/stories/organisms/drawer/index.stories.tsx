@@ -120,7 +120,7 @@ export const WithExtra: Story = {
                 취소
               </Button>
               <Button
-                type="primary"
+                variant="solid"
                 size="small"
                 onClick={() => setOpen(false)}
               >

@@ -7,7 +7,7 @@ export default function DrawerDemo() {
 
   return (
     <>
-      <Button type="primary" onClick={() => setOpen(true)}>
+      <Button variant="solid" onClick={() => setOpen(true)}>
         Open drawer
       </Button>
       <Drawer
@@ -17,7 +17,7 @@ export default function DrawerDemo() {
         direction="right"
         size="small"
         footer={
-          <Button type="primary" onClick={() => setOpen(false)}>
+          <Button variant="solid" onClick={() => setOpen(false)}>
             Done
           </Button>
         }

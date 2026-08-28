@@ -128,7 +128,7 @@ export default function Home() {
               <InstallCommand />
               <div className="flex gap-3">
                 <Button
-                  type="primary"
+                  variant="solid"
                   icon={<BookOpen size={16} />}
                   onClick={() => window.open(DOCS_URL, '_blank')}
                 >
