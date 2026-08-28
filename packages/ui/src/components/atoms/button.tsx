@@ -172,8 +172,6 @@ const Button = ({
   return (
     <Comp
       data-slot="button"
-      data-variant="default"
-      data-size="default"
       className={cn(
         BUTTON_BASE,
         'inline-flex items-center justify-center gap-x-2',
