@@ -42,7 +42,7 @@ const PageHeader = ({
       <div className="flex items-start gap-2">
         {onBack && (
           <Button
-            type="text"
+            variant="text"
             shape="circle"
             size="small"
             aria-label={locale.back ?? DEFAULT_LOCALE.back}

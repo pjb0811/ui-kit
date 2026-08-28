@@ -26,7 +26,7 @@ export default function ButtonDemo() {
       </Space>
       <Space wrap align="center">
         {COLORS.map(color => (
-          <Button key={color} type="primary" color={color}>
+          <Button key={color} variant="solid" color={color}>
             {color}
           </Button>
         ))}

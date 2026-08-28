@@ -5,7 +5,7 @@ export default function EmptyDemo() {
     <Empty
       title="No projects yet"
       description="Create your first project to get started."
-      action={<Button type="primary">New project</Button>}
+      action={<Button variant="solid">New project</Button>}
     />
   );
 }

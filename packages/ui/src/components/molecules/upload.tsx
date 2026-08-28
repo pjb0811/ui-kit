@@ -193,7 +193,7 @@ const Upload = ({
               )}
               <span className="flex-1 truncate text-sm">{file.name}</span>
               <Button
-                type="text"
+                variant="text"
                 shape="circle"
                 size="small"
                 icon={<X className="size-4" />}

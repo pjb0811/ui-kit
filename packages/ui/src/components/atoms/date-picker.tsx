@@ -55,7 +55,6 @@ const DatePicker = ({
       }
     >
       <Button
-        type="default"
         icon={<CalendarIcon />}
         data-empty={!value}
         disabled={disabled}

@@ -39,11 +39,32 @@ export interface Props extends Omit<
   disabled?: boolean;
   size?: 'small' | 'middle' | 'large';
   /**
-   * antd-style visual preset. Maps to a `variant` internally — passing
-   * both `type` and `variant` lets `variant` win, so it can override the
-   * preset for one-off cases without needing every value duplicated here.
+   * @deprecated Use `variant` instead. `type` is an alias kept for backwards
+   * compatibility and will be removed in the next major.
+   *
+   * The two props address the same axis, and 3 of the 5 values (`dashed`,
+   * `text`, `link`) are already spelled identically — `<Button type="text">`
+   * and `<Button variant="text">` render the same thing. The only values
+   * `type` contributes are the aliases `primary` → `solid` and
+   * `default` → `outlined`. `variant` additionally offers `filled`, which
+   * `type` cannot express.
+   *
+   * Migration:
+   * | `type`    | `variant`   |
+   * | --------- | ----------- |
+   * | `primary` | `solid`     |
+   * | `default` | `outlined`  |
+   * | `dashed`  | `dashed`    |
+   * | `text`    | `text`      |
+   * | `link`    | `link`      |
+   *
+   * Passing both still lets `variant` win.
    */
   type?: 'primary' | 'default' | 'dashed' | 'text' | 'link';
+  /**
+   * Visual fill style. This is the canonical prop — prefer it over `type`.
+   * Defaults to `'outlined'` (matching the legacy `type="default"`).
+   */
   variant?: 'solid' | 'outlined' | 'dashed' | 'filled' | 'text' | 'link';
   /**
    * Native `<button>` `type` (`button`/`submit`/`reset`), kept separate
@@ -131,7 +152,7 @@ const shapesClasses = {
 const Button = ({
   icon,
   className,
-  type = 'default',
+  type,
   variant,
   htmlType = 'button',
   size,
@@ -154,7 +175,12 @@ const Button = ({
   const iconOnly = icon && !children;
   const computedColor = danger ? 'danger' : color;
   const colored = computedColor && computedColor !== 'default';
-  const resolvedVariant = variant ?? typeToVariant[type] ?? 'solid';
+  // `variant` is canonical; `type` is a deprecated alias resolved through
+  // typeToVariant. The default lives here (not on the `type` parameter) so the
+  // deprecated prop stays off the default path — a Button with neither prop
+  // resolves straight to 'outlined'.
+  const resolvedVariant =
+    variant ?? (type ? typeToVariant[type] : undefined) ?? 'outlined';
   const isLoading = !!loading;
 
   const Comp = asChild ? Slot : 'button';
