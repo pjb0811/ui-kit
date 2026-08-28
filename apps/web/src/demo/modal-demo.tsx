@@ -7,7 +7,7 @@ export default function ModalDemo() {
 
   return (
     <Space>
-      <Button variant="solid" onClick={() => setOpen(true)}>
+      <Button type="primary" onClick={() => setOpen(true)}>
         Open modal
       </Button>
       <Button
