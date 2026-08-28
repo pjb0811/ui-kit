@@ -1,5 +1,13 @@
 # web
 
+## 1.4.5
+
+### Patch Changes
+
+- Updated dependencies [d691bf0]
+- Updated dependencies [7d73934]
+  - @repo/ui@6.0.1
+
 ## 1.4.4
 
 ### Patch Changes

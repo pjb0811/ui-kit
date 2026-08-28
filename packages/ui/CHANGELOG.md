@@ -1,5 +1,53 @@
 # @repo/ui
 
+## 6.0.1
+
+### Patch Changes
+
+- d691bf0: Deprecate `Button`'s `type` prop in favour of `variant` (ui-kit#278 follow-up).
+
+  The two props address the same axis and largely duplicate each other: 3 of the 5
+  `type` values (`dashed`, `text`, `link`) are spelled identically to their
+  `variant` counterparts, so `<Button type="text">` and `<Button variant="text">`
+  already render the same thing. `type` only contributes the aliases
+  `primary` → `solid` and `default` → `outlined`, while `variant` additionally
+  offers `filled`, which `type` cannot express.
+
+  `type` is now marked `@deprecated` with an in-editor migration table. **Nothing
+  changes at runtime** — passing both still lets `variant` win, and every
+  `type`/`variant` combination resolves to exactly the same variant as before.
+  The default moved off the deprecated prop (`type = 'default'` on the parameter)
+  onto the resolution itself (`?? 'outlined'`), so a Button with neither prop no
+  longer routes through the deprecated path.
+
+  | `type`    | use instead                                        |
+  | --------- | -------------------------------------------------- |
+  | `primary` | `solid`                                            |
+  | `default` | `outlined` (now the default, so it can be omitted) |
+  | `dashed`  | `dashed`                                           |
+  | `text`    | `text`                                             |
+  | `link`    | `link`                                             |
+
+  `type` will be removed in the next major.
+
+- 7d73934: Stop `Button` from emitting hardcoded `data-variant="default"` / `data-size="default"`
+  (ui-kit#308).
+
+  The two attributes were literals that never reflected the component's actual props:
+  a Button rendered with `variant="outlined" size="large"` still emitted
+  `data-variant="default" data-size="default"`. They were a leftover from the Phase 4
+  absorb (ui-kit#304), which inlined `core/button.tsx`'s `data-variant={variant}` /
+  `data-size={size}` while the atom happened to be passing the literal `"default"`.
+
+  No consumer-visible behaviour change: because the values were constant, any selector
+  using them matched exactly the same elements as `[data-slot='button']`, which is
+  unchanged and remains the documented styling hook. `data-slot="button"` itself is
+  untouched — the 20 `[data-slot='button'][data-color=…]` rules in `globals.css` that
+  define the preset-color system depend on it.
+
+  This also clears a false positive in the smell check documented in `CLAUDE.md`, which
+  matched `data-variant="` on the very component it exists to police.
+
 ## 6.0.0
 
 ### Major Changes
