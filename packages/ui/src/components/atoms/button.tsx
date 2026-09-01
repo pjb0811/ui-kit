@@ -178,19 +178,22 @@ const Button = ({
 }: Props) => {
   const { componentSize, defaultProps } = useConfig();
   const buttonDefaults = defaultProps?.button as
-    Partial<Pick<Props, 'shape'>> | undefined;
+    Partial<Pick<Props, 'shape' | 'variant' | 'color'>> | undefined;
   const resolvedSize = size ?? componentSize ?? 'middle';
   const resolvedShape = shape ?? buttonDefaults?.shape ?? 'default';
   const iconOnly = icon && !children;
   // `type` is syntactic sugar that expands to a (color, variant) pair; explicit
   // `color`/`variant` win over it, so `type` only fills the axes left unset.
-  // `danger` still trumps everything, matching antd. Defaults live here rather
-  // than on the parameters so `type` gets a chance to supply them first.
+  // A `Config` default sits below the call-site `type` (which is more specific)
+  // but above the library built-in. `danger` still trumps everything, matching
+  // antd. Defaults live here rather than on the parameters so `type` gets a
+  // chance to supply them first.
   const typeDefaults = type ? typeToColorVariant[type] : undefined;
-  const resolvedVariant = variant ?? typeDefaults?.variant ?? 'outlined';
+  const resolvedVariant =
+    variant ?? typeDefaults?.variant ?? buttonDefaults?.variant ?? 'outlined';
   const computedColor = danger
     ? 'danger'
-    : (color ?? typeDefaults?.color ?? 'default');
+    : (color ?? typeDefaults?.color ?? buttonDefaults?.color ?? 'default');
   const colored = computedColor !== 'default';
   const isLoading = !!loading;
 

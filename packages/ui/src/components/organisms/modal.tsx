@@ -78,7 +78,7 @@ interface StaticProps extends Props {
 
 const Modal = ({
   open = false,
-  maskClosable = false,
+  maskClosable,
   closable = false,
   closeIcon,
   className,
@@ -95,7 +95,12 @@ const Modal = ({
   onCancel,
   ...props
 }: Props) => {
-  const { locale } = useConfig();
+  const { locale, defaultProps } = useConfig();
+  const modalDefaults = defaultProps?.modal as
+    Partial<Pick<Props, 'maskClosable'>> | undefined;
+  // Explicit prop > `Config` default > built-in, matching Button/Tag.
+  const resolvedMaskClosable =
+    maskClosable ?? modalDefaults?.maskClosable ?? false;
 
   if (typeof window === 'undefined') {
     return null;
@@ -126,7 +131,7 @@ const Modal = ({
         closeIcon={closeIcon}
         container={container}
         onPointerDownOutside={event => {
-          if (!maskClosable) {
+          if (!resolvedMaskClosable) {
             event.preventDefault();
           }
         }}
