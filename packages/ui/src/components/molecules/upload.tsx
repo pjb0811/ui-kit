@@ -179,7 +179,9 @@ const Upload = ({
             <li
               key={file.uid}
               className={cn(
-                'flex items-center gap-2 rounded-md border p-2',
+                // `m-0` completes the list reset the `ul` above starts — see
+                // Radio.Group for the host rule this guards against.
+                'm-0 flex items-center gap-2 rounded-md border p-2',
                 classNames?.item,
                 //
               )}

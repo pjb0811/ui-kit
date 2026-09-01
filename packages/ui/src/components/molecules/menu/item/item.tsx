@@ -200,6 +200,9 @@ const Item = ({
       className={cn(
         'group',
         'relative',
+        // `m-0` completes MENU_CLASSNAMES' list reset — see Radio.Group for
+        // the host rule (`.markdown li + li`) this guards against.
+        'm-0',
         root && isHorizontal ? 'inline-block' : 'block',
       )}
       onMouseEnter={() => {

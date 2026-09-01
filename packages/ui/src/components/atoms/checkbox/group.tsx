@@ -66,8 +66,11 @@ const Group = ({
     <ul
       {...props}
       className={cn(
-        'm-0 list-none p-0',
-        orientation === 'vertical' ? 'space-y-2' : 'flex gap-2',
+        // Spacing comes from `gap`, not `space-y`'s child margins, so the
+        // per-item `m-0` reset below can neutralise host list styles without
+        // also wiping out the group's own spacing.
+        'm-0 flex list-none gap-2 p-0',
+        orientation === 'vertical' && 'flex-col',
         className,
       )}
     >
@@ -77,7 +80,9 @@ const Group = ({
         return (
           <li
             key={`${index}-${String(item.value)}`}
-            className={cn('flex', classNames?.wrapper)}
+            // `m-0` completes the list reset the `ul` above starts (#253) —
+            // see Radio.Group for the host rule this guards against.
+            className={cn('m-0 flex', classNames?.wrapper)}
           >
             <Checkbox
               placement={placement}
