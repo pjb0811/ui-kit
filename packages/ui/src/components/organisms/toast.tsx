@@ -16,10 +16,16 @@ import {
   isBrowser,
 } from './imperative-stack';
 
-type ToastType = 'info' | 'success' | 'error' | 'warning';
+type ToastStatus = 'info' | 'success' | 'error' | 'warning';
 
 export interface Props {
-  type?: ToastType;
+  status?: ToastStatus;
+  /**
+   * @deprecated Use `status`. Kept as an alias so existing
+   * `type="info|success|error|warning"` usage keeps working; `status` matches
+   * the shared semantic-state vocabulary used by `Result`.
+   */
+  type?: ToastStatus;
   title: React.ReactNode;
   description?: React.ReactNode;
   icon?: React.ReactNode;
@@ -35,7 +41,7 @@ interface StaticProps extends Props {
   container?: HTMLElement;
 }
 
-const TYPE_ICONS: Record<ToastType, React.ReactNode> = {
+const STATUS_ICONS: Record<ToastStatus, React.ReactNode> = {
   info: <Info className="text-blue-400" />,
   success: <Check className="text-green-400" />,
   error: <OctagonX className="text-red-400" />,
@@ -43,6 +49,7 @@ const TYPE_ICONS: Record<ToastType, React.ReactNode> = {
 };
 
 const Toast = ({
+  status,
   type,
   title,
   description,
@@ -53,10 +60,12 @@ const Toast = ({
   onClose,
 }: Props) => {
   const { locale } = useConfig();
+  // `type` is the deprecated alias for `status`; prefer `status` when both set.
+  const resolvedStatus = status ?? type;
 
   return (
     <div
-      role={type === 'error' ? 'alert' : 'status'}
+      role={resolvedStatus === 'error' ? 'alert' : 'status'}
       className={cn(
         'pointer-events-auto flex w-80 items-start gap-3 rounded-lg',
         'bg-background text-foreground border p-4 shadow-lg',
@@ -64,9 +73,9 @@ const Toast = ({
         //
       )}
     >
-      {(icon || type) && (
+      {(icon || resolvedStatus) && (
         <div className="mt-0.5 shrink-0 [&_svg]:size-5">
-          {icon || (type && TYPE_ICONS[type])}
+          {icon || (resolvedStatus && STATUS_ICONS[resolvedStatus])}
         </div>
       )}
       <div className="flex-1 space-y-1">
@@ -165,16 +174,16 @@ Toast.destroyAll = () => {
   toastStack.destroy();
 };
 
-type TriggerOptions = Omit<StaticProps, 'type' | 'title'>;
+type TriggerOptions = Omit<StaticProps, 'status' | 'type' | 'title'>;
 
 Toast.info = (title: React.ReactNode, props?: TriggerOptions) =>
-  toastStack.render({ type: 'info', title, ...props });
+  toastStack.render({ status: 'info', title, ...props });
 Toast.success = (title: React.ReactNode, props?: TriggerOptions) =>
-  toastStack.render({ type: 'success', title, ...props });
+  toastStack.render({ status: 'success', title, ...props });
 Toast.error = (title: React.ReactNode, props?: TriggerOptions) =>
-  toastStack.render({ type: 'error', title, ...props });
+  toastStack.render({ status: 'error', title, ...props });
 Toast.warning = (title: React.ReactNode, props?: TriggerOptions) =>
-  toastStack.render({ type: 'warning', title, ...props });
+  toastStack.render({ status: 'warning', title, ...props });
 
 export default Toast;
 export type { StaticProps as ToastOptions };

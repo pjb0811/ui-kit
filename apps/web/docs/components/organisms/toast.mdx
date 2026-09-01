@@ -50,11 +50,11 @@ Toast.destroy(id);
 | ------------- | ----------------------- | ----------- |
 | `description` | `ReactNode`             | -           |
 | `duration`    | `number` (ms, `0` = sticky) | `4000`  |
-| `icon`        | `ReactNode` (overrides the type icon) | -   |
+| `icon`        | `ReactNode` (overrides the status icon) | - |
 | `closable`    | `boolean`               | `true`      |
 | `action`      | `ReactNode`             | -           |
 | `container`   | `HTMLElement` (custom mount target) | -     |
 | `className`   | `string`                | -           |
 | `onClose`     | `() => void`            | -           |
 
-Each type sets an accessible role automatically (`alert` for `error`, `status` otherwise) and a matching icon.
+Each status sets an accessible role automatically (`alert` for `error`, `status` otherwise) and a matching icon. The `Toast.*` methods set `status` for you; on the `<Toast>` component the `status` prop drives this (the old `type` prop still works as a deprecated alias).

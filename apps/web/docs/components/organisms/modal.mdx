@@ -32,7 +32,7 @@ const [open, setOpen] = useState(false);
 
 ## Imperative
 
-The static methods render a centered, type-styled modal and manage their own open state. `Modal.confirm` shows both OK/Cancel; the others show a single acknowledge button.
+The static methods render a centered, status-styled modal and manage their own open state. `Modal.confirm` shows both OK/Cancel; the others show a single acknowledge button.
 
 ```tsx
 Modal.confirm({
@@ -73,4 +73,4 @@ Modal.success({ title: 'Saved.' });
 | `Modal.confirm`                                   | OK + Cancel                        |
 | `Modal.destroy(id)` / `Modal.destroyAll()`        | programmatic close                 |
 
-Each imperative type renders a matching icon next to the title.
+Each imperative status renders a matching icon next to the title. `Modal.info` / `success` / `error` / `warning` set the `status` axis; `Modal.confirm` is a separate interaction mode (two-button footer), not a status.
