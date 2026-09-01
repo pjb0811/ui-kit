@@ -1,7 +1,10 @@
+'use client';
+
 import * as React from 'react';
 
 import { Slot } from '@radix-ui/react-slot';
 
+import { useConfig } from '@repo/ui/providers';
 import { cn } from '@repo/ui/utils';
 
 import { INTERACTIVE_CHASSIS } from '../../lib/chassis';
@@ -50,12 +53,19 @@ const outlinedColorClasses: Record<string, string> = {
 
 const Tag = ({
   className,
-  variant = 'default',
-  color = 'default',
+  variant,
+  color,
   asChild = false,
   children,
   ...props
 }: Props) => {
+  const { defaultProps } = useConfig();
+  const tagDefaults = defaultProps?.tag as
+    Partial<Pick<Props, 'variant' | 'color'>> | undefined;
+  // An explicit prop wins over a `Config` default, which wins over the built-in
+  // — the same resolution order `Button` uses.
+  const resolvedVariant = variant ?? tagDefaults?.variant ?? 'default';
+  const resolvedColor = color ?? tagDefaults?.color ?? 'default';
   const Comp = asChild ? Slot : 'span';
 
   return (
@@ -65,8 +75,8 @@ const Tag = ({
         TAG_BASE,
         'rounded-full px-2.5 py-1',
         'text-xs font-medium',
-        variant === 'default' && fillColorClasses[color],
-        variant === 'outlined' && outlinedColorClasses[color],
+        resolvedVariant === 'default' && fillColorClasses[resolvedColor],
+        resolvedVariant === 'outlined' && outlinedColorClasses[resolvedColor],
         className,
         //
       )}
