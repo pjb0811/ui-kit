@@ -60,8 +60,17 @@ export interface Props {
   onCancel?: () => void;
 }
 
+type ModalStatus = 'info' | 'success' | 'error' | 'warning';
+
 interface StaticProps extends Props {
-  type?: 'info' | 'success' | 'error' | 'warning' | 'confirm';
+  status?: ModalStatus;
+  /**
+   * @deprecated Use `status` for the semantic state. Kept as an alias so
+   * existing `type="info|success|error|warning"` calls keep working. `confirm`
+   * is an interaction mode, not a status — call `Modal.confirm()` instead
+   * (still accepted here as `type="confirm"` for back-compat).
+   */
+  type?: ModalStatus | 'confirm';
   id?: string;
   icon?: React.ReactNode;
   container?: HTMLElement;
@@ -170,6 +179,7 @@ const STATIC_ICONS = {
 
 const StaticModal = ({
   id,
+  status,
   type,
   title,
   content,
@@ -186,6 +196,10 @@ const StaticModal = ({
   const resolvedOkText = okText ?? locale.ok ?? DEFAULT_LOCALE.ok;
   const resolvedCancelText =
     cancelText ?? locale.cancel ?? DEFAULT_LOCALE.cancel;
+  // `confirm` is an interaction mode (two-button footer), not a status. The
+  // semantic state comes from `status`, with `type` as its deprecated alias.
+  const isConfirm = type === 'confirm';
+  const resolvedStatus = status ?? (isConfirm ? undefined : type);
 
   const closeModal = (callback?: () => void) => {
     callback?.();
@@ -195,31 +209,30 @@ const StaticModal = ({
     }, 200);
   };
 
-  const footer =
-    type === 'confirm' ? (
-      <div className="grid w-full grid-cols-5 gap-x-2">
-        <Button
-          variant="outlined"
-          className="col-span-2"
-          onClick={() => closeModal(onCancel)}
-        >
-          {resolvedCancelText}
-        </Button>
-        <Button className="col-span-3" onClick={() => closeModal(onOk)}>
-          {resolvedOkText}
-        </Button>
-      </div>
-    ) : (
+  const footer = isConfirm ? (
+    <div className="grid w-full grid-cols-5 gap-x-2">
       <Button
-        className={cn(
-          'grow',
-          //
-        )}
-        onClick={() => closeModal(onOk)}
+        variant="outlined"
+        className="col-span-2"
+        onClick={() => closeModal(onCancel)}
       >
+        {resolvedCancelText}
+      </Button>
+      <Button className="col-span-3" onClick={() => closeModal(onOk)}>
         {resolvedOkText}
       </Button>
-    );
+    </div>
+  ) : (
+    <Button
+      className={cn(
+        'grow',
+        //
+      )}
+      onClick={() => closeModal(onOk)}
+    >
+      {resolvedOkText}
+    </Button>
+  );
 
   if (!isBrowser) {
     return null;
@@ -251,7 +264,10 @@ const StaticModal = ({
             //
           )}
         >
-          {icon || (type && STATIC_ICONS[type])}
+          {icon ||
+            (isConfirm
+              ? STATIC_ICONS.confirm
+              : resolvedStatus && STATIC_ICONS[resolvedStatus])}
           {title}
         </p>
       }
@@ -290,13 +306,15 @@ Modal.destroyAll = () => {
 };
 
 Modal.info = (props: StaticProps) =>
-  modalStack.render({ type: 'info', ...props });
+  modalStack.render({ status: 'info', ...props });
 Modal.success = (props: StaticProps) =>
-  modalStack.render({ type: 'success', ...props });
+  modalStack.render({ status: 'success', ...props });
 Modal.error = (props: StaticProps) =>
-  modalStack.render({ type: 'error', ...props });
+  modalStack.render({ status: 'error', ...props });
 Modal.warning = (props: StaticProps) =>
-  modalStack.render({ type: 'warning', ...props });
+  modalStack.render({ status: 'warning', ...props });
+// `confirm` is a mode, not a status, so it rides the `type` axis (the only
+// place it lives) rather than `status`.
 Modal.confirm = (props: StaticProps) =>
   modalStack.render({ type: 'confirm', ...props });
 
