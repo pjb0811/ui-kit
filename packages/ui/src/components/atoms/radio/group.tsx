@@ -110,7 +110,13 @@ const RadioGroup = ({
         return (
           <li
             key={`${index}-${String(item.value)}`}
-            className={cn('flex', classNames?.wrapper)}
+            // `m-0` completes the list reset the `ul` above starts (#253):
+            // without preflight, hosts that style prose lists still reach the
+            // items — Docusaurus/Infima's `.markdown li + li` gives every item
+            // but the first a `margin-top`, which in horizontal orientation
+            // drops options 2..n by that much and stretches the first one,
+            // making it look misaligned.
+            className={cn('m-0 flex', classNames?.wrapper)}
           >
             {isButton ? (
               // `asChild` gives the Button real radio semantics (role,
