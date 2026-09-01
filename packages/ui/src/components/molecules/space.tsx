@@ -1,5 +1,6 @@
 import { Children } from 'react';
 
+import { useConfig } from '@repo/ui/providers';
 import { cn } from '@repo/ui/utils';
 
 import Skeleton from '../atoms/skeleton';
@@ -35,7 +36,7 @@ const Space = ({
   loading,
   loader,
   children,
-  size = 'middle',
+  size,
   orientation = 'horizontal',
   align = 'center',
   wrap = false,
@@ -46,12 +47,17 @@ const Space = ({
   style,
   ...props
 }: Props) => {
+  const { componentSize } = useConfig();
+  // `size` overrides the global `componentSize` from `Config`, which in turn
+  // falls back to `middle` — the same resolution order `Button` uses so a single
+  // `<Config componentSize>` sizes both. Numeric/array gaps bypass the token.
+  const resolvedSize = size ?? componentSize ?? 'middle';
   const [x, y] =
-    typeof size === 'string'
-      ? sizes[size] || [0, 0]
-      : Array.isArray(size)
-        ? size
-        : [size, size];
+    typeof resolvedSize === 'string'
+      ? sizes[resolvedSize] || [0, 0]
+      : Array.isArray(resolvedSize)
+        ? resolvedSize
+        : [resolvedSize, resolvedSize];
   const count = Children.count(children);
 
   if (loading) {
