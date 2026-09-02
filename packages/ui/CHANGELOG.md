@@ -1,5 +1,70 @@
 # @repo/ui
 
+## 6.2.0
+
+### Minor Changes
+
+- d75a89d: Unify the semantic-state axis under `status`. `Modal` and `Toast` now take a
+  `status` prop (`info | success | error | warning`), matching `Result`'s
+  vocabulary, instead of spelling the same axis `type`. The old `type` prop stays
+  as a deprecated alias, so this is **non-breaking** — existing
+  `type="error"` usage and every `Modal.*` / `Toast.*` call keep working.
+
+  `Modal.confirm` is unchanged: `confirm` is an interaction mode (the two-button
+  footer), not a status, so it stays on its own axis rather than being folded into
+  `status` (ui-kit#318).
+
+- 62c4ae7: Add a `Slider` atom. A numeric-range control built on the Radix `Slider`
+  primitive (draggable + keyboard-operable), following the existing
+  `Checkbox`/`Switch` shape: controlled/uncontrolled via `useControllableState`,
+  with `value`/`defaultValue`/`onChange`, `min`/`max`/`step`, `disabled`, and
+  `orientation`. Pass a bare `number` for a single thumb or a `[min, max]` tuple
+  for a two-thumb range — `onChange` returns the same shape. Consumers no longer
+  need to hand-roll `<input type="range">` (ui-kit#315).
+- 11b80bd: `Space` now honours the global `componentSize` from `Config`. When `size` is
+  left unset it falls back to `<Config componentSize>` before the built-in
+  `middle`, matching `Button`'s resolution order — so a single
+  `<Config componentSize="large">` sizes both. An explicit `size` (including
+  numeric/array gaps) still wins, so this is non-breaking (ui-kit#317).
+- 95b5eec: Align `Tag`'s `variant`/`color` vocabulary with `Button` (ui-kit#320), **without
+  breaking existing `Tag` usage**:
+
+  - `variant="filled"` is the new canonical spelling of what used to be
+    `variant="default"`. `"default"` still works as a **deprecated alias** (renders
+    identically) and will be removed in a future major.
+  - `color` now also accepts `Button`'s shared preset palette (`blue`, `purple`,
+    `cyan`, `green`, `magenta`, `pink`, `red`, `orange`, `yellow`, `volcano`,
+    `geekblue`, `lime`, `gold`) alongside the existing named states
+    (`primary`/`success`/`warning`/`danger`). Presets are backed by the same
+    `data-color` custom-property system as `Button` (`--tag-*` mirrors `--btn-*`),
+    so a colour word renders the same hue on either component.
+
+  The preset list is now shared from `lib/colors` and consumed by both `Button`
+  and `Tag`. Existing named-state tags render byte-identical (they keep their
+  bespoke classes and never emit `data-color`), so this is additive and
+  non-breaking — the vocabulary alignment ships as a minor with a deprecation
+  window rather than waiting for a major.
+
+- 157545d: Widen `Config`'s `defaultProps` beyond `button.shape`. Apps can now set
+  library-wide defaults for more of the settled prop surface in one place:
+
+  - `defaultProps.button.variant` / `defaultProps.button.color`
+  - `defaultProps.tag.variant` / `defaultProps.tag.color`
+  - `defaultProps.modal.maskClosable`
+
+  Each resolves `explicit prop ?? Config default ?? built-in`, the same order
+  `Button` already used for `shape` (for `Button`, a call-site `type` shorthand
+  still wins over the `Config` default). Additive and non-breaking — components
+  behave exactly as before when no default is set (ui-kit#319).
+
+### Patch Changes
+
+- e197fcc: Add the `'use client'` directive to `Space`. `Space` reads `componentSize` via
+  `useConfig` (a React context hook), so it must be a client component like every
+  other `Config` consumer (`Button`, `Switch`, `Modal`, `Tag`, …). Without the
+  directive, importing `<Space>` into a React Server Component tree could throw at
+  runtime. Non-behavioural fix — output is unchanged in existing client trees.
+
 ## 6.1.0
 
 ### Minor Changes
