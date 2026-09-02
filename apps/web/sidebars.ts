@@ -31,6 +31,7 @@ const sidebars: SidebarsConfig = {
         'components/atoms/date-picker',
         'components/atoms/color-picker',
         'components/atoms/switch',
+        'components/atoms/slider',
         'components/atoms/input',
         'components/atoms/checkbox',
         'components/atoms/radio',

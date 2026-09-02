@@ -15,5 +15,6 @@ export * as resizable from './resizable';
 export * as select from './select';
 export * as separator from './separator';
 export * as skeleton from './skeleton';
+export * as slider from './slider';
 export * as switchComponent from './switch';
 export * as textarea from './textarea';

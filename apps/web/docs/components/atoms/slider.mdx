@@ -1,0 +1,49 @@
+---
+sidebar_position: 16
+title: Slider
+---
+
+import DemoTheme from '@site/src/components/DemoTheme';
+import SliderDemo from '../../../src/demo/slider-demo';
+
+# Slider
+
+A numeric-range control built on the Radix `Slider` primitive — draggable and
+fully keyboard-operable.
+
+```tsx
+import { Slider } from '@jbpark/ui-kit';
+
+// single thumb
+<Slider value={value} onChange={setValue} />;
+
+// two-thumb range
+<Slider value={[min, max]} onChange={setRange} />;
+```
+
+<DemoTheme>
+
+<SliderDemo />
+
+</DemoTheme>
+
+## Props
+
+| Prop           | Type                              | Default        |
+| -------------- | --------------------------------- | -------------- |
+| `value`        | `number \| number[]`              | -              |
+| `defaultValue` | `number \| number[]`              | `[min]`        |
+| `min`          | `number`                          | `0`            |
+| `max`          | `number`                          | `100`          |
+| `step`         | `number`                          | `1`            |
+| `disabled`     | `boolean`                         | -              |
+| `orientation`  | `'horizontal' \| 'vertical'`      | `'horizontal'` |
+| `onChange`     | `(value: number \| number[]) => void` | -          |
+| `className`    | `string`                          | -              |
+
+Works both controlled (pass `value` + `onChange`) and uncontrolled (pass
+`defaultValue`, or neither). Pass a single `number` for one thumb or a
+`[min, max]` tuple for a two-thumb range — `onChange` hands back the same shape
+you gave it. `Slider` also accepts the rest of
+`React.ComponentPropsWithoutRef<'span'>` except `onChange` and `defaultValue`
+(both renamed to the value-based forms above).
