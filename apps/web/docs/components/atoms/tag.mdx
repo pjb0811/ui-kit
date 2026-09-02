@@ -24,11 +24,21 @@ import { Tag } from '@jbpark/ui-kit';
 
 ## Props
 
-| Prop        | Type                                                                | Default     |
-| ----------- | -------------------------------------------------------------------- | ----------- |
-| `variant`   | `'default' \| 'outlined'`                                          | `'default'` |
-| `color`     | `'default' \| 'primary' \| 'success' \| 'warning' \| 'danger'`     | `'default'` |
-| `className` | `string`                                                              | -           |
-| `children`  | `ReactNode`                                                           | -           |
+| Prop        | Type                                                              | Default    |
+| ----------- | ---------------------------------------------------------------- | ---------- |
+| `variant`   | `'filled' \| 'outlined'`                                         | `'filled'` |
+| `color`     | `'default' \| 'primary' \| 'success' \| 'warning' \| 'danger' \| PresetColor` | `'default'` |
+| `className` | `string`                                                         | -          |
+| `children`  | `ReactNode`                                                      | -          |
+
+`Tag` shares `Button`'s vocabulary (#320): `variant="filled"` matches `Button`'s
+`filled`, and `color` accepts the same preset palette — `blue`, `purple`,
+`cyan`, `green`, `magenta`, `pink`, `red`, `orange`, `yellow`, `volcano`,
+`geekblue`, `lime`, `gold` — on top of the named states
+(`primary`/`success`/`warning`/`danger`).
+
+> **Deprecation:** `variant="default"` is still accepted as an alias for
+> `"filled"` and renders identically, but it will be removed in a future major.
+> Prefer `variant="filled"`.
 
 `Tag` also accepts the rest of `React.ComponentProps<'span'>` (e.g. `onClick`, `style`).

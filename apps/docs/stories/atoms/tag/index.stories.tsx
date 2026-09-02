@@ -11,11 +11,30 @@ const meta: Meta<typeof Tag> = {
   argTypes: {
     variant: {
       control: { type: 'select' },
-      options: ['default', 'outlined'],
+      options: ['filled', 'outlined'],
     },
     color: {
       control: { type: 'select' },
-      options: ['default', 'primary', 'success', 'warning', 'danger'],
+      options: [
+        'default',
+        'primary',
+        'success',
+        'warning',
+        'danger',
+        'blue',
+        'purple',
+        'cyan',
+        'green',
+        'magenta',
+        'pink',
+        'red',
+        'orange',
+        'yellow',
+        'volcano',
+        'geekblue',
+        'lime',
+        'gold',
+      ],
     },
     className: {
       control: { type: 'text' },
@@ -36,5 +55,12 @@ export const Outlined: Story = {
   args: {
     children: 'Tag',
     variant: 'outlined',
+  },
+};
+
+export const Preset: Story = {
+  args: {
+    children: 'gold',
+    color: 'gold',
   },
 };

@@ -9,25 +9,11 @@ import { useConfig } from '@repo/ui/providers';
 import { cn } from '@repo/ui/utils';
 
 import { INTERACTIVE_CHASSIS } from '../../lib/chassis';
+import { type PresetColor } from '../../lib/colors';
 
 type NativeButtonProps = React.ComponentProps<'button'> & {
   asChild?: boolean;
 };
-
-type PresetColors =
-  | 'blue'
-  | 'purple'
-  | 'cyan'
-  | 'green'
-  | 'magenta'
-  | 'pink'
-  | 'red'
-  | 'orange'
-  | 'yellow'
-  | 'volcano'
-  | 'geekblue'
-  | 'lime'
-  | 'gold';
 
 export interface Props extends Omit<
   NativeButtonProps,
@@ -72,7 +58,7 @@ export interface Props extends Omit<
    * Color, independent of `variant`. Defaults to `'default'`, or to whatever
    * `type` maps to when `type` is set. `danger` overrides this.
    */
-  color?: PresetColors | 'default' | 'primary' | 'danger';
+  color?: PresetColor | 'default' | 'primary' | 'danger';
   loading?: boolean | { icon: React.ReactNode };
 }
 
