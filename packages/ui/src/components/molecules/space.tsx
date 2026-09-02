@@ -1,3 +1,5 @@
+'use client';
+
 import { Children } from 'react';
 
 import { useConfig } from '@repo/ui/providers';
