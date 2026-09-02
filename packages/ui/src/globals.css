@@ -255,6 +255,51 @@
     --btn-bg: #f59e0b;
   }
 
+  /* Tag's shared preset palette (#320). Mirrors the `--btn-*` hues above so a
+   * given colour word renders the same on `Tag` and `Button`; `Tag` reads
+   * `--tag-bg` for both its 10% fill tint and its outlined border/text (see
+   * tag.tsx). Named states (primary/success/warning/danger) keep their own
+   * classes and never set `data-color`, so only these presets match here. */
+  [data-slot='badge'][data-color='blue'] {
+    --tag-bg: #3b82f6;
+  }
+  [data-slot='badge'][data-color='purple'] {
+    --tag-bg: #a855f7;
+  }
+  [data-slot='badge'][data-color='cyan'] {
+    --tag-bg: #06b6d4;
+  }
+  [data-slot='badge'][data-color='green'] {
+    --tag-bg: #22c55e;
+  }
+  [data-slot='badge'][data-color='magenta'] {
+    --tag-bg: #d946ef;
+  }
+  [data-slot='badge'][data-color='pink'] {
+    --tag-bg: #ec4899;
+  }
+  [data-slot='badge'][data-color='red'] {
+    --tag-bg: #ef4444;
+  }
+  [data-slot='badge'][data-color='orange'] {
+    --tag-bg: #f97316;
+  }
+  [data-slot='badge'][data-color='yellow'] {
+    --tag-bg: #eab308;
+  }
+  [data-slot='badge'][data-color='volcano'] {
+    --tag-bg: #ea580c;
+  }
+  [data-slot='badge'][data-color='geekblue'] {
+    --tag-bg: #6366f1;
+  }
+  [data-slot='badge'][data-color='lime'] {
+    --tag-bg: #84cc16;
+  }
+  [data-slot='badge'][data-color='gold'] {
+    --tag-bg: #f59e0b;
+  }
+
   /* Row/Col's 24-column responsive grid (templates/grid/col.tsx) — Col
    * hands over one CSS custom property per breakpoint tier, already
    * resolved via its own mobile-first cascade (pure prop math, no

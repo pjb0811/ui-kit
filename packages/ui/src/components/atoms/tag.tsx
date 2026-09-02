@@ -8,14 +8,29 @@ import { useConfig } from '@repo/ui/providers';
 import { cn } from '@repo/ui/utils';
 
 import { INTERACTIVE_CHASSIS } from '../../lib/chassis';
+import { type PresetColor, isPresetColor } from '../../lib/colors';
 
 type NativeSpanProps = React.ComponentProps<'span'> & {
   asChild?: boolean;
 };
 
-export interface Props extends Omit<NativeSpanProps, 'variant'> {
-  variant?: 'default' | 'outlined';
-  color?: 'default' | 'primary' | 'success' | 'warning' | 'danger';
+export interface Props extends Omit<NativeSpanProps, 'variant' | 'color'> {
+  /**
+   * Fill style, aligned with `Button`'s vocabulary. `'default'` is a
+   * **deprecated alias** for `'filled'` — it still renders identically, but
+   * prefer `'filled'` going forward (#320).
+   *
+   * @remarks `'default'` will be removed in a future major.
+   */
+  variant?: 'filled' | 'outlined' | 'default';
+  /**
+   * Colour, sharing `Button`'s preset palette. The named states
+   * (`primary`/`success`/`warning`/`danger`) keep their semantic look; the
+   * shared presets (`blue`, `red`, `gold`, …) are backed by the same
+   * `data-color` system as `Button` (#320).
+   */
+  color?:
+    'default' | 'primary' | 'success' | 'warning' | 'danger' | PresetColor;
 }
 
 // Base absorbed from core/badge's cva base + its `outline` variant, which Tag
@@ -51,6 +66,18 @@ const outlinedColorClasses: Record<string, string> = {
   danger: 'border-destructive text-destructive',
 };
 
+// Preset colours resolve their hue from the shared `--tag-bg` custom property
+// (globals.css, keyed on `data-color`) rather than a per-colour Tailwind class,
+// so `Tag` and `Button` stay in lock-step. Fill uses a 10% tint behind the
+// full-strength hue; outlined borders and texts it directly.
+const presetFillClasses = cn(
+  'border-transparent',
+  'bg-[color-mix(in_oklch,var(--tag-bg),transparent_90%)]',
+  'text-(--tag-bg)',
+);
+
+const presetOutlinedClasses = cn('border-(--tag-bg) text-(--tag-bg)');
+
 const Tag = ({
   className,
   variant,
@@ -64,19 +91,31 @@ const Tag = ({
     Partial<Pick<Props, 'variant' | 'color'>> | undefined;
   // An explicit prop wins over a `Config` default, which wins over the built-in
   // — the same resolution order `Button` uses.
-  const resolvedVariant = variant ?? tagDefaults?.variant ?? 'default';
+  const resolvedVariant = variant ?? tagDefaults?.variant ?? 'filled';
   const resolvedColor = color ?? tagDefaults?.color ?? 'default';
+  // `'default'` is the pre-#320 spelling of `'filled'`; fold it in so the alias
+  // renders identically.
+  const isOutlined = resolvedVariant === 'outlined';
+  const preset = isPresetColor(resolvedColor);
   const Comp = asChild ? Slot : 'span';
 
   return (
     <Comp
       data-slot="badge"
+      // Only preset colours drive the `--tag-*` system; the named states keep
+      // their bespoke classes, so existing usage renders byte-identical.
+      data-color={preset ? resolvedColor : undefined}
       className={cn(
         TAG_BASE,
         'rounded-full px-2.5 py-1',
         'text-xs font-medium',
-        resolvedVariant === 'default' && fillColorClasses[resolvedColor],
-        resolvedVariant === 'outlined' && outlinedColorClasses[resolvedColor],
+        preset
+          ? isOutlined
+            ? presetOutlinedClasses
+            : presetFillClasses
+          : isOutlined
+            ? outlinedColorClasses[resolvedColor]
+            : fillColorClasses[resolvedColor],
         className,
         //
       )}
