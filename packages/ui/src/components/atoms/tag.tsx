@@ -8,7 +8,7 @@ import { useConfig } from '@repo/ui/providers';
 import { cn } from '@repo/ui/utils';
 
 import { INTERACTIVE_CHASSIS } from '../../lib/chassis';
-import { type PresetColor, isPresetColor } from '../../lib/colors';
+import { type PresetColor } from '../../lib/colors';
 
 type NativeSpanProps = React.ComponentProps<'span'> & {
   asChild?: boolean;
@@ -16,18 +16,19 @@ type NativeSpanProps = React.ComponentProps<'span'> & {
 
 export interface Props extends Omit<NativeSpanProps, 'variant' | 'color'> {
   /**
-   * Fill style, aligned with `Button`'s vocabulary. `'default'` is a
-   * **deprecated alias** for `'filled'` — it still renders identically, but
-   * prefer `'filled'` going forward (#320).
-   *
-   * @remarks `'default'` will be removed in a future major.
+   * Fill style, aligned with `Button`'s vocabulary (#320). The pre-7.0
+   * `'default'` spelling was removed — use `'filled'`, which renders
+   * identically.
    */
-  variant?: 'filled' | 'outlined' | 'default';
+  variant?: 'filled' | 'outlined';
   /**
-   * Colour, sharing `Button`'s preset palette. The named states
-   * (`primary`/`success`/`warning`/`danger`) keep their semantic look; the
-   * shared presets (`blue`, `red`, `gold`, …) are backed by the same
-   * `data-color` system as `Button` (#320).
+   * Colour. Every value — the semantic states (`primary`/`success`/`warning`/
+   * `danger`) as well as the palette shared with `Button` (`blue`, `red`,
+   * `gold`, …) — resolves through the same `data-color` + `--tag-*` system
+   * (#320), so any of them can be re-themed the same way.
+   *
+   * `success`/`warning` have no `Button` counterpart on purpose: a Tag marks
+   * state, which is why antd's Tag also carries them while its Button does not.
    */
   color?:
     'default' | 'primary' | 'success' | 'warning' | 'danger' | PresetColor;
@@ -48,35 +49,18 @@ const TAG_BASE = cn(
   'text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground',
 );
 
-const fillColorClasses: Record<string, string> = {
-  default: 'border-transparent bg-muted text-muted-foreground',
-  primary: 'border-transparent bg-primary/10 text-primary',
-  success:
-    'border-transparent bg-green-500/10 text-green-600 dark:text-green-400',
-  warning:
-    'border-transparent bg-yellow-500/10 text-yellow-600 dark:text-yellow-400',
-  danger: 'border-transparent bg-destructive/10 text-destructive',
-};
+// Every colour — semantic states and shared presets alike — resolves from the
+// `--tag-*` custom properties that `globals.css` sets per `data-color` (#320).
+// Before 7.0 only the presets took this path while the states carried bespoke
+// Tailwind classes, which meant `[data-color]` hooks and `--tag-*` overrides
+// worked on some colours but silently not on others.
+//
+//   --tag-bg    the hue; the border in `outlined`
+//   --tag-fg    text colour (defaults to --tag-bg)
+//   --tag-tint  the fill behind `filled` (defaults to a 10% --tag-bg wash)
+const fillClasses = cn('border-transparent bg-(--tag-tint) text-(--tag-fg)');
 
-const outlinedColorClasses: Record<string, string> = {
-  default: 'border-border text-foreground',
-  primary: 'border-primary text-primary',
-  success: 'border-green-500 text-green-600 dark:text-green-400',
-  warning: 'border-yellow-500 text-yellow-600 dark:text-yellow-400',
-  danger: 'border-destructive text-destructive',
-};
-
-// Preset colours resolve their hue from the shared `--tag-bg` custom property
-// (globals.css, keyed on `data-color`) rather than a per-colour Tailwind class,
-// so `Tag` and `Button` stay in lock-step. Fill uses a 10% tint behind the
-// full-strength hue; outlined borders and texts it directly.
-const presetFillClasses = cn(
-  'border-transparent',
-  'bg-[color-mix(in_oklch,var(--tag-bg),transparent_90%)]',
-  'text-(--tag-bg)',
-);
-
-const presetOutlinedClasses = cn('border-(--tag-bg) text-(--tag-bg)');
+const outlinedClasses = cn('border-(--tag-bg) text-(--tag-fg)');
 
 const Tag = ({
   className,
@@ -93,29 +77,23 @@ const Tag = ({
   // — the same resolution order `Button` uses.
   const resolvedVariant = variant ?? tagDefaults?.variant ?? 'filled';
   const resolvedColor = color ?? tagDefaults?.color ?? 'default';
-  // `'default'` is the pre-#320 spelling of `'filled'`; fold it in so the alias
-  // renders identically.
   const isOutlined = resolvedVariant === 'outlined';
-  const preset = isPresetColor(resolvedColor);
   const Comp = asChild ? Slot : 'span';
 
   return (
     <Comp
       data-slot="badge"
-      // Only preset colours drive the `--tag-*` system; the named states keep
-      // their bespoke classes, so existing usage renders byte-identical.
-      data-color={preset ? resolvedColor : undefined}
+      // Emitted for every colour, not just the presets, so consumers can hook
+      // `[data-color]` / `[data-variant]` uniformly. `data-variant` is what
+      // lets `globals.css` give `default` a different text colour when
+      // outlined without reintroducing a second class path here.
+      data-color={resolvedColor}
+      data-variant={resolvedVariant}
       className={cn(
         TAG_BASE,
         'rounded-full px-2.5 py-1',
         'text-xs font-medium',
-        preset
-          ? isOutlined
-            ? presetOutlinedClasses
-            : presetFillClasses
-          : isOutlined
-            ? outlinedColorClasses[resolvedColor]
-            : fillColorClasses[resolvedColor],
+        isOutlined ? outlinedClasses : fillClasses,
         className,
         //
       )}

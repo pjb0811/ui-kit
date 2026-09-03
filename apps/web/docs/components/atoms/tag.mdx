@@ -37,8 +37,32 @@ import { Tag } from '@jbpark/ui-kit';
 `geekblue`, `lime`, `gold` — on top of the named states
 (`primary`/`success`/`warning`/`danger`).
 
-> **Deprecation:** `variant="default"` is still accepted as an alias for
-> `"filled"` and renders identically, but it will be removed in a future major.
-> Prefer `variant="filled"`.
+`success` and `warning` have no `Button` counterpart by design: a `Tag` marks
+state, which is why antd's `Tag` also carries status colours its `Button` does
+not.
+
+### Theming a colour
+
+Every colour — states and presets alike — resolves from the same custom
+properties, set per `data-color`, so any of them can be re-themed the same way:
+
+| Property     | Role                                            |
+| ------------ | ----------------------------------------------- |
+| `--tag-bg`   | the hue; the border when `variant="outlined"`   |
+| `--tag-fg`   | text colour (defaults to `--tag-bg`)            |
+| `--tag-tint` | the fill behind `variant="filled"`              |
+
+```css
+/* re-theme one colour, wherever it is used */
+[data-slot='badge'][data-color='success'] {
+  --tag-bg: oklch(70% 0.2 160);
+}
+```
+
+> **Breaking in 7.0:** `variant="default"` was removed — use `variant="filled"`,
+> which renders identically. Before 7.0 only preset colours emitted `data-color`
+> and read `--tag-*`; the named states used fixed classes, so the hooks above
+> silently did nothing for them. Now every colour takes the same path, and the
+> rendered output for existing tags is pixel-identical.
 
 `Tag` also accepts the rest of `React.ComponentProps<'span'>` (e.g. `onClick`, `style`).
