@@ -1,5 +1,12 @@
 # web
 
+## 1.4.8
+
+### Patch Changes
+
+- Updated dependencies [1a35841]
+  - @repo/ui@7.0.0
+
 ## 1.4.7
 
 ### Patch Changes
