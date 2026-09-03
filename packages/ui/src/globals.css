@@ -255,11 +255,57 @@
     --btn-bg: #f59e0b;
   }
 
-  /* Tag's shared preset palette (#320). Mirrors the `--btn-*` hues above so a
-   * given colour word renders the same on `Tag` and `Button`; `Tag` reads
-   * `--tag-bg` for both its 10% fill tint and its outlined border/text (see
-   * tag.tsx). Named states (primary/success/warning/danger) keep their own
-   * classes and never set `data-color`, so only these presets match here. */
+  /* Tag's colour system (#320). Every colour — the semantic states as well as
+   * the palette shared with `Button` — resolves here, so `[data-color]` hooks
+   * and `--tag-*` overrides behave the same whichever one is in use. Preset
+   * hues mirror the `--btn-*` values above so a colour word renders the same
+   * on `Tag` and `Button`.
+   *
+   *   --tag-bg    the hue; also the border in `outlined`
+   *   --tag-fg    text colour; defaults to the hue
+   *   --tag-tint  the fill behind `filled`; defaults to a 10% wash */
+  [data-slot='badge'][data-color] {
+    --tag-fg: var(--tag-bg);
+    --tag-tint: color-mix(in oklab, var(--tag-bg), transparent 90%);
+  }
+
+  /* Semantic states. `default` is the one colour whose fill is a solid surface
+   * rather than a wash of its own hue, and whose text differs between the two
+   * variants — hence the explicit tint/fg. */
+  [data-slot='badge'][data-color='default'] {
+    --tag-bg: var(--border);
+    --tag-tint: var(--muted);
+    --tag-fg: var(--muted-foreground);
+  }
+  [data-slot='badge'][data-color='default'][data-variant='outlined'] {
+    --tag-fg: var(--foreground);
+  }
+
+  [data-slot='badge'][data-color='primary'] {
+    --tag-bg: var(--primary);
+  }
+  [data-slot='badge'][data-color='danger'] {
+    --tag-bg: var(--destructive);
+  }
+  /* success/warning read one step darker than their hue for legible text on a
+   * light surface, and one step lighter in dark mode — the exact Tailwind
+   * green/yellow ramp values these two rendered before they joined this
+   * system, so the move is visually lossless. */
+  [data-slot='badge'][data-color='success'] {
+    --tag-bg: oklch(72.3% 0.219 149.579);
+    --tag-fg: oklch(62.7% 0.194 149.214);
+  }
+  [data-slot='badge'][data-color='warning'] {
+    --tag-bg: oklch(79.5% 0.184 86.047);
+    --tag-fg: oklch(68.1% 0.162 75.834);
+  }
+  :is(.dark, [data-theme='dark']) [data-slot='badge'][data-color='success'] {
+    --tag-fg: oklch(79.2% 0.209 151.711);
+  }
+  :is(.dark, [data-theme='dark']) [data-slot='badge'][data-color='warning'] {
+    --tag-fg: oklch(85.2% 0.199 91.936);
+  }
+
   [data-slot='badge'][data-color='blue'] {
     --tag-bg: #3b82f6;
   }
