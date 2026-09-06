@@ -1,5 +1,12 @@
 # web
 
+## 1.4.9
+
+### Patch Changes
+
+- Updated dependencies [d4db4ca]
+  - @repo/ui@7.1.0
+
 ## 1.4.8
 
 ### Patch Changes

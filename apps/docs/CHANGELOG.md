@@ -1,5 +1,12 @@
 # docs
 
+## 0.5.14
+
+### Patch Changes
+
+- Updated dependencies [d4db4ca]
+  - @repo/ui@7.1.0
+
 ## 0.5.13
 
 ### Patch Changes
