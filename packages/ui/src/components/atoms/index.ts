@@ -7,6 +7,7 @@ export { default as Input } from './input';
 export { default as Popover } from './popover';
 export { default as Progress } from './progress';
 export { default as Radio } from './radio';
+export { default as RichTextEditor } from './rich-text-editor';
 export { default as Select } from './select';
 export { default as Skeleton } from './skeleton';
 export { default as Slider } from './slider';
