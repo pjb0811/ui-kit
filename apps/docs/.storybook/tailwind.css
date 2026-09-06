@@ -8,5 +8,17 @@
  * globals.css instead would drag in its top-level (UN-layered) `* { margin:0;
  * padding:0 }` reset, which beats every `@layer utilities` spacing class and
  * flattens all component spacing.
+ *
+ * `@repo/ui/style.css` is imported here (after preflight), not as a separate
+ * JS import in preview.ts, on purpose: both it and Tailwind's preflight
+ * declare `* { border-color: ... }` in `@layer base`, and same layer + equal
+ * specificity means the later one wins. Two `@import`s in one CSS file keep
+ * that order under our control; two `import`s in preview.ts don't —
+ * `@trivago/prettier-plugin-sort-imports` reorders `@repo/*` before relative
+ * imports on every save/commit regardless of source order or
+ * `// prettier-ignore`, which previously put preflight's `currentColor`
+ * default back in charge and rendered every bare `border` utility (e.g.
+ * PopoverContent) near-black instead of the theme's light gray.
  */
 @import 'tailwindcss';
+@import '@repo/ui/style.css';
