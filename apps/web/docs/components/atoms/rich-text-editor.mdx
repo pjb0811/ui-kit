@@ -1,0 +1,84 @@
+---
+sidebar_position: 17
+title: RichTextEditor
+---
+
+import DemoTheme from '@site/src/components/DemoTheme';
+import RichTextEditorDemo from '../../../src/demo/rich-text-editor-demo';
+
+# RichTextEditor
+
+A Tiptap-based rich text editor — edits an HTML string, committing on blur.
+
+```tsx
+import { RichTextEditor } from '@jbpark/ui-kit';
+
+<RichTextEditor value={value} onChange={setValue} toolbar />;
+```
+
+<DemoTheme>
+
+<RichTextEditorDemo />
+
+</DemoTheme>
+
+## Props
+
+| Prop           | Type                                      | Default            |
+| -------------- | ------------------------------------------ | ------------------- |
+| `value`        | `string`                                   | `''`                |
+| `placeholder`  | `string`                                   | `'Enter text...'`   |
+| `onChange`     | `(value: string) => void`                  | -                    |
+| `className`    | `string`                                   | -                    |
+| `classNames`   | `{ toolbar?: string; content?: string }`   | -                    |
+| `toolbar`      | `boolean \| ToolbarPreset[]`               | `false`              |
+| `toolbarItems` | `ToolbarItem[]`                            | -                    |
+
+`RichTextEditor` is always controlled via `value`/`onChange` — there is no
+`defaultValue`. `onChange` fires with the editor's HTML (`editor.getHTML()`)
+on blur, not on every keystroke.
+
+### Toolbar
+
+`toolbar` is opt-in (defaults to no toolbar, matching the original,
+toolbar-less output). Pass `toolbar` (bare, or `toolbar={true}`) for
+every built-in `ToolbarPreset`, or an array to pick a subset and order
+them, e.g. `toolbar={['bold', 'italic', 'link']}`.
+
+Every preset maps onto a command `StarterKit` or the added
+`@tiptap/extension-text-style` `TextStyleKit` already registers — no
+extra Tiptap extension is needed beyond what the package ships:
+
+| Preset | Does |
+| --- | --- |
+| `undo` / `redo` | History |
+| `heading` | Paragraph / Heading 1-4, via a `Select` |
+| `bold` / `italic` / `underline` / `strike` / `code` | Inline marks |
+| `bulletList` / `orderedList` | Lists |
+| `blockquote` / `codeBlock` / `horizontalRule` | Block nodes |
+| `link` | Small URL popover — pre-fills from the selection's existing link, empty href unsets it |
+| `fontSize` / `color` | `TextStyleKit`-backed, via `Select` / `ColorPicker` |
+
+`toolbarItems` appends custom buttons after the built-in presets, for
+anything not already covered above. Each item receives the live Tiptap
+`Editor` instance, so it can call any registered command:
+
+```tsx
+import type { Editor } from '@tiptap/core';
+import { Eraser } from 'lucide-react';
+
+<RichTextEditor
+  value={value}
+  onChange={setValue}
+  toolbar={['bold', 'italic', 'link']}
+  toolbarItems={[
+    {
+      key: 'clearFormatting',
+      icon: <Eraser />,
+      label: 'Clear formatting',
+      onClick: (editor: Editor) =>
+        editor.chain().focus().clearNodes().unsetAllMarks().run(),
+    },
+  ]}
+/>;
+```
