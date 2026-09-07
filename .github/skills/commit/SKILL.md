@@ -1,6 +1,6 @@
 ---
 name: commit
-description: "Generate a commit message from staged changes using this repository's commit convention. Use when the user asks for /commit, commit message generation, gitmoji selection, commit type or scope selection, or creating an actual git commit from staged files."
+description: "Generate a commit message from staged changes using this repository's commit convention. Use when the user asks for /commit, commit message generation, commit type or scope selection, or creating an actual git commit from staged files."
 argument-hint: 'Optional: special emphasis, for example "docs only" or "no scope". Messages are English by default.'
 user-invocable: true
 disable-model-invocation: false
@@ -14,7 +14,7 @@ disable-model-invocation: false
 
 - 사용자가 `/commit` 을 호출할 때
 - 스테이징된 변경을 바탕으로 커밋 메시지를 만들어 달라고 할 때
-- gitmoji, type, scope 선택까지 포함한 커밋 메시지 초안이 필요할 때
+- type, scope 선택까지 포함한 커밋 메시지 초안이 필요할 때
 - 사용자가 명시적으로 요청한 경우 실제 `git commit` 까지 진행해야 할 때
 
 ## Source Convention
@@ -25,7 +25,7 @@ disable-model-invocation: false
 - 형식은 반드시 아래 형태를 따른다.
 
 ```text
-<emoji> <type>(<scope>): <short summary>
+<type>(<scope>): <short summary>
 
 - detail 1
 - detail 2
@@ -33,7 +33,7 @@ disable-model-invocation: false
 
 ## Required Rules
 
-- 변경 내용에 가장 적절한 gitmoji 하나만 고른다.
+- **제목 앞에 이모지/gitmoji를 붙이지 않는다.** (2026-09-07 전역 컨벤션 변경)
 - `type` 은 `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`, `perf`, `ci`, `build` 중 하나만 사용한다.
 - `scope` 는 **선택 사항**이다. 변경이 한 영역에 명확히 국한될 때만 붙인다. 예: `ui`, `web`, `docs`, `components`, `config`, `build`
 - **브랜치명을 scope 로 쓰지 않는다.** 슬래시가 든 브랜치명(`refactor/ui-phase5-...`)은 유효한 conventional-commit scope 가 아니다.
@@ -61,7 +61,7 @@ disable-model-invocation: false
 3. 스테이징된 변경이 없으면 메시지를 지어내지 말고, 스테이징이 필요하다고 안내한다.
 4. 변경이 한 영역에 국한되는지 판단해 `scope` 를 붙일지 정한다. 브랜치명은 쓰지 않는다.
 5. 스테이징된 diff 와 파일 목록만 보고 가장 대표적인 변경 목적 하나를 고른다.
-6. 그 목적에 맞는 `gitmoji` 와 `type` 을 하나씩만 선택한다.
+6. 그 목적에 맞는 `type` 을 하나만 선택한다.
 7. 한 줄 제목을 먼저 만들고, 이어서 본문 bullet 을 1개 이상 작성한다.
 8. 결과는 바로 사용할 수 있는 최종 커밋 메시지 형태로 제시한다.
 9. 사용자가 실제 커밋 실행을 명시적으로 요청한 경우에만 `git commit` 을 수행한다.
@@ -76,15 +76,15 @@ disable-model-invocation: false
 ## Output Format
 
 - 응답 첫 부분에 완성된 커밋 메시지를 코드 블록으로 제공한다.
-- 필요하면 바로 아래에 `type`, `scope`, `gitmoji` 선택 이유를 한두 문장으로 짧게 덧붙인다.
+- 필요하면 바로 아래에 `type`, `scope` 선택 이유를 한두 문장으로 짧게 덧붙인다.
 - 사용자가 커밋 실행까지 요청하지 않았다면 실제 `git commit` 명령은 실행하지 않는다.
 
 ## Quick Checks
 
-- 제목이 `<emoji> <type>(<scope>): <short summary>` 형식을 만족하는가 (scope 는 선택)
+- 제목이 `<type>(<scope>): <short summary>` 형식을 만족하는가 (scope 는 선택, 이모지 없음)
 - 제목과 본문이 영어인가
 - 제목이 소문자로 시작하는가
-- gitmoji 가 정확히 하나인가
+- 제목 앞에 이모지가 없는가
 - 제목 끝에 마침표가 없는가
 - 본문이 `-` bullet 형식이고 최소 1개 이상인가
 - scope 에 브랜치명을 쓰지 않았는가
