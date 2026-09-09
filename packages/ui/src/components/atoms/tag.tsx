@@ -8,7 +8,7 @@ import { useConfig } from '@repo/ui/providers';
 import { cn } from '@repo/ui/utils';
 
 import { INTERACTIVE_CHASSIS } from '../../lib/chassis';
-import { type PresetColor } from '../../lib/colors';
+import { type DeprecatedPresetColor, type PresetColor } from '../../lib/colors';
 
 type NativeSpanProps = React.ComponentProps<'span'> & {
   asChild?: boolean;
@@ -24,14 +24,25 @@ export interface Props extends Omit<NativeSpanProps, 'variant' | 'color'> {
   /**
    * Colour. Every value — the semantic states (`primary`/`success`/`warning`/
    * `danger`) as well as the palette shared with `Button` (`blue`, `red`,
-   * `gold`, …) — resolves through the same `data-color` + `--tag-*` system
+   * `amber`, …) — resolves through the same `data-color` + `--tag-*` system
    * (#320), so any of them can be re-themed the same way.
    *
    * `success`/`warning` have no `Button` counterpart on purpose: a Tag marks
    * state, which is why antd's Tag also carries them while its Button does not.
+   *
+   * Preset hues use Tailwind's colour names (#342). The pre-8.0 spellings
+   * `magenta`/`geekblue`/`gold`/`volcano` still work and render unchanged, but
+   * are deprecated — use `fuchsia`/`indigo`/`amber` instead (`volcano` has no
+   * successor; it is `orange` one lightness step darker).
    */
   color?:
-    'default' | 'primary' | 'success' | 'warning' | 'danger' | PresetColor;
+    | 'default'
+    | 'primary'
+    | 'success'
+    | 'warning'
+    | 'danger'
+    | PresetColor
+    | DeprecatedPresetColor;
 }
 
 // Base absorbed from core/badge's cva base + its `outline` variant, which Tag

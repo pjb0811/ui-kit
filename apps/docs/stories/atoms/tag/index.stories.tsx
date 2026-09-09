@@ -25,15 +25,14 @@ const meta: Meta<typeof Tag> = {
         'purple',
         'cyan',
         'green',
-        'magenta',
+        'fuchsia',
         'pink',
         'red',
         'orange',
         'yellow',
-        'volcano',
-        'geekblue',
+        'indigo',
         'lime',
-        'gold',
+        'amber',
       ],
     },
     className: {
@@ -60,7 +59,7 @@ export const Outlined: Story = {
 
 export const Preset: Story = {
   args: {
-    children: 'gold',
-    color: 'gold',
+    children: 'amber',
+    color: 'amber',
   },
 };

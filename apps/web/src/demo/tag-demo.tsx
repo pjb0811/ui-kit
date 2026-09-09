@@ -7,15 +7,14 @@ const PRESETS = [
   'purple',
   'cyan',
   'green',
-  'magenta',
+  'fuchsia',
   'pink',
   'red',
   'orange',
   'yellow',
-  'volcano',
-  'geekblue',
+  'indigo',
   'lime',
-  'gold',
+  'amber',
 ] as const;
 
 export default function TagDemo() {

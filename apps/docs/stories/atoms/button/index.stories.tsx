@@ -25,15 +25,14 @@ const colorOptions: ColorType[] = [
   'purple',
   'cyan',
   'green',
-  'magenta',
+  'fuchsia',
   'pink',
   'red',
   'orange',
   'yellow',
-  'volcano',
-  'geekblue',
+  'indigo',
   'lime',
-  'gold',
+  'amber',
 ];
 
 const meta: Meta<typeof Button> = {

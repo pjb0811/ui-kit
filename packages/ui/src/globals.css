@@ -188,19 +188,105 @@
 }
 
 @layer components {
+  /* ------------------------------------------------------------------------
+   * Shared preset palette (#342).
+   *
+   * One block per colour, serving BOTH `Button` and `Tag` — before this the
+   * same thirteen hex literals were written out twice, once per component, and
+   * `lib/colors.ts` carried a "keep this in sync" note because nothing
+   * enforced it.
+   *
+   * Each entry resolves from Tailwind's own `--color-*` theme variable rather
+   * than a hand-copied literal. The values were always Tailwind's (they were
+   * the v3 hex ramp); referencing the variable makes that dependency explicit,
+   * picks up v4's oklch/P3 recalibration, and means the palette is defined in
+   * exactly one place — Tailwind's theme. Tailwind keeps a theme variable in
+   * the build output when it is referenced from CSS like this, so the compiled
+   * `dist/style.css` carries its own copy and does not depend on the consuming
+   * app also having that colour enabled.
+   *
+   * `--preset-color` is the single hand-off point: the rules further down map
+   * it onto each component's own `--btn-*` / `--tag-*` vocabulary. Overriding
+   * it on an element (or any ancestor of one) re-themes that preset for both
+   * components at once.
+   * --------------------------------------------------------------------- */
+  :is([data-slot='button'], [data-slot='badge'])[data-color='blue'] {
+    --preset-color: var(--color-blue-500);
+  }
+  :is([data-slot='button'], [data-slot='badge'])[data-color='purple'] {
+    --preset-color: var(--color-purple-500);
+  }
+  :is([data-slot='button'], [data-slot='badge'])[data-color='cyan'] {
+    --preset-color: var(--color-cyan-500);
+  }
+  :is([data-slot='button'], [data-slot='badge'])[data-color='green'] {
+    --preset-color: var(--color-green-500);
+  }
+  :is([data-slot='button'], [data-slot='badge'])[data-color='fuchsia'] {
+    --preset-color: var(--color-fuchsia-500);
+  }
+  :is([data-slot='button'], [data-slot='badge'])[data-color='pink'] {
+    --preset-color: var(--color-pink-500);
+  }
+  :is([data-slot='button'], [data-slot='badge'])[data-color='red'] {
+    --preset-color: var(--color-red-500);
+  }
+  :is([data-slot='button'], [data-slot='badge'])[data-color='orange'] {
+    --preset-color: var(--color-orange-500);
+  }
+  :is([data-slot='button'], [data-slot='badge'])[data-color='yellow'] {
+    --preset-color: var(--color-yellow-500);
+  }
+  :is([data-slot='button'], [data-slot='badge'])[data-color='indigo'] {
+    --preset-color: var(--color-indigo-500);
+  }
+  :is([data-slot='button'], [data-slot='badge'])[data-color='lime'] {
+    --preset-color: var(--color-lime-500);
+  }
+  :is([data-slot='button'], [data-slot='badge'])[data-color='amber'] {
+    --preset-color: var(--color-amber-500);
+  }
+
+  /* Deprecated pre-8.0 spellings, resolving to the exact same hues they always
+   * rendered (see lib/colors.ts). Removed in the next major. `volcano` is the
+   * one with no canonical successor — it is `orange` one lightness step
+   * darker, not a hue of its own. */
+  :is([data-slot='button'], [data-slot='badge'])[data-color='magenta'] {
+    --preset-color: var(--color-fuchsia-500);
+  }
+  :is([data-slot='button'], [data-slot='badge'])[data-color='geekblue'] {
+    --preset-color: var(--color-indigo-500);
+  }
+  :is([data-slot='button'], [data-slot='badge'])[data-color='gold'] {
+    --preset-color: var(--color-amber-500);
+  }
+  :is([data-slot='button'], [data-slot='badge'])[data-color='volcano'] {
+    --preset-color: var(--color-orange-600);
+  }
+
   [data-slot='button'][data-color] {
+    --btn-bg: var(--preset-color);
     --btn-fg: white;
     --btn-border: var(--btn-bg);
     --btn-bg-hover: color-mix(in oklch, var(--btn-bg), black 12%);
     --btn-bg-active: color-mix(in oklch, var(--btn-bg), black 22%);
   }
 
+  /* Hues light enough that white text on them fails contrast. */
   [data-slot='button'][data-color='yellow'],
   [data-slot='button'][data-color='lime'],
+  [data-slot='button'][data-color='amber'],
   [data-slot='button'][data-color='gold'] {
     --btn-fg: black;
   }
 
+  /* Semantic colours resolve from the theme, not the preset palette, so they
+   * replace the `--btn-bg` set above.
+   *
+   * ⚠️ `[data-color='default']` and `[data-color]` have the SAME specificity
+   * (0,2,0) — an attribute selector counts the same with or without a value —
+   * so these win on source order alone. They must stay after the
+   * `[data-slot='button'][data-color]` block. */
   [data-slot='button'][data-color='default'] {
     --btn-bg: var(--muted);
     --btn-border: var(--muted-foreground);
@@ -215,63 +301,29 @@
     --btn-bg: var(--destructive);
   }
 
-  [data-slot='button'][data-color='blue'] {
-    --btn-bg: #3b82f6;
-  }
-  [data-slot='button'][data-color='purple'] {
-    --btn-bg: #a855f7;
-  }
-  [data-slot='button'][data-color='cyan'] {
-    --btn-bg: #06b6d4;
-  }
-  [data-slot='button'][data-color='green'] {
-    --btn-bg: #22c55e;
-  }
-  [data-slot='button'][data-color='magenta'] {
-    --btn-bg: #d946ef;
-  }
-  [data-slot='button'][data-color='pink'] {
-    --btn-bg: #ec4899;
-  }
-  [data-slot='button'][data-color='red'] {
-    --btn-bg: #ef4444;
-  }
-  [data-slot='button'][data-color='orange'] {
-    --btn-bg: #f97316;
-  }
-  [data-slot='button'][data-color='yellow'] {
-    --btn-bg: #eab308;
-  }
-  [data-slot='button'][data-color='volcano'] {
-    --btn-bg: #ea580c;
-  }
-  [data-slot='button'][data-color='geekblue'] {
-    --btn-bg: #6366f1;
-  }
-  [data-slot='button'][data-color='lime'] {
-    --btn-bg: #84cc16;
-  }
-  [data-slot='button'][data-color='gold'] {
-    --btn-bg: #f59e0b;
-  }
-
   /* Tag's colour system (#320). Every colour — the semantic states as well as
    * the palette shared with `Button` — resolves here, so `[data-color]` hooks
-   * and `--tag-*` overrides behave the same whichever one is in use. Preset
-   * hues mirror the `--btn-*` values above so a colour word renders the same
-   * on `Tag` and `Button`.
+   * and `--tag-*` overrides behave the same whichever one is in use. The preset
+   * hues come from the shared `--preset-color` block above, so a colour word
+   * renders the same on `Tag` and `Button` by construction rather than by
+   * keeping two hand-copied lists in sync (#342).
    *
    *   --tag-bg    the hue; also the border in `outlined`
    *   --tag-fg    text colour; defaults to the hue
    *   --tag-tint  the fill behind `filled`; defaults to a 10% wash */
   [data-slot='badge'][data-color] {
+    --tag-bg: var(--preset-color);
     --tag-fg: var(--tag-bg);
     --tag-tint: color-mix(in oklab, var(--tag-bg), transparent 90%);
   }
 
   /* Semantic states. `default` is the one colour whose fill is a solid surface
    * rather than a wash of its own hue, and whose text differs between the two
-   * variants — hence the explicit tint/fg. */
+   * variants — hence the explicit tint/fg.
+   *
+   * ⚠️ Same-specificity-as-`[data-color]` caveat as on the Button side: these
+   * replace `--tag-bg` by source order, so they must stay below the block
+   * above. */
   [data-slot='badge'][data-color='default'] {
     --tag-bg: var(--border);
     --tag-tint: var(--muted);
@@ -288,62 +340,23 @@
     --tag-bg: var(--destructive);
   }
   /* success/warning read one step darker than their hue for legible text on a
-   * light surface, and one step lighter in dark mode — the exact Tailwind
-   * green/yellow ramp values these two rendered before they joined this
-   * system, so the move is visually lossless. */
+   * light surface, and one step lighter in dark mode. These were already
+   * Tailwind's green/yellow ramp values, hand-copied as literals; referencing
+   * the theme variables instead is byte-identical and keeps them on the same
+   * footing as the shared presets (#342). */
   [data-slot='badge'][data-color='success'] {
-    --tag-bg: oklch(72.3% 0.219 149.579);
-    --tag-fg: oklch(62.7% 0.194 149.214);
+    --tag-bg: var(--color-green-500);
+    --tag-fg: var(--color-green-600);
   }
   [data-slot='badge'][data-color='warning'] {
-    --tag-bg: oklch(79.5% 0.184 86.047);
-    --tag-fg: oklch(68.1% 0.162 75.834);
+    --tag-bg: var(--color-yellow-500);
+    --tag-fg: var(--color-yellow-600);
   }
   :is(.dark, [data-theme='dark']) [data-slot='badge'][data-color='success'] {
-    --tag-fg: oklch(79.2% 0.209 151.711);
+    --tag-fg: var(--color-green-400);
   }
   :is(.dark, [data-theme='dark']) [data-slot='badge'][data-color='warning'] {
-    --tag-fg: oklch(85.2% 0.199 91.936);
-  }
-
-  [data-slot='badge'][data-color='blue'] {
-    --tag-bg: #3b82f6;
-  }
-  [data-slot='badge'][data-color='purple'] {
-    --tag-bg: #a855f7;
-  }
-  [data-slot='badge'][data-color='cyan'] {
-    --tag-bg: #06b6d4;
-  }
-  [data-slot='badge'][data-color='green'] {
-    --tag-bg: #22c55e;
-  }
-  [data-slot='badge'][data-color='magenta'] {
-    --tag-bg: #d946ef;
-  }
-  [data-slot='badge'][data-color='pink'] {
-    --tag-bg: #ec4899;
-  }
-  [data-slot='badge'][data-color='red'] {
-    --tag-bg: #ef4444;
-  }
-  [data-slot='badge'][data-color='orange'] {
-    --tag-bg: #f97316;
-  }
-  [data-slot='badge'][data-color='yellow'] {
-    --tag-bg: #eab308;
-  }
-  [data-slot='badge'][data-color='volcano'] {
-    --tag-bg: #ea580c;
-  }
-  [data-slot='badge'][data-color='geekblue'] {
-    --tag-bg: #6366f1;
-  }
-  [data-slot='badge'][data-color='lime'] {
-    --tag-bg: #84cc16;
-  }
-  [data-slot='badge'][data-color='gold'] {
-    --tag-bg: #f59e0b;
+    --tag-fg: var(--color-yellow-400);
   }
 
   /* Row/Col's 24-column responsive grid (templates/grid/col.tsx) — Col
