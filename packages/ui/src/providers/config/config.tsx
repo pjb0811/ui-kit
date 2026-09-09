@@ -72,29 +72,12 @@ const tokenToCssVar: Record<keyof ThemeToken, string> = {
   colorRing: '--ring',
   borderRadius: '--radius',
 
-  btnBackground: '--btn-bg',
-  btnBackgroundHover: '--btn-bg-hover',
-  btnBackgroundActive: '--btn-bg-active',
-  btnBorder: '--btn-border',
-  btnForeground: '--btn-fg',
-
-  sidebar: '--sidebar',
-  sidebarForeground: '--sidebar-foreground',
-  sidebarPrimary: '--sidebar-primary',
-  sidebarPrimaryForeground: '--sidebar-primary-foreground',
-  sidebarAccent: '--sidebar-accent',
-  sidebarAccentForeground: '--sidebar-accent-foreground',
-  sidebarBorder: '--sidebar-border',
-  sidebarRing: '--sidebar-ring',
-
-  chart1: '--chart-1',
-  chart2: '--chart-2',
-  chart3: '--chart-3',
-  chart4: '--chart-4',
-  chart5: '--chart-5',
-
-  fontSans: '--font-sans',
-  fontMono: '--font-mono',
+  // Not `--font-sans`/`--font-mono`: those are `@theme inline` entries, so
+  // Tailwind substitutes their value into each utility rather than referencing
+  // them, and a wrapper-level override never applied. `globals.css` reads these
+  // hooks ahead of the app's own font variable instead (#343).
+  fontSans: '--ui-font-sans',
+  fontMono: '--ui-font-mono',
 };
 
 const buildCssVars = (token?: ThemeToken): React.CSSProperties => {

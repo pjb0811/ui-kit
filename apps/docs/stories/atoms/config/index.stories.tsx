@@ -104,3 +104,24 @@ export const Nested: Story = {
     </Config>
   ),
 };
+
+/**
+ * `fontSans`/`fontMono` override the app's own font variables for everything
+ * inside the `Config`. Leaving them unset keeps whatever font the host app
+ * already set, so this is purely additive.
+ */
+export const FontToken: Story = {
+  render: () => (
+    <div className={cn('flex flex-col gap-4')}>
+      <p className={cn('font-mono text-sm')}>Default mono (app font)</p>
+
+      <Config theme={{ token: { fontMono: 'ui-serif, Georgia, serif' } }}>
+        <p className={cn('font-mono text-sm')}>Overridden via token.fontMono</p>
+      </Config>
+
+      <p className={cn('font-mono text-sm')}>
+        Sibling outside Config is unaffected
+      </p>
+    </div>
+  ),
+};

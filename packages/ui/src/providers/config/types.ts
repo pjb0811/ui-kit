@@ -1,3 +1,28 @@
+/**
+ * Theme overrides applied as CSS custom properties on `Config`'s wrapper
+ * element, inherited by everything inside it.
+ *
+ * Every token here is verified to actually reach a component. That is worth
+ * stating because it did not use to be true: 19 of the previous 40 tokens were
+ * inert (#343). Three groups were dropped in 8.0 —
+ *
+ * - `btnBackground`/`btnBackgroundHover`/`btnBackgroundActive`/`btnBorder`/
+ *   `btnForeground` — `globals.css` declares `--btn-*` on the button element
+ *   itself (keyed off `data-color`), and an element's own declaration always
+ *   beats an inherited one, so a wrapper value could never win. Re-theming a
+ *   button is done through `colorPrimary`/`colorDestructive` for the semantic
+ *   colours, or by overriding `--preset-color` in CSS for the preset hues.
+ * - `sidebar*` and `chart*` — no component in the library reads them, and the
+ *   matching utilities (`bg-sidebar`, `bg-chart-1`) are never generated into
+ *   the published stylesheet, so nothing consumed them. The underlying
+ *   `--sidebar-*`/`--chart-*` custom properties are still declared in
+ *   `globals.css` and remain overridable in plain CSS; only the inert token
+ *   API is gone. They should come back alongside an actual Sidebar/Chart
+ *   component.
+ *
+ * `fontSans`/`fontMono` were inert for a different reason and were fixed
+ * rather than removed — see below.
+ */
 export interface ThemeToken {
   // Colors
   colorPrimary?: string;
@@ -28,32 +53,10 @@ export interface ThemeToken {
   // propagates to the entire derived scale with nothing more needed.
   borderRadius?: string;
 
-  // Button color presets (Button's color prop reads these — see
-  // button.tsx's `bg-(--btn-bg)` etc)
-  btnBackground?: string;
-  btnBackgroundHover?: string;
-  btnBackgroundActive?: string;
-  btnBorder?: string;
-  btnForeground?: string;
-
-  // Sidebar
-  sidebar?: string;
-  sidebarForeground?: string;
-  sidebarPrimary?: string;
-  sidebarPrimaryForeground?: string;
-  sidebarAccent?: string;
-  sidebarAccentForeground?: string;
-  sidebarBorder?: string;
-  sidebarRing?: string;
-
-  // Charts
-  chart1?: string;
-  chart2?: string;
-  chart3?: string;
-  chart4?: string;
-  chart5?: string;
-
-  // Fonts
+  // Fonts. These write `--ui-font-sans`/`--ui-font-mono`, the override hooks
+  // `globals.css` reads ahead of the app's own font variable — see the comment
+  // on the `@theme inline` block there for why the indirection is required
+  // (#343).
   fontSans?: string;
   fontMono?: string;
 }
