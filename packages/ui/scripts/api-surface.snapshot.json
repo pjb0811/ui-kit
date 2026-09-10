@@ -3,6 +3,7 @@
     ".",
     "./Button",
     "./Card",
+    "./CodeEditor",
     "./Layout",
     "./Menu",
     "./Reveals",

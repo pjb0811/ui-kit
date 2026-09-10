@@ -8,6 +8,7 @@ export default defineConfig({
     index: 'src/index.ts',
     Typography: 'src/components/atoms/typography/index.ts',
     Button: 'src/components/atoms/button.tsx',
+    CodeEditor: 'src/components/atoms/code-editor.tsx',
     Tag: 'src/components/atoms/tag.tsx',
     Card: 'src/components/molecules/card.tsx',
     Space: 'src/components/molecules/space.tsx',
