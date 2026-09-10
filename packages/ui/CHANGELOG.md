@@ -1,5 +1,151 @@
 # @repo/ui
 
+## 8.0.0
+
+### Major Changes
+
+- 198c108: Make every `Config` theme token actually do something (ui-kit#343).
+
+  19 of `ThemeToken`'s 40 keys were inert — they type-checked, autocompleted, and
+  silently did nothing. Verified by setting each one to a sentinel value against
+  the built stylesheet and reading back the computed styles. The 21 survivors all
+  demonstrably reach a component.
+
+  **Removed: `btnBackground`, `btnBackgroundHover`, `btnBackgroundActive`,
+  `btnBorder`, `btnForeground`.** `globals.css` declares `--btn-*` on the button
+  element itself, keyed off `data-color`. An element's own declaration always
+  beats an inherited one, so a value set on `Config`'s wrapper could never win —
+  for any colour, including `default`. Re-theme buttons with
+  `colorPrimary`/`colorDestructive` for the semantic colours, or by overriding
+  `--preset-color` in CSS for the preset hues:
+
+  ```css
+  [data-slot='button'][data-color='blue'] {
+    --preset-color: oklch(55% 0.2 250);
+  }
+  ```
+
+  **Removed: `sidebar`, `sidebarForeground`, `sidebarPrimary`,
+  `sidebarPrimaryForeground`, `sidebarAccent`, `sidebarAccentForeground`,
+  `sidebarBorder`, `sidebarRing`, `chart1`–`chart5`.** No component in the library
+  reads them, and the matching utilities (`bg-sidebar`, `bg-chart-1`) are never
+  generated into the published stylesheet, so nothing consumed them either. The
+  underlying `--sidebar-*` / `--chart-*` custom properties are still declared and
+  remain overridable in plain CSS — only the inert token API is gone. They should
+  return alongside an actual Sidebar/Chart component.
+
+  **Fixed: `fontSans` and `fontMono`.** These were inert for a different reason,
+  so they were repaired rather than dropped. They previously wrote
+  `--font-sans`/`--font-mono`, but those are `@theme inline` entries — Tailwind
+  substitutes their _value_ into each utility (`.font-mono { font-family:
+var(--font-geist-mono) }`) instead of referencing them, so the override never
+  applied. They now write `--ui-font-sans`/`--ui-font-mono`, which `globals.css`
+  reads ahead of the app's own font variable.
+
+  Dropping `inline` would have been the other fix, but it breaks the standard
+  Next.js setup: `next/font` scopes its variable to `<body>` via a className, and
+  a non-inline `@theme` resolves that variable at `:root`, where it does not
+  exist. Apps that set no font token are unaffected — the app's own font variable
+  is still the fallback.
+
+  **Migration.** Code using a removed token had no effect, so deleting those keys
+  changes nothing at runtime; it only clears the type error. Nothing else needs to
+  move.
+
+### Minor Changes
+
+- 198c108: Align the shared preset colour palette with Tailwind's own colour names, and
+  define it in one place instead of two (ui-kit#342).
+
+  **The palette is now a single source of truth.** `Button` and `Tag` each
+  carried their own copy of the same thirteen hex literals — 26 declarations that
+  nothing kept in sync, which is why `lib/colors.ts` had a "keep this list in
+  sync" comment. Both now resolve from one shared `--preset-color` block, so a
+  colour word renders the same hue on either component by construction.
+
+  **Preset names now match Tailwind's.** The values were always Tailwind's — the
+  presets were the v3 hex ramp, spelled with antd's vocabulary — so four names
+  said one thing and rendered another:
+
+  | before     | rendered           | now       |
+  | ---------- | ------------------ | --------- |
+  | `magenta`  | Tailwind `fuchsia` | `fuchsia` |
+  | `geekblue` | Tailwind `indigo`  | `indigo`  |
+  | `gold`     | Tailwind `amber`   | `amber`   |
+
+  The other nine (`blue`, `purple`, `cyan`, `green`, `pink`, `red`, `orange`,
+  `yellow`, `lime`) already matched and are unchanged.
+
+  **The old spellings still work.** `magenta`, `geekblue`, `gold` and `volcano`
+  are deprecated aliases that render exactly what they always did, and will be
+  removed in the next major. `volcano` has no successor: every other preset is a
+  distinct hue at Tailwind's `500` step, but `volcano` is `orange-600` — the same
+  hue as `orange`, one step darker — so it is a lightness variant rather than a
+  hue. It keeps rendering `orange-600` until removal.
+
+  **Colours shift very slightly.** Each preset now references the matching
+  `--color-*` Tailwind theme variable rather than a hand-copied literal, which
+  picks up Tailwind v4's oklch/P3 recalibration of its palette (the old literals
+  were the v3 sRGB hex values). The difference is small — ΔE 0.017–0.036 in
+  oklab, at or just above the just-noticeable threshold — and nine of the
+  thirteen now sit slightly outside sRGB, so they render a touch more saturated
+  on P3 displays. `Tag`'s `success`/`warning` and their dark-mode variants were
+  already exact Tailwind values inlined by hand; they now reference the same
+  variables and are byte-identical.
+
+  Referencing theme variables does not couple the published stylesheet to the
+  consuming app's palette: Tailwind keeps a referenced theme variable in the
+  build output, so `dist/style.css` ships its own copy of each colour it uses.
+
+- 6d069d8: Add `CodeEditor`, a CodeMirror 6 editing surface published at its own subpath
+  (ui-kit#346).
+
+  Extracted from live-editor's editor, which already split into a reusable
+  CodeMirror surface and app-specific glue. Only the surface moved: JS/TS
+  highlighting (`javascript({ jsx: true, typescript: true })`), line wrapping, the
+  VSCode theme pair, the Cmd/Ctrl+S write-back, and CodeMirror's unified diff
+  view.
+
+  ```tsx
+  import CodeEditor from '@jbpark/ui-kit/CodeEditor';
+  
+  <CodeEditor value={code} onChange={setCode} height="200px" />;
+  ```
+
+  **CodeMirror is an optional peer, and `CodeEditor` is reachable only through
+  `@jbpark/ui-kit/CodeEditor`** — it is deliberately absent from the root barrel.
+  An ESM re-export is eager, so exposing it there would make
+  `import { Button } from '@jbpark/ui-kit'` fail to resolve for every consumer
+  that never asked for an editor. Nothing changes for existing imports; using the
+  new subpath means installing the peer set:
+
+  ```bash
+  pnpm add @uiw/react-codemirror @uiw/codemirror-theme-vscode \
+    @codemirror/lang-javascript @codemirror/merge codemirror
+  ```
+
+  **No formatter ships with it.** Format-on-save is injected as
+  `formatCode?: (code: string) => Promise<string>`, so the package carries none of
+  prettier's ~9.6 MB; pass the formatter your app already owns. Cmd+S runs it,
+  writes the result back with the cursor preserved, then fires `onChange`/`onSave`
+  — and without `formatCode` the shortcut still fires `onSave`, unformatted. The
+  write-back discards its result if the document moved while an async format was
+  in flight, and skips the transaction entirely when the text is unchanged so no
+  no-op undo entry is pushed. Errors surface through `onFormatError` (named around
+  the DOM `onError` handler the underlying props already carry).
+
+  `diff={{ original }}` renders `unifiedMergeView` against `original` instead of a
+  plain document, for a read-only review step before persisting; `mergeControls`
+  defaults to `false`.
+
+  `theme` is `'light' | 'dark' | 'auto' | 'none' | Extension`, defaulting to
+  `'auto'`, which follows the nearest `Config`'s `theme.dark` (`'system'` resolved
+  against `prefers-color-scheme`) and stays light when no `Config` sets it. The
+  two named options select the VSCode pair — narrowing CodeMirror's own meaning
+  for `'light'`/`'dark'`, which upstream are its built-in themes — while `'none'`
+  and a theme extension pass straight through. Apps that toggle the `.dark` class
+  themselves instead of going through `Config` should pass `theme` explicitly.
+
 ## 7.1.0
 
 ### Minor Changes
