@@ -1,18 +1,13 @@
 'use client';
 
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-  useSyncExternalStore,
-} from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { DirectionProvider } from '@radix-ui/react-direction';
 
 import { cn } from '@repo/ui/utils';
 
 import { Context, DEFAULT_LOCALE, useConfig } from './context';
+import { resolveDark, useSystemPrefersDark } from './dark-mode';
 import { registerRootConfig } from './registry';
 import type {
   ComponentSize,
@@ -21,35 +16,6 @@ import type {
   ThemeConfig,
   ThemeToken,
 } from './types';
-
-const DARK_MEDIA_QUERY = '(prefers-color-scheme: dark)';
-
-const subscribeToSystemColorScheme = (callback: () => void) => {
-  if (typeof window === 'undefined') {
-    return () => {};
-  }
-
-  const mql = window.matchMedia(DARK_MEDIA_QUERY);
-  mql.addEventListener('change', callback);
-  return () => mql.removeEventListener('change', callback);
-};
-
-const getSystemPrefersDark = () =>
-  typeof window !== 'undefined' && window.matchMedia(DARK_MEDIA_QUERY).matches;
-
-// No `window` during SSR, so there's no way to know the visitor's actual
-// preference before hydration — assume light (the conservative default)
-// and let useSyncExternalStore correct it client-side once matchMedia is
-// available, same flash-of-incorrect-guess tradeoff already accepted for
-// Sider's breakpoint prop elsewhere in this library.
-const getServerSnapshot = () => false;
-
-const useSystemPrefersDark = () =>
-  useSyncExternalStore(
-    subscribeToSystemColorScheme,
-    getSystemPrefersDark,
-    getServerSnapshot,
-  );
 
 const tokenToCssVar: Record<keyof ThemeToken, string> = {
   colorPrimary: '--primary',
@@ -171,10 +137,7 @@ const Config = ({
   );
 
   const systemPrefersDark = useSystemPrefersDark();
-  const isDarkActive =
-    mergedTheme.dark === 'system'
-      ? systemPrefersDark
-      : mergedTheme.dark === 'dark';
+  const isDarkActive = resolveDark(mergedTheme.dark, systemPrefersDark);
 
   // `darkToken` overrides individual keys of `token` (not a full swap)
   // only while dark mode is actually active.

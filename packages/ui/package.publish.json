@@ -16,6 +16,11 @@
       "import": "./dist/Button.mjs",
       "default": "./dist/Button.mjs"
     },
+    "./CodeEditor": {
+      "types": "./dist/CodeEditor.d.mts",
+      "import": "./dist/CodeEditor.mjs",
+      "default": "./dist/CodeEditor.mjs"
+    },
     "./Tag": {
       "types": "./dist/Tag.d.mts",
       "import": "./dist/Tag.mjs",

@@ -1,0 +1,153 @@
+---
+sidebar_position: 18
+title: CodeEditor
+---
+
+import DemoTheme from '@site/src/components/DemoTheme';
+import CodeEditorDemo from '../../../src/demo/code-editor-demo';
+
+# CodeEditor
+
+A CodeMirror 6 code editing surface with JS/TS highlighting, line wrapping, a
+Cmd+S hook, and an optional unified diff view.
+
+```tsx
+import CodeEditor from '@jbpark/ui-kit/CodeEditor';
+
+<CodeEditor value={code} onChange={setCode} height="200px" />;
+```
+
+:::info Subpath-only, with optional peers
+
+`CodeEditor` is **not** exported from the package root — `import { CodeEditor }
+from '@jbpark/ui-kit'` will not work, and that is deliberate. CodeMirror is a
+set of _optional_ peer dependencies, so pulling the editor through the root
+barrel would make every consumer resolve CodeMirror just to import a `Button`.
+
+Install the peer set alongside the library to use this subpath:
+
+```bash
+pnpm add @uiw/react-codemirror @uiw/codemirror-theme-vscode \
+  @codemirror/lang-javascript @codemirror/merge codemirror
+```
+
+All five are needed even if you never render a diff — `@codemirror/merge` is
+imported statically by the component.
+
+:::
+
+<DemoTheme>
+
+<CodeEditorDemo />
+
+</DemoTheme>
+
+## Props
+
+Every [`@uiw/react-codemirror`](https://uiwjs.github.io/react-codemirror/) prop
+is accepted (`editable`, `readOnly`, `basicSetup`, …). The additions and
+overrides:
+
+| Prop            | Type                                                   | Default      |
+| --------------- | ------------------------------------------------------ | ------------ |
+| `value`         | `string`                                               | — (required) |
+| `height`        | `string`                                               | `'100%'`     |
+| `theme`         | `'light' \| 'dark' \| 'auto' \| 'none' \| Extension`   | `'auto'`     |
+| `extensions`    | `Extension[]`                                          | -            |
+| `diff`          | `{ original: string; mergeControls?: boolean }`         | -            |
+| `formatCode`    | `(code: string) => Promise<string>`                    | -            |
+| `onChange`      | `(value: string) => void`                              | -            |
+| `onSave`        | `(value: string) => void`                              | -            |
+| `onFormatError` | `(error: string \| null) => void`                       | -            |
+
+`CodeEditor` is always controlled via `value`/`onChange` — there is no
+`defaultValue`.
+
+### Theme
+
+`theme` takes the VSCode pair by name, follows the app's dark mode, or accepts
+any CodeMirror theme extension:
+
+```tsx
+<CodeEditor value={code} />                   // 'auto' — follows Config
+<CodeEditor value={code} theme="dark" />      // vscodeDark, regardless
+<CodeEditor value={code} theme={dracula} />   // your own theme extension
+<CodeEditor value={code} theme="none" />      // no theme at all; style it yourself
+```
+
+`'auto'` is the default and reads `theme.dark` from the nearest `Config`, with
+`'system'` resolved against `prefers-color-scheme`:
+
+```tsx
+<Config theme={{ dark: 'system' }}>
+  <CodeEditor value={code} onChange={setCode} />
+</Config>
+```
+
+With no `Config` — or one that doesn't set `dark` — `'auto'` is light, so
+nothing changes for an app that never opted into dark mode.
+
+:::note
+
+`'auto'` only sees dark mode that goes through `Config`. Toggling the `.dark`
+class yourself (which is what this documentation site does, so that `<body>`
+is covered too) leaves the editor on light, so pass `theme` explicitly there:
+
+```tsx
+const { colorMode } = useColorMode();
+
+<CodeEditor value={code} theme={colorMode} />;
+```
+
+Note also that `'light'`/`'dark'` mean the VSCode themes here, not CodeMirror's
+own same-named built-ins.
+
+:::
+
+### Format on save
+
+The component carries no formatter. Pass `formatCode` and Cmd/Ctrl+S runs it,
+writes the result back (keeping the cursor in place), then fires `onChange` and
+`onSave` with the formatted text. Without `formatCode` the shortcut still fires
+`onSave`, it just doesn't reformat.
+
+```tsx
+<CodeEditor
+  value={code}
+  formatCode={formatWithPrettier}
+  onChange={setCode}
+  onSave={persist}
+  onFormatError={setError}
+/>
+```
+
+Keeping the formatter out of the package is intentional: prettier is ~9.6 MB,
+and only apps that want format-on-save should pay for it. `onFormatError`
+receives `null` on a clean save, or the message a rejected `formatCode` threw —
+it is named that way because the underlying props already carry the DOM
+`onError` handler.
+
+Two safeguards apply to the write-back:
+
+- If the document changed while an async `formatCode` was in flight, the result
+  is discarded rather than clobbering newer keystrokes.
+- If the formatted text is identical to the input, no transaction is dispatched
+  (so Cmd+S doesn't push a no-op undo entry). The callbacks still fire.
+
+### Diff view
+
+`diff` swaps the plain document for CodeMirror's `unifiedMergeView`, diffing the
+current content against `diff.original` — useful as a read-only review step
+before persisting a change. `mergeControls` defaults to `false`; pass `true` for
+per-chunk accept/reject gutters.
+
+```tsx
+<CodeEditor value={current} diff={{ original: lastSaved }} editable={false} />
+```
+
+### Extensions and language support
+
+The built-in extension set is
+`javascript({ jsx: true, typescript: true })` plus `EditorView.lineWrapping`.
+Anything passed in `extensions` is appended after it, so another language mode,
+a keymap, or a linter can be layered on without forking the component.

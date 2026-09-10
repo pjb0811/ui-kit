@@ -47,6 +47,12 @@ import { createElement as h } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 
 import * as ui from '../dist/index.mjs';
+// Subpath-only entries (#346). CodeEditor is published at ./CodeEditor and is
+// deliberately NOT in the root barrel — CodeMirror is an optional peer, and an
+// eager re-export would break `import { Button }` for consumers without it. The
+// loop over `ui` below therefore can't see it, so it's rendered explicitly:
+// otherwise the newest component would be the one component with no SSR gate.
+import * as codeEditor from '../dist/CodeEditor.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const GLOBALS_CSS = path.join(__dirname, '..', 'src', 'globals.css');
@@ -116,6 +122,13 @@ const fixtures = {
   Toast: { title: 'hi' },
 };
 
+// Components reachable only through their own export subpath, with the module
+// they live in. Same contracts as the barrel exports — they just have to be
+// named here because nothing enumerates them for us.
+const SUBPATH_COMPONENTS = {
+  CodeEditor: { module: codeEditor, props: { value: 'const a = 1;\n' } },
+};
+
 // Exports that aren't renderable components (providers-as-values, hooks,
 // constants). Providers still render fine but carry no smoke value on their own.
 const NON_COMPONENTS = new Set([
@@ -145,6 +158,21 @@ for (const name of Object.keys(ui).sort()) {
       h(Config, null, h(Comp, props, children ?? undefined)),
     );
     markupByName[name] = markup;
+    results.push({ name, ok: true });
+  } catch (err) {
+    results.push({ name, ok: false, err });
+  }
+}
+
+for (const [name, { module: mod, props }] of Object.entries(
+  SUBPATH_COMPONENTS,
+)) {
+  const Comp = mod.default;
+  try {
+    if (!isComponent(Comp)) {
+      throw new Error('subpath module has no default-exported component');
+    }
+    markupByName[name] = renderToStaticMarkup(h(Config, null, h(Comp, props)));
     results.push({ name, ok: true });
   } catch (err) {
     results.push({ name, ok: false, err });
