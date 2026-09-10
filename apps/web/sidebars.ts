@@ -33,6 +33,7 @@ const sidebars: SidebarsConfig = {
         'components/atoms/switch',
         'components/atoms/slider',
         'components/atoms/rich-text-editor',
+        'components/atoms/code-editor',
         'components/atoms/input',
         'components/atoms/checkbox',
         'components/atoms/radio',
