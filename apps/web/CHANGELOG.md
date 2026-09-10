@@ -1,5 +1,13 @@
 # web
 
+## 1.5.0
+
+### Minor Changes
+
+- 36c11f3: List the CodeEditor docs page in the sidebar under Data Entry. The page has
+  existed since the component landed, but no sidebar referenced it, so it was
+  reachable only by typing its URL.
+
 ## 1.4.10
 
 ### Patch Changes
