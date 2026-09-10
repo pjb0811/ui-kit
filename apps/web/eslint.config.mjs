@@ -4,6 +4,9 @@ import { config } from '@repo/eslint-config/react-internal';
 export default [
   ...config,
   {
-    ignores: ['.docusaurus/**', 'build/**', '.next/**'],
+    // Node scripts, not part of the Docusaurus bundle — the shared React config
+    // targets the browser, so `process`/`import.meta` trip `no-undef` here.
+    // Matches how packages/ui treats its own scripts/.
+    ignores: ['.docusaurus/**', 'build/**', '.next/**', 'scripts/**'],
   },
 ];

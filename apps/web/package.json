@@ -8,7 +8,8 @@
     "start": "docusaurus serve --port 3000",
     "clear": "docusaurus clear",
     "lint": "eslint --max-warnings 0",
-    "check-types": "tsc"
+    "check-types": "tsc",
+    "check-orphaned-docs": "node scripts/check-orphaned-docs.mjs"
   },
   "dependencies": {
     "@codemirror/lang-javascript": "^6.2.5",

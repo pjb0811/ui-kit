@@ -16,6 +16,9 @@
     "check-dynamic-classes": {
       "dependsOn": ["^check-dynamic-classes"]
     },
+    "check-orphaned-docs": {
+      "inputs": ["docs/**", "sidebars.ts", "scripts/check-orphaned-docs.mjs"]
+    },
     "check-regression-net": {
       "dependsOn": ["build"],
       "inputs": [

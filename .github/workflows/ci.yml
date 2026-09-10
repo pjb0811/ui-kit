@@ -39,6 +39,9 @@ jobs:
       - name: Check for dynamically-constructed Tailwind classes
         run: pnpm run check-dynamic-classes
 
+      - name: Check for orphaned docs pages
+        run: pnpm exec turbo run check-orphaned-docs
+
       - name: Build
         run: pnpm exec turbo run build
 
