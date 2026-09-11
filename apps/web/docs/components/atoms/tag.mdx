@@ -67,10 +67,17 @@ properties, set per `data-color`, so any of them can be re-themed the same way:
 
 ```css
 /* re-theme one colour, wherever it is used */
-[data-slot='badge'][data-color='success'] {
+[data-slot='tag'][data-color='success'] {
   --tag-bg: oklch(70% 0.2 160);
 }
 ```
+
+> **Breaking in 9.0:** the root `data-slot` changed from `badge` to `tag`.
+> Selectors like the one above must be updated; nothing else about the rendered
+> output changed (same element, same classes). The old value is now free for the
+> separate antd-style `Badge` — a count/dot decorator, which is a different
+> component from this chip. The names cross between ecosystems: what shadcn
+> calls a Badge is what antd (and this library) calls a Tag.
 
 > **Breaking in 7.0:** `variant="default"` was removed — use `variant="filled"`,
 > which renders identically. Before 7.0 only preset colours emitted `data-color`

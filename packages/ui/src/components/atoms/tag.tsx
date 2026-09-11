@@ -2,19 +2,18 @@
 
 import * as React from 'react';
 
-import { Slot } from '@radix-ui/react-slot';
-
 import { useConfig } from '@repo/ui/providers';
 import { cn } from '@repo/ui/utils';
 
-import { INTERACTIVE_CHASSIS } from '../../lib/chassis';
+import { badge } from '../../core';
 import { type DeprecatedPresetColor, type PresetColor } from '../../lib/colors';
 
-type NativeSpanProps = React.ComponentProps<'span'> & {
-  asChild?: boolean;
-};
+const Core = badge.Badge;
 
-export interface Props extends Omit<NativeSpanProps, 'variant' | 'color'> {
+export interface Props extends Omit<
+  React.ComponentProps<typeof Core>,
+  'variant' | 'color'
+> {
   /**
    * Fill style, aligned with `Button`'s vocabulary (#320). The pre-7.0
    * `'default'` spelling was removed — use `'filled'`, which renders
@@ -45,20 +44,15 @@ export interface Props extends Omit<NativeSpanProps, 'variant' | 'color'> {
     | DeprecatedPresetColor;
 }
 
-// Base absorbed from core/badge's cva base + its `outline` variant, which Tag
-// always rendered as (#278 ③ / #294 Phase 4). The shared focus/aria/centering
-// set lives in INTERACTIVE_CHASSIS; a Tag adds badge geometry and its svg
-// sizing but — unlike Button — no `disabled:*` (a Tag is not disableable). The
-// rounded/padding leftovers are overridden by the atom classes below exactly as
-// before, so the rendered output is unchanged (verified against a pre-refactor
-// render matrix).
-const TAG_BASE = cn(
-  INTERACTIVE_CHASSIS,
-  'border w-fit whitespace-nowrap overflow-hidden',
-  'text-xs font-medium gap-1 transition-[color,box-shadow]',
-  '[&>svg]:size-3 [&>svg]:pointer-events-none',
-  'text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground',
-);
+// Geometry, the focus/aria chassis and the svg sizing all come from
+// `core/badge` now (#278 ③ is reversed here — see the core membership rule in
+// CLAUDE.md). Tag pins the core `outline` variant because it supplies exactly
+// the neutral base Tag wants — a border plus `text-foreground` and the `[a&]`
+// hover treatment — and then repaints border/text/fill from the `--tag-*`
+// custom properties below. Pinning one core variant is deliberate and is why
+// the membership rule had to change; the alternative (absorbing the primitive)
+// is what left `core/badge` orphaned and three upstream releases stale.
+const CORE_VARIANT = 'outline';
 
 // Every colour — semantic states and shared presets alike — resolves from the
 // `--tag-*` custom properties that `globals.css` sets per `data-color` (#320).
@@ -73,14 +67,7 @@ const fillClasses = cn('border-transparent bg-(--tag-tint) text-(--tag-fg)');
 
 const outlinedClasses = cn('border-(--tag-bg) text-(--tag-fg)');
 
-const Tag = ({
-  className,
-  variant,
-  color,
-  asChild = false,
-  children,
-  ...props
-}: Props) => {
+const Tag = ({ className, variant, color, children, ...props }: Props) => {
   const { defaultProps } = useConfig();
   const tagDefaults = defaultProps?.tag as
     Partial<Pick<Props, 'variant' | 'color'>> | undefined;
@@ -89,21 +76,25 @@ const Tag = ({
   const resolvedVariant = variant ?? tagDefaults?.variant ?? 'filled';
   const resolvedColor = color ?? tagDefaults?.color ?? 'default';
   const isOutlined = resolvedVariant === 'outlined';
-  const Comp = asChild ? Slot : 'span';
 
   return (
-    <Comp
-      data-slot="badge"
+    <Core
+      variant={CORE_VARIANT}
+      // Overrides the core primitive's own `data-slot="badge"`. The slot now
+      // matches the public component name, which frees `badge` for the
+      // antd-style Badge (a count/dot decorator, a different component from
+      // this chip — shadcn's Badge is what antd calls a Tag).
+      data-slot="tag"
       // Emitted for every colour, not just the presets, so consumers can hook
       // `[data-color]` / `[data-variant]` uniformly. `data-variant` is what
       // lets `globals.css` give `default` a different text colour when
-      // outlined without reintroducing a second class path here.
+      // outlined without reintroducing a second class path here; it also
+      // replaces the core primitive's own `data-variant`, which would
+      // otherwise report the pinned core variant rather than Tag's.
       data-color={resolvedColor}
       data-variant={resolvedVariant}
       className={cn(
-        TAG_BASE,
         'rounded-full px-2.5 py-1',
-        'text-xs font-medium',
         isOutlined ? outlinedClasses : fillClasses,
         className,
         //
@@ -111,7 +102,7 @@ const Tag = ({
       {...props}
     >
       {children}
-    </Comp>
+    </Core>
   );
 };
 

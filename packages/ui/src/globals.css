@@ -225,40 +225,40 @@
    * it on an element (or any ancestor of one) re-themes that preset for both
    * components at once.
    * --------------------------------------------------------------------- */
-  :is([data-slot='button'], [data-slot='badge'])[data-color='blue'] {
+  :is([data-slot='button'], [data-slot='tag'])[data-color='blue'] {
     --preset-color: var(--color-blue-500);
   }
-  :is([data-slot='button'], [data-slot='badge'])[data-color='purple'] {
+  :is([data-slot='button'], [data-slot='tag'])[data-color='purple'] {
     --preset-color: var(--color-purple-500);
   }
-  :is([data-slot='button'], [data-slot='badge'])[data-color='cyan'] {
+  :is([data-slot='button'], [data-slot='tag'])[data-color='cyan'] {
     --preset-color: var(--color-cyan-500);
   }
-  :is([data-slot='button'], [data-slot='badge'])[data-color='green'] {
+  :is([data-slot='button'], [data-slot='tag'])[data-color='green'] {
     --preset-color: var(--color-green-500);
   }
-  :is([data-slot='button'], [data-slot='badge'])[data-color='fuchsia'] {
+  :is([data-slot='button'], [data-slot='tag'])[data-color='fuchsia'] {
     --preset-color: var(--color-fuchsia-500);
   }
-  :is([data-slot='button'], [data-slot='badge'])[data-color='pink'] {
+  :is([data-slot='button'], [data-slot='tag'])[data-color='pink'] {
     --preset-color: var(--color-pink-500);
   }
-  :is([data-slot='button'], [data-slot='badge'])[data-color='red'] {
+  :is([data-slot='button'], [data-slot='tag'])[data-color='red'] {
     --preset-color: var(--color-red-500);
   }
-  :is([data-slot='button'], [data-slot='badge'])[data-color='orange'] {
+  :is([data-slot='button'], [data-slot='tag'])[data-color='orange'] {
     --preset-color: var(--color-orange-500);
   }
-  :is([data-slot='button'], [data-slot='badge'])[data-color='yellow'] {
+  :is([data-slot='button'], [data-slot='tag'])[data-color='yellow'] {
     --preset-color: var(--color-yellow-500);
   }
-  :is([data-slot='button'], [data-slot='badge'])[data-color='indigo'] {
+  :is([data-slot='button'], [data-slot='tag'])[data-color='indigo'] {
     --preset-color: var(--color-indigo-500);
   }
-  :is([data-slot='button'], [data-slot='badge'])[data-color='lime'] {
+  :is([data-slot='button'], [data-slot='tag'])[data-color='lime'] {
     --preset-color: var(--color-lime-500);
   }
-  :is([data-slot='button'], [data-slot='badge'])[data-color='amber'] {
+  :is([data-slot='button'], [data-slot='tag'])[data-color='amber'] {
     --preset-color: var(--color-amber-500);
   }
 
@@ -266,16 +266,16 @@
    * rendered (see lib/colors.ts). Removed in the next major. `volcano` is the
    * one with no canonical successor — it is `orange` one lightness step
    * darker, not a hue of its own. */
-  :is([data-slot='button'], [data-slot='badge'])[data-color='magenta'] {
+  :is([data-slot='button'], [data-slot='tag'])[data-color='magenta'] {
     --preset-color: var(--color-fuchsia-500);
   }
-  :is([data-slot='button'], [data-slot='badge'])[data-color='geekblue'] {
+  :is([data-slot='button'], [data-slot='tag'])[data-color='geekblue'] {
     --preset-color: var(--color-indigo-500);
   }
-  :is([data-slot='button'], [data-slot='badge'])[data-color='gold'] {
+  :is([data-slot='button'], [data-slot='tag'])[data-color='gold'] {
     --preset-color: var(--color-amber-500);
   }
-  :is([data-slot='button'], [data-slot='badge'])[data-color='volcano'] {
+  :is([data-slot='button'], [data-slot='tag'])[data-color='volcano'] {
     --preset-color: var(--color-orange-600);
   }
 
@@ -326,7 +326,7 @@
    *   --tag-bg    the hue; also the border in `outlined`
    *   --tag-fg    text colour; defaults to the hue
    *   --tag-tint  the fill behind `filled`; defaults to a 10% wash */
-  [data-slot='badge'][data-color] {
+  [data-slot='tag'][data-color] {
     --tag-bg: var(--preset-color);
     --tag-fg: var(--tag-bg);
     --tag-tint: color-mix(in oklab, var(--tag-bg), transparent 90%);
@@ -339,19 +339,19 @@
    * ⚠️ Same-specificity-as-`[data-color]` caveat as on the Button side: these
    * replace `--tag-bg` by source order, so they must stay below the block
    * above. */
-  [data-slot='badge'][data-color='default'] {
+  [data-slot='tag'][data-color='default'] {
     --tag-bg: var(--border);
     --tag-tint: var(--muted);
     --tag-fg: var(--muted-foreground);
   }
-  [data-slot='badge'][data-color='default'][data-variant='outlined'] {
+  [data-slot='tag'][data-color='default'][data-variant='outlined'] {
     --tag-fg: var(--foreground);
   }
 
-  [data-slot='badge'][data-color='primary'] {
+  [data-slot='tag'][data-color='primary'] {
     --tag-bg: var(--primary);
   }
-  [data-slot='badge'][data-color='danger'] {
+  [data-slot='tag'][data-color='danger'] {
     --tag-bg: var(--destructive);
   }
   /* success/warning read one step darker than their hue for legible text on a
@@ -359,18 +359,18 @@
    * Tailwind's green/yellow ramp values, hand-copied as literals; referencing
    * the theme variables instead is byte-identical and keeps them on the same
    * footing as the shared presets (#342). */
-  [data-slot='badge'][data-color='success'] {
+  [data-slot='tag'][data-color='success'] {
     --tag-bg: var(--color-green-500);
     --tag-fg: var(--color-green-600);
   }
-  [data-slot='badge'][data-color='warning'] {
+  [data-slot='tag'][data-color='warning'] {
     --tag-bg: var(--color-yellow-500);
     --tag-fg: var(--color-yellow-600);
   }
-  :is(.dark, [data-theme='dark']) [data-slot='badge'][data-color='success'] {
+  :is(.dark, [data-theme='dark']) [data-slot='tag'][data-color='success'] {
     --tag-fg: var(--color-green-400);
   }
-  :is(.dark, [data-theme='dark']) [data-slot='badge'][data-color='warning'] {
+  :is(.dark, [data-theme='dark']) [data-slot='tag'][data-color='warning'] {
     --tag-fg: var(--color-yellow-400);
   }
 
