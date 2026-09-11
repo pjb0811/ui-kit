@@ -21,10 +21,10 @@
 //
 //   3. a11y/state chassis (#301): Button and Tag must keep their focus-ring /
 //      aria-invalid (and, for Button, disabled) classes in the rendered markup.
-//      That chassis lives in core's cva base string today; the Phase 4 absorb
-//      must carry it into the atom. Asserted per-component because Tag's chassis
-//      is a strict subset of Button's (a Tag isn't disableable) — a single
-//      shared list would false-positive on Tag.
+//      That chassis lives in core's cva base string, so an atom that stops
+//      wrapping its primitive has to carry it itself. Asserted per-component
+//      because Tag's chassis is a strict subset of Button's (a Tag isn't
+//      disableable) — a single shared list would false-positive on Tag.
 //
 //   4. generic preflight-reset slot (#301 follow-up): the non-Tailwind-host
 //      reset in globals.css is scoped generically to
@@ -32,9 +32,10 @@
 //      not just the color-keyed ones in contract #2. So an atom can drop its
 //      data-slot, keep every globals.css-keyed slot present elsewhere, PASS
 //      contract #2, and still regress bare-element UA defaults on hosts without
-//      their own preflight (Docusaurus etc. — the #253/#256 class). Tag is
-//      exactly this: its data-slot="badge" is load-bearing for the reset but is
-//      not individually keyed in globals.css. Asserted per named component.
+//      their own preflight (Docusaurus etc. — the #253/#256 class). Asserted
+//      per named component. Tag was the original entry, back when it emitted
+//      data-slot="badge"; its slot is keyed by name now, so the registry is
+//      empty and waiting for the next component in that position.
 //
 // Run after `build`, via the css-stub loader (Swiper imports `.css`):
 //   node --import ./scripts/loaders/css-stub.mjs scripts/check-ssr-smoke.mjs
@@ -59,10 +60,12 @@ const GLOBALS_CSS = path.join(__dirname, '..', 'src', 'globals.css');
 
 const { Config } = ui;
 
-// a11y/state chassis that must survive the core→atom absorption (#301). The
+// a11y/state chassis that must survive however the atom gets it (#301). The
 // six focus/aria classes are shared; Button additionally disables. Tag's set is
-// a strict subset — do NOT push disabled:* onto it. Update deliberately if the
-// design of these states changes.
+// a strict subset — do NOT push disabled:* onto it. Both atoms wrap their core
+// primitive again, so these classes come from the cva base string; this check
+// is what makes that sourcing swappable without a silent regression. Update
+// deliberately if the design of these states changes.
 const COMMON_CHASSIS = [
   'focus-visible:border-ring',
   'focus-visible:ring-ring/50',
@@ -82,9 +85,12 @@ const CHASSIS = {
 // follow-up). Button's data-slot="button" IS keyed, so #2 already covers it;
 // don't list it here or it double-reports. Add a component here if it grows a
 // generic-reset dependency without a keyed selector.
-const RESET_SLOTS = {
-  Tag: 'badge',
-};
+//
+// Tag used to live here: its slot was "badge", which the generic reset matched
+// but no globals.css rule keyed by name. Now that Tag emits data-slot="tag" and
+// globals.css keys its colour rules off [data-slot='tag'], contract #2 covers
+// it and listing it here would double-report.
+const RESET_SLOTS = {};
 
 // Minimal valid props per component that needs them. Anything not listed is
 // rendered with no props. Keep entries tiny — just enough to render.
@@ -256,8 +262,9 @@ if (errors.length) {
 }
 
 const passed = results.filter(r => r.ok);
+const resetSlots = Object.values(RESET_SLOTS).sort();
 console.log(
   `✓ SSR smoke + contracts passed: ${passed.length} components render, ` +
     `data-slot [${[...cssSlots].sort().join(', ')}] present, Button/Tag chassis intact, ` +
-    `reset-slot [${Object.values(RESET_SLOTS).sort().join(', ')}] present.`,
+    `reset-slot ${resetSlots.length ? `[${resetSlots.join(', ')}] present` : 'registry empty'}.`,
 );
