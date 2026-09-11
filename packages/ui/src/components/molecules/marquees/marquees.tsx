@@ -17,6 +17,7 @@ export interface Props extends React.ComponentPropsWithoutRef<'div'> {
   speed?: number;
   autoFill?: boolean | number;
   pauseOnHover?: boolean;
+  gap?: number;
   items?: ItemProps[];
 }
 
@@ -26,6 +27,7 @@ const Marquees = ({
   speed,
   pauseOnHover = true,
   autoFill = true,
+  gap,
   ...props
 }: Props) => {
   const [width, setWidth] = useState<string | number>(
@@ -87,6 +89,7 @@ const Marquees = ({
             pause={pause}
             speed={speed}
             autoFill={autoFill}
+            gap={gap}
             {...item}
           >
             {children}
