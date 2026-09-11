@@ -7,6 +7,7 @@ import { AnimatePresence, motion } from 'motion/react';
 
 import { cn } from '@repo/ui/utils';
 
+import { OVERLAY_LAYER } from '../../lib/z-layers';
 import Menu, { MenuProps } from './menu';
 
 type ChangeEventHandler = (open: boolean) => void;
@@ -119,7 +120,8 @@ const Dropdown = ({
         {open && (
           <motion.div
             className={cn(
-              'absolute top-full z-50 pt-2',
+              'absolute top-full pt-2',
+              OVERLAY_LAYER,
               //
             )}
             initial={{ opacity: 0, y: -10 }}

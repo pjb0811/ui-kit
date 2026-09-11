@@ -7,6 +7,8 @@ import { Drawer as DrawerPrimitive } from 'vaul';
 import { useConfig } from '@repo/ui/providers';
 import { cn } from '@repo/ui/utils';
 
+import { OVERLAY_LAYER } from '../lib/z-layers';
+
 interface CustomProps {
   draggable?: boolean;
 }
@@ -56,7 +58,8 @@ function DrawerOverlay({
       className={cn(
         `data-[state=open]:animate-in data-[state=closed]:animate-out
         data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0
-        z-50 bg-black/50`,
+        bg-black/50`,
+        OVERLAY_LAYER,
         className,
       )}
       {...props}
@@ -90,7 +93,8 @@ function DrawerContent({
       <DrawerPrimitive.Content
         data-slot="drawer-content"
         className={cn(
-          'group/drawer-content bg-background fixed z-50 flex h-auto flex-col',
+          'group/drawer-content bg-background fixed flex h-auto flex-col',
+          OVERLAY_LAYER,
           `data-[vaul-drawer-direction=top]:inset-x-0
           data-[vaul-drawer-direction=top]:top-0
           data-[vaul-drawer-direction=top]:mb-24

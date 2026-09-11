@@ -150,11 +150,13 @@ const Sider = ({
   return (
     <aside
       className={cn(
-        // Below Header's z-50 (and every other floating/overlay primitive
-        // in this library, which all use z-50) — Sider is a static layout
-        // column, not floating chrome, and previously outranked Header
-        // with an arbitrary z-100, covering it once Header stuck to the
-        // viewport top on scroll.
+        // Below Header — and below every other floating/overlay primitive
+        // in this library, which all share OVERLAY_LAYER (lib/z-layers.ts).
+        // Sider is a static layout column, not floating chrome, and
+        // previously outranked Header with an arbitrary z-100, covering it
+        // once Header stuck to the viewport top on scroll. Kept as a small
+        // absolute value rather than tracking OVERLAY_LAYER: it only has to
+        // stay under that layer, and raising it in step would defeat this.
         'z-10 flex h-full shrink-0 flex-col overflow-hidden',
         'transition-[width] duration-200',
         // Lets a Sider visually sit on the right without needing to

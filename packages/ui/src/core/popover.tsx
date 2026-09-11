@@ -7,6 +7,8 @@ import * as PopoverPrimitive from '@radix-ui/react-popover';
 import { useConfig } from '@repo/ui/providers';
 import { cn } from '@repo/ui/utils';
 
+import { OVERLAY_LAYER } from '../lib/z-layers';
+
 function Popover({
   ...props
 }: React.ComponentProps<typeof PopoverPrimitive.Root>) {
@@ -43,9 +45,10 @@ function PopoverContent({
           data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2
           data-[side=left]:slide-in-from-right-2
           data-[side=right]:slide-in-from-left-2
-          data-[side=top]:slide-in-from-bottom-2 z-50 w-72
+          data-[side=top]:slide-in-from-bottom-2 w-72
           origin-(--radix-popover-content-transform-origin) rounded-md border
           p-4 shadow-md outline-hidden`,
+          OVERLAY_LAYER,
           className,
         )}
         {...props}
