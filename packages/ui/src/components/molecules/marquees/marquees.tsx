@@ -30,8 +30,16 @@ const Marquees = ({
   gap,
   ...props
 }: Props) => {
+  // The container's own width, not the viewport's. `useResponsiveSize`
+  // measures in a layout effect, but this component copies the result into
+  // state in a passive effect and then throttles it, so the seed is what
+  // paints for the first ~200ms. `100vw` overflowed every padded or columned
+  // layout for that window — on the docs page it drew the track 1280px wide
+  // inside a 703px column, briefly showing the whole track and giving the
+  // page a horizontal scrollbar. `100%` resolves to the same value the
+  // measurement lands on, so there is nothing left to snap.
   const [width, setWidth] = useState<string | number>(
-    '100vw',
+    '100%',
     //
   );
   const [padding, setPadding] = useState(0);
