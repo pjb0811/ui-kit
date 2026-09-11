@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import { X } from 'lucide-react';
 
 import { DEFAULT_LOCALE, useConfig } from '@repo/ui/providers';
-import { cn, renderConditional } from '@repo/ui/utils';
+import { cn } from '@repo/ui/utils';
 
 import { drawer } from '../../core';
 import Button from '../atoms/button';
@@ -214,9 +214,9 @@ const Drawer = ({
               <DrawerTitle className={cn(classNames?.title)}>
                 {title}
               </DrawerTitle>
-              {renderConditional(extra, v => (
-                <div className={cn('shrink-0', classNames?.extra)}>{v}</div>
-              ))}
+              {extra != null && (
+                <div className={cn('shrink-0', classNames?.extra)}>{extra}</div>
+              )}
             </div>
           </div>
           <DrawerDescription className="hidden" />
@@ -230,9 +230,11 @@ const Drawer = ({
         >
           {children}
         </div>
-        {renderConditional(footer, v => (
-          <DrawerFooter className={cn(classNames?.footer)}>{v}</DrawerFooter>
-        ))}
+        {footer != null && (
+          <DrawerFooter className={cn(classNames?.footer)}>
+            {footer}
+          </DrawerFooter>
+        )}
       </DrawerContent>
     </DrawerCore>
   );
