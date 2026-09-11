@@ -26,9 +26,9 @@ import { Button } from '@jbpark/ui-kit';
 
 | Prop        | Type                                                          | Default     |
 | ----------- | ----------------------------------------------------------------- | ----------- |
-| `variant`   | `'solid' \| 'outlined' \| 'dashed' \| 'filled' \| 'text' \| 'link'` | `'outlined'` |
+| `variant`   | `'solid' \| 'outlined' \| 'dashed' \| 'filled' \| 'text' \| 'link'` (plus the shadcn words below) | `'outlined'` |
 | `type`      | `'primary' \| 'default' \| 'dashed' \| 'text' \| 'link'`         | -           |
-| `size`      | `'small' \| 'middle' \| 'large'`                                  | `'middle'`  |
+| `size`      | `'small' \| 'middle' \| 'large'` (plus the shadcn words below)     | `'middle'`  |
 | `shape`     | `'default' \| 'circle' \| 'round'`                                | `'default'` |
 | `color`     | preset color name (see below) `\| 'default' \| 'primary' \| 'danger'` | `'default'` |
 | `icon`      | `ReactNode`                                                        | -           |
@@ -54,6 +54,50 @@ So `<Button type="primary">` renders the same as
 `<Button color="primary" variant="solid">`, while
 `<Button type="primary" variant="filled">` keeps the primary color and renders
 filled instead. `danger` overrides the resolved color either way.
+
+### shadcn's vocabulary
+
+`variant` and `size` also accept shadcn's own words, so a snippet copied from
+the shadcn docs renders as the nearest thing on this library's scale instead of
+erroring. They are sugar in exactly the sense `type` is — each expands to a
+`(color, variant)` pair, and an explicit `color` still wins over the one the
+word implies.
+
+| shadcn `variant` | equivalent to                        |
+| ---------------- | ------------------------------------ |
+| `default`        | `color="primary" variant="solid"`    |
+| `destructive`    | `color="danger" variant="solid"`     |
+| `outline`        | `color="default" variant="outlined"` |
+| `secondary`      | `color="default" variant="filled"`   |
+| `ghost`          | `color="default" variant="text"`     |
+
+`link` is shared: it is already one of this library's own variants and already
+renders what shadcn's `link` renders, so it is left alone.
+
+| shadcn `size`               | renders as |
+| --------------------------- | ---------- |
+| `xs`, `sm`, `icon-xs`, `icon-sm` | `small` |
+| `default`, `icon`           | `middle`   |
+| `lg`, `icon-lg`             | `large`    |
+
+There is no separate `xs` step on this scale, so `xs` renders as `small`. The
+`icon*` sizes additionally force the icon-only (square, unpadded) treatment,
+which this component otherwise infers from `icon` being set with no children —
+so the shadcn idiom of passing the icon as *children* works too:
+
+```tsx
+<Button size="icon">
+  <Trash />
+</Button>
+```
+
+:::warning[`variant="default"` and `type="default"` are opposites]
+
+shadcn's `variant="default"` is a **filled primary** button; antd's
+`type="default"` is a **plain outlined** one. They are different props, so
+nothing collides at runtime — but don't read one as the other.
+
+:::
 
 Preset `color` names follow Tailwind's own palette names:
 `blue`, `purple`, `cyan`, `green`, `fuchsia`, `pink`, `red`, `orange`,

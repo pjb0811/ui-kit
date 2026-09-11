@@ -21,10 +21,10 @@
 //
 //   3. a11y/state chassis (#301): Button and Tag must keep their focus-ring /
 //      aria-invalid (and, for Button, disabled) classes in the rendered markup.
-//      That chassis lives in core's cva base string today; the Phase 4 absorb
-//      must carry it into the atom. Asserted per-component because Tag's chassis
-//      is a strict subset of Button's (a Tag isn't disableable) — a single
-//      shared list would false-positive on Tag.
+//      That chassis lives in core's cva base string, so an atom that stops
+//      wrapping its primitive has to carry it itself. Asserted per-component
+//      because Tag's chassis is a strict subset of Button's (a Tag isn't
+//      disableable) — a single shared list would false-positive on Tag.
 //
 //   4. generic preflight-reset slot (#301 follow-up): the non-Tailwind-host
 //      reset in globals.css is scoped generically to
@@ -60,10 +60,12 @@ const GLOBALS_CSS = path.join(__dirname, '..', 'src', 'globals.css');
 
 const { Config } = ui;
 
-// a11y/state chassis that must survive the core→atom absorption (#301). The
+// a11y/state chassis that must survive however the atom gets it (#301). The
 // six focus/aria classes are shared; Button additionally disables. Tag's set is
-// a strict subset — do NOT push disabled:* onto it. Update deliberately if the
-// design of these states changes.
+// a strict subset — do NOT push disabled:* onto it. Both atoms wrap their core
+// primitive again, so these classes come from the cva base string; this check
+// is what makes that sourcing swappable without a silent regression. Update
+// deliberately if the design of these states changes.
 const COMMON_CHASSIS = [
   'focus-visible:border-ring',
   'focus-visible:ring-ring/50',

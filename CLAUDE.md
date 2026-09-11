@@ -89,8 +89,8 @@ Radix가 이미 담당하는 영역(focus trap/management, 포털 마운트, `ar
 오늘 기준으로 적용하면:
 
 - **속함 (조합형)** — `select`, `dialog`, `drawer`, `resizable`, `accordion`, `popover`, `radio-group`, `checkbox`, `switch`, `progress`, `calendar`, `field`. 실제 Radix 파트 트리·포털·애니메이션 배선을 담당하므로 소비 atom이 override할 이유가 없다.
-- **속함 (upstream 동기화)** — `badge`. 단일 요소지만 (c)에 해당한다. `Tag`가 이걸 감싸고, 파일은 `new-york-v4` 레지스트리 원본을 그대로 유지하므로 shadcn 릴리스와 직접 diff할 수 있다. 반대로 해봤더니(#278 ③ 흡수) `core/badge`는 **아무도 import하지 않는 고아**가 된 채 upstream보다 세 가지(`rounded-full`, `ghost`/`link` 변형, `data-variant`)나 뒤처졌다 — 그래서 되돌렸다.
-- **속하지 않음 (단일 요소)** — `input`, `textarea`, `skeleton`. DOM 요소 하나 + 클래스뿐이라 스타일 자체가 정체성이고, 소비 atom이 결국 그걸 덮어쓴다. `button`은 현재 흡수 상태이며 `badge`와 같은 방식의 재연결이 남아 있다.
+- **속함 (upstream 동기화)** — `badge`, `button`. 단일 요소지만 (c)에 해당한다. `Tag`/`Button`이 이걸 감싸고, 파일은 `new-york-v4` 레지스트리 원본을 그대로 유지하므로 shadcn 릴리스와 직접 diff할 수 있다. 반대로 해봤더니(#278 ③ 흡수) `core/badge`는 **아무도 import하지 않는 고아**가 된 채 upstream보다 세 가지(`rounded-full`, `ghost`/`link` 변형, `data-variant`)나 뒤처졌다 — 그래서 되돌렸다.
+- **속하지 않음 (단일 요소)** — `input`, `textarea`, `skeleton`. DOM 요소 하나 + 클래스뿐이라 스타일 자체가 정체성이고, 소비 atom이 결국 그걸 덮어쓴다.
 - **경계선** — `label`, `separator` (Radix 파트 1개씩, 실질 기여는 `htmlFor` 배선 / `role="separator"`). 기본값으로 흘려보내지 말고 그때그때 명시적으로 판단한다.
 
 **왜**: 다중 파트 프리미티브는 **구조·배선**을 위임하므로 소비자가 덮어쓸 이유가 없다 (그래서 `dialog`/`select`엔 이 문제가 없다). 단일 요소 프리미티브는 그게 안 된다 — 스타일이 곧 정체성이라 소비자가 반드시 override한다. 그럼에도 `badge`를 core에 두는 건 **위임이 아니라 동기화**를 위해서다: 얻는 것은 스타일 재사용이 아니라 "upstream과 대조할 파일이 딱 하나 있다"는 점이고, atom이 그 위를 덮어쓰는 비용은 그 대가로 받아들인다. 이 구분이 없으면 새 컴포넌트가 죄다 "core 프리미티브를 감싼다"로 기본 수렴한다.
@@ -106,6 +106,8 @@ grep -rn 'variant="' packages/ui/src/components/ | grep -v 'resolvedVariant\|{va
 ```
 
 `core`로 직접 향하는 히트가 나오면 둘 중 하나를 택한다: 그 프리미티브를 소비 atom으로 흡수하거나, (c)에 해당한다면 **왜 그 변형에 고정했는지 코드에 주석으로 남긴다** (`atoms/tag.tsx`의 `CORE_VARIANT` 참고 — core `outline`이 Tag가 원하는 중립 베이스와 정확히 일치해서 고정한 경우다). 주석 없는 하드코딩은 여전히 smell이다. (`float-button`/`modal` 등이 **우리 자신의 `Button`**에 넘기는 `variant=`는 정상 — `core` 프리미티브로 곧장 가는 것만 해당한다.)
+
+고정 자체를 피하는 방법도 있다: **cva는 변형 축에 `null`을 넘기면 그 축을 통째로 건너뛴다.** `atoms/button.tsx`가 `variant={null} size={null}`로 core/button을 감싸는 이유이며, 이러면 프리미티브는 베이스 문자열만 기여하고 색·사이즈 클래스는 전부 atom이 소유한다. 고정할 중립 변형이 마땅치 않으면 이쪽을 먼저 고려한다.
 
 ### 컴포넌트 작성 패턴
 
