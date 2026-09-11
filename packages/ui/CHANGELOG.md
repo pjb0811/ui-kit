@@ -1,5 +1,149 @@
 # @repo/ui
 
+## 8.1.0
+
+### Minor Changes
+
+- 85a90a4: Add `gap` to `Marquees`, the space between the repeated copies of a row.
+
+  `autoFill` duplicates each row until it covers the container, and those copies
+  were laid out flush against one another. Any row that spaces its own children —
+  the common case, a flex row of pills — therefore rendered a visibly tighter seam
+  than the rest of the track: 12px between pills inside a copy, 0px between the
+  last pill of one copy and the first pill of the next, repeating at every
+  boundary.
+
+  ```tsx
+  <Marquees speed={40} gap={12} items={[{ key: 0, children: row }]} />
+  ```
+
+  `gap` is a px number, defaults to `0` (the previous layout), and is available
+  per-row through `ItemProps` like `speed` and `autoFill`. It is applied as
+  trailing padding on every copy rather than a flex `gap` on the track, so the
+  spacing is uniform at both the copy seam and the boundary between the two loop
+  halves, with no special case at either end. Because `offsetWidth` is the
+  border-box width, the measured copy width already includes that padding and the
+  loop distance stays exact — the scroll remains seamless. Changing `gap` rewinds
+  the measurement to the container width so the repeat count is recomputed instead
+  of reusing a count derived from the old copy width.
+
+- 073d189: Every floating/overlay primitive moves from `z-50` to `z-1000`, declared once as
+  `OVERLAY_LAYER` in `src/lib/z-layers.ts`.
+
+  `z-50` is shadcn's default, and it assumes you own the whole app and keep its
+  chrome below 50. A published package doesn't get that assumption. Infima
+  (Docusaurus) puts its navbar at `--ifm-z-index-fixed: 200` and its own overlay at
+  400, so on this repo's own docs site a right-anchored `Drawer` had its top 60px —
+  the entire header, meaning the title _and_ the close button — painted under the
+  navbar, and the mask couldn't dim that strip. It still hit-tested fine, because
+  vaul/Radix mark outside content `pointer-events: none` while a modal is open, so
+  the close button was clickable but invisible. `Modal` escaped only by accident:
+  it's vertically centred, so it lands below the navbar's 60px.
+
+  Measured on the docs Drawer demo (1280×900):
+
+  |                                 | Before                   | After                  |
+  | ------------------------------- | ------------------------ | ---------------------- |
+  | Overlay / content `z-index`     | `50`                     | `1000`                 |
+  | Topmost element over the navbar | the navbar's own link    | `[data-slot=drawer-…]` |
+  | Drawer header (y 0–78) visible  | no — navbar painted over | yes                    |
+  | Navbar strip dimmed by the mask | no (`rgb(255,255,255)`)  | yes                    |
+
+  Affected: `Modal`/`Dialog` (mask + content), `Drawer` (mask + content),
+  `Popover`, `Select`'s popup, `Dropdown`'s menu, `FloatButton`, and
+  `Layout.Header` when `position` is `sticky` or `fixed`.
+
+  **They all moved together, to the same value, on purpose.** Nothing in that list
+  ranks against anything else in it by z-index; relative order falls out of DOM
+  order, which is what puts a `Select` popup above the `Drawer` it was opened from
+  (Radix appends each portal to `body` as it opens) and a `Drawer` above
+  `Layout.Header`. Giving one of them a different value would silently invert those
+  pairs. Verified after the change: `Select` popup `1000`, `Popover` `1000`,
+  `Dropdown` menu `1000`, all above the navbar's `200`.
+
+  `Modal.confirm` and the imperative `Toast`/`Modal` stack roots are unchanged at
+  `10000`, so an imperative confirm opened from inside a declarative `Modal` still
+  lands on top — verified at `z=10000`. `Layout.Sider` stays at `z-10`: it only has
+  to stay under this layer, and raising it in step would undo the fix that stopped
+  it covering a sticky `Header`.
+
+  Graded `minor` rather than `patch` because 1000 is a contract, not an
+  implementation detail: the library now claims the band every major UI library
+  reserves for modals (antd 1000, Bootstrap 1055, MUI 1300). A host that
+  deliberately parks its own chrome between 50 and 1000 to sit above these
+  components will see that inverted. Retune per call site with `className` /
+  `classNames.mask` — both land after `OVERLAY_LAYER` in `cn()`, so
+  `tailwind-merge` lets them win.
+
+### Patch Changes
+
+- eca097d: `Drawer`'s `footer` is wrapped in the footer bar again, and `classNames.footer` /
+  `classNames.extra` do something again.
+
+  `Drawer` rendered its `footer` and `extra` slots through
+  `renderConditional(value, wrapper)`, which returns the value **unwrapped** when
+  it is already a React element and only calls `wrapper` for strings, numbers and
+  arrays. A footer is practically always an element, so the wrapper was skipped in
+  the common case: `DrawerFooter` never mounted, and `classNames.footer` — a
+  documented prop — silently did nothing. `extra` lost its `shrink-0` wrapper and
+  `classNames.extra` the same way.
+
+  Measured on the docs Drawer demo (`direction="right"`, `size="small"`, 1280px
+  viewport, so a 384px panel):
+
+  |                               | Before                           | After           |
+  | ----------------------------- | -------------------------------- | --------------- |
+  | `[data-slot="drawer-footer"]` | absent                           | present         |
+  | Footer button width           | `384px` (full panel)             | `352px`         |
+  | Inset from the panel edges    | `0px` / `0px`                    | `16px` / `16px` |
+  | Pinned to the panel bottom    | no — sat directly under the body | yes (`mt-auto`) |
+
+  Without the wrapper the button became a direct child of `drawer-content`, which
+  is `flex flex-col`; `align-items: stretch` blew it out to the full panel width
+  with no padding.
+
+  `PageHeader`'s `extra` had the identical bug and is fixed the same way — note its
+  sibling `title`/`subTitle` were already written as plain conditionals.
+
+  Both now render as `{value != null && <Wrapper>{value}</Wrapper>}`.
+  `renderConditional` itself is unchanged: the element opt-out is deliberate for
+  content slots like `Card`/`Popover`/`List`'s `title`, where forcing the wrapper
+  would nest a caller-supplied heading inside `<h6>`. It now carries a doc comment
+  saying so, so a layout wrapper doesn't get routed through it again.
+
+  The footer keeps its stacked full-width layout (`flex flex-col`), so a footer
+  with two buttons still stacks them rather than switching to `Modal`'s
+  right-aligned row. Override with `classNames.footer` — which now works.
+
+- a4c433a: Fix `Marquees` briefly painting its track at the viewport width before the
+  measurement lands.
+
+  `width` was seeded with `'100vw'`. `useResponsiveSize` measures in a layout
+  effect, so the real container width is known before the first paint, but
+  `Marquees` copies it into state in a passive effect and then passes it through
+  `useThrottledValue(width, 200)` — whose leading edge is spent on mount by the
+  seed itself, pushing the first real value onto the trailing timer. So the seed
+  is what paints for roughly the first 200ms.
+
+  On the docs page that drew the track 1280px wide inside a 703px column: the
+  whole track was visible for ~190ms, the page grew a transient horizontal
+  scrollbar (`scrollWidth` 1596 vs `clientWidth` 1280), and then it snapped to the
+  column width and clipped. Measured from first paint:
+
+  |                           | Before                       | After   |
+  | ------------------------- | ---------------------------- | ------- |
+  | Track width, first ~190ms | `1280px` (column is `703px`) | `703px` |
+  | Page horizontal overflow  | `+316px`                     | `0px`   |
+
+  The seed is now `'100%'`, which resolves against the container to the same value
+  the measurement produces (`size.width` minus the container's horizontal
+  padding), so there is nothing left to snap. Verified at 420 / 768 / 1280 /
+  1920px viewports: no page overflow on any frame, and the track renders at its
+  final width from the first paint.
+
+  This does not change the throttle, which is still wanted for resize; it only
+  stops the pre-measurement frames from being wrong.
+
 ## 8.0.0
 
 ### Major Changes

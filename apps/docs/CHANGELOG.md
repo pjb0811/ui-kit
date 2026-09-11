@@ -1,5 +1,15 @@
 # docs
 
+## 0.5.16
+
+### Patch Changes
+
+- Updated dependencies [eca097d]
+- Updated dependencies [a4c433a]
+- Updated dependencies [85a90a4]
+- Updated dependencies [073d189]
+  - @repo/ui@8.1.0
+
 ## 0.5.15
 
 ### Patch Changes
