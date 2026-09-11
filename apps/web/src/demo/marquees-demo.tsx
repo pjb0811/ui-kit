@@ -17,5 +17,5 @@ const row = (
 const items = [{ key: 0, children: row }];
 
 export default function MarqueesDemo() {
-  return <Marquees speed={40} items={items} />;
+  return <Marquees speed={40} gap={12} items={items} />;
 }

@@ -22,6 +22,14 @@ const meta: Meta<typeof Marquees> = {
     autoFill: {
       control: { type: 'boolean' },
     },
+    gap: {
+      control: { type: 'range', min: 0, max: 100, step: 4 },
+    },
+  },
+  // The rows below space their own children by `gap-2`; `gap` applies the same
+  // 8px between the repeated copies so the seam is not tighter than the rest.
+  args: {
+    gap: 8,
   },
   render: props => {
     return (

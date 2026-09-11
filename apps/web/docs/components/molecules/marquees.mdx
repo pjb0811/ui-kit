@@ -15,6 +15,7 @@ import { Marquees } from '@jbpark/ui-kit';
 
 <Marquees
   speed={40}
+  gap={12}
   items={[{ key: 0, children: <div>Scrolling content</div> }]}
 />;
 ```
@@ -33,6 +34,7 @@ import { Marquees } from '@jbpark/ui-kit';
 | `speed`        | `number` (px/second)  | `100`   |
 | `pauseOnHover` | `boolean`             | `true`  |
 | `autoFill`     | `boolean \| number`   | `true`  |
+| `gap`          | `number` (px)         | `0`     |
 | `className`    | `string`              | -       |
 
-Each `ItemProps` is `{ key?; children; speed?; autoFill?; pauseOnHover? }` — per-row overrides fall back to the values set on `Marquees`. `autoFill` repeats each row enough to cover the container (pass a number to force a specific repeat count). `Marquees.Item` is also exported for rendering a single track directly. `Marquees` forwards the rest of `React.ComponentProps<'div'>`.
+Each `ItemProps` is `{ key?; children; speed?; autoFill?; pauseOnHover?; gap? }` — per-row overrides fall back to the values set on `Marquees`. `autoFill` repeats each row enough to cover the container (pass a number to force a specific repeat count). `gap` is the space between those repeats — set it to match the spacing inside your row, otherwise the last element of one copy sits flush against the first element of the next. `Marquees.Item` is also exported for rendering a single track directly. `Marquees` forwards the rest of `React.ComponentProps<'div'>`.

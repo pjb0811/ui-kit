@@ -13,6 +13,7 @@ export interface ItemProps {
   autoFill?: boolean | number;
   pause?: boolean;
   pauseOnHover?: boolean;
+  gap?: number;
   children?: React.ReactNode;
 }
 
@@ -30,12 +31,21 @@ export interface Props
 // render by ~90%.
 const INITIAL_AUTO_FILL_GUESS = 10;
 
+const resolveInitialRepeatCount = (autoFill: boolean | number) => {
+  if (!autoFill) {
+    return 0;
+  }
+
+  return typeof autoFill === 'boolean' ? INITIAL_AUTO_FILL_GUESS : autoFill;
+};
+
 const Item = ({
   width: _width,
   speed = 100,
   autoFill = false,
   pause: _pause = false,
   pauseOnHover = false,
+  gap = 0,
   children,
 }: Props) => {
   const itemRefs = useRef<HTMLDivElement[]>([]);
@@ -45,14 +55,11 @@ const Item = ({
   const [width, setWidth] = useState<string | number>(_width);
   const { pause, hoverEvents } = usePauseOnHover(pauseOnHover);
   const [repeatCount, setRepeatCount] = useState(
-    autoFill
-      ? typeof autoFill === 'boolean'
-        ? INITIAL_AUTO_FILL_GUESS
-        : autoFill
-      : 0,
+    resolveInitialRepeatCount(autoFill),
   );
   const [prevWidthProp, setPrevWidthProp] = useState(_width);
   const [prevAutoFill, setPrevAutoFill] = useState(autoFill);
+  const [prevGap, setPrevGap] = useState(gap);
 
   // Adjusted directly in render (React's "adjust state during render"
   // pattern) instead of an effect, so `width`/`repeatCount` re-sync with
@@ -64,13 +71,16 @@ const Item = ({
 
   if (autoFill !== prevAutoFill) {
     setPrevAutoFill(autoFill);
-    setRepeatCount(
-      autoFill
-        ? typeof autoFill === 'boolean'
-          ? INITIAL_AUTO_FILL_GUESS
-          : autoFill
-        : 0,
-    );
+    setRepeatCount(resolveInitialRepeatCount(autoFill));
+  }
+
+  // `gap` widens every copy, so both the measured item width and the repeat
+  // count derived from it are stale. Rewind `width` to the container width
+  // so the measuring effect below recomputes the loop distance from scratch.
+  if (gap !== prevGap) {
+    setPrevGap(gap);
+    setWidth(_width);
+    setRepeatCount(resolveInitialRepeatCount(autoFill));
   }
 
   const isPaused = _pause || pause;
@@ -85,6 +95,9 @@ const Item = ({
       return;
     }
 
+    // `offsetWidth` is the border-box width, so it already includes the
+    // `gap` padding each copy carries — the loop distance stays exact
+    // without adding `gap` back in here.
     const itemWidth = itemRefs.current[0].offsetWidth;
 
     if (itemWidth >= width) {
@@ -103,7 +116,7 @@ const Item = ({
 
     setWidth(totalWidth);
     setRepeatCount(repeatCount - 1);
-  }, [autoFill, width, children]);
+  }, [autoFill, width, children, gap]);
 
   useGSAP(
     () => {
@@ -161,19 +174,25 @@ const Item = ({
             style={{ minWidth: width }}
             className="flex flex-nowrap"
           >
+            {/* Every copy carries the same trailing `gap`, so the spacing is
+                uniform at the seam between copies and between the two loop
+                halves — no special-casing at either boundary. */}
             <div
               ref={el => {
                 if (el) {
                   itemRefs.current[index] = el;
                 }
               }}
+              style={{ paddingRight: gap }}
             >
               {children}
             </div>
             {[
               ...Array(typeof autoFill === 'number' ? autoFill : repeatCount),
             ].map((_, i) => (
-              <div key={i}>{children}</div>
+              <div key={i} style={{ paddingRight: gap }}>
+                {children}
+              </div>
             ))}
           </div>
         ))}
