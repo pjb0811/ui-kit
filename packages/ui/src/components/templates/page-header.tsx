@@ -3,7 +3,7 @@
 import { ArrowLeft } from 'lucide-react';
 
 import { DEFAULT_LOCALE, useConfig } from '@repo/ui/providers';
-import { cn, renderConditional } from '@repo/ui/utils';
+import { cn } from '@repo/ui/utils';
 
 import Button from '../atoms/button';
 
@@ -69,9 +69,9 @@ const PageHeader = ({
               </p>
             )}
           </div>
-          {renderConditional(extra, v => (
-            <div className={cn('shrink-0', classNames?.extra)}>{v}</div>
-          ))}
+          {extra != null && (
+            <div className={cn('shrink-0', classNames?.extra)}>{extra}</div>
+          )}
         </div>
       </div>
       {children}
