@@ -65,12 +65,11 @@ type ModalStatus = 'info' | 'success' | 'error' | 'warning';
 interface StaticProps extends Props {
   status?: ModalStatus;
   /**
-   * @deprecated Use `status` for the semantic state. Kept as an alias so
-   * existing `type="info|success|error|warning"` calls keep working. `confirm`
-   * is an interaction mode, not a status — call `Modal.confirm()` instead
-   * (still accepted here as `type="confirm"` for back-compat).
+   * Interaction mode set by `Modal.confirm()` to request the two-button
+   * footer. `confirm` is a mode, not a status, so it rides its own axis rather
+   * than `status` — call `Modal.confirm()` rather than setting this directly.
    */
-  type?: ModalStatus | 'confirm';
+  mode?: 'confirm';
   id?: string;
   icon?: React.ReactNode;
   container?: HTMLElement;
@@ -185,7 +184,7 @@ const STATIC_ICONS = {
 const StaticModal = ({
   id,
   status,
-  type,
+  mode,
   title,
   content,
   okText,
@@ -201,10 +200,9 @@ const StaticModal = ({
   const resolvedOkText = okText ?? locale.ok ?? DEFAULT_LOCALE.ok;
   const resolvedCancelText =
     cancelText ?? locale.cancel ?? DEFAULT_LOCALE.cancel;
-  // `confirm` is an interaction mode (two-button footer), not a status. The
-  // semantic state comes from `status`, with `type` as its deprecated alias.
-  const isConfirm = type === 'confirm';
-  const resolvedStatus = status ?? (isConfirm ? undefined : type);
+  // `confirm` is an interaction mode (two-button footer), not a status; the
+  // semantic state comes from `status`.
+  const isConfirm = mode === 'confirm';
 
   const closeModal = (callback?: () => void) => {
     callback?.();
@@ -270,9 +268,7 @@ const StaticModal = ({
           )}
         >
           {icon ||
-            (isConfirm
-              ? STATIC_ICONS.confirm
-              : resolvedStatus && STATIC_ICONS[resolvedStatus])}
+            (isConfirm ? STATIC_ICONS.confirm : status && STATIC_ICONS[status])}
           {title}
         </p>
       }
@@ -318,9 +314,9 @@ Modal.error = (props: StaticProps) =>
   modalStack.render({ status: 'error', ...props });
 Modal.warning = (props: StaticProps) =>
   modalStack.render({ status: 'warning', ...props });
-// `confirm` is a mode, not a status, so it rides the `type` axis (the only
-// place it lives) rather than `status`.
+// `confirm` is a mode, not a status, so it rides its own `mode` axis rather
+// than `status`.
 Modal.confirm = (props: StaticProps) =>
-  modalStack.render({ type: 'confirm', ...props });
+  modalStack.render({ mode: 'confirm', ...props });
 
 export default Modal;

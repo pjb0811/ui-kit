@@ -262,23 +262,6 @@
     --preset-color: var(--color-amber-500);
   }
 
-  /* Deprecated pre-8.0 spellings, resolving to the exact same hues they always
-   * rendered (see lib/colors.ts). Removed in the next major. `volcano` is the
-   * one with no canonical successor — it is `orange` one lightness step
-   * darker, not a hue of its own. */
-  :is([data-slot='button'], [data-slot='tag'])[data-color='magenta'] {
-    --preset-color: var(--color-fuchsia-500);
-  }
-  :is([data-slot='button'], [data-slot='tag'])[data-color='geekblue'] {
-    --preset-color: var(--color-indigo-500);
-  }
-  :is([data-slot='button'], [data-slot='tag'])[data-color='gold'] {
-    --preset-color: var(--color-amber-500);
-  }
-  :is([data-slot='button'], [data-slot='tag'])[data-color='volcano'] {
-    --preset-color: var(--color-orange-600);
-  }
-
   [data-slot='button'][data-color] {
     --btn-bg: var(--preset-color);
     --btn-fg: white;
@@ -290,8 +273,7 @@
   /* Hues light enough that white text on them fails contrast. */
   [data-slot='button'][data-color='yellow'],
   [data-slot='button'][data-color='lime'],
-  [data-slot='button'][data-color='amber'],
-  [data-slot='button'][data-color='gold'] {
+  [data-slot='button'][data-color='amber'] {
     --btn-fg: black;
   }
 

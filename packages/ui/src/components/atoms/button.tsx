@@ -9,7 +9,7 @@ import { useConfig } from '@repo/ui/providers';
 import { cn } from '@repo/ui/utils';
 
 import { button } from '../../core';
-import { type DeprecatedPresetColor, type PresetColor } from '../../lib/colors';
+import { type PresetColor } from '../../lib/colors';
 
 const Core = button.Button;
 
@@ -106,13 +106,9 @@ export interface Props extends Omit<
    * Color, independent of `variant`. Defaults to `'default'`, or to whatever
    * `type` maps to when `type` is set. `danger` overrides this.
    *
-   * Preset hues use Tailwind's colour names (#342). The pre-8.0 spellings
-   * `magenta`/`geekblue`/`gold`/`volcano` still work and render unchanged, but
-   * are deprecated — use `fuchsia`/`indigo`/`amber` instead (`volcano` has no
-   * successor; it is `orange` one lightness step darker).
+   * Preset hues use Tailwind's colour names (#342).
    */
-  color?:
-    PresetColor | DeprecatedPresetColor | 'default' | 'primary' | 'danger';
+  color?: PresetColor | 'default' | 'primary' | 'danger';
   loading?: boolean | { icon: React.ReactNode };
 }
 

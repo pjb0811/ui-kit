@@ -20,12 +20,6 @@ type ToastStatus = 'info' | 'success' | 'error' | 'warning';
 
 export interface Props {
   status?: ToastStatus;
-  /**
-   * @deprecated Use `status`. Kept as an alias so existing
-   * `type="info|success|error|warning"` usage keeps working; `status` matches
-   * the shared semantic-state vocabulary used by `Result`.
-   */
-  type?: ToastStatus;
   title: React.ReactNode;
   description?: React.ReactNode;
   icon?: React.ReactNode;
@@ -50,7 +44,6 @@ const STATUS_ICONS: Record<ToastStatus, React.ReactNode> = {
 
 const Toast = ({
   status,
-  type,
   title,
   description,
   icon,
@@ -60,12 +53,10 @@ const Toast = ({
   onClose,
 }: Props) => {
   const { locale } = useConfig();
-  // `type` is the deprecated alias for `status`; prefer `status` when both set.
-  const resolvedStatus = status ?? type;
 
   return (
     <div
-      role={resolvedStatus === 'error' ? 'alert' : 'status'}
+      role={status === 'error' ? 'alert' : 'status'}
       className={cn(
         'pointer-events-auto flex w-80 items-start gap-3 rounded-lg',
         'bg-background text-foreground border p-4 shadow-lg',
@@ -73,9 +64,9 @@ const Toast = ({
         //
       )}
     >
-      {(icon || resolvedStatus) && (
+      {(icon || status) && (
         <div className="mt-0.5 shrink-0 [&_svg]:size-5">
-          {icon || (resolvedStatus && STATUS_ICONS[resolvedStatus])}
+          {icon || (status && STATUS_ICONS[status])}
         </div>
       )}
       <div className="flex-1 space-y-1">
@@ -174,7 +165,7 @@ Toast.destroyAll = () => {
   toastStack.destroy();
 };
 
-type TriggerOptions = Omit<StaticProps, 'status' | 'type' | 'title'>;
+type TriggerOptions = Omit<StaticProps, 'status' | 'title'>;
 
 Toast.info = (title: React.ReactNode, props?: TriggerOptions) =>
   toastStack.render({ status: 'info', title, ...props });

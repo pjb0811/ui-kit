@@ -6,7 +6,7 @@ import { useConfig } from '@repo/ui/providers';
 import { cn } from '@repo/ui/utils';
 
 import { badge } from '../../core';
-import { type DeprecatedPresetColor, type PresetColor } from '../../lib/colors';
+import { type PresetColor } from '../../lib/colors';
 
 const Core = badge.Badge;
 
@@ -29,19 +29,10 @@ export interface Props extends Omit<
    * `success`/`warning` have no `Button` counterpart on purpose: a Tag marks
    * state, which is why antd's Tag also carries them while its Button does not.
    *
-   * Preset hues use Tailwind's colour names (#342). The pre-8.0 spellings
-   * `magenta`/`geekblue`/`gold`/`volcano` still work and render unchanged, but
-   * are deprecated — use `fuchsia`/`indigo`/`amber` instead (`volcano` has no
-   * successor; it is `orange` one lightness step darker).
+   * Preset hues use Tailwind's colour names (#342).
    */
   color?:
-    | 'default'
-    | 'primary'
-    | 'success'
-    | 'warning'
-    | 'danger'
-    | PresetColor
-    | DeprecatedPresetColor;
+    'default' | 'primary' | 'success' | 'warning' | 'danger' | PresetColor;
 }
 
 // Geometry, the focus/aria chassis and the svg sizing all come from

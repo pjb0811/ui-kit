@@ -105,18 +105,5 @@ Preset `color` names follow Tailwind's own palette names:
 `danger`. Each resolves from the matching `--color-*` Tailwind theme variable,
 so a colour word renders the same hue on `Button` and `Tag`.
 
-:::note[Deprecated spellings]
-
-`magenta`, `geekblue`, `gold` and `volcano` still work and render exactly what
-they always did, but are deprecated and will be removed in the next major.
-They named antd's palette while rendering Tailwind's, so the name and the
-value disagreed — use `fuchsia`, `indigo` and `amber` instead.
-
-`volcano` has no successor: every other preset is a distinct hue at Tailwind's
-`500` step, but `volcano` is `orange-600` — the same hue as `orange`, one step
-darker. If you need that exact shade, set `--btn-bg` directly.
-
-:::
-
 `Button` also accepts the rest of Radix UI's `Slot` props via `asChild`, and
 the native `<button>` attributes.
