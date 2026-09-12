@@ -118,7 +118,10 @@ const Checkbox = ({
         value={itemValue}
         checked={checked}
         disabled={disabled}
-        className={cn(cursorClassName)}
+        // `rounded-sm` used to live on the vendored primitive; it moved here so
+        // `core/checkbox` stays upstream-verbatim (`rounded-[4px]`). Same radius
+        // (Tailwind `rounded-sm` == 4px), and tailwind-merge lets it win (#361).
+        className={cn('rounded-sm', cursorClassName)}
         onCheckedChange={onChange}
       />
       {children && (

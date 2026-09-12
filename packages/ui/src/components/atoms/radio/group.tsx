@@ -3,6 +3,7 @@
 import { useId } from 'react';
 
 import { useControllableState } from '@jbpark/use-hooks';
+import * as RadioGroupPrimitive from '@radix-ui/react-radio-group';
 
 import { cn } from '@repo/ui/utils';
 
@@ -19,7 +20,7 @@ import {
 import { RadioGroupContext } from './context';
 import Radio from './radio';
 
-const { RadioGroup: Core, RadioGroupItem: Item } = radio;
+const { RadioGroup: Core } = radio;
 
 export type { OptionValue };
 
@@ -122,9 +123,13 @@ const RadioGroup = ({
               // `asChild` gives the Button real radio semantics (role,
               // aria-checked, roving tabindex, arrow-key nav, click/keyboard
               // selection via the shared Core's onValueChange below) instead
-              // of a plain list of buttons with none of that.
-              <Item
+              // of a plain list of buttons with none of that. Uses the Radix
+              // primitive directly (not `core/RadioGroupItem`) so that core
+              // stays upstream-verbatim with no `asChild` branch (#361); the
+              // `data-slot` matches what the default item emits.
+              <RadioGroupPrimitive.Item
                 asChild
+                data-slot="radio-group-item"
                 value={String(item.value)}
                 disabled={disabled || item.disabled}
               >
@@ -155,7 +160,7 @@ const RadioGroup = ({
                 >
                   {item.label}
                 </Button>
-              </Item>
+              </RadioGroupPrimitive.Item>
             ) : (
               <Radio
                 id={getOptionId(index)}
