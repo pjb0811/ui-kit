@@ -2,23 +2,17 @@
 
 import { useControllableState } from '@jbpark/use-hooks';
 
+import { type ComponentSize, useConfig } from '@repo/ui/providers';
 import { cn } from '@repo/ui/utils';
 
 import { switchComponent } from '../../core';
 
 const { Switch: Core } = switchComponent;
 
+// Keyed by the shared `ComponentSize` vocabulary (#350). The `calc` offset on
+// each `handleChecked` is `handle width + 2px` (the `left-0.5` inset), so the
+// handle lands flush at both ends — it must be recomputed per row, not copied.
 const sizeConfig = {
-  medium: {
-    core: 'default' as const,
-    track: 'h-8! w-12!',
-    handle: 'size-6!',
-    handleChecked:
-      'data-[state=unchecked]:left-0.5 data-[state=checked]:left-[calc(100%-26px)]',
-    fontSize: 'text-xs',
-    marginChecked: 'mr-7 ml-2',
-    marginUnchecked: 'mr-2 ml-7',
-  },
   small: {
     core: 'sm' as const,
     track: 'h-6! w-10!',
@@ -29,7 +23,27 @@ const sizeConfig = {
     marginChecked: 'mr-6 ml-1.5',
     marginUnchecked: 'mr-1.5 ml-6',
   },
-};
+  middle: {
+    core: 'default' as const,
+    track: 'h-8! w-12!',
+    handle: 'size-6!',
+    handleChecked:
+      'data-[state=unchecked]:left-0.5 data-[state=checked]:left-[calc(100%-26px)]',
+    fontSize: 'text-xs',
+    marginChecked: 'mr-7 ml-2',
+    marginUnchecked: 'mr-2 ml-7',
+  },
+  large: {
+    core: 'default' as const,
+    track: 'h-10! w-16!',
+    handle: 'size-8!',
+    handleChecked:
+      'data-[state=unchecked]:left-0.5 data-[state=checked]:left-[calc(100%-34px)]',
+    fontSize: 'text-sm',
+    marginChecked: 'mr-9 ml-2.5',
+    marginUnchecked: 'mr-2.5 ml-9',
+  },
+} satisfies Record<ComponentSize, unknown>;
 
 export interface Props extends Omit<
   React.ComponentPropsWithoutRef<'button'>,
@@ -39,7 +53,14 @@ export interface Props extends Omit<
     track?: string;
     handle?: string;
   };
-  size?: 'small' | 'medium';
+  /**
+   * Density on the shared `ComponentSize` scale (`small` | `middle` | `large`),
+   * falling back to the nearest `Config`'s `componentSize`, then `middle`.
+   *
+   * `medium` is accepted as a deprecated alias of `middle` — kept so existing
+   * `size="medium"` calls keep working; removed in the next major.
+   */
+  size?: ComponentSize | 'medium';
   defaultChecked?: boolean;
   checked?: boolean;
   disabled?: boolean;
@@ -51,7 +72,7 @@ export interface Props extends Omit<
 const Switch = ({
   className,
   classNames,
-  size = 'medium',
+  size,
   defaultChecked,
   checked: _checked,
   onChange: _onChange = () => {},
@@ -65,8 +86,14 @@ const Switch = ({
     onChange: _onChange,
   });
 
+  const { componentSize } = useConfig();
+  // `medium` is the deprecated spelling of `middle`; an explicit `size` wins,
+  // then the Config default, then `middle`.
+  const resolvedSize =
+    (size === 'medium' ? 'middle' : size) ?? componentSize ?? 'middle';
+
   const hasChildren = !!(checkedChildren || unCheckedChildren);
-  const config = sizeConfig[size];
+  const config = sizeConfig[resolvedSize];
 
   return (
     <Core
