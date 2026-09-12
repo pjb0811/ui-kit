@@ -1,0 +1,114 @@
+{
+  "accordion": {
+    "status": "local-additions",
+    "behind": []
+  },
+  "badge": {
+    "status": "local-additions",
+    "behind": []
+  },
+  "button": {
+    "status": "local-additions",
+    "behind": []
+  },
+  "calendar": {
+    "status": "upstream-ahead",
+    "behind": [
+      "2",
+      "8",
+      "[&:nth-child",
+      "[--cell-size:--spacing",
+      "[data-selected",
+      "]",
+      "dark:hover:text-accent-foreground",
+      "props.showWeekNumber",
+      "size-auto",
+      "true]:rounded-l-md",
+      "true]:rounded-r-md",
+      "type"
+    ]
+  },
+  "checkbox": {
+    "status": "upstream-ahead",
+    "behind": [
+      "rounded-[4px]"
+    ]
+  },
+  "dialog": {
+    "status": "upstream-ahead",
+    "behind": [
+      "outline",
+      "true",
+      "z-50"
+    ]
+  },
+  "drawer": {
+    "status": "upstream-ahead",
+    "behind": [
+      "w-[100px]",
+      "z-50"
+    ]
+  },
+  "field": {
+    "status": "local-additions",
+    "behind": []
+  },
+  "input": {
+    "status": "in-sync",
+    "behind": []
+  },
+  "label": {
+    "status": "in-sync",
+    "behind": []
+  },
+  "popover": {
+    "status": "upstream-ahead",
+    "behind": [
+      "z-50"
+    ]
+  },
+  "progress": {
+    "status": "local-additions",
+    "behind": []
+  },
+  "radio-group": {
+    "status": "local-additions",
+    "behind": []
+  },
+  "resizable": {
+    "status": "in-sync",
+    "behind": []
+  },
+  "select": {
+    "status": "upstream-ahead",
+    "behind": [
+      "z-50"
+    ]
+  },
+  "separator": {
+    "status": "in-sync",
+    "behind": []
+  },
+  "skeleton": {
+    "status": "in-sync",
+    "behind": []
+  },
+  "slider": {
+    "status": "upstream-ahead",
+    "behind": [
+      "?",
+      "_values",
+      "_values.length",
+      "bg-muted",
+      "bg-white"
+    ]
+  },
+  "switch": {
+    "status": "local-additions",
+    "behind": []
+  },
+  "textarea": {
+    "status": "in-sync",
+    "behind": []
+  }
+}

@@ -1,0 +1,67 @@
+name: Core drift
+
+# Advisory-only: reports when a vendored `packages/ui/src/core/*` primitive has
+# fallen behind its shadcn `new-york-v4` registry entry (ui-kit#362). It is
+# network-bound and upstream can change under an unrelated PR, so it is kept
+# OUT of the required `ci.yml` path and runs on a weekly schedule (plus manual
+# dispatch). On drift it opens or refreshes a single tracking issue.
+
+on:
+  schedule:
+    # Mondays 00:00 UTC
+    - cron: '0 0 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  core-drift:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24.x
+
+      # The script only uses Node builtins + fetch and reads the checked-out
+      # source, so no install/build is needed.
+      - name: Run core drift check
+        id: drift
+        run: |
+          set +e
+          node packages/ui/scripts/check-core-drift.mjs --enforce \
+            | sed 's/\x1b\[[0-9;]*m//g' | tee drift-report.txt
+          echo "exit=${PIPESTATUS[0]}" >> "$GITHUB_OUTPUT"
+
+      - name: Open or update the drift tracking issue
+        if: steps.drift.outputs.exit != '0'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          MARKER='<!-- core-drift-report -->'
+          TITLE='core/* drift vs shadcn new-york-v4'
+          {
+            echo "$MARKER"
+            echo "Automated report from \`.github/workflows/core-drift.yml\` (#362)."
+            echo "A \`core/*\` primitive is behind its upstream registry entry, or the check errored."
+            echo
+            echo '```'
+            cat drift-report.txt
+            echo '```'
+            echo
+            echo "_Last run: $(date -u '+%Y-%m-%d %H:%M UTC') · ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}_"
+          } > issue-body.md
+
+          EXISTING=$(gh issue list --state open --search "$TITLE in:title" \
+            --json number,title --jq ".[] | select(.title == \"$TITLE\") | .number" | head -n1)
+
+          if [ -n "$EXISTING" ]; then
+            gh issue edit "$EXISTING" --body-file issue-body.md
+            gh issue comment "$EXISTING" --body "Drift check re-ran and still reports divergence — body updated ($(date -u '+%Y-%m-%d %H:%M UTC'))."
+          else
+            gh issue create --title "$TITLE" --body-file issue-body.md
+          fi

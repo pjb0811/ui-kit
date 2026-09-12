@@ -58,6 +58,7 @@
     "lint": "eslint . --max-warnings 0",
     "check-dynamic-classes": "node scripts/check-dynamic-tailwind-classes.mjs",
     "check-api-surface": "node scripts/check-api-surface.mjs",
+    "check-core-drift": "node scripts/check-core-drift.mjs",
     "check-preflight-reset": "node scripts/check-preflight-reset.mjs",
     "check-ssr-smoke": "node --import ./scripts/loaders/css-stub.mjs scripts/check-ssr-smoke.mjs",
     "check-regression-net": "pnpm run check-api-surface && pnpm run check-preflight-reset && pnpm run check-ssr-smoke",
