@@ -1,5 +1,113 @@
 # @repo/ui
 
+## 9.0.0
+
+### Major Changes
+
+- ba7d678: Remove the deprecated `type` aliases and the pre-8.0 preset colour spellings
+
+  The aliases added non-breaking by #318 (semantic-state axis) and #342 (Tailwind
+  palette names) are removed now that 9.0.0 is the first major since they shipped.
+
+  **Breaking — semantic state.** `Modal` and `Toast` no longer accept `type`; use
+  `status` (`'info' | 'success' | 'error' | 'warning'`). `Modal.confirm()` is
+  unchanged — the two-button confirm is now an internal `mode` axis rather than
+  `type='confirm'`, so the imperative call keeps working.
+
+  - `<Modal type="info" />` / `Modal.info({ type: 'info' })` → `status="info"`
+  - `<Toast type="error" />` → `status="error"`
+
+  **Breaking — preset colour spellings** on `Button` and `Tag`:
+
+  | removed    | use instead |
+  | ---------- | ----------- |
+  | `magenta`  | `fuchsia`   |
+  | `geekblue` | `indigo`    |
+  | `gold`     | `amber`     |
+  | `volcano`  | _(none)_    |
+
+  `volcano` has no successor — it rendered `orange-600`, the same hue as `orange`
+  one lightness step darker, not a distinct hue. Callers who want that exact
+  shade set the custom property directly, e.g. `style={{ '--btn-bg':
+'var(--color-orange-600)' }}` (`--tag-bg` on `Tag`).
+
+  These spellings were never exported values (`lib/colors.ts` is internal), so the
+  change is to prop types and stylesheet rules only — the public API surface
+  snapshot is unchanged.
+
+- 4544429: Rebuild `Tag` on the shadcn `badge` primitive and free the `badge` slot
+
+  **Breaking:** `Tag`'s root `data-slot` changed from `badge` to `tag`. CSS that
+  themed a Tag through `[data-slot='badge']` — the hook documented on the Tag
+  page — must be updated to `[data-slot='tag']`. Nothing else about the rendered
+  output changed: same element, same classes, same `--tag-bg` / `--tag-fg` /
+  `--tag-tint` custom properties, verified identical across a 68-case matrix of
+  every `variant` × `color` combination plus `asChild` and a custom `className`.
+
+  `Tag` keeps its name and its props. The two ecosystems cross here: what shadcn
+  calls a Badge is what antd — and this library — calls a Tag, and antd's own
+  `Badge` (a count/dot decorator attached to another element) has no shadcn
+  counterpart. Renaming `Tag` would have left that component with no name, so the
+  slot moved instead and `badge` is now free for it.
+
+  - `core/badge.tsx` is re-synced with the upstream `new-york-v4` registry entry,
+    which it was three changes behind: `rounded-full` and `border-transparent` in
+    the base, the added `ghost` and `link` variants, and the emitted
+    `data-variant`. Two local adaptations are documented in the file — `Slot`
+    comes from `@radix-ui/react-slot` (this repo installs the individual Radix
+    packages and has no unified `radix-ui` dependency) and `cn` from
+    `@repo/ui/utils`.
+  - `Tag` wraps that primitive again instead of carrying an absorbed copy of its
+    base classes, so it no longer needs `INTERACTIVE_CHASSIS`; `Button` is that
+    helper's only remaining consumer.
+  - The core membership rule in `CLAUDE.md` gains a third criterion for exactly
+    this case: a single-element primitive belongs in `core` when keeping the
+    upstream file verbatim is what makes shadcn version syncs diffable. The
+    absorbed arrangement it replaces is why `core/badge` sat orphaned and stale.
+  - The SSR smoke test's reset-slot registry is now empty: `[data-slot='tag']` is
+    keyed by name in `globals.css`, so the data-slot contract already covers it.
+
+### Minor Changes
+
+- 4544429: Accept shadcn's `variant` / `size` words on `Button`, and rewire it onto
+  `core/button`
+
+  `Button` keeps its own vocabulary and its orthogonal `color` × `variant` axes.
+  shadcn's words are accepted _in addition_, as sugar in exactly the sense `type`
+  already is: each expands to a `(color, variant)` pair, and an explicit `color`
+  still wins over the one the word implies. Nothing existing changes — verified
+  identical across a 94-case matrix covering every `variant`, `type`, `size`,
+  `color` and `shape` combination plus `block` / `danger` / `disabled` /
+  `loading` / icon-only / `htmlType` / custom `className`: zero class differences
+  and zero attribute differences.
+
+  - `variant` also takes `default`, `destructive`, `outline`, `secondary` and
+    `ghost`. `link` is deliberately not remapped — it is already one of this
+    component's own variants and already renders what shadcn's `link` renders, so
+    aliasing it would have changed `variant="link"`'s resolved colour from
+    `default` to `primary` for existing callers.
+  - `size` also takes `xs`, `sm`, `default`, `lg` and the four `icon*` words,
+    mapped onto the `small` / `middle` / `large` scale. The `icon*` sizes force
+    the icon-only treatment, so the shadcn idiom of passing the icon as
+    _children_ (`<Button size="icon"><Trash /></Button>`) renders square — it
+    previously needed the `icon` prop with no children.
+  - `Button` now emits `data-variant` and `data-size` alongside the existing
+    `data-color`, matching the core primitive and `Tag`.
+
+  **Fixes:** `asChild` threw `Slot failed to slot onto its children` on _every_
+  call, with or without an icon. A Button renders two children (the icon slot and
+  the caller's content) and Radix's `Slot` accepts multiple children only when
+  one is marked `Slottable`; that marker was missing, so `<Button asChild>` was
+  unusable. Confirmed against 8.1.0 before the fix.
+
+  `Button` wraps `core/button` again rather than carrying an absorbed copy of its
+  cva base. It pins no core variant: passing `variant={null} size={null}` makes
+  cva skip those axes entirely, so the primitive contributes only its base string
+  and the atom keeps every colour and size class. `lib/chassis.ts` had no
+  consumers left after this and is removed — the focus/aria/disabled classes it
+  held now come from the primitive, and the SSR smoke test still asserts they
+  survive in the rendered markup.
+
 ## 8.1.0
 
 ### Minor Changes
