@@ -6,6 +6,25 @@ import * as SwitchPrimitive from '@radix-ui/react-switch';
 
 import { cn } from '@repo/ui/utils';
 
+/*
+ * Vendored from shadcn's `new-york-v4` switch registry entry.
+ *
+ * Local patches — re-apply these after any `shadcn add switch`:
+ * 1. Import `cn` from `@repo/ui/utils` (upstream uses its `cn` alias) and
+ *    `SwitchPrimitive` from `@radix-ui/react-switch` (upstream uses the unified
+ *    `radix-ui` package, which this repo doesn't install).
+ * 2. `CustomProps` adds `handleClassName` (merged onto `SwitchPrimitive.Thumb`)
+ *    and `children` (rendered inside the Root, after the Thumb).
+ *
+ * Why this stays a local patch rather than moving to `atoms/switch` (#361):
+ * both reach *into* the primitive's sub-tree. `atoms/switch` is an antd-style
+ * switch whose public `classNames.handle` is a runtime string that has to land
+ * on the Thumb, and whose `checkedChildren`/`unCheckedChildren` labels render
+ * inside the track (the Root) — neither is expressible through a verbatim
+ * primitive + `className` composition, so this one is irreducibly structural
+ * (like the four in #363). The rest of `shadcn add switch --diff` is class
+ * ordering / prettier wrapping, not a patch.
+ */
 interface CustomProps {
   handleClassName?: string;
   children?: React.ReactNode;

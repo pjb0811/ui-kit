@@ -7,6 +7,24 @@ import { ChevronDownIcon } from 'lucide-react';
 
 import { cn } from '@repo/ui/utils';
 
+/*
+ * Vendored from shadcn's `new-york-v4` accordion registry entry.
+ *
+ * Local patches — re-apply these after any `shadcn add accordion`:
+ * 1. Import `cn` from `@repo/ui/utils` (upstream uses its `cn` alias) and
+ *    `AccordionPrimitive` from `@radix-ui/react-accordion` (upstream uses the
+ *    unified `radix-ui` package, which this repo doesn't install).
+ * 2. `AccordionTrigger` gains `CustomTriggerProps` with `expandIcon`, which
+ *    *replaces* the default `ChevronDownIcon` (`{expandIcon || <ChevronDown/>}`).
+ *
+ * Why this stays a local patch rather than moving to `molecules/collapse`
+ * (#361): `expandIcon` replaces the built-in chevron, but a verbatim trigger
+ * always renders that chevron. Reproducing a replacement through the verbatim
+ * primitive would mean hiding the chevron and re-injecting an icon via
+ * children, which changes the DOM and the `[&[data-state=open]>svg]` rotation
+ * target. Irreducibly structural (like #363). The rest of
+ * `shadcn add accordion --diff` is class ordering / prettier wrapping.
+ */
 function Accordion({
   ...props
 }: React.ComponentProps<typeof AccordionPrimitive.Root>) {
