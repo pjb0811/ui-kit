@@ -9,7 +9,7 @@ const meta: Meta<typeof Toast> = {
     layout: 'centered',
   },
   argTypes: {
-    type: {
+    status: {
       control: { type: 'select' },
       options: ['info', 'success', 'error', 'warning'],
     },
@@ -24,7 +24,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    type: 'info',
+    status: 'info',
     title: '알림',
     description: '이것은 토스트 알림입니다.',
     closable: true,
