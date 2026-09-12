@@ -11,6 +11,32 @@ import { cn } from '@repo/ui/utils';
 import Button from '../components/atoms/button';
 import { OVERLAY_LAYER } from '../lib/z-layers';
 
+/*
+ * Vendored from shadcn's `new-york-v4` dialog registry entry.
+ *
+ * Local patches — re-apply these after any `shadcn add dialog`:
+ * 1. Imports: `DialogPrimitive` from `@radix-ui/react-dialog` (upstream uses
+ *    the unified `radix-ui` package, which this repo doesn't install), `cn`
+ *    from `@repo/ui/utils`, and `Button` from `../components/atoms/button`
+ *    (used by `DialogFooter`'s close button).
+ * 2. `OVERLAY_LAYER` (src/lib/z-layers.ts) replaces upstream's `z-50` on
+ *    `DialogOverlay` and `DialogContent`. Why: this package is published and
+ *    can't assume it owns the app's z-index scale — see #359.
+ * 3. `DialogContent` takes a `container` prop, defaulted to
+ *    `useConfig().getContainer()`, and passes it to `DialogPortal`. Why:
+ *    portalled content must stay inside the themed wrapper, or dark mode and
+ *    the CSS custom properties don't reach it.
+ * 4. `DialogContent` replaces upstream's `showCloseButton?: boolean` with
+ *    `CustomContentProps` (`classNames`, `closeIcon`, `closable`, `container`):
+ *    the close button is gated by `closable` (and `closable.disabled`) and
+ *    renders a caller-supplied `closeIcon`, and `classNames.mask` is forwarded
+ *    to the overlay.
+ * 5. `DialogFooter`'s close button uses this library's Button vocabulary
+ *    (`variant="outlined"`; upstream says `"outline"`).
+ *
+ * The rest of what `shadcn add dialog --diff` reports is Tailwind class
+ * ordering and prettier line-wrapping from this repo's formatter, not a patch.
+ */
 function Dialog({
   ...props
 }: React.ComponentProps<typeof DialogPrimitive.Root>) {

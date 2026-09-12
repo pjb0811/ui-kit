@@ -9,6 +9,27 @@ import { cn } from '@repo/ui/utils';
 
 import { OVERLAY_LAYER } from '../lib/z-layers';
 
+/*
+ * Vendored from shadcn's `new-york-v4` drawer registry entry (built on `vaul`,
+ * same as upstream).
+ *
+ * Local patches — re-apply these after any `shadcn add drawer`:
+ * 1. Imports: `cn` from `@repo/ui/utils` (upstream uses its `cn` alias). The
+ *    `vaul` import is upstream-verbatim.
+ * 2. `OVERLAY_LAYER` (src/lib/z-layers.ts) replaces upstream's `z-50` on
+ *    `DrawerOverlay` and `DrawerContent`. Why: this package is published and
+ *    can't assume it owns the app's z-index scale — see #359.
+ * 3. `Drawer` root takes a `draggable` prop (`CustomProps`) → `handleOnly={!
+ *    draggable}`, plus `container` defaulted to `useConfig().getContainer()`.
+ *    Why: the container keeps portalled content inside the themed wrapper, or
+ *    dark mode and the CSS custom properties don't reach it.
+ * 4. `DrawerContent` takes `CustomContentProps` (`classNames`, `handlebar`,
+ *    `mask`): `classNames.mask` + `!mask && 'hidden'` on the overlay, and the
+ *    drag handlebar is gated by `handlebar` with `classNames.handlebar`.
+ *
+ * The rest of what `shadcn add drawer --diff` reports is Tailwind class
+ * ordering and prettier line-wrapping from this repo's formatter, not a patch.
+ */
 interface CustomProps {
   draggable?: boolean;
 }

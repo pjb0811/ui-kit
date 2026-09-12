@@ -9,6 +9,25 @@ import { cn } from '@repo/ui/utils';
 
 import { OVERLAY_LAYER } from '../lib/z-layers';
 
+/*
+ * Vendored from shadcn's `new-york-v4` popover registry entry.
+ *
+ * Local patches — re-apply these after any `shadcn add popover`:
+ * 1. Imports: `PopoverPrimitive` from `@radix-ui/react-popover` (upstream uses
+ *    the unified `radix-ui` package, which this repo doesn't install), `cn`
+ *    from `@repo/ui/utils`.
+ * 2. `OVERLAY_LAYER` (src/lib/z-layers.ts) replaces upstream's `z-50` on
+ *    `PopoverContent`. Why: this package is published and can't assume it owns
+ *    the app's z-index scale — see #359.
+ * 3. `PopoverContent` takes a `container` prop, defaulted to
+ *    `useConfig().getContainer()`, and passes it to `PopoverPrimitive.Portal`
+ *    (upstream renders the portal with no `container`). Why: portalled content
+ *    must stay inside the themed wrapper, or dark mode and the CSS custom
+ *    properties don't reach it.
+ *
+ * The rest of what `shadcn add popover --diff` reports is Tailwind class
+ * ordering and prettier line-wrapping from this repo's formatter, not a patch.
+ */
 function Popover({
   ...props
 }: React.ComponentProps<typeof PopoverPrimitive.Root>) {
