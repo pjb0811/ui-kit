@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
-import { Switch } from '@repo/ui';
+import { Config, Switch } from '@repo/ui';
 import { cn } from '@repo/ui/utils';
 
 const meta: Meta<typeof Switch> = {
@@ -12,7 +12,7 @@ const meta: Meta<typeof Switch> = {
   argTypes: {
     size: {
       control: { type: 'select' },
-      options: ['medium', 'small'],
+      options: ['small', 'middle', 'large', 'medium'],
     },
     disabled: {
       control: { type: 'boolean' },
@@ -58,4 +58,25 @@ export const WithChildren: Story = {
     checkedChildren: 'ON',
     unCheckedChildren: 'OFF',
   },
+};
+
+// The three steps of the shared `ComponentSize` scale.
+export const Sizes: Story = {
+  render: () => (
+    <div className="flex items-center gap-6">
+      <Switch size="small" defaultChecked />
+      <Switch size="middle" defaultChecked />
+      <Switch size="large" defaultChecked />
+    </div>
+  ),
+};
+
+// With no explicit `size`, `Switch` inherits the nearest `Config`'s
+// `componentSize` (#350) — the same contract `Button` and `Space` follow.
+export const WithConfig: Story = {
+  render: () => (
+    <Config componentSize="large">
+      <Switch defaultChecked />
+    </Config>
+  ),
 };
