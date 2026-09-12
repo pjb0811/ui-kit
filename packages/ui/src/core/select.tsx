@@ -10,6 +10,25 @@ import { cn } from '@repo/ui/utils';
 
 import { OVERLAY_LAYER } from '../lib/z-layers';
 
+/*
+ * Vendored from shadcn's `new-york-v4` select registry entry.
+ *
+ * Local patches — re-apply these after any `shadcn add select`:
+ * 1. Imports: `SelectPrimitive` from `@radix-ui/react-select` (upstream uses
+ *    the unified `radix-ui` package, which this repo doesn't install), `cn`
+ *    from `@repo/ui/utils`.
+ * 2. `OVERLAY_LAYER` (src/lib/z-layers.ts) replaces upstream's `z-50` on
+ *    `SelectContent`. Why: this package is published and can't assume it owns
+ *    the app's z-index scale — see #359.
+ * 3. `SelectContent` takes a `container` prop, defaulted to
+ *    `useConfig().getContainer()`, and passes it to `SelectPrimitive.Portal`
+ *    (upstream renders the portal with no `container`). Why: portalled content
+ *    must stay inside the themed wrapper, or dark mode and the CSS custom
+ *    properties don't reach it.
+ *
+ * The rest of what `shadcn add select --diff` reports is Tailwind class
+ * ordering and prettier line-wrapping from this repo's formatter, not a patch.
+ */
 function Select({
   ...props
 }: React.ComponentProps<typeof SelectPrimitive.Root>) {
