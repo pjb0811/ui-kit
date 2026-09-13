@@ -23,7 +23,6 @@
 // `lint-and-build` path — see `.github/workflows/core-drift.yml`. Run advisory
 // by default (exit 0); pass `--enforce` to exit non-zero when any component is
 // behind upstream.
-
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -44,9 +43,7 @@ const update = process.argv.includes('--update');
 // Strip `/* */` and `//` comments without touching string contents. Good
 // enough for these files — none embed comment markers inside a string literal.
 const stripComments = src =>
-  src
-    .replace(/\/\*[\s\S]*?\*\//g, ' ')
-    .replace(/(^|[^:])\/\/.*$/gm, '$1 ');
+  src.replace(/\/\*[\s\S]*?\*\//g, ' ').replace(/(^|[^:])\/\/.*$/gm, '$1 ');
 
 const normalise = src => {
   let s = stripComments(src);
@@ -107,6 +104,7 @@ const BASE_UI_COMPONENTS = new Set([
   'popover',
   'radio-group',
   'separator',
+  'select',
   'slider',
   'switch',
 ]);
@@ -133,13 +131,21 @@ for (const name of components) {
   try {
     const res = await fetch(REGISTRY(name));
     if (!res.ok) {
-      results.push({ name, status: 'no-upstream', detail: `HTTP ${res.status}` });
+      results.push({
+        name,
+        status: 'no-upstream',
+        detail: `HTTP ${res.status}`,
+      });
       continue;
     }
     const json = await res.json();
     upstream = (json.files ?? []).map(f => f.content).join('\n');
     if (!upstream) {
-      results.push({ name, status: 'no-upstream', detail: 'empty registry entry' });
+      results.push({
+        name,
+        status: 'no-upstream',
+        detail: 'empty registry entry',
+      });
       continue;
     }
   } catch (e) {
@@ -172,7 +178,9 @@ const label = {
   error: `${RED}error${RESET}`,
 };
 
-console.log(`\nCore drift vs shadcn new-york-v4 (${components.length} components)\n`);
+console.log(
+  `\nCore drift vs shadcn new-york-v4 (${components.length} components)\n`,
+);
 
 for (const r of results) {
   console.log(`  ${r.name.padEnd(16)} ${label[r.status]}`);
@@ -206,12 +214,17 @@ const RANK = { 'in-sync': 0, 'local-additions': 1, 'upstream-ahead': 2 };
 const snapshot = Object.fromEntries(
   results
     .filter(r => r.status in RANK)
-    .map(r => [r.name, { status: r.status, behind: [...(r.behind ?? [])].sort() }]),
+    .map(r => [
+      r.name,
+      { status: r.status, behind: [...(r.behind ?? [])].sort() },
+    ]),
 );
 
 if (update) {
   fs.writeFileSync(SNAPSHOT_PATH, `${JSON.stringify(snapshot, null, 2)}\n`);
-  console.log(`✓ Wrote baseline snapshot (${Object.keys(snapshot).length} components).\n`);
+  console.log(
+    `✓ Wrote baseline snapshot (${Object.keys(snapshot).length} components).\n`,
+  );
   process.exit(0);
 }
 
@@ -236,7 +249,9 @@ for (const [name, cur] of Object.entries(snapshot)) {
   }
   const newlyBehind = cur.behind.filter(t => !base.behind.includes(t));
   if (newlyBehind.length) {
-    regressions.push(`${name}: new upstream-only tokens — ${newlyBehind.join(' ')}`);
+    regressions.push(
+      `${name}: new upstream-only tokens — ${newlyBehind.join(' ')}`,
+    );
   }
 }
 

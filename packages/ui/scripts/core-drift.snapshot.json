@@ -26,18 +26,11 @@
   },
   "dialog": {
     "status": "upstream-ahead",
-    "behind": [
-      "outline",
-      "true",
-      "z-50"
-    ]
+    "behind": ["outline", "true", "z-50"]
   },
   "drawer": {
     "status": "upstream-ahead",
-    "behind": [
-      "w-[100px]",
-      "z-50"
-    ]
+    "behind": ["w-[100px]", "z-50"]
   },
   "field": {
     "status": "local-additions",
@@ -54,12 +47,6 @@
   "resizable": {
     "status": "in-sync",
     "behind": []
-  },
-  "select": {
-    "status": "upstream-ahead",
-    "behind": [
-      "z-50"
-    ]
   },
   "skeleton": {
     "status": "in-sync",
