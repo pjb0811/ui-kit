@@ -18,7 +18,7 @@ const sizeConfig = {
     track: 'h-6! w-10!',
     handle: 'size-5!',
     handleChecked:
-      'data-[state=unchecked]:left-0.5 data-[state=checked]:left-[calc(100%-22px)]',
+      'data-unchecked:left-0.5 data-checked:left-[calc(100%-22px)]',
     fontSize: 'text-[10px]',
     marginChecked: 'mr-6 ml-1.5',
     marginUnchecked: 'mr-1.5 ml-6',
@@ -28,7 +28,7 @@ const sizeConfig = {
     track: 'h-8! w-12!',
     handle: 'size-6!',
     handleChecked:
-      'data-[state=unchecked]:left-0.5 data-[state=checked]:left-[calc(100%-26px)]',
+      'data-unchecked:left-0.5 data-checked:left-[calc(100%-26px)]',
     fontSize: 'text-xs',
     marginChecked: 'mr-7 ml-2',
     marginUnchecked: 'mr-2 ml-7',
@@ -38,15 +38,17 @@ const sizeConfig = {
     track: 'h-10! w-16!',
     handle: 'size-8!',
     handleChecked:
-      'data-[state=unchecked]:left-0.5 data-[state=checked]:left-[calc(100%-34px)]',
+      'data-unchecked:left-0.5 data-checked:left-[calc(100%-34px)]',
     fontSize: 'text-sm',
     marginChecked: 'mr-9 ml-2.5',
     marginUnchecked: 'mr-2.5 ml-9',
   },
 } satisfies Record<ComponentSize, unknown>;
 
+// Base UI's Switch renders a `<span>` (plus a hidden `<input>`), not the
+// `<button>` Radix used — so the forwarded host props are span-based now.
 export interface Props extends Omit<
-  React.ComponentPropsWithoutRef<'button'>,
+  React.ComponentPropsWithoutRef<'span'>,
   'onChange'
 > {
   classNames?: {

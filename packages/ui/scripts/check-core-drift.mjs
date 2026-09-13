@@ -105,6 +105,7 @@ const BASE_UI_COMPONENTS = new Set([
   'progress',
   'separator',
   'slider',
+  'switch',
 ]);
 
 const components = fs
