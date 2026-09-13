@@ -85,10 +85,6 @@
       "z-50"
     ]
   },
-  "separator": {
-    "status": "in-sync",
-    "behind": []
-  },
   "skeleton": {
     "status": "in-sync",
     "behind": []

@@ -99,10 +99,14 @@ const tokenSet = src =>
 
 const diff = (a, b) => [...a].filter(t => !b.has(t));
 
+// Migrated primitives own their styling and no longer track shadcn (#375).
+const BASE_UI_COMPONENTS = new Set(['separator']);
+
 const components = fs
   .readdirSync(CORE_DIR)
   .filter(f => f.endsWith('.tsx'))
   .map(f => f.replace(/\.tsx$/, ''))
+  .filter(name => !BASE_UI_COMPONENTS.has(name))
   .sort();
 
 const GREEN = '\x1b[32m';
