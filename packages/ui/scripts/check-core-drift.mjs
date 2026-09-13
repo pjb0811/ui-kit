@@ -103,6 +103,7 @@ const diff = (a, b) => [...a].filter(t => !b.has(t));
 const BASE_UI_COMPONENTS = new Set([
   'checkbox',
   'progress',
+  'radio-group',
   'separator',
   'slider',
   'switch',

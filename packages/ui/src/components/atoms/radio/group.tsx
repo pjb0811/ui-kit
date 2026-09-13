@@ -2,8 +2,8 @@
 
 import { useId } from 'react';
 
+import { Radio as RadioPrimitive } from '@base-ui/react/radio';
 import { useControllableState } from '@jbpark/use-hooks';
-import * as RadioGroupPrimitive from '@radix-ui/react-radio-group';
 
 import { cn } from '@repo/ui/utils';
 
@@ -77,10 +77,10 @@ const RadioGroup = ({
     setValue(optionValue);
   };
 
-  // A single Radix radiogroup root owns every option so that arrow keys move
-  // focus across the whole group. `id` stays index-derived (for DOM
-  // id/label pairing), but Radix itself now addresses/submits items by
-  // their real (stringified) `value` — see radio.tsx.
+  // A single Base UI RadioGroup root owns every option so that arrow keys
+  // move focus across the whole group. `id` stays index-derived (for DOM
+  // id/label pairing), but Base UI itself addresses/submits items by their
+  // real (stringified) `value` — see radio.tsx.
   const baseId = useId();
   const getOptionId = (index: number) => `${baseId}-${index}`;
   const checkedItemValue = value === undefined ? '' : String(value);
@@ -120,47 +120,53 @@ const RadioGroup = ({
             className={cn('m-0 flex', classNames?.wrapper)}
           >
             {isButton ? (
-              // `asChild` gives the Button real radio semantics (role,
+              // `render` gives the Button real radio semantics (role,
               // aria-checked, roving tabindex, arrow-key nav, click/keyboard
               // selection via the shared Core's onValueChange below) instead
-              // of a plain list of buttons with none of that. Uses the Radix
-              // primitive directly (not `core/RadioGroupItem`) so that core
-              // stays upstream-verbatim with no `asChild` branch (#361); the
-              // `data-slot` matches what the default item emits.
-              <RadioGroupPrimitive.Item
-                asChild
+              // of a plain list of buttons with none of that. Base UI has no
+              // `asChild`; its `render` prop merges the primitive's props onto
+              // the Button element. Uses the Radio primitive directly (not
+              // `core/RadioGroupItem`) so the core stays a plain default item;
+              // the `data-slot` matches what that item emits.
+              <RadioPrimitive.Root
                 data-slot="radio-group-item"
                 value={String(item.value)}
                 disabled={disabled || item.disabled}
-              >
-                <Button
-                  variant={checked ? buttonStyle : 'outlined'}
-                  size={size}
-                  disabled={disabled || item.disabled}
-                  className={cn(
-                    // The `solid` variant (the checked item, by default)
-                    // renders no border at all while `outlined` (every
-                    // unchecked item) renders a 1px one — reserving the
-                    // border unconditionally keeps every option's box the
-                    // same size regardless of which variant it's in.
-                    'rounded-none border',
-                    checked &&
-                      (buttonStyle === 'outlined'
-                        ? 'border-primary'
-                        : 'border-transparent'),
-                    index === 0 &&
-                      (orientation === 'vertical'
-                        ? 'rounded-t-lg'
-                        : 'rounded-l-lg'),
-                    index === options.length - 1 &&
-                      (orientation === 'vertical'
-                        ? 'rounded-b-lg'
-                        : 'rounded-r-lg'),
-                  )}
-                >
-                  {item.label}
-                </Button>
-              </RadioGroupPrimitive.Item>
+                // The Button below renders a real `<button>`, so tell Base UI
+                // it's a native button — otherwise `useButton` synthesises
+                // Enter/Space activation for a non-native element and would
+                // double-handle keyboard selection.
+                nativeButton
+                render={
+                  <Button
+                    variant={checked ? buttonStyle : 'outlined'}
+                    size={size}
+                    disabled={disabled || item.disabled}
+                    className={cn(
+                      // The `solid` variant (the checked item, by default)
+                      // renders no border at all while `outlined` (every
+                      // unchecked item) renders a 1px one — reserving the
+                      // border unconditionally keeps every option's box the
+                      // same size regardless of which variant it's in.
+                      'rounded-none border',
+                      checked &&
+                        (buttonStyle === 'outlined'
+                          ? 'border-primary'
+                          : 'border-transparent'),
+                      index === 0 &&
+                        (orientation === 'vertical'
+                          ? 'rounded-t-lg'
+                          : 'rounded-l-lg'),
+                      index === options.length - 1 &&
+                        (orientation === 'vertical'
+                          ? 'rounded-b-lg'
+                          : 'rounded-r-lg'),
+                    )}
+                  >
+                    {item.label}
+                  </Button>
+                }
+              />
             ) : (
               <Radio
                 id={getOptionId(index)}
