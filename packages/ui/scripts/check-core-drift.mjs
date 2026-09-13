@@ -100,7 +100,7 @@ const tokenSet = src =>
 const diff = (a, b) => [...a].filter(t => !b.has(t));
 
 // Migrated primitives own their styling and no longer track shadcn (#375).
-const BASE_UI_COMPONENTS = new Set(['separator']);
+const BASE_UI_COMPONENTS = new Set(['progress', 'separator']);
 
 const components = fs
   .readdirSync(CORE_DIR)
