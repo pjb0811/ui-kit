@@ -28,12 +28,6 @@
       "type"
     ]
   },
-  "checkbox": {
-    "status": "upstream-ahead",
-    "behind": [
-      "rounded-[4px]"
-    ]
-  },
   "dialog": {
     "status": "upstream-ahead",
     "behind": [
