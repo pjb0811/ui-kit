@@ -79,16 +79,6 @@
     "status": "in-sync",
     "behind": []
   },
-  "slider": {
-    "status": "upstream-ahead",
-    "behind": [
-      "?",
-      "_values",
-      "_values.length",
-      "bg-muted",
-      "bg-white"
-    ]
-  },
   "switch": {
     "status": "local-additions",
     "behind": []

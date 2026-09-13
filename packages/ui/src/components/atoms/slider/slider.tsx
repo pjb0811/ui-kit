@@ -46,8 +46,8 @@ const Slider = ({
   ...props
 }: Props) => {
   // A `number[]` value/defaultValue means the consumer wants a range; a bare
-  // `number` means a single thumb. Radix works in `number[]` throughout, so we
-  // normalise on the way in and hand the original shape back through `onChange`.
+  // `number` means a single thumb. Normalize internally and hand the original
+  // shape back through `onChange`.
   const isRange = Array.isArray(_value ?? defaultValue);
 
   const [value, onChange] = useControllableState<number[]>({

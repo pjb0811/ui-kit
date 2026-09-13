@@ -66,3 +66,10 @@ export const Stepped: Story = {
     step: 10,
   },
 };
+
+export const Vertical: Story = {
+  args: {
+    defaultValue: 40,
+    orientation: 'vertical',
+  },
+};
