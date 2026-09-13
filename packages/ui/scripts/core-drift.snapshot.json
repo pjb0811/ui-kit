@@ -79,10 +79,6 @@
     "status": "in-sync",
     "behind": []
   },
-  "switch": {
-    "status": "local-additions",
-    "behind": []
-  },
   "textarea": {
     "status": "in-sync",
     "behind": []
