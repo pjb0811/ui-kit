@@ -27,3 +27,10 @@ export const Default: Story = {
     value: 50,
   },
 };
+
+export const Vertical: Story = {
+  args: {
+    value: 50,
+    direction: 'vertical',
+  },
+};

@@ -21,7 +21,6 @@ const Progress = ({
   ...props
 }: Props) => {
   const isHorizontal = direction === 'horizontal';
-  const dimension = isHorizontal ? 'width' : 'height';
   const normalizedValue = Number.isFinite(value)
     ? Math.min(100, Math.max(0, value))
     : 0;
@@ -37,11 +36,11 @@ const Progress = ({
         //
       )}
       barClassName={cn('flex-none', classNames?.bar)}
-      barStyle={{
-        transform: 'none',
-        [dimension]: `${normalizedValue}%`,
-        //
-      }}
+      barStyle={
+        isHorizontal
+          ? { width: `${normalizedValue}%` }
+          : { width: '100%', height: `${normalizedValue}%` }
+      }
     />
   );
 };
