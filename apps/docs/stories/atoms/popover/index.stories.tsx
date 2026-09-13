@@ -1,6 +1,8 @@
+import { useState } from 'react';
+
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
-import { Button, Popover } from '@repo/ui';
+import { Button, Config, DatePicker, Popover } from '@repo/ui';
 import { cn } from '@repo/ui/utils';
 
 const meta: Meta<typeof Popover> = {
@@ -65,4 +67,58 @@ export const Default: Story = {
     ),
     children: <Button>Open Popover</Button>,
   },
+};
+
+export const Controlled: Story = {
+  render: function ControlledPopover() {
+    const [open, setOpen] = useState(false);
+
+    return (
+      <Popover
+        title="Controlled popover"
+        open={open}
+        onOpenChange={setOpen}
+        content={<Button onClick={() => setOpen(false)}>Close popup</Button>}
+      >
+        <Button>Toggle controlled</Button>
+      </Popover>
+    );
+  },
+};
+
+export const Disabled: Story = {
+  args: {
+    ...Default.args,
+    children: <Button disabled>Disabled trigger</Button>,
+  },
+};
+
+export const NonButtonTrigger: Story = {
+  args: {
+    ...Default.args,
+    children: <span>Open from span</span>,
+  },
+};
+
+export const ThemedDatePicker: Story = {
+  render: () => (
+    <Config theme={{ dark: 'dark' }}>
+      <DatePicker />
+    </Config>
+  ),
+};
+
+export const Collision: Story = {
+  parameters: { layout: 'fullscreen' },
+  render: () => (
+    <div className="p-2">
+      <Popover
+        placement="top"
+        title="Flipped popup"
+        content="Near the top edge"
+      >
+        <Button>Open near edge</Button>
+      </Popover>
+    </div>
+  ),
 };

@@ -51,12 +51,6 @@
     "status": "in-sync",
     "behind": []
   },
-  "popover": {
-    "status": "upstream-ahead",
-    "behind": [
-      "z-50"
-    ]
-  },
   "resizable": {
     "status": "in-sync",
     "behind": []
