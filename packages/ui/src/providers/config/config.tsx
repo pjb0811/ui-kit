@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { DirectionProvider } from '@radix-ui/react-direction';
+import { DirectionProvider } from '@base-ui/react/direction-provider';
 
 import { cn } from '@repo/ui/utils';
 
@@ -250,19 +250,15 @@ const Config = ({
     </Context.Provider>
   );
 
-  // DirectionProvider is Radix's own mechanism (@radix-ui/react-direction)
-  // for propagating `dir` to every primitive that calls its useDirection()
-  // internally — Select, Menu (Dropdown/Menu), Accordion (Collapse),
-  // RadioGroup, ScrollArea all pick up RTL automatically this way, no
-  // per-component wiring needed. Only wraps when this Config's own
+  // DirectionProvider propagates `direction` to Base UI primitives such as
+  // Select, Accordion, and RadioGroup. Only wraps when this Config's own
   // `direction` prop is set (not the merely-inherited resolved value) —
   // context already cascades on its own, so re-wrapping at every nested
   // Config that doesn't override direction would just be redundant.
-  // Components with hardcoded LTR-only layout logic that Radix's Direction
-  // context doesn't reach (Popover placement, Splitter, Sider, Drawer)
-  // aren't covered by this and would need dedicated follow-up work.
+  // Components with hardcoded LTR-only layout logic (Popover placement,
+  // Splitter, Sider, Drawer) still need dedicated handling.
   return direction ? (
-    <DirectionProvider dir={direction}>{content}</DirectionProvider>
+    <DirectionProvider direction={direction}>{content}</DirectionProvider>
   ) : (
     content
   );

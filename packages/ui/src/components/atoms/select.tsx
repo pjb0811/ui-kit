@@ -45,8 +45,20 @@ const Select = ({
   onChange,
   ...props
 }: Props) => {
+  const items = options?.flatMap(option =>
+    isGroup(option) ? option.options : option,
+  );
+
   return (
-    <Core onValueChange={onChange} {...props}>
+    <Core
+      items={items}
+      onValueChange={value => {
+        if (value !== null) {
+          onChange?.(value);
+        }
+      }}
+      {...props}
+    >
       <SelectTrigger className={cn('w-full max-w-48', className)}>
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
