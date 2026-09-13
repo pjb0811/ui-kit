@@ -2,32 +2,31 @@
 
 import * as React from 'react';
 
-import * as AccordionPrimitive from '@radix-ui/react-accordion';
+import {
+  Accordion as AccordionPrimitive,
+  type AccordionRoot,
+} from '@base-ui/react/accordion';
 import { ChevronDownIcon } from 'lucide-react';
 
 import { cn } from '@repo/ui/utils';
 
 /*
- * Vendored from shadcn's `new-york-v4` accordion registry entry.
+ * Base UI primitives with repo-owned styling; no longer vendored from shadcn.
  *
- * Local patches — re-apply these after any `shadcn add accordion`:
- * 1. Import `cn` from `@repo/ui/utils` (upstream uses its `cn` alias) and
- *    `AccordionPrimitive` from `@radix-ui/react-accordion` (upstream uses the
- *    unified `radix-ui` package, which this repo doesn't install).
- * 2. `AccordionTrigger` gains `CustomTriggerProps` with `expandIcon`, which
- *    *replaces* the default `ChevronDownIcon` (`{expandIcon || <ChevronDown/>}`).
- *
- * Why this stays a local patch rather than moving to `molecules/collapse`
- * (#361): `expandIcon` replaces the built-in chevron, but a verbatim trigger
- * always renders that chevron. Reproducing a replacement through the verbatim
- * primitive would mean hiding the chevron and re-injecting an icon via
- * children, which changes the DOM and the `[&[data-state=open]>svg]` rotation
- * target. Irreducibly structural (like #363). The rest of
- * `shadcn add accordion --diff` is class ordering / prettier wrapping.
+ * Notes on the Radix → Base UI shape change:
+ * - Radix's `Accordion.Content` becomes Base UI's `Accordion.Panel`.
+ * - `AccordionTrigger` keeps `expandIcon`, which *replaces* the default
+ *   `ChevronDownIcon`. The open-state rotation targets Base UI's
+ *   `data-panel-open` attribute on the trigger (Radix used `data-state=open`).
+ * - The Radix-only `data-[state=…]:animate-accordion-*` classes are dropped:
+ *   they targeted Radix's `data-state` and relied on keyframes this package
+ *   never defined, so they were inert. Base UI mounts/unmounts the panel.
  */
-function Accordion({
-  ...props
-}: React.ComponentProps<typeof AccordionPrimitive.Root>) {
+// Base UI's accordion is generic over the item value; this library always
+// addresses items by their stringified key (see molecules/collapse), so pin it
+// to `string` — otherwise `React.ComponentProps` erases the generic to
+// `unknown` and `value`/`onValueChange` stop lining up with the string callers.
+function Accordion({ ...props }: AccordionRoot.Props<string>) {
   return <AccordionPrimitive.Root data-slot="accordion" {...props} />;
 }
 
@@ -63,8 +62,8 @@ function AccordionTrigger({
           `focus-visible:border-ring focus-visible:ring-ring/50 flex flex-1
           items-start justify-between gap-4 rounded-md py-4 text-left text-sm
           font-medium transition-all outline-none hover:underline
-          focus-visible:ring-[3px] disabled:pointer-events-none
-          disabled:opacity-50 [&[data-state=open]>svg]:rotate-180`,
+          focus-visible:ring-[3px] data-disabled:pointer-events-none
+          data-disabled:opacity-50 [&[data-panel-open]>svg]:rotate-180`,
           className,
         )}
         {...props}
@@ -85,16 +84,15 @@ function AccordionContent({
   className,
   children,
   ...props
-}: React.ComponentProps<typeof AccordionPrimitive.Content>) {
+}: React.ComponentProps<typeof AccordionPrimitive.Panel>) {
   return (
-    <AccordionPrimitive.Content
+    <AccordionPrimitive.Panel
       data-slot="accordion-content"
-      className="data-[state=closed]:animate-accordion-up
-        data-[state=open]:animate-accordion-down overflow-hidden text-sm"
+      className="overflow-hidden text-sm"
       {...props}
     >
       <div className={cn('pt-0 pb-4', className)}>{children}</div>
-    </AccordionPrimitive.Content>
+    </AccordionPrimitive.Panel>
   );
 }
 

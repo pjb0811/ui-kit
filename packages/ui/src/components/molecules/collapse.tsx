@@ -46,25 +46,18 @@ const Collapse = ({
 }: Props) => {
   const controlled = _activeKey !== undefined;
 
-  const accordionProps = accordion
-    ? {
-        type: 'single' as const,
-        onValueChange: (value: string) => {
-          _onChange?.(value ? [value] : []);
-        },
-        ...(controlled
-          ? { value: `${_activeKey?.[0] ?? ''}` }
-          : { defaultValue: `${defaultActiveKey?.[0] ?? ''}` }),
-      }
-    : {
-        type: 'multiple' as const,
-        onValueChange: (values: string[]) => {
-          _onChange?.(values);
-        },
-        ...(controlled
-          ? { value: _activeKey?.map(key => `${key}`) }
-          : { defaultValue: defaultActiveKey?.map(key => `${key}`) }),
-      };
+  // Base UI's accordion has no `type` and always models the open set as an
+  // array; `multiple` (default false) is the only single-vs-multiple switch.
+  // `accordion` here means "one panel open at a time", so `multiple = !accordion`.
+  const accordionProps = {
+    multiple: !accordion,
+    onValueChange: (values: string[]) => {
+      _onChange?.(values);
+    },
+    ...(controlled
+      ? { value: (_activeKey ?? []).map(key => `${key}`) }
+      : { defaultValue: (defaultActiveKey ?? []).map(key => `${key}`) }),
+  };
 
   return (
     <Accordion {...props} className={className} {...accordionProps}>
