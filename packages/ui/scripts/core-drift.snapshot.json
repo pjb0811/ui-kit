@@ -61,10 +61,6 @@
       "z-50"
     ]
   },
-  "radio-group": {
-    "status": "local-additions",
-    "behind": []
-  },
   "resizable": {
     "status": "in-sync",
     "behind": []

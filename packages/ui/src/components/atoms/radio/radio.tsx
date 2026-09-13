@@ -14,9 +14,13 @@ import { type OptionValue } from './group';
 const { RadioGroup: Core, RadioGroupItem: Item } = radio;
 const { Field, FieldLabel } = field;
 
+// Spreads onto the wrapper `<div>`, so the host props are div-based. (Base UI's
+// `RadioGroup` — `Core` here — types `style`/`className` as state callbacks,
+// which a native `<div>` can't take; the meaningful control props below are
+// re-declared explicitly anyway.)
 export interface Props extends Omit<
-  React.ComponentPropsWithoutRef<typeof Core>,
-  'onChange' | 'value'
+  React.ComponentPropsWithoutRef<'div'>,
+  'onChange'
 > {
   placement?: 'left' | 'right';
   defaultChecked?: boolean;
@@ -28,7 +32,7 @@ export interface Props extends Omit<
   /**
    * Id shared by the underlying control and its label. Generated internally
    * when omitted. `RadioGroup` passes a deterministic id so that the group's
-   * single Radix root can address each option.
+   * single Base UI root can address each option.
    */
   id?: string;
   icons?: Partial<{ checked: React.ReactNode; unchecked: React.ReactNode }>;
@@ -57,9 +61,10 @@ const Radio = ({
 
   const generatedId = useId();
   const id = _id ?? generatedId;
-  // Radix identifies/submits an item by its `value`, which is separate from
-  // `id` (used only for the DOM id/label pairing) — stringified since Radix
-  // requires a string, while `OptionValue` also allows number/boolean.
+  // Base UI identifies/submits an item by its `value`, which is separate
+  // from `id` (used only for the DOM id/label pairing) — stringified since
+  // the group value is a string, while `OptionValue` also allows
+  // number/boolean.
   const itemValue = String(_value);
   const grouped = useContext(RadioGroupContext);
 
@@ -85,15 +90,15 @@ const Radio = ({
   );
 
   // When rendered inside a `RadioGroup`, the group owns the single shared
-  // `Core` (Radix radiogroup root) so that arrow keys move focus across every
-  // option. A standalone `Radio` still has to provide its own root.
+  // `Core` (Base UI RadioGroup root) so that arrow keys move focus across
+  // every option. A standalone `Radio` still has to provide its own root.
   const renderField = (
     <Field
       orientation="horizontal"
       className={cn('flex gap-2', placement === 'right' && 'flex-row-reverse')}
       data-disabled={disabled}
     >
-      <Item value={itemValue} id={id} checked={checked} disabled={disabled} />
+      <Item value={itemValue} id={id} disabled={disabled} />
       <FieldLabel htmlFor={id} className={cursorClassName}>
         {children}
       </FieldLabel>
