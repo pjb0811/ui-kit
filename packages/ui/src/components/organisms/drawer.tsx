@@ -53,7 +53,6 @@ export interface Props {
   size?: 'small' | 'medium' | 'large' | 'full' | string;
   maskClosable?: boolean;
   handlebar?: boolean;
-  draggable?: boolean;
   rounded?: boolean;
   mask?: boolean;
   className?: string;
@@ -111,7 +110,6 @@ const Drawer = ({
   size = 'medium',
   maskClosable = true,
   handlebar = true,
-  draggable = false,
   rounded = false,
   mask = true,
   className,
@@ -157,9 +155,11 @@ const Drawer = ({
   return (
     <DrawerCore
       open={open}
-      direction={direction}
-      handleOnly={!draggable}
-      container={container}
+      // antd's mask ⇒ Base UI's modal (focus trap + scroll lock); maskClosable
+      // gates outside-press dismissal at the root, replacing vaul's
+      // Content-level onPointerDownOutside handler.
+      modal={mask}
+      disablePointerDismissal={!maskClosable}
       onOpenChange={open => {
         if (!open) {
           onClose();
@@ -168,6 +168,8 @@ const Drawer = ({
       {...props}
     >
       <DrawerContent
+        direction={direction}
+        container={container}
         className={cn(
           'border-none outline-none',
           rounded ? ROUNDED_CLASSES[direction] : 'rounded-none!',
@@ -177,11 +179,6 @@ const Drawer = ({
         )}
         handlebar={handlebar}
         mask={mask}
-        onPointerDownOutside={event => {
-          if (!maskClosable) {
-            event.preventDefault();
-          }
-        }}
         classNames={{
           mask: classNames?.mask || '',
           handlebar: classNames?.handlebar || '',
