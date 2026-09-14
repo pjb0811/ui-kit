@@ -150,6 +150,17 @@
 
 @layer base {
   /*
+   * Base UI portals are appended beside the application root. Marking that
+   * root with `data-ui-root` gives the app its own stacking context, so portal
+   * siblings paint above page chrome regardless of descendant z-index values.
+   * This is opt-in because a component library cannot safely choose or wrap a
+   * host application's layout root.
+   */
+  [data-ui-root] {
+    isolation: isolate;
+  }
+
+  /*
    * Border/outline color defaults. Tailwind v4 defaults `border`/`outline`
    * color to `currentColor`; this restores the design-system tokens so a bare
    * `border`/`outline` utility on a component renders in the theme color. Kept

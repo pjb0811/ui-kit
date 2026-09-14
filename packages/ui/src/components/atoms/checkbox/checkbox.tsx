@@ -118,9 +118,8 @@ const Checkbox = ({
         value={itemValue}
         checked={checked}
         disabled={disabled}
-        // `rounded-sm` used to live on the vendored primitive; it moved here so
-        // `core/checkbox` stays upstream-verbatim (`rounded-[4px]`). Same radius
-        // (Tailwind `rounded-sm` == 4px), and tailwind-merge lets it win (#361).
+        // Keep the atom's established 4px radius after the Base UI migration;
+        // tailwind-merge lets this override the core primitive's radius (#361).
         className={cn('rounded-sm', cursorClassName)}
         onCheckedChange={onChange}
       />

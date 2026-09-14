@@ -129,13 +129,19 @@ import '@jbpark/ui-kit/style.css';
 
 function App() {
   return (
-    <Layout>
-      <Typography.Title>Hello!</Typography.Title>
-      <Button variant="primary">Click me</Button>
-    </Layout>
+    <div data-ui-root>
+      <Layout>
+        <Typography.Title>Hello!</Typography.Title>
+        <Button variant="primary">Click me</Button>
+      </Layout>
+    </div>
   );
 }
 ```
+
+Put `data-ui-root` on your application layout root. The included stylesheet
+applies `isolation: isolate` there so Base UI portals render above page content
+without competing with z-index values inside the app.
 
 ### Import Individual Components
 
@@ -210,12 +216,7 @@ import '@jbpark/ui-kit/style.css';
 
 ### UI Libraries
 
-- **Radix UI** - Accessible headless UI components
-  - `@radix-ui/react-accordion` (1.2.12)
-  - `@radix-ui/react-dialog` (1.1.15)
-  - `@radix-ui/react-progress` (1.1.7)
-  - `@radix-ui/react-slot` (1.2.3)
-  - `@radix-ui/react-switch` (1.2.6)
+- **Base UI** - Accessible headless UI components
 - **Lucide React 0.542.0** - Icon library
 - **Motion 12.23.12** - Animation library
 - **Swiper 11.2.10** - Touch slider

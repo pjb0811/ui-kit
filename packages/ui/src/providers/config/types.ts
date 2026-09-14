@@ -122,7 +122,7 @@ export interface ContextValue {
   // see needsWrapper in config.tsx), or the parent Config's resolution.
   // Portal-based primitives (Dialog/Popover/Select/Drawer) call this as
   // their default `container` so themed/dark-mode content they render
-  // (via Radix/vaul portals to document.body by default) stays a DOM
+  // (via Base UI portals to document.body by default) stays a DOM
   // descendant of the themed wrapper instead of an unthemed sibling.
   // Returns undefined when nothing in the tree renders a wrapper, so
   // callers fall back to their own normal default (document.body).

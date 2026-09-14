@@ -32,7 +32,7 @@ const meta: Meta<typeof Container> = {
     padded: {
       control: { type: 'boolean' },
     },
-    asChild: {
+    render: {
       table: { disable: true },
     },
   },

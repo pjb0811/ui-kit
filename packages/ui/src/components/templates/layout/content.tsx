@@ -1,25 +1,30 @@
-import { Slot } from '@radix-ui/react-slot';
+'use client';
+
+import { useRender } from '@base-ui/react/use-render';
 
 import { cn } from '@repo/ui/utils';
 
 import { SiderRegistryContext } from './sider-context';
 
-export interface Props extends React.ComponentProps<'main'> {
-  asChild?: boolean;
+export interface Props extends Omit<
+  useRender.ComponentProps<'main'>,
+  'className'
+> {
+  className?: string;
 }
 
-const Content = ({ children, className, asChild = false, ...props }: Props) => {
+const Content = ({ children, className, render, ...props }: Props) => {
   // Only one <main> landmark should exist per page — a Layout nested
   // inside a page that already has its own <main> (or a Content nested
   // inside another Content) needs a way to opt out of rendering a second
-  // one. asChild + Slot (same pattern as core/button.tsx and
-  // core/badge.tsx) merges these props/classes onto the caller's own
-  // element instead.
-  const Comp = asChild ? Slot : 'main';
-
-  return (
-    <Comp
-      className={cn(
+  // one. Base UI's render contract merges these props/classes onto the
+  // caller's own element instead.
+  return useRender({
+    defaultTagName: 'main',
+    render,
+    props: {
+      ...props,
+      className: cn(
         'min-w-0 shrink grow basis-auto',
         // basis-auto (not basis-0) sizes Content from its actual content
         // height first, so flex-grow only adds extra space when content is
@@ -31,19 +36,14 @@ const Content = ({ children, className, asChild = false, ...props }: Props) => {
         // the Sider row's cross axis it's harmless since min-height there
         // governs stretch, not main-axis growth.
         className,
-      )}
-      {...props}
-    >
-      {/* Reset the registry to null so a `Sider` used inside `Content`
-          (e.g. a detail page's own sub-navigation) doesn't register
-          against the ancestor `Layout` and flip its axis to flex-row —
-          a genuinely nested `Layout` already gets its own fresh registry,
-          this only guards the "Sider with no intervening Layout" case. */}
-      <SiderRegistryContext.Provider value={null}>
-        {children}
-      </SiderRegistryContext.Provider>
-    </Comp>
-  );
+      ),
+      children: (
+        <SiderRegistryContext.Provider value={null}>
+          {children}
+        </SiderRegistryContext.Provider>
+      ),
+    },
+  });
 };
 
 export default Content;

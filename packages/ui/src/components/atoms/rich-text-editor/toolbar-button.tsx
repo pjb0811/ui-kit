@@ -11,12 +11,8 @@ export interface ToolbarButtonProps extends Omit<
 
 const ToolbarButton = ({ active, className, ...props }: ToolbarButtonProps) => (
   <Button
-    // Spread first: when this button sits inside a `Popover` trigger
-    // (`asChild`), Radix injects its own native `type="button"` onto us for
-    // form-submit safety — that's a different `type` than Button's own
-    // antd-style color/variant switch, and if it landed after these three,
-    // it would silently override `type="text"` and fall through to the
-    // `outlined` variant's border.
+    // Spread first so composition props cannot override Button's antd-style
+    // color/variant switch below.
     {...props}
     type="text"
     size="small"
