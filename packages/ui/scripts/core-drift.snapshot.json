@@ -24,10 +24,6 @@
       "type"
     ]
   },
-  "dialog": {
-    "status": "upstream-ahead",
-    "behind": ["outline", "true", "z-50"]
-  },
   "drawer": {
     "status": "upstream-ahead",
     "behind": ["w-[100px]", "z-50"]

@@ -113,6 +113,10 @@ const Modal = ({
           onCancel?.();
         }
       }}
+      // antd's `maskClosable` is a root-level dismissal concern in Base UI:
+      // blocking the outside (mask) press keeps the dialog open on backdrop
+      // click while Escape still closes it, matching the previous behaviour.
+      disablePointerDismissal={!resolvedMaskClosable}
       {...props}
     >
       <DialogContent
@@ -129,11 +133,6 @@ const Modal = ({
         closable={closable}
         closeIcon={closeIcon}
         container={container}
-        onPointerDownOutside={event => {
-          if (!resolvedMaskClosable) {
-            event.preventDefault();
-          }
-        }}
       >
         {/**
          * @todo [Dialog & AlertDialog] fix: can't get id correctly in shadow dom
@@ -283,12 +282,12 @@ const StaticModal = ({
 };
 
 // No `role`/`aria-modal` here — this element is only a mount point for the
-// imperative stack, not the dialog itself. Radix already renders its own
+// imperative stack, not the dialog itself. Base UI already renders its own
 // `role="dialog"`/`aria-modal="true"` on the actual `DialogContent` via
 // portal once a modal is open. Setting it here as well would (a) leave
 // `aria-modal="true"` on the page permanently, even with zero modals open,
 // hiding the rest of the document from screen readers, and (b) duplicate
-// Radix's own dialog role once one is open.
+// Base UI's own dialog role once one is open.
 const modalStack: ImperativeStack<StaticProps> =
   createImperativeStack<StaticProps>({
     createRootElement: () => {
