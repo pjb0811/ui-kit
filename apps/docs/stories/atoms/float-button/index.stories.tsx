@@ -11,7 +11,8 @@ const meta: Meta<typeof FloatButton> = {
   },
   argTypes: {
     icon: { table: { disable: true } },
-    asChild: { table: { disable: true } },
+    render: { table: { disable: true } },
+    nativeButton: { table: { disable: true } },
     block: { table: { disable: true } },
     loading: { type: 'boolean' },
   },

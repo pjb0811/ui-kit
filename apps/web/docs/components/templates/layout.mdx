@@ -4,6 +4,7 @@ title: Layout
 ---
 
 import DemoTheme from '@site/src/components/DemoTheme';
+
 import LayoutDemo from '../../../src/demo/layout-demo';
 
 # Layout
@@ -34,23 +35,23 @@ import { Layout } from '@jbpark/ui-kit';
 - **`Layout`** — the flex wrapper. The outermost one is `min-h-screen`; nested ones shrink to fit.
 - **`Layout.Header`** — `sticky` by default; also accepts `position="static" | "fixed"`.
 - **`Layout.Sider`** — a side panel, optionally `collapsible` with a breakpoint that auto-collapses.
-- **`Layout.Content`** — the `<main>` landmark; use `asChild` to avoid a duplicate `<main>` when nested.
+- **`Layout.Content`** — the `<main>` landmark; use `render={<section />}` to avoid a duplicate `<main>` when nested.
 - **`Layout.Footer`** — a full-width `<footer>`.
 
 ## Sider props
 
-| Prop               | Type                          | Default  |
-| ------------------ | ----------------------------- | -------- |
-| `width`            | `number \| string`            | `200`    |
-| `collapsedWidth`   | `number \| string`            | `80`     |
-| `collapsible`      | `boolean`                     | `false`  |
-| `collapsed`        | `boolean` (controlled)        | -        |
-| `defaultCollapsed` | `boolean`                     | `false`  |
-| `placement`        | `'left' \| 'right'`           | `'left'` |
-| `breakpoint`       | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl' \| '2xl'` | - |
-| `reverseArrow`     | `boolean`                     | `false`  |
-| `trigger`          | `ReactNode` (custom toggle)   | -        |
-| `onCollapse`       | `(collapsed: boolean) => void` | -       |
-| `onBreakpoint`     | `(broken: boolean) => void`   | -        |
+| Prop               | Type                                            | Default  |
+| ------------------ | ----------------------------------------------- | -------- |
+| `width`            | `number \| string`                              | `200`    |
+| `collapsedWidth`   | `number \| string`                              | `80`     |
+| `collapsible`      | `boolean`                                       | `false`  |
+| `collapsed`        | `boolean` (controlled)                          | -        |
+| `defaultCollapsed` | `boolean`                                       | `false`  |
+| `placement`        | `'left' \| 'right'`                             | `'left'` |
+| `breakpoint`       | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl' \| '2xl'` | -        |
+| `reverseArrow`     | `boolean`                                       | `false`  |
+| `trigger`          | `ReactNode` (custom toggle)                     | -        |
+| `onCollapse`       | `(collapsed: boolean) => void`                  | -        |
+| `onBreakpoint`     | `(broken: boolean) => void`                     | -        |
 
 `Header` takes `position`; all four sub-components forward the rest of their native element props.

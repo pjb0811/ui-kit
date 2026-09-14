@@ -35,14 +35,11 @@ export interface Props extends Omit<
     'default' | 'primary' | 'success' | 'warning' | 'danger' | PresetColor;
 }
 
-// Geometry, the focus/aria chassis and the svg sizing all come from
-// `core/badge` now (#278 ③ is reversed here — see the core membership rule in
-// CLAUDE.md). Tag pins the core `outline` variant because it supplies exactly
-// the neutral base Tag wants — a border plus `text-foreground` and the `[a&]`
-// hover treatment — and then repaints border/text/fill from the `--tag-*`
-// custom properties below. Pinning one core variant is deliberate and is why
-// the membership rule had to change; the alternative (absorbing the primitive)
-// is what left `core/badge` orphaned and three upstream releases stale.
+// Geometry, the focus/aria chassis and the svg sizing all come from the
+// repo-owned `core/badge`. Tag pins the core `outline` variant because it
+// supplies exactly the neutral base Tag wants — a border plus `text-foreground`
+// and the `[a&]` hover treatment — then repaints border/text/fill from the
+// `--tag-*` custom properties below.
 const CORE_VARIANT = 'outline';
 
 // Every colour — semantic states and shared presets alike — resolves from the

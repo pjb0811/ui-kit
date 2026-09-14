@@ -1,22 +1,13 @@
-import * as React from 'react';
+'use client';
 
-import { Slot } from '@radix-ui/react-slot';
+import { useRender } from '@base-ui/react/use-render';
 import { type VariantProps, cva } from 'class-variance-authority';
 
 import { cn } from '@repo/ui/utils';
 
-/**
- * Vendored from shadcn's `new-york-v4` badge registry entry.
- *
- * Two deliberate local adaptations, both of which must survive the next sync:
- * - upstream imports `Slot` from the unified `radix-ui` package; this repo
- *   installs the individual `@radix-ui/*` packages (13 of them) and has no
- *   `radix-ui` dependency, so the import stays on `@radix-ui/react-slot`.
- * - `cn` resolves through `@repo/ui/utils` rather than upstream's `cn` alias.
- *
- * Everything else is upstream verbatim, including the `rounded-full` /
- * `border-transparent` base and the `ghost` / `link` variants.
- */
+// Repo-owned styling seeded from shadcn's Base UI badge. Base UI has no badge
+// primitive, so useRender provides its `render` composition contract without
+// retaining Radix Slot as a one-off dependency.
 const badgeVariants = cva(
   `inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden
   rounded-full border border-transparent px-2 py-0.5 text-xs font-medium
@@ -45,27 +36,22 @@ const badgeVariants = cva(
   },
 );
 
-type Props = React.ComponentProps<'span'> &
+type Props = Omit<useRender.ComponentProps<'span'>, 'className'> &
   VariantProps<typeof badgeVariants> & {
-    asChild?: boolean;
+    className?: string;
   };
 
-function Badge({
-  className,
-  variant = 'default',
-  asChild = false,
-  ...props
-}: Props) {
-  const Comp = asChild ? Slot : 'span';
-
-  return (
-    <Comp
-      data-slot="badge"
-      data-variant={variant}
-      className={cn(badgeVariants({ variant }), className)}
-      {...props}
-    />
-  );
+function Badge({ className, variant = 'default', render, ...props }: Props) {
+  return useRender({
+    defaultTagName: 'span',
+    render,
+    props: {
+      'data-slot': 'badge',
+      'data-variant': variant,
+      className: cn(badgeVariants({ variant }), className),
+      ...props,
+    },
+  });
 }
 
 export { Badge, badgeVariants, type Props };

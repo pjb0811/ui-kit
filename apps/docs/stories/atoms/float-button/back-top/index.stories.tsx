@@ -10,7 +10,8 @@ const meta: Meta<typeof FloatButton.BackTop> = {
   },
   argTypes: {
     visibilityHeight: { control: 'number' },
-    asChild: { table: { disable: true } },
+    render: { table: { disable: true } },
+    nativeButton: { table: { disable: true } },
     icon: { table: { disable: true } },
     block: { table: { disable: true } },
     loading: { table: { disable: true } },

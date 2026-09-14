@@ -17,6 +17,10 @@
  */
 @import '@repo/ui/style.css';
 
+#__docusaurus {
+  isolation: isolate;
+}
+
 body {
   @apply bg-background text-foreground;
 }

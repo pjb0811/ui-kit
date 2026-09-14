@@ -43,7 +43,8 @@ const meta: Meta<typeof Button> = {
     layout: 'centered',
   },
   argTypes: {
-    asChild: { table: { disable: true } },
+    render: { table: { disable: true } },
+    nativeButton: { table: { disable: true } },
     icon: {
       options: Object.keys(icons),
       mapping: icons,

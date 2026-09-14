@@ -2,7 +2,6 @@
 
 import * as React from 'react';
 
-import { Slottable } from '@radix-ui/react-slot';
 import { LoaderCircle } from 'lucide-react';
 
 import { useConfig } from '@repo/ui/providers';
@@ -237,7 +236,7 @@ const Button = ({
   disabled,
   loading,
   danger,
-  asChild = false,
+  nativeButton = true,
   children,
   onMouseDown,
   ...props
@@ -307,7 +306,7 @@ const Button = ({
       // every colour/size class.
       variant={null}
       size={null}
-      asChild={asChild}
+      nativeButton={nativeButton}
       data-slot="button"
       data-variant={resolvedVariant}
       data-size={resolvedSize}
@@ -340,7 +339,7 @@ const Button = ({
         className,
         //
       )}
-      type={htmlType}
+      type={nativeButton ? htmlType : undefined}
       disabled={disabled || isLoading}
       aria-busy={isLoading}
       data-color={computedColor}
@@ -350,15 +349,7 @@ const Button = ({
       {...props}
     >
       {displayIcon}
-      {/*
-        A Button renders two children (the icon slot and the caller's content),
-        but Radix's Slot accepts multiple children only when exactly one is
-        marked `Slottable` — without this marker `asChild` threw
-        "Slot failed to slot onto its children" for *every* call, icon or not.
-        `Slottable` is a plain fragment when `asChild` is false, so the
-        non-asChild markup is unchanged.
-      */}
-      <Slottable>{children}</Slottable>
+      {children}
     </Core>
   );
 };

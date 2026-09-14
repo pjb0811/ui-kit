@@ -37,23 +37,26 @@
 //      data-slot="badge"; its slot is keyed by name now, so the registry is
 //      empty and waiting for the next component in that position.
 //
+//   5. render composition (#375): Button, Container, and Layout.Content must
+//      merge their props/classes/children onto a replacement element without
+//      leaking button-only attributes onto a non-button host.
+//
 // Run after `build`, via the css-stub loader (Swiper imports `.css`):
 //   node --import ./scripts/loaders/css-stub.mjs scripts/check-ssr-smoke.mjs
+import { createElement as h } from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
 
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { createElement as h } from 'react';
-import { renderToStaticMarkup } from 'react-dom/server';
-
-import * as ui from '../dist/index.mjs';
 // Subpath-only entries (#346). CodeEditor is published at ./CodeEditor and is
 // deliberately NOT in the root barrel — CodeMirror is an optional peer, and an
 // eager re-export would break `import { Button }` for consumers without it. The
 // loop over `ui` below therefore can't see it, so it's rendered explicitly:
 // otherwise the newest component would be the one component with no SSR gate.
 import * as codeEditor from '../dist/CodeEditor.mjs';
+import * as ui from '../dist/index.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const GLOBALS_CSS = path.join(__dirname, '..', 'src', 'globals.css');
@@ -75,7 +78,11 @@ const COMMON_CHASSIS = [
   'dark:aria-invalid:ring-destructive/40',
 ];
 const CHASSIS = {
-  Button: [...COMMON_CHASSIS, 'disabled:opacity-50', 'disabled:pointer-events-none'],
+  Button: [
+    ...COMMON_CHASSIS,
+    'disabled:opacity-50',
+    'disabled:pointer-events-none',
+  ],
   Tag: [...COMMON_CHASSIS],
 };
 
@@ -109,11 +116,17 @@ const fixtures = {
   Marquees: { children: h('span', null, 'scrolling') },
   Reveals: { children: h('div', null, 'reveal') },
   Menu: { items: [{ key: '1', label: 'Item' }] },
-  Dropdown: { menu: { items: [{ key: '1', label: 'Item' }] }, children: h('button', null, 'trigger') },
+  Dropdown: {
+    menu: { items: [{ key: '1', label: 'Item' }] },
+    children: h('button', null, 'trigger'),
+  },
   Popover: { content: 'hi', children: h('button', null, 'trigger') },
   Drawer: { open: false, onClose: () => {}, children: 'x' },
   Modal: { open: false, onCancel: () => {} },
-  Swiper: { data: [1, 2], renderItem: item => h(ui.Swiper.Slide, { key: item }, String(item)) },
+  Swiper: {
+    data: [1, 2],
+    renderItem: item => h(ui.Swiper.Slide, { key: item }, String(item)),
+  },
   Layout: { children: h(ui.Layout.Content, null, 'content') },
   Row: { children: h(ui.Col, { span: 12 }, 'col') },
   Col: { span: 12, children: 'col' },
@@ -204,9 +217,11 @@ if (failed.length) {
 
 // 2. data-slot contract, derived from globals.css.
 const cssSlots = new Set(
-  [...fs.readFileSync(GLOBALS_CSS, 'utf8').matchAll(/\[data-slot='([a-z-]+)'\]/g)].map(
-    m => m[1],
-  ),
+  [
+    ...fs
+      .readFileSync(GLOBALS_CSS, 'utf8')
+      .matchAll(/\[data-slot='([a-z-]+)'\]/g),
+  ].map(m => m[1]),
 );
 const allMarkup = Object.values(markupByName).join('');
 const renderedSlots = new Set(
@@ -255,6 +270,83 @@ for (const [name, slot] of Object.entries(RESET_SLOTS)) {
   }
 }
 
+// 5. Base UI render composition contracts.
+const compositionCases = [
+  {
+    name: 'Button',
+    markup: renderToStaticMarkup(
+      h(
+        ui.Button,
+        {
+          render: h('div', { className: 'custom-button' }),
+          nativeButton: false,
+        },
+        'Composed button',
+      ),
+    ),
+    expected: [
+      '<div',
+      'class="custom-button ',
+      'role="button"',
+      'Composed button',
+    ],
+    forbidden: ['type="button"'],
+  },
+  {
+    name: 'Container',
+    markup: renderToStaticMarkup(
+      h(
+        ui.Container,
+        {
+          render: h('section', {
+            'aria-label': 'Results',
+            className: 'custom-container',
+          }),
+        },
+        'Composed container',
+      ),
+    ),
+    expected: [
+      '<section',
+      'aria-label="Results"',
+      'class="custom-container ',
+      'mx-auto',
+      'Composed container',
+    ],
+    forbidden: [],
+  },
+  {
+    name: 'Layout.Content',
+    markup: renderToStaticMarkup(
+      h(
+        ui.Layout.Content,
+        { render: h('section', { className: 'custom-content' }) },
+        'Composed content',
+      ),
+    ),
+    expected: [
+      '<section',
+      'class="custom-content ',
+      'min-w-0',
+      'Composed content',
+    ],
+    forbidden: [],
+  },
+];
+
+for (const { name, markup, expected, forbidden } of compositionCases) {
+  const missing = expected.filter(value => !markup.includes(value));
+  const leaked = forbidden.filter(value => markup.includes(value));
+
+  if (missing.length || leaked.length) {
+    errors.push(
+      `${name} render composition:` +
+        (missing.length ? `\n    missing: ${missing.join(', ')}` : '') +
+        (leaked.length ? `\n    leaked: ${leaked.join(', ')}` : ''),
+    );
+  }
+}
+
 if (errors.length) {
   console.error('✘ SSR smoke / rendered-output contract failed:\n');
   for (const e of errors) console.error('  - ' + e + '\n');
@@ -266,5 +358,6 @@ const resetSlots = Object.values(RESET_SLOTS).sort();
 console.log(
   `✓ SSR smoke + contracts passed: ${passed.length} components render, ` +
     `data-slot [${[...cssSlots].sort().join(', ')}] present, Button/Tag chassis intact, ` +
-    `reset-slot ${resetSlots.length ? `[${resetSlots.join(', ')}] present` : 'registry empty'}.`,
+    `reset-slot ${resetSlots.length ? `[${resetSlots.join(', ')}] present` : 'registry empty'}, ` +
+    'render composition intact.',
 );

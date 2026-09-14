@@ -129,13 +129,19 @@ import '@jbpark/ui-kit/style.css';
 
 function App() {
   return (
-    <Layout>
-      <Typography.Title>안녕하세요!</Typography.Title>
-      <Button variant="primary">클릭하세요</Button>
-    </Layout>
+    <div data-ui-root>
+      <Layout>
+        <Typography.Title>안녕하세요!</Typography.Title>
+        <Button variant="primary">클릭하세요</Button>
+      </Layout>
+    </div>
   );
 }
 ```
+
+애플리케이션 레이아웃 루트에 `data-ui-root`를 지정하세요. 패키지 스타일시트가
+해당 요소에 `isolation: isolate`를 적용해 Base UI 포털이 앱 내부의 z-index와
+경쟁하지 않고 페이지 콘텐츠 위에 표시되도록 합니다.
 
 ### 개별 컴포넌트 import
 
@@ -210,12 +216,7 @@ import '@jbpark/ui-kit/style.css';
 
 ### UI 라이브러리
 
-- **Radix UI** - 접근성 우선 헤드리스 UI 컴포넌트
-  - `@radix-ui/react-accordion` (1.2.12)
-  - `@radix-ui/react-dialog` (1.1.15)
-  - `@radix-ui/react-progress` (1.1.7)
-  - `@radix-ui/react-slot` (1.2.3)
-  - `@radix-ui/react-switch` (1.2.6)
+- **Base UI** - 접근성 우선 헤드리스 UI 컴포넌트
 - **Lucide React 0.542.0** - 아이콘 라이브러리
 - **Motion 12.23.12** - 애니메이션 라이브러리
 - **Swiper 11.2.10** - 터치 슬라이더

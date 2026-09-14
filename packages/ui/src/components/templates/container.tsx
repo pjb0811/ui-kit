@@ -1,4 +1,6 @@
-import { Slot } from '@radix-ui/react-slot';
+'use client';
+
+import { useRender } from '@base-ui/react/use-render';
 
 import { cn } from '@repo/ui/utils';
 
@@ -37,10 +39,13 @@ const MAX_WIDTH_CLASSES: Record<MaxWidth, string> = {
   none: 'max-w-none',
 };
 
-export interface Props extends React.ComponentProps<'div'> {
+export interface Props extends Omit<
+  useRender.ComponentProps<'div'>,
+  'className'
+> {
   maxWidth?: MaxWidth;
   padded?: boolean;
-  asChild?: boolean;
+  className?: string;
 }
 
 // Standardizes the `mx-auto max-w-7xl px-4` wrapper every app in this
@@ -50,23 +55,23 @@ const Container = ({
   className,
   maxWidth = '7xl',
   padded = true,
-  asChild = false,
+  render,
   ...props
 }: Props) => {
-  const Comp = asChild ? Slot : 'div';
-
-  return (
-    <Comp
-      className={cn(
+  return useRender({
+    defaultTagName: 'div',
+    render,
+    props: {
+      ...props,
+      className: cn(
         'mx-auto w-full',
         MAX_WIDTH_CLASSES[maxWidth],
         padded && 'px-4 sm:px-6 lg:px-8',
         className,
         //
-      )}
-      {...props}
-    />
-  );
+      ),
+    },
+  });
 };
 
 export default Container;

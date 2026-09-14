@@ -4,6 +4,7 @@ title: Button
 ---
 
 import DemoTheme from '@site/src/components/DemoTheme';
+
 import ButtonDemo from '../../../src/demo/button-demo';
 
 # Button
@@ -24,20 +25,22 @@ import { Button } from '@jbpark/ui-kit';
 
 ## Props
 
-| Prop        | Type                                                          | Default     |
-| ----------- | ----------------------------------------------------------------- | ----------- |
-| `variant`   | `'solid' \| 'outlined' \| 'dashed' \| 'filled' \| 'text' \| 'link'` (plus the shadcn words below) | `'outlined'` |
-| `type`      | `'primary' \| 'default' \| 'dashed' \| 'text' \| 'link'`         | -           |
-| `size`      | `'small' \| 'middle' \| 'large'` (plus the shadcn words below)     | `'middle'`  |
-| `shape`     | `'default' \| 'circle' \| 'round'`                                | `'default'` |
-| `color`     | preset color name (see below) `\| 'default' \| 'primary' \| 'danger'` | `'default'` |
-| `icon`      | `ReactNode`                                                        | -           |
-| `loading`   | `boolean \| { icon: ReactNode }`                                  | -           |
-| `block`     | `boolean`                                                          | -           |
-| `danger`    | `boolean`                                                          | -           |
-| `disabled`  | `boolean`                                                          | -           |
-| `htmlType`  | `'button' \| 'submit' \| 'reset'`                                 | `'button'`  |
-| `className` | `string`                                                           | -           |
+| Prop           | Type                                                                                              | Default      |
+| -------------- | ------------------------------------------------------------------------------------------------- | ------------ |
+| `variant`      | `'solid' \| 'outlined' \| 'dashed' \| 'filled' \| 'text' \| 'link'` (plus the shadcn words below) | `'outlined'` |
+| `type`         | `'primary' \| 'default' \| 'dashed' \| 'text' \| 'link'`                                          | -            |
+| `size`         | `'small' \| 'middle' \| 'large'` (plus the shadcn words below)                                    | `'middle'`   |
+| `shape`        | `'default' \| 'circle' \| 'round'`                                                                | `'default'`  |
+| `color`        | preset color name (see below) `\| 'default' \| 'primary' \| 'danger'`                             | `'default'`  |
+| `icon`         | `ReactNode`                                                                                       | -            |
+| `loading`      | `boolean \| { icon: ReactNode }`                                                                  | -            |
+| `block`        | `boolean`                                                                                         | -            |
+| `danger`       | `boolean`                                                                                         | -            |
+| `disabled`     | `boolean`                                                                                         | -            |
+| `htmlType`     | `'button' \| 'submit' \| 'reset'`                                                                 | `'button'`   |
+| `render`       | `ReactElement \| (props, state) => ReactElement`                                                  | -            |
+| `nativeButton` | `boolean`                                                                                         | `true`       |
+| `className`    | `string`                                                                                          | -            |
 
 `type` is syntactic sugar for a `(color, variant)` pair — it **follows `variant`
 and `color` when those are provided**, filling in only the axes you leave unset.
@@ -74,16 +77,16 @@ word implies.
 `link` is shared: it is already one of this library's own variants and already
 renders what shadcn's `link` renders, so it is left alone.
 
-| shadcn `size`               | renders as |
-| --------------------------- | ---------- |
-| `xs`, `sm`, `icon-xs`, `icon-sm` | `small` |
-| `default`, `icon`           | `middle`   |
-| `lg`, `icon-lg`             | `large`    |
+| shadcn `size`                    | renders as |
+| -------------------------------- | ---------- |
+| `xs`, `sm`, `icon-xs`, `icon-sm` | `small`    |
+| `default`, `icon`                | `middle`   |
+| `lg`, `icon-lg`                  | `large`    |
 
 There is no separate `xs` step on this scale, so `xs` renders as `small`. The
 `icon*` sizes additionally force the icon-only (square, unpadded) treatment,
 which this component otherwise infers from `icon` being set with no children —
-so the shadcn idiom of passing the icon as *children* works too:
+so the shadcn idiom of passing the icon as _children_ works too:
 
 ```tsx
 <Button size="icon">
@@ -105,5 +108,12 @@ Preset `color` names follow Tailwind's own palette names:
 `danger`. Each resolves from the matching `--color-*` Tailwind theme variable,
 so a colour word renders the same hue on `Button` and `Tag`.
 
-`Button` also accepts the rest of Radix UI's `Slot` props via `asChild`, and
-the native `<button>` attributes.
+Use Base UI's `render` prop to compose Button with another component:
+
+```tsx
+<Button render={<CustomButton />}>Save</Button>
+```
+
+The custom component must forward its ref and spread the received props. When
+rendering a non-`button` element, also pass `nativeButton={false}`. Native
+`<button>` attributes are forwarded.

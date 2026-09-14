@@ -22,3 +22,7 @@
  */
 @import 'tailwindcss';
 @import '@repo/ui/style.css';
+
+#storybook-root {
+  isolation: isolate;
+}
