@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 
-import { Drawer as DrawerPrimitive } from 'vaul';
+import { Dialog as DialogPrimitive } from '@base-ui/react/dialog';
 
 import { useConfig } from '@repo/ui/providers';
 import { cn } from '@repo/ui/utils';
@@ -10,76 +10,61 @@ import { cn } from '@repo/ui/utils';
 import { OVERLAY_LAYER } from '../lib/z-layers';
 
 /*
- * Vendored from shadcn's `new-york-v4` drawer registry entry (built on `vaul`,
- * same as upstream).
+ * Drawer rebuilt on Base UI's Dialog primitives (ui-kit#375, Decision #2) —
+ * no longer `vaul`. Base UI has no dedicated Drawer, so the side-sheet is a
+ * Dialog whose popup is anchored to an edge and slides in/out.
  *
- * Local patches — re-apply these after any `shadcn add drawer`:
- * 1. Imports: `cn` from `@repo/ui/utils` (upstream uses its `cn` alias). The
- *    `vaul` import is upstream-verbatim.
- * 2. `OVERLAY_LAYER` (src/lib/z-layers.ts) replaces upstream's `z-50` on
- *    `DrawerOverlay` and `DrawerContent`. Why: this package is published and
- *    can't assume it owns the app's z-index scale — see #359.
- * 3. `Drawer` root takes a `draggable` prop (`CustomProps`) → `handleOnly={!
- *    draggable}`, plus `container` defaulted to `useConfig().getContainer()`.
- *    Why: the container keeps portalled content inside the themed wrapper, or
- *    dark mode and the CSS custom properties don't reach it.
- * 4. `DrawerContent` takes `CustomContentProps` (`classNames`, `handlebar`,
- *    `mask`): `classNames.mask` + `!mask && 'hidden'` on the overlay, and the
- *    drag handlebar is gated by `handlebar` with `classNames.handlebar`.
+ * Consequences of dropping vaul:
+ * - No drag-to-dismiss / snap points. The `handlebar` stays as a visual
+ *   affordance on bottom drawers but is no longer draggable.
+ * - `direction` is a local `DrawerContent` prop (top/bottom/left/right) exposed
+ *   as `data-direction`, which drives both the popup's own placement/slide and
+ *   the `group-data-[direction=…]` hooks the header/handlebar rely on. It
+ *   replaces vaul's `data-vaul-drawer-direction`.
+ * - Pointer-outside dismissal (`maskClosable`) is a root concern
+ *   (`disablePointerDismissal`), and mask/modal behaviour is driven by the
+ *   consumer — see `organisms/drawer`.
  *
- * The rest of what `shadcn add drawer --diff` reports is Tailwind class
- * ordering and prettier line-wrapping from this repo's formatter, not a patch.
+ * Retained local patches: `OVERLAY_LAYER` (#359) over upstream's z-index, the
+ * themed portal `container` (default `useConfig().getContainer()`), and the
+ * `classNames`/`handlebar`/`mask` custom props.
  */
-interface CustomProps {
-  draggable?: boolean;
-}
+type Direction = 'top' | 'bottom' | 'left' | 'right';
 
 function Drawer({
-  draggable,
-  container,
   ...props
-}: React.ComponentProps<typeof DrawerPrimitive.Root> & CustomProps) {
-  const { getContainer } = useConfig();
-
-  return (
-    <DrawerPrimitive.Root
-      data-slot="drawer"
-      handleOnly={!draggable}
-      container={container ?? getContainer()}
-      {...props}
-    />
-  );
+}: React.ComponentProps<typeof DialogPrimitive.Root>) {
+  return <DialogPrimitive.Root data-slot="drawer" {...props} />;
 }
 
 function DrawerTrigger({
   ...props
-}: React.ComponentProps<typeof DrawerPrimitive.Trigger>) {
-  return <DrawerPrimitive.Trigger data-slot="drawer-trigger" {...props} />;
+}: React.ComponentProps<typeof DialogPrimitive.Trigger>) {
+  return <DialogPrimitive.Trigger data-slot="drawer-trigger" {...props} />;
 }
 
 function DrawerPortal({
   ...props
-}: React.ComponentProps<typeof DrawerPrimitive.Portal>) {
-  return <DrawerPrimitive.Portal data-slot="drawer-portal" {...props} />;
+}: React.ComponentProps<typeof DialogPrimitive.Portal>) {
+  return <DialogPrimitive.Portal {...props} />;
 }
 
 function DrawerClose({
   ...props
-}: React.ComponentProps<typeof DrawerPrimitive.Close>) {
-  return <DrawerPrimitive.Close data-slot="drawer-close" {...props} />;
+}: React.ComponentProps<typeof DialogPrimitive.Close>) {
+  return <DialogPrimitive.Close data-slot="drawer-close" {...props} />;
 }
 
 function DrawerOverlay({
   className,
   ...props
-}: React.ComponentProps<typeof DrawerPrimitive.Overlay>) {
+}: React.ComponentProps<typeof DialogPrimitive.Backdrop>) {
   return (
-    <DrawerPrimitive.Overlay
+    <DialogPrimitive.Backdrop
       data-slot="drawer-overlay"
       className={cn(
-        `data-[state=open]:animate-in data-[state=closed]:animate-out
-        data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0
-        bg-black/50`,
+        `fixed inset-0 bg-black/50 transition-opacity duration-300
+        data-ending-style:opacity-0 data-starting-style:opacity-0`,
         OVERLAY_LAYER,
         className,
       )}
@@ -92,6 +77,8 @@ interface CustomContentProps {
   classNames?: Record<string, string>;
   handlebar?: boolean;
   mask?: boolean;
+  direction?: Direction;
+  container?: HTMLElement;
 }
 
 function DrawerContent({
@@ -99,45 +86,48 @@ function DrawerContent({
   children,
   classNames = {},
   handlebar,
-  mask,
+  mask = true,
+  direction = 'bottom',
+  container,
   ...props
-}: React.ComponentProps<typeof DrawerPrimitive.Content> & CustomContentProps) {
+}: React.ComponentProps<typeof DialogPrimitive.Popup> & CustomContentProps) {
+  const { getContainer } = useConfig();
+  const resolvedContainer = container ?? getContainer();
+
   return (
-    <DrawerPortal data-slot="drawer-portal">
-      <DrawerOverlay
-        className={cn(
-          classNames?.mask || '',
-          !mask && 'hidden',
-          //
-        )}
-      />
-      <DrawerPrimitive.Content
+    <DrawerPortal container={resolvedContainer}>
+      {mask && <DrawerOverlay className={cn(classNames?.mask)} />}
+      <DialogPrimitive.Popup
         data-slot="drawer-content"
+        data-direction={direction}
         className={cn(
-          'group/drawer-content bg-background fixed flex h-auto flex-col',
+          `group/drawer-content bg-background fixed flex h-auto flex-col
+          transition-transform duration-300 ease-in-out`,
           OVERLAY_LAYER,
-          `data-[vaul-drawer-direction=top]:inset-x-0
-          data-[vaul-drawer-direction=top]:top-0
-          data-[vaul-drawer-direction=top]:mb-24
-          data-[vaul-drawer-direction=top]:max-h-[80vh]
-          data-[vaul-drawer-direction=top]:rounded-b-lg
-          data-[vaul-drawer-direction=top]:border-b`,
-          `data-[vaul-drawer-direction=bottom]:inset-x-0
-          data-[vaul-drawer-direction=bottom]:bottom-0
-          data-[vaul-drawer-direction=bottom]:mt-24
-          data-[vaul-drawer-direction=bottom]:max-h-[80vh]
-          data-[vaul-drawer-direction=bottom]:rounded-t-lg
-          data-[vaul-drawer-direction=bottom]:border-t`,
-          `data-[vaul-drawer-direction=right]:inset-y-0
-          data-[vaul-drawer-direction=right]:right-0
-          data-[vaul-drawer-direction=right]:w-3/4
-          data-[vaul-drawer-direction=right]:border-l
-          data-[vaul-drawer-direction=right]:sm:max-w-sm`,
-          `data-[vaul-drawer-direction=left]:inset-y-0
-          data-[vaul-drawer-direction=left]:left-0
-          data-[vaul-drawer-direction=left]:w-3/4
-          data-[vaul-drawer-direction=left]:border-r
-          data-[vaul-drawer-direction=left]:sm:max-w-sm`,
+          `data-[direction=top]:inset-x-0 data-[direction=top]:top-0
+          data-[direction=top]:mb-24 data-[direction=top]:max-h-[80vh]
+          data-[direction=top]:w-full data-[direction=top]:rounded-b-lg
+          data-[direction=top]:border-b
+          data-[direction=top]:data-ending-style:-translate-y-full
+          data-[direction=top]:data-starting-style:-translate-y-full`,
+          `data-[direction=bottom]:inset-x-0 data-[direction=bottom]:bottom-0
+          data-[direction=bottom]:mt-24 data-[direction=bottom]:max-h-[80vh]
+          data-[direction=bottom]:w-full data-[direction=bottom]:rounded-t-lg
+          data-[direction=bottom]:border-t
+          data-[direction=bottom]:data-ending-style:translate-y-full
+          data-[direction=bottom]:data-starting-style:translate-y-full`,
+          `data-[direction=right]:inset-y-0 data-[direction=right]:right-0
+          data-[direction=right]:h-full data-[direction=right]:w-3/4
+          data-[direction=right]:border-l
+          data-[direction=right]:data-ending-style:translate-x-full
+          data-[direction=right]:data-starting-style:translate-x-full
+          data-[direction=right]:sm:max-w-sm`,
+          `data-[direction=left]:inset-y-0 data-[direction=left]:left-0
+          data-[direction=left]:h-full data-[direction=left]:w-3/4
+          data-[direction=left]:border-r
+          data-[direction=left]:data-ending-style:-translate-x-full
+          data-[direction=left]:data-starting-style:-translate-x-full
+          data-[direction=left]:sm:max-w-sm`,
           className,
         )}
         {...props}
@@ -146,17 +136,13 @@ function DrawerContent({
           <div
             className={cn(
               `bg-muted mx-auto mt-4 hidden h-2 w-25 shrink-0 rounded-full
-              group-data-[vaul-drawer-direction=bottom]/drawer-content:block`,
+              group-data-[direction=bottom]/drawer-content:block`,
               classNames?.handlebar,
             )}
           />
         )}
-        {/* <div
-          className="bg-muted mx-auto mt-4 hidden h-2 w-[100px] shrink-0 rounded-full
-            group-data-[vaul-drawer-direction=bottom]/drawer-content:block"
-        /> */}
         {children}
-      </DrawerPrimitive.Content>
+      </DialogPrimitive.Popup>
     </DrawerPortal>
   );
 }
@@ -167,9 +153,9 @@ function DrawerHeader({ className, ...props }: React.ComponentProps<'div'>) {
       data-slot="drawer-header"
       className={cn(
         `flex flex-col gap-0.5 p-4
-        group-data-[vaul-drawer-direction=bottom]/drawer-content:text-center
-        group-data-[vaul-drawer-direction=top]/drawer-content:text-center
-        md:gap-1.5 md:text-left`,
+        group-data-[direction=bottom]/drawer-content:text-center
+        group-data-[direction=top]/drawer-content:text-center md:gap-1.5
+        md:text-left`,
         className,
       )}
       {...props}
@@ -190,9 +176,9 @@ function DrawerFooter({ className, ...props }: React.ComponentProps<'div'>) {
 function DrawerTitle({
   className,
   ...props
-}: React.ComponentProps<typeof DrawerPrimitive.Title>) {
+}: React.ComponentProps<typeof DialogPrimitive.Title>) {
   return (
-    <DrawerPrimitive.Title
+    <DialogPrimitive.Title
       data-slot="drawer-title"
       className={cn('text-foreground font-semibold', className)}
       {...props}
@@ -203,9 +189,9 @@ function DrawerTitle({
 function DrawerDescription({
   className,
   ...props
-}: React.ComponentProps<typeof DrawerPrimitive.Description>) {
+}: React.ComponentProps<typeof DialogPrimitive.Description>) {
   return (
-    <DrawerPrimitive.Description
+    <DialogPrimitive.Description
       data-slot="drawer-description"
       className={cn('text-muted-foreground text-sm', className)}
       {...props}

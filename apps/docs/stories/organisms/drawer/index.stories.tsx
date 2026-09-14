@@ -31,9 +31,6 @@ const meta: Meta<typeof Drawer> = {
     handlebar: {
       control: { type: 'boolean' },
     },
-    draggable: {
-      control: { type: 'boolean' },
-    },
     rounded: {
       control: { type: 'boolean' },
     },
@@ -85,7 +82,6 @@ export const Default: Story = {
     maskClosable: true,
     closable: true,
     handlebar: true,
-    draggable: true,
     rounded: false,
     mask: true,
   },
@@ -100,7 +96,6 @@ export const WithExtra: Story = {
     maskClosable: true,
     closable: true,
     handlebar: true,
-    draggable: true,
     rounded: false,
     mask: true,
   },

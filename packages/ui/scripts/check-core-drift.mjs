@@ -101,6 +101,7 @@ const BASE_UI_COMPONENTS = new Set([
   'accordion',
   'checkbox',
   'dialog',
+  'drawer',
   'progress',
   'popover',
   'radio-group',
