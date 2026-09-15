@@ -1,5 +1,100 @@
 # @repo/ui
 
+## 10.0.0
+
+### Major Changes
+
+- 88a839a: Update Progress and Separator components to use Base UI primitives with repo‑owned styling.
+- 57f98b1: Finish the Base UI migration by replacing the remaining Radix Label and Slot
+  usage, removing all direct `@radix-ui/*` dependencies, and retiring the shadcn
+  core drift infrastructure.
+
+  `Button`, `Container`, and `Layout.Content` now use Base UI's `render` prop for
+  composition. Replace `asChild` plus a child element with `render={<Element />}`
+  and keep the content as children. For `Button`, set `nativeButton={false}` when
+  the rendered element is not a native button.
+
+- 266e7d9: Update Accordion component to use Base UI primitives with repo-owned styling.
+
+  Base UI reshapes the accordion API: Radix's `Accordion.Content` becomes
+  `Accordion.Panel`, and the root drops `type="single" | "multiple"` in favour of
+  a `multiple` boolean while modelling the open set as an array for both modes.
+  `molecules/collapse` is updated accordingly (its public `activeKey`/`onChange`
+  array contract is unchanged). Single-open mode is now collapsible — clicking the
+  open panel closes it. The `@radix-ui/react-accordion` dependency is dropped.
+
+- e29aca7: Update Checkbox component to use Base UI primitives with repo-owned styling.
+- 11957a9: Update Dialog component to use Base UI primitives with repo-owned styling.
+
+  Radix's `Dialog.Overlay`/`Dialog.Content` become Base UI's `Dialog.Backdrop`/
+  `Dialog.Popup`, and open/close styling moves to Base UI's `data-starting-style`/
+  `data-ending-style` transition hooks (the old Radix `data-[state]:animate-*`
+  classes were inert here). Pointer-outside dismissal (antd's `maskClosable`) is
+  now a root-level `disablePointerDismissal` concern rather than a
+  `Content`-level `onPointerDownOutside` handler; `organisms/modal` is updated to
+  match. The themed portal container, `OVERLAY_LAYER`, and the
+  `closable`/`closeIcon`/`classNames.mask` custom props are preserved. The direct
+  `@radix-ui/react-dialog` dependency is dropped (it remains transitively via
+  `vaul`, which the drawer still uses).
+
+- 65772e7: Update RadioGroup component to use Base UI primitives with repo-owned styling.
+
+  Base UI splits Radix's `RadioGroup.Item` into a standalone `Radio.Root` +
+  `Radio.Indicator`, and its radio renders a `<span>` (plus a hidden `<input>`)
+  rather than Radix's `<button>`. The button-style `Radio.Group` option now wires
+  its `Button` through Base UI's `render` prop instead of `asChild`, and the
+  `Radio` atom forwards div-based host props. The `@radix-ui/react-radio-group`
+  dependency is dropped.
+
+- ed5fba5: Migrate Select and Config's direction provider to Base UI while preserving grouped options, themed portals, item-aligned positioning, keyboard interaction, and RTL behavior.
+- e931c77: Update Slider component to use Base UI primitives with repo-owned styling.
+- 6e02fb3: Update Switch component to use Base UI primitives with repo-owned styling.
+
+  The underlying element changes from Radix's `<button>` to Base UI's `<span>`
+  (plus a hidden `<input>`), so `atoms/switch` now forwards span-based host props
+  instead of button-based ones, and its native `value` attribute is no longer
+  accepted.
+
+- f6d759b: Rebuild Drawer on Base UI's Dialog primitives and drop the `vaul` dependency
+  (#375, Decision #2). The side-sheet is now a Dialog whose popup is anchored to
+  an edge and slides in/out via `data-starting-style`/`data-ending-style`.
+
+  Breaking:
+
+  - `vaul`'s drag-to-dismiss and snap points are gone. The `handlebar` remains as
+    a visual affordance on bottom drawers but is no longer draggable, and the
+    `Drawer` organism's `draggable` prop is removed.
+  - The core `Drawer` speaks Base UI's Dialog API (`Backdrop`/`Popup`); `direction`
+    is a `DrawerContent` prop surfaced as `data-direction` (replacing vaul's
+    `data-vaul-drawer-direction`). Outside-press dismissal is a root concern
+    (`disablePointerDismissal`), and `mask` maps to Base UI's `modal`.
+
+  Removing `vaul` also drops the last transitive `@radix-ui/react-dialog`, so the
+  package no longer depends on any Radix primitive.
+
+### Patch Changes
+
+- 57e69ca: Remove the doubled padding inside `DatePicker`'s popover
+
+  `PopoverContent` carries `p-4` and `Calendar` carries its own `p-3`, so a
+  `DatePicker` popup stacked both and sat on 28px of inset. Measured in the docs
+  app: the popup was 336×406 with a 28px gap between its edge and the first
+  calendar cell; it is now 312×382 with an even 16px inset.
+
+  `Calendar` now zeroes its own padding when it renders inside a popover, using
+  the same `[[data-slot=popover-content]_&]` hook it already used to drop its
+  background there. Keeping the override scoped this way — rather than removing
+  `p-3` outright — means a standalone `Calendar` is unaffected.
+
+  The popover's `p-4` is left alone on purpose: it is the only padding the other
+  two consumers get. `ColorPicker` wraps `react-colorful`, which renders with no
+  padding of its own (verified: still 234×234 with a 16px inset after this
+  change), and the rich-text-editor link popover holds a bare input row.
+
+- baf2bc3: Migrate Popover to Base UI while preserving its public props and themed portal container. Delegate arrow positioning to Base UI so it follows collision-adjusted placement, including in DatePicker.
+
+  For custom trigger components that render a non-button element, pass `nativeButton={false}`. Intrinsic non-button elements are detected automatically.
+
 ## 9.1.1
 
 ### Patch Changes
