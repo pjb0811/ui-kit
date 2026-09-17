@@ -21,6 +21,41 @@
   isolation: isolate;
 }
 
+/*
+ * Infima paints the *page background on `<html>`*, not `<body>`
+ * (`html { background-color: var(--ifm-background-color) }`), so the theme
+ * token is what has to change — painting `<body>` instead leaves the two
+ * elements disagreeing.
+ *
+ * That disagreement was only visible in dark mode. In light mode Infima
+ * leaves `--ifm-background-color: transparent`, so an opaque `<body>`
+ * background propagates up to the canvas and covers the whole viewport. In
+ * dark mode Infima sets it to an opaque `#1b1b1d`, which blocks that
+ * propagation: `<html>` painted `#1b1b1d` while `<body>` painted ui-kit's
+ * `--background` (`oklch(0.145 0 0)`, i.e. `#0a0a0a`). Docusaurus' Layout
+ * also pins `html, body { height: 100% }` — a fixed height, not a minimum —
+ * so `<body>`'s box is exactly one viewport tall and scrolling any docs page
+ * past the first screen revealed the lighter `#1b1b1d` underneath, as did
+ * overscroll.
+ *
+ * Mapping the Infima variable keeps `<html>` the single element that paints
+ * the canvas (same as the sibling Docusaurus sites, which override
+ * `--ifm-*` tokens and never touch `body`). The `html[data-theme='dark']`
+ * selector is required, not redundant: Infima's own dark value is set at
+ * that exact specificity, which a bare `:root` rule would lose to.
+ */
+:root,
+html[data-theme='dark'] {
+  --ifm-background-color: var(--background);
+}
+
+/*
+ * Text color stays on `<body>` on purpose. The equivalent Infima token,
+ * `--ifm-font-color-base`, also feeds `--ifm-navbar-link-color`,
+ * `--ifm-dropdown-link-color` and `--ifm-alert-color`, so overriding it
+ * would repaint site chrome that has always used Infima's own content
+ * color.
+ */
 body {
-  @apply bg-background text-foreground;
+  @apply text-foreground;
 }
