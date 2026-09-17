@@ -18,7 +18,7 @@ const Toolbar = ({ editor, presets, items, className }: ToolbarProps) => {
     <div
       data-slot="rich-text-editor-toolbar"
       className={cn(
-        'flex flex-wrap items-center gap-1 border-b border-gray-200 px-2 py-1',
+        'border-input flex flex-wrap items-center gap-1 border-b px-2 py-1',
         className,
         //
       )}
