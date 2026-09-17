@@ -7,6 +7,13 @@ import { cn } from '@repo/ui/utils';
 // visibly a no-op. Selectors are written out per Tailwind utility (not built
 // via string interpolation) because v4 only extracts class candidates that
 // appear as literal strings in source (see popover.tsx's arrow-class comment).
+//
+// Colours resolve from the theme tokens in globals.css, never from a fixed
+// palette step: a literal `bg-gray-100` renders the same in both schemes, so
+// the editor stayed a white card on a dark page. `bg-foreground`/
+// `text-background` on `pre` is deliberate — it is the one block that wants to
+// invert against the surface, and inverting the tokens keeps it legible in
+// either scheme without a `dark:` override.
 export const RICH_TEXT_CONTENT_CLASSES = cn(
   '[&_.tiptap]:outline-none',
   // Every block element (p/h1/ul/blockquote/...) carries its own UA top
@@ -41,42 +48,45 @@ export const RICH_TEXT_CONTENT_CLASSES = cn(
 
   '[&_.tiptap_blockquote]:my-2',
   '[&_.tiptap_blockquote]:border-l-2',
-  '[&_.tiptap_blockquote]:border-gray-300',
+  '[&_.tiptap_blockquote]:border-border',
   '[&_.tiptap_blockquote]:pl-3',
-  '[&_.tiptap_blockquote]:text-gray-600',
+  '[&_.tiptap_blockquote]:text-muted-foreground',
   '[&_.tiptap_blockquote]:italic',
 
   // A long unwrapped code line would otherwise blow out the box width.
   '[&_.tiptap_pre]:overflow-x-auto',
   '[&_.tiptap_pre]:my-2',
   '[&_.tiptap_pre]:rounded',
-  '[&_.tiptap_pre]:bg-gray-900',
+  '[&_.tiptap_pre]:bg-foreground',
   '[&_.tiptap_pre]:p-3',
   '[&_.tiptap_pre]:font-mono',
   '[&_.tiptap_pre]:text-sm',
-  '[&_.tiptap_pre]:text-gray-100',
+  '[&_.tiptap_pre]:text-background',
   // Reset the inline `code` treatment below when it's nested inside `pre`,
   // so a code block doesn't get a second (redundant) chip background.
   '[&_.tiptap_pre_code]:bg-transparent',
   '[&_.tiptap_pre_code]:p-0',
   '[&_.tiptap_pre_code]:text-inherit',
   '[&_.tiptap_code]:rounded',
-  '[&_.tiptap_code]:bg-gray-100',
+  '[&_.tiptap_code]:bg-muted',
   '[&_.tiptap_code]:px-1',
   '[&_.tiptap_code]:py-0.5',
   '[&_.tiptap_code]:font-mono',
   '[&_.tiptap_code]:text-[0.85em]',
 
   '[&_.tiptap_hr]:my-4',
-  '[&_.tiptap_hr]:border-gray-200',
+  '[&_.tiptap_hr]:border-border',
 
-  '[&_.tiptap_a]:text-blue-600',
+  // No colour: this theme's `--primary` is achromatic (near-black in light,
+  // near-white in dark), so `text-primary` would render the link at almost the
+  // body colour and buy nothing. `Typography.Link` reaches the same conclusion
+  // and styles links with the underline alone — match it.
   '[&_.tiptap_a]:underline',
   '[&_.tiptap_a]:underline-offset-2',
 
   '[&_.tiptap_p.is-editor-empty:first-child::before]:pointer-events-none',
   '[&_.tiptap_p.is-editor-empty:first-child::before]:float-left',
   '[&_.tiptap_p.is-editor-empty:first-child::before]:h-0',
-  '[&_.tiptap_p.is-editor-empty:first-child::before]:text-gray-400',
+  '[&_.tiptap_p.is-editor-empty:first-child::before]:text-muted-foreground',
   '[&_.tiptap_p.is-editor-empty:first-child::before]:content-[attr(data-placeholder)]',
 );

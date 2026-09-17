@@ -85,7 +85,7 @@ const RichTextEditor = ({
     <div
       data-slot="rich-text-editor"
       className={cn(
-        'rounded border border-gray-200 bg-white text-sm text-gray-800',
+        'border-input bg-background text-foreground rounded border text-sm',
         className,
         //
       )}
