@@ -2,19 +2,18 @@ import { type ReactNode, useEffect } from 'react';
 
 import { useColorMode } from '@docusaurus/theme-common';
 
-// Bridges Docusaurus' color mode into ui-kit's own dark-mode mechanism (a
-// `.dark` class ancestor) so components on this page — and the page
-// background itself — follow the navbar's light/dark toggle instead of
-// defaulting to light.
+// Mirrors Docusaurus' color mode onto <html> as ui-kit's own `.dark` marker.
 //
-// Deliberately toggles `.dark` on <html> directly rather than wrapping
-// children in ui-kit's <Config theme={{ dark }}>: Config only applies
-// `.dark` to a div it renders *inside* this component's children, which is
-// a descendant of <body> — too low for custom.css, which resolves
-// `--background`/`--foreground` on <html> (via `--ifm-background-color`)
-// and on <body>. Both rules need `.dark` on <html> itself or above.
-// Toggling <html> covers the page chrome and every ui-kit component under
-// it in one place.
+// Redundant on this site as it stands: ui-kit's dark variant is defined as
+// `&:is(.dark *, [data-theme='dark'] *)` and its token block keys off
+// `.dark, [data-theme='dark']`, so Docusaurus' own `data-theme` attribute
+// already drives every ui-kit component here. Kept as an explicit bridge so
+// the site doesn't silently depend on ui-kit continuing to recognise
+// Docusaurus' attribute — `.dark` is the library's documented marker.
+//
+// When it does apply, it has to go on <html>, not on a wrapper: ui-kit's
+// selectors match *descendants* of the marked element, and <Config
+// theme={{ dark }}> would only mark a div rendered inside these children.
 //
 // Must be used from inside page content, not from `@theme/Root`: Root
 // renders above Docusaurus' ColorModeProvider, so useColorMode() throws
