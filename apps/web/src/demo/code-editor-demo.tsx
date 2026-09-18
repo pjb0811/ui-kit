@@ -20,8 +20,9 @@ export default function CodeEditorDemo() {
   const [value, setValue] = useState(SAMPLE);
   const [saved, setSaved] = useState<string | null>(null);
   // `theme` defaults to `'auto'`, which follows <Config theme={{ dark }}>. This
-  // site doesn't use that — DemoTheme toggles `.dark` on <html> directly (see
-  // its comment for why) — so the color mode is handed over explicitly.
+  // site doesn't use `Config` — its dark mode comes from Docusaurus' own
+  // `data-theme` attribute on <html>, which ui-kit's selectors also accept —
+  // so the color mode is handed over explicitly.
   const { colorMode } = useColorMode();
 
   return (
