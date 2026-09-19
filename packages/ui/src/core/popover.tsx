@@ -65,7 +65,17 @@ function PopoverArrow() {
         data-[side=right]:-rotate-90 data-[side=top]:-bottom-2
         data-[side=top]:rotate-180"
     >
-      <svg width="18" height="9" viewBox="0 0 18 9" fill="none">
+      {/* `block` keeps the arrow box exactly as tall as the SVG. Left inline,
+          the SVG sits on a text baseline and the wrapper inherits the popup's
+          line-height instead (26px, not 9px), which pushes the triangle down
+          inside the popup and rotates it about the wrong centre. */}
+      <svg
+        className="block"
+        width="18"
+        height="9"
+        viewBox="0 0 18 9"
+        fill="none"
+      >
         <path d="M0 9 9 0 18 9" className="fill-border" />
         <path d="M1 9 9 1 17 9" className="fill-popover" />
       </svg>

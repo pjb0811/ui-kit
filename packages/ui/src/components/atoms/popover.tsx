@@ -87,8 +87,11 @@ const Popover = ({
 
   return (
     <CorePopover open={open} onOpenChange={setOpen}>
+      {/* Deliberately no `data-slot` here: Base UI merges the trigger's own
+          props over the rendered element's, so a `data-slot` set here replaces
+          the child's. A `Button` trigger would lose `data-slot="button"` and
+          with it every `--btn-*` token rule in globals.css. */}
       <PopoverTrigger
-        data-slot="popover-trigger"
         render={trigger}
         nativeButton={
           nativeButton ??
