@@ -1,5 +1,203 @@
 # @repo/ui
 
+## 10.0.0
+
+### Major Changes
+
+- 88a839a: Update Progress and Separator components to use Base UI primitives with repo‑owned styling.
+- 57f98b1: Finish the Base UI migration by replacing the remaining Radix Label and Slot
+  usage, removing all direct `@radix-ui/*` dependencies, and retiring the shadcn
+  core drift infrastructure.
+
+  `Button`, `Container`, and `Layout.Content` now use Base UI's `render` prop for
+  composition. Replace `asChild` plus a child element with `render={<Element />}`
+  and keep the content as children. For `Button`, set `nativeButton={false}` when
+  the rendered element is not a native button.
+
+- 266e7d9: Update Accordion component to use Base UI primitives with repo-owned styling.
+
+  Base UI reshapes the accordion API: Radix's `Accordion.Content` becomes
+  `Accordion.Panel`, and the root drops `type="single" | "multiple"` in favour of
+  a `multiple` boolean while modelling the open set as an array for both modes.
+  `molecules/collapse` is updated accordingly (its public `activeKey`/`onChange`
+  array contract is unchanged). Single-open mode is now collapsible — clicking the
+  open panel closes it. The `@radix-ui/react-accordion` dependency is dropped.
+
+- e29aca7: Update Checkbox component to use Base UI primitives with repo-owned styling.
+- 11957a9: Update Dialog component to use Base UI primitives with repo-owned styling.
+
+  Radix's `Dialog.Overlay`/`Dialog.Content` become Base UI's `Dialog.Backdrop`/
+  `Dialog.Popup`, and open/close styling moves to Base UI's `data-starting-style`/
+  `data-ending-style` transition hooks (the old Radix `data-[state]:animate-*`
+  classes were inert here). Pointer-outside dismissal (antd's `maskClosable`) is
+  now a root-level `disablePointerDismissal` concern rather than a
+  `Content`-level `onPointerDownOutside` handler; `organisms/modal` is updated to
+  match. The themed portal container, `OVERLAY_LAYER`, and the
+  `closable`/`closeIcon`/`classNames.mask` custom props are preserved. The direct
+  `@radix-ui/react-dialog` dependency is dropped (it remains transitively via
+  `vaul`, which the drawer still uses).
+
+- 65772e7: Update RadioGroup component to use Base UI primitives with repo-owned styling.
+
+  Base UI splits Radix's `RadioGroup.Item` into a standalone `Radio.Root` +
+  `Radio.Indicator`, and its radio renders a `<span>` (plus a hidden `<input>`)
+  rather than Radix's `<button>`. The button-style `Radio.Group` option now wires
+  its `Button` through Base UI's `render` prop instead of `asChild`, and the
+  `Radio` atom forwards div-based host props. The `@radix-ui/react-radio-group`
+  dependency is dropped.
+
+- ed5fba5: Migrate Select and Config's direction provider to Base UI while preserving grouped options, themed portals, item-aligned positioning, keyboard interaction, and RTL behavior.
+- e931c77: Update Slider component to use Base UI primitives with repo-owned styling.
+- 6e02fb3: Update Switch component to use Base UI primitives with repo-owned styling.
+
+  The underlying element changes from Radix's `<button>` to Base UI's `<span>`
+  (plus a hidden `<input>`), so `atoms/switch` now forwards span-based host props
+  instead of button-based ones, and its native `value` attribute is no longer
+  accepted.
+
+- f6d759b: Rebuild Drawer on Base UI's Dialog primitives and drop the `vaul` dependency
+  (#375, Decision #2). The side-sheet is now a Dialog whose popup is anchored to
+  an edge and slides in/out via `data-starting-style`/`data-ending-style`.
+
+  Breaking:
+
+  - `vaul`'s drag-to-dismiss and snap points are gone. The `handlebar` remains as
+    a visual affordance on bottom drawers but is no longer draggable, and the
+    `Drawer` organism's `draggable` prop is removed.
+  - The core `Drawer` speaks Base UI's Dialog API (`Backdrop`/`Popup`); `direction`
+    is a `DrawerContent` prop surfaced as `data-direction` (replacing vaul's
+    `data-vaul-drawer-direction`). Outside-press dismissal is a root concern
+    (`disablePointerDismissal`), and `mask` maps to Base UI's `modal`.
+
+  Removing `vaul` also drops the last transitive `@radix-ui/react-dialog`, so the
+  package no longer depends on any Radix primitive.
+
+### Patch Changes
+
+- 57e69ca: Remove the doubled padding inside `DatePicker`'s popover
+
+  `PopoverContent` carries `p-4` and `Calendar` carries its own `p-3`, so a
+  `DatePicker` popup stacked both and sat on 28px of inset. Measured in the docs
+  app: the popup was 336×406 with a 28px gap between its edge and the first
+  calendar cell; it is now 312×382 with an even 16px inset.
+
+  `Calendar` now zeroes its own padding when it renders inside a popover, using
+  the same `[[data-slot=popover-content]_&]` hook it already used to drop its
+  background there. Keeping the override scoped this way — rather than removing
+  `p-3` outright — means a standalone `Calendar` is unaffected.
+
+  The popover's `p-4` is left alone on purpose: it is the only padding the other
+  two consumers get. `ColorPicker` wraps `react-colorful`, which renders with no
+  padding of its own (verified: still 234×234 with a 16px inset after this
+  change), and the rich-text-editor link popover holds a bare input row.
+
+- ddae7ba: Add a `check-data-theme-dark` regression check that asserts the built stylesheet still keys dark mode off `[data-theme='dark']`, the marker every Docusaurus host depends on. No runtime change.
+- baf2bc3: Migrate Popover to Base UI while preserving its public props and themed portal container. Delegate arrow positioning to Base UI so it follows collision-adjusted placement, including in DatePicker.
+
+  For custom trigger components that render a non-button element, pass `nativeButton={false}`. Intrinsic non-button elements are detected automatically.
+
+- 8b4cd6f: Fix `Popover`'s trigger losing its button styling and its arrow rendering inside the popup
+
+  Two regressions from the Base UI migration, both visible on the docs site's
+  Popover page.
+
+  **Trigger.** `atoms/popover.tsx` passed `data-slot="popover-trigger"` to
+  `Popover.Trigger`. Base UI merges the trigger's own props _over_ the element
+  given to `render`, so that attribute replaced the child's `data-slot="button"`
+  — and every `[data-slot='button']…` rule in `globals.css` stopped matching.
+  `--btn-bg`, `--btn-fg` and `--btn-border` were then all undefined, so
+  `border-[color-mix(in_oklch,var(--btn-border),transparent_50%)]` became invalid
+  at computed-value time and fell back to `currentColor`: measured on the docs
+  site, an outlined trigger rendered `rgb(10, 10, 10)` where the same button on
+  the Button page renders `oklch(0.5555 0 none / 0.5)`. A colored trigger
+  (`bg-(--btn-bg)`, `text-(--btn-fg)`) lost its fill entirely. The attribute was
+  referenced nowhere in the repo, so it is simply dropped; Base UI still marks
+  the element with `data-base-ui-click-trigger` and the `aria-*` pair.
+
+  **Arrow.** The arrow's `<svg>` was inline, so it sat on a text baseline and the
+  wrapper took the popup's line-height rather than the SVG's height — measured
+  18×26 instead of 18×9. That broke both offsets and rotation: the
+  `data-[side=…]:-top-2` / `-bottom-2` offsets are sized for a 9px box, and
+  `rotate-90`/`rotate-180` spin about the box centre. On all four placements the
+  triangle landed _inside_ the popup (11px past the top edge on `bottom`) instead
+  of protruding from it. Marking the SVG `block` collapses the line box; the
+  existing offsets — including the `13px` on the horizontal sides, which is half
+  of 18 plus 4 — then resolve as originally intended, an ~8px protrusion with a
+  1px overlap that hides the popup border.
+
+- ae31de5: Center the checked dot inside `Radio`
+
+  The selected dot sat 7px above the middle of its control, hard against the top
+  edge. Measured on the docs page: the 8px dot's centre was 7px off the 16px
+  control's centre.
+
+  Base UI's `Radio.Root` renders a `<span role="radio">` where Radix rendered a
+  `<button>`, and the markup carried over from the Radix version unchanged in
+  #381. That markup centered the dot by absolutely positioning it at `top-1/2`
+  inside the indicator — which collapses to zero height, since its only child is
+  out of flow. A `<button>` centers its content through the UA's own anonymous
+  box, so a zero-height indicator still landed on the centre line; a span gets no
+  such treatment, and as a flex item of the surrounding `Field` its display is
+  blockified to `block`, so the indicator stacked at the top and took the dot
+  with it.
+
+  `RadioGroupItem` now centers explicitly with `inline-flex items-center
+justify-center` — matching `core/checkbox`, which was adapted this way during
+  the same migration — and the dot stays in flow instead of being positioned
+  against a zero-height parent. Verified in the docs app: the dot is now exactly
+  centred on both axes, and the indicator measures 8px tall rather than 0.
+
+- 90f6f78: Replace the stale Radix references left over from the Base UI migration
+
+  The package has carried no Radix code since the migration finished — zero
+  `@radix-ui/*` entries in `pnpm-lock.yaml`, zero imports in `src` — but the
+  published metadata and the docs still advertised it. `package.json` described
+  the library as "built with TypeScript, Tailwind CSS, and Radix UI" and listed
+  `radix-ui` as an npm keyword; both now say Base UI.
+
+  The same sweep corrects the `core/` READMEs, which credited Radix for
+  `accordion`, `dialog`, `progress` and `switch`, and still described `drawer` as
+  "Vaul based" — `vaul` was dropped along with the last transitive
+  `@radix-ui/react-dialog`. The root READMEs' UI-library list had the same two
+  stale entries.
+
+  Two code comments described current behaviour as Radix's rather than Base UI's:
+  the rich-text-editor colour-picker note about outside-interaction dismissal, and
+  `option-group`'s explanation of how `Radio.Group` matches items by `value`.
+  Comments that deliberately contrast the two libraries — the `Radix → Base UI`
+  shape-change notes in `core/accordion`, `core/dialog` and `core/radio-group`,
+  `core/select`'s note that `dir` is retained from the old API, and `core/badge`'s
+  reason for using `useRender` instead of Radix Slot — are accurate and left
+  alone, as is the release history in `CHANGELOG.md` and the pending changesets.
+
+- 46c1a1b: Make `RichTextEditor` follow the active theme
+
+  The editor stayed a white card with dark text in dark mode. Its shell and
+  content styles were written against fixed palette steps — `bg-white`,
+  `text-gray-800`, `border-gray-200`, `bg-gray-100`, `text-blue-600` — which
+  render identically in both schemes, so nothing about it responded to the theme.
+  Measured on the docs page: with `data-theme="dark"` the page background went to
+  `oklch(0.145 0 0)` while the editor stayed `rgb(255, 255, 255)`.
+
+  Every colour now resolves from the same tokens the rest of the library uses, so
+  the editor inherits any theme a `Config` supplies rather than only the default
+  light one:
+
+  - shell: `bg-background text-foreground border-input`, toolbar divider
+    `border-input`
+  - content: `border-border` / `text-muted-foreground` on blockquote, `bg-muted`
+    on inline code, `border-border` on `hr`, `text-muted-foreground` on the
+    placeholder
+  - code blocks invert deliberately (`bg-foreground` / `text-background`) — that
+    block wants to contrast with the surface, and inverting the tokens keeps it
+    legible in either scheme without a `dark:` override
+  - links drop their colour and keep the underline, matching `Typography.Link`.
+    This theme's `--primary` is achromatic, so colouring them would have rendered
+    the link at almost the body colour and bought nothing
+
+  `RichTextEditor` was the only component in `src/components` still using a fixed
+  palette this way.
+
 ## 9.1.1
 
 ### Patch Changes
