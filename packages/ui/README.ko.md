@@ -25,7 +25,7 @@ src/
 │   ├── molecules/    # 🔬 분자 - 원자들의 조합
 │   ├── organisms/    # 🦠 유기체 - 복잡한 UI 블록
 │   └── templates/    # 📄 템플릿 - 페이지 레이아웃
-├── core/             # ⚙️ 핵심 UI 로직 (Radix UI 기반)
+├── core/             # ⚙️ 핵심 UI 로직 (Base UI 기반)
 ├── lib/
 │   ├── enums/        # 📋 열거형 타입
 │   └── utils/        # 🛠 유틸리티 함수
@@ -90,15 +90,15 @@ src/
 
 ### Core 모듈
 
-Radix UI 기반의 접근성 우선 핵심 컴포넌트들:
+Base UI 기반의 접근성 우선 핵심 컴포넌트들:
 
-- `accordion.tsx` - 아코디언 컴포넌트 (Radix UI 기반)
+- `accordion.tsx` - 아코디언 컴포넌트 (Base UI 기반)
 - `button.tsx` - 버튼 컴포넌트 (class-variance-authority로 variants 관리)
-- `dialog.tsx` - 다이얼로그 컴포넌트 (Radix UI 기반)
-- `drawer.tsx` - 드로어 컴포넌트 (Vaul 기반)
-- `progress.tsx` - 진행률 컴포넌트 (Radix UI 기반)
+- `dialog.tsx` - 다이얼로그 컴포넌트 (Base UI 기반)
+- `drawer.tsx` - 드로어 컴포넌트 (Base UI dialog 기반)
+- `progress.tsx` - 진행률 컴포넌트 (Base UI 기반)
 - `skeleton.tsx` - 스켈레톤 컴포넌트
-- `switch.tsx` - 스위치 컴포넌트 (Radix UI 기반)
+- `switch.tsx` - 스위치 컴포넌트 (Base UI 기반)
 
 ### 유틸리티
 

@@ -25,7 +25,7 @@ src/
 │   ├── molecules/    # 🔬 Molecules - Combinations of atoms
 │   ├── organisms/    # 🦠 Organisms - Complex UI blocks
 │   └── templates/    # 📄 Templates - Page layouts
-├── core/             # ⚙️ Core UI logic (Radix UI based)
+├── core/             # ⚙️ Core UI logic (Base UI based)
 ├── lib/
 │   ├── enums/        # 📋 Enumeration types
 │   └── utils/        # 🛠 Utility functions
@@ -90,15 +90,15 @@ Page layout templates
 
 ### Core Module
 
-Accessibility-first core components based on Radix UI:
+Accessibility-first core components based on Base UI:
 
-- `accordion.tsx` - Accordion component (Radix UI based)
+- `accordion.tsx` - Accordion component (Base UI based)
 - `button.tsx` - Button component (variants managed with class-variance-authority)
-- `dialog.tsx` - Dialog component (Radix UI based)
-- `drawer.tsx` - Drawer component (Vaul based)
-- `progress.tsx` - Progress component (Radix UI based)
+- `dialog.tsx` - Dialog component (Base UI based)
+- `drawer.tsx` - Drawer component (Base UI dialog based)
+- `progress.tsx` - Progress component (Base UI based)
 - `skeleton.tsx` - Skeleton component
-- `switch.tsx` - Switch component (Radix UI based)
+- `switch.tsx` - Switch component (Base UI based)
 
 ### Utilities
 

@@ -263,7 +263,7 @@ export const TOOLBAR_PRESET_RENDERERS: Record<
       value={editor.getAttributes('textStyle').color || '#000000'}
       // No `.focus()`: react-colorful fires `onChange` continuously while
       // dragging, and refocusing the editor on every tick moves DOM focus
-      // out from under the still-open popover, which Radix reads as an
+      // out from under the still-open popover, which Base UI reads as an
       // outside interaction and dismisses immediately (ui-kit reported
       // symptom: "picker closes as soon as you try to change the color").
       // The mark still applies to the stored selection without it.

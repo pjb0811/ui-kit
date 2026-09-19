@@ -5,7 +5,7 @@ title: Overview
 
 # ui-kit
 
-A React UI component library built with TypeScript, Tailwind CSS, and Radix UI.
+A React UI component library built with TypeScript, Tailwind CSS, and Base UI.
 
 ## Install
 

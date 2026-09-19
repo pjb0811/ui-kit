@@ -16,9 +16,9 @@ const FEATURES = [
       'Every component ships with full type definitions, so props and variants are checked and autocompleted as you write.',
   },
   {
-    title: 'Radix UI primitives',
+    title: 'Base UI primitives',
     description:
-      'Interactive components (Dialog, Popover, Dropdown, Drawer, and more) are built on accessible, unstyled Radix primitives.',
+      'Interactive components (Dialog, Popover, Dropdown, Drawer, and more) are built on accessible, unstyled Base UI primitives.',
   },
   {
     title: 'Tailwind CSS 4',
@@ -105,7 +105,7 @@ export default function Home() {
   return (
     <Layout
       title="ui-kit — React UI component library"
-      description="Modern React UI component library built with TypeScript, Tailwind CSS, and Radix UI. Featuring atoms, molecules, organisms and layout templates for building beautiful interfaces."
+      description="Modern React UI component library built with TypeScript, Tailwind CSS, and Base UI. Featuring atoms, molecules, organisms and layout templates for building beautiful interfaces."
     >
       <div className="mx-auto flex max-w-5xl flex-col gap-24 px-6 py-16">
         <section className="flex flex-col items-center gap-6 text-center">
@@ -115,7 +115,7 @@ export default function Home() {
             className="h-5 w-auto"
           />
           <Typography.Title level={1} className="max-w-2xl">
-            A React UI kit built on TypeScript, Tailwind, and Radix
+            A React UI kit built on TypeScript, Tailwind, and Base UI
           </Typography.Title>
           <Typography.Paragraph className="text-muted-foreground max-w-xl">
             Atoms, molecules, organisms, and page templates for building

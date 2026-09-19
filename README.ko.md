@@ -89,11 +89,10 @@ Atomic Design 패턴을 따라 구성된 React 컴포넌트 라이브러리입�
 
 ### UI 라이브러리
 
-- **[Radix UI](https://www.radix-ui.com/)** - 접근성 우선 헤드리스 UI 컴포넌트
+- **[Base UI](https://base-ui.com/)** - 접근성 우선 헤드리스 UI 컴포넌트
 - **[Lucide React](https://lucide.dev/)** - 아이콘 라이브러리
 - **[Motion](https://motion.dev/)** - 애니메이션 라이브러리
 - **[Swiper](https://swiperjs.com/)** - 터치 슬라이더
-- **[Vaul](https://vaul.dev/)** - 드로어 컴포넌트
 
 ### 개발 도구
 
@@ -252,6 +251,6 @@ function App() {
 - [Turborepo 공식 문서](https://turborepo.com/docs)
 - [Next.js 공식 문서](https://nextjs.org/docs)
 - [Tailwind CSS 문서](https://tailwindcss.com/docs)
-- [Radix UI 문서](https://www.radix-ui.com/docs)
+- [Base UI 문서](https://base-ui.com/react/overview/quick-start)
 - [Storybook 문서](https://storybook.js.org/docs)
 - [pnpm 문서](https://pnpm.io/)

@@ -247,7 +247,7 @@ import './local';
 | 런타임        | React 19, Node ≥18                                                              |
 | 언어          | TypeScript 5.9                                                                  |
 | 스타일        | Tailwind CSS v4                                                                 |
-| UI 프리미티브 | Radix UI                                                                        |
+| UI 프리미티브 | Base UI                                                                         |
 | 아이콘        | lucide-react                                                                    |
 | 애니메이션    | motion (framer), GSAP                                                           |
 | 패키지 매니저 | pnpm 10                                                                         |
