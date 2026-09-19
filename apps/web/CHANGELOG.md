@@ -1,5 +1,31 @@
 # web
 
+## 1.5.6
+
+### Patch Changes
+
+- e9a90ad: Fix dark mode background mismatch by aligning Infima's background color with ui‑kit theme, ensuring consistent page background in dark mode.
+- ddae7ba: Remove the `DemoTheme` wrapper from the docs site. It toggled ui-kit's `.dark` class on `<html>`, which never took effect — Docusaurus owns that attribute through react-helmet-async and rewrites it on every route change. Dark mode was already driven entirely by Docusaurus' own `data-theme` attribute, which ui-kit's selectors accept, so rendering is unchanged.
+- c6565ba: Dark mode now correctly applies background and text colors across the site, matching sibling Docusaurus sites.
+- Updated dependencies [88a839a]
+- Updated dependencies [57e69ca]
+- Updated dependencies [57f98b1]
+- Updated dependencies [ddae7ba]
+- Updated dependencies [266e7d9]
+- Updated dependencies [e29aca7]
+- Updated dependencies [11957a9]
+- Updated dependencies [baf2bc3]
+- Updated dependencies [65772e7]
+- Updated dependencies [ed5fba5]
+- Updated dependencies [e931c77]
+- Updated dependencies [6e02fb3]
+- Updated dependencies [8b4cd6f]
+- Updated dependencies [ae31de5]
+- Updated dependencies [f6d759b]
+- Updated dependencies [90f6f78]
+- Updated dependencies [46c1a1b]
+  - @repo/ui@10.0.0
+
 ## 1.5.5
 
 ### Patch Changes
