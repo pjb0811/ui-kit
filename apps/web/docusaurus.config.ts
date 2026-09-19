@@ -22,7 +22,7 @@ const tailwindPlugin = (): Plugin => ({
 const config: Config = {
   title: 'ui-kit',
   tagline:
-    'A React UI component library built with TypeScript, Tailwind CSS, and Radix UI',
+    'A React UI component library built with TypeScript, Tailwind CSS, and Base UI',
   favicon: 'img/favicon.ico',
 
   future: {

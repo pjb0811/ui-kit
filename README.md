@@ -89,11 +89,10 @@ Theme and configuration providers
 
 ### UI Libraries
 
-- **[Radix UI](https://www.radix-ui.com/)** - Accessible headless UI components
+- **[Base UI](https://base-ui.com/)** - Accessible headless UI components
 - **[Lucide React](https://lucide.dev/)** - Icon library
 - **[Motion](https://motion.dev/)** - Animation library
 - **[Swiper](https://swiperjs.com/)** - Touch slider
-- **[Vaul](https://vaul.dev/)** - Drawer component
 
 ### Development Tools
 
@@ -252,7 +251,7 @@ This project is licensed under the MIT License.
 - [Turborepo Documentation](https://turborepo.com/docs)
 - [Next.js Documentation](https://nextjs.org/docs)
 - [Tailwind CSS Docs](https://tailwindcss.com/docs)
-- [Radix UI Documentation](https://www.radix-ui.com/docs)
+- [Base UI Documentation](https://base-ui.com/react/overview/quick-start)
 - [Storybook Documentation](https://storybook.js.org/docs)
 - [pnpm Documentation](https://pnpm.io/)
 

@@ -23,8 +23,8 @@ export const normalizeOptions = (options: Options): Option[] =>
         },
   );
 
-// Radio.Group/Checkbox.Group both key selection off `value` (Radix's
-// RadioGroup matches items by it, and Checkbox.Group tests membership via
+// Radio.Group/Checkbox.Group both key selection off `value` (Base UI's
+// Radio.Group matches items by it, and Checkbox.Group tests membership via
 // `value.includes(...)`), so two options sharing a value aren't just a
 // React list-key collision — they become indistinguishable to the
 // component's own selection logic, e.g. both rendering aria-checked=true

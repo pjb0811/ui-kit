@@ -6,7 +6,7 @@ packages/ui 프로젝트에서 작업할 때 참고하는 가이드입니다.
 
 - 재사용 가능한 UI 컴포넌트 라이브러리
 - Atomic Design 계층(atoms/molecules/organisms/templates)
-- Radix 기반 core 컴포넌트 래퍼
+- Base UI 기반 core 컴포넌트 래퍼
 
 ## Key Paths
 

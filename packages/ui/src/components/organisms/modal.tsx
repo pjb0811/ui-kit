@@ -136,6 +136,10 @@ const Modal = ({
       >
         {/**
          * @todo [Dialog & AlertDialog] fix: can't get id correctly in shadow dom
+         *
+         * Filed while `core/dialog` was still Radix-based; the linked fix is
+         * Radix's, and the repo no longer depends on it. Revalidate against
+         * Base UI's Dialog before acting on this — the bug may already be gone.
          * @see https://github.com/radix-ui/primitives/pull/3384
          **/}
         <DialogHeader
