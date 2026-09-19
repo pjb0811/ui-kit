@@ -107,8 +107,8 @@ Theme and configuration providers
 
 ### Requirements
 
-- Node.js >= 18
-- pnpm 9.0.0
+- Node.js: package metadata declares `>=20`; repository development/builds and CI use the version pinned in `.nvmrc` (currently 24.18.0)
+- pnpm: 10.x or higher
 
 ### Installation
 
