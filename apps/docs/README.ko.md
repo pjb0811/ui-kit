@@ -28,8 +28,8 @@ apps/docs/
 
 ### 필수 요구사항
 
-- **Node.js** >= 18
-- **pnpm** 9.0.0
+- **Node.js** >= 20
+- **pnpm** >= 10
 
 ### 설치
 
@@ -162,25 +162,25 @@ pnpm run check-types
 
 이 프로젝트는 최신 Tailwind CSS 4를 사용하여 스타일링됩니다:
 
-- **Tailwind CSS 4.1.12** - 유틸리티 CSS 프레임워크
+- **Tailwind CSS 4.3.3** - 유틸리티 CSS 프레임워크
 
 ## 🛠 기술 스택
 
 ### 핵심 기술
 
-- **Next.js 16.1.3** - React 프레임워크 (Turbopack 지원)
-- **React 19.1.0** - UI 라이브러리
-- **TypeScript 5.9.2** - 정적 타입 체크
+- **Next.js 16.3.1** - React 프레임워크 (Turbopack 지원)
+- **React 19.2.8** - UI 라이브러리
+- **TypeScript 6.0.3** - 정적 타입 체크
 
 ### 문서화 도구
 
-- **Storybook 10.1.11** - 컴포넌트 문서화 및 테스트
-- **@storybook/nextjs-vite 10.1.11** - Next.js 통합
+- **Storybook 10.5.8** - 컴포넌트 문서화 및 테스트
+- **@storybook/nextjs-vite 10.5.8** - Next.js 통합
 
 ### 개발 도구
 
-- **ESLint 9.34.0** - 코드 린팅
-- **eslint-plugin-storybook 10.1.11** - Storybook ESLint 플러그인
+- **ESLint 9.39.5** - 코드 린팅
+- **eslint-plugin-storybook 10.5.8** - Storybook ESLint 플러그인
 
 ## 📦 의존성
 

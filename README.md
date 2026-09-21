@@ -9,8 +9,8 @@ A modern monorepo containing a comprehensive React UI component library and web/
 ```
 ui-kit/
 ├── apps/                    # Applications
-│   ├── docs/               # Storybook documentation site (port: 3001)
-│   └── web/                # Next.js demo/service app (port: 3000)
+│   ├── docs/               # Next.js demo app (port: 3001) + Storybook (port: 6006)
+│   └── web/                # Docusaurus documentation site (port: 3000)
 ├── packages/               # Shared packages
 │   ├── ui/                 # Main UI component library
 │   ├── eslint-config/      # ESLint configuration
@@ -83,7 +83,7 @@ Theme and configuration providers
 ### Core Technologies
 
 - **[React 19](https://react.dev/)** - UI library
-- **[TypeScript 5.9](https://www.typescriptlang.org/)** - Static type checking
+- **[TypeScript 6.0](https://www.typescriptlang.org/)** - Static type checking
 - **[Next.js 16](https://nextjs.org/)** - React framework
 - **[Tailwind CSS 4](https://tailwindcss.com/)** - Utility-first CSS framework
 
@@ -97,7 +97,7 @@ Theme and configuration providers
 ### Development Tools
 
 - **[Turborepo](https://turborepo.com/)** - Monorepo build system
-- **[pnpm](https://pnpm.io/)** - Package manager (v9.0.0)
+- **[pnpm](https://pnpm.io/)** - Package manager (v10)
 - **[ESLint](https://eslint.org/)** - Code linting
 - **[Prettier](https://prettier.io/)** - Code formatting
 - **[Storybook](https://storybook.js.org/)** - Component documentation

@@ -9,8 +9,8 @@ A modern and reusable React UI component library built with TypeScript and Tailw
 - **Package Name**: `@jbpark/ui-kit`
 - **License**: MIT
 - **Package Manager**: pnpm
-- **Node.js Requirement**: >= 18
-- **React Requirement**: ^18.0.0 || ^19.0.0
+- **Node.js Requirement**: >= 20
+- **React Requirement**: ^19.0.0
 
 ## 🏗 Architecture
 
@@ -27,8 +27,10 @@ src/
 │   └── templates/    # 📄 Templates - Page layouts
 ├── core/             # ⚙️ Core UI logic (Base UI based)
 ├── lib/
-│   ├── enums/        # 📋 Enumeration types
-│   └── utils/        # 🛠 Utility functions
+│   ├── utils/        # 🛠 Utility functions
+│   ├── colors.ts     # 🎨 Colour token resolution
+│   └── z-layers.ts   # 🪟 Shared portal z-index scale
+├── providers/        # 🧩 Config provider and theming
 ├── globals.css       # 🎨 Global styles
 └── index.ts          # 📥 Package entry point
 ```
@@ -103,7 +105,7 @@ Accessibility-first core components based on Base UI:
 ### Utilities
 
 - **`cn()`** - Class name merging utility (clsx + tailwind-merge)
-- **`TEXT_LEVELS`** - Typography level constants
+- **`renderConditional()`** - Conditional render helper
 
 ## 🚀 Installation & Usage
 
@@ -171,13 +173,12 @@ import Typography from '@jbpark/ui-kit/Typography';
 > `swiper`'s CSS as a side effect and can break Node/SSR builds (e.g. an
 > Astro static build) that don't expect a bare `.css` import.
 
-### Import Utilities and Enums
+### Import Utilities and Providers
 
 ```tsx
 // Utility functions
-// Enumeration constants
-import { TEXT_LEVELS } from '@jbpark/ui-kit/enums';
-import { cn } from '@jbpark/ui-kit/utils';
+import { Config } from '@jbpark/ui-kit/providers';
+import { cn, renderConditional } from '@jbpark/ui-kit/utils';
 ```
 
 ### Import Styles
@@ -210,28 +211,29 @@ import '@jbpark/ui-kit/style.css';
 
 ### Core Libraries
 
-- **React 19.1.0** - UI library
-- **TypeScript 5.9.2** - Static type checking
-- **Tailwind CSS 4.1.12** - Utility-first CSS framework
+- **React 19.2** - UI library
+- **TypeScript 6.0** - Static type checking
+- **Tailwind CSS 4.3** - Utility-first CSS framework
 
 ### UI Libraries
 
-- **Base UI** - Accessible headless UI components
-- **Lucide React 0.542.0** - Icon library
-- **Motion 12.23.12** - Animation library
-- **Swiper 11.2.10** - Touch slider
-- **Vaul 1.1.2** - Drawer component
+- **Base UI 1.8** - Accessible headless UI primitives
+- **Lucide React 1.45** - Icon library
+- **Motion 13.1** - Animation library
+- **Swiper 14.1** - Touch slider
+- **TipTap 3.30** - RichTextEditor engine
+- **react-day-picker 10.0** - DatePicker calendar
+- **react-resizable-panels 4.12** - Splitter panels
 
 ### Utilities
 
 - **class-variance-authority 0.7.1** - Component variants management
 - **clsx 2.1.1** - Conditional class names
-- **tailwind-merge 3.3.1** - Tailwind class merging
-- **react-use 17.6.0** - React hooks collection
-- **@uidotdev/usehooks 2.4.1** - Additional React hooks
-- **uuid 11.1.0** - Unique ID generation
-- **@gsap/react 2.1.2** - GSAP animation
-- **tw-animate-css 1.3.7** - Tailwind animations
+- **tailwind-merge 3.6** - Tailwind class merging
+- **@jbpark/use-hooks 4.0** - React hooks collection
+- **date-fns 4.4** - Date formatting and parsing
+- **react-colorful 5.8** - ColorPicker input
+- **GSAP 3.15 / @gsap/react 2.1** - GSAP animation
 
 ## 🔧 Development
 
@@ -267,10 +269,16 @@ This package exports the following modules:
 
 - `@jbpark/ui-kit` - Main package (all components)
 - `@jbpark/ui-kit/Typography` - Typography component
+- `@jbpark/ui-kit/Button` - Button component
+- `@jbpark/ui-kit/Tag` - Tag component
+- `@jbpark/ui-kit/Card` - Card component
+- `@jbpark/ui-kit/Space` - Space component
 - `@jbpark/ui-kit/Menu` - Menu component
 - `@jbpark/ui-kit/Reveals` - Reveals component
-- `@jbpark/ui-kit/utils` - Utility functions (`cn` etc)
-- `@jbpark/ui-kit/enums` - Enumeration constants (`TEXT_LEVELS` etc)
+- `@jbpark/ui-kit/CodeEditor` - CodeEditor component
+- `@jbpark/ui-kit/Layout` - Layout template
+- `@jbpark/ui-kit/utils` - Utility functions (`cn`, `renderConditional`)
+- `@jbpark/ui-kit/providers` - Config provider and theming
 - `@jbpark/ui-kit/style.css` - Global styles (required)
 
 ## 🤝 Contributing
