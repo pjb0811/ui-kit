@@ -10,7 +10,7 @@ export default function SkeletonDemo() {
       <Button onClick={() => setLoading(l => !l)}>
         {loading ? 'Show content' : 'Show skeleton'}
       </Button>
-      <Card className="w-80">
+      <Card className="w-full max-w-80">
         <Skeleton loading={loading} avatar count={3}>
           <Typography.Title level={5} className="mb-2">
             Loaded content
@@ -23,7 +23,7 @@ export default function SkeletonDemo() {
       </Card>
       <Space align="start" size="middle" wrap>
         <Skeleton.Button />
-        <div className="w-64">
+        <div className="w-64 max-w-full">
           <Skeleton.Node />
         </div>
       </Space>

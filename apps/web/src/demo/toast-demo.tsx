@@ -2,7 +2,7 @@ import { Button, Space, Toast } from '@repo/ui';
 
 export default function ToastDemo() {
   return (
-    <Space>
+    <Space wrap>
       <Button onClick={() => Toast.info('Heads up — something happened.')}>
         Info
       </Button>

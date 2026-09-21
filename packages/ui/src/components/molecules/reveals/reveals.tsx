@@ -59,7 +59,7 @@ const Reveals = ({
   return (
     <div
       className={cn(
-        'flex gap-5',
+        'flex flex-wrap gap-5',
         className,
         classNames?.root,
         //

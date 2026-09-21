@@ -10,7 +10,7 @@ const Node = ({ classNames, ...props }: SkeletonProps) => {
       classNames={{
         ...classNames,
         item: cn(
-          'h-50 w-full min-w-80',
+          'h-50 w-full',
           'rounded-3xl',
           classNames?.item,
           //
