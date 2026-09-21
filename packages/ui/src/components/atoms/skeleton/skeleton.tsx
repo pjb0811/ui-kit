@@ -82,7 +82,7 @@ const Skeleton = ({
       )}
       <div
         className={cn(
-          'flex grow',
+          'flex min-w-0 grow',
           direction === 'vertical' && 'flex-col',
           classNames.wrapper,
         )}
@@ -100,7 +100,10 @@ const Skeleton = ({
               className={cn(
                 'rounded-md',
                 !active && 'animate-none',
+                // SIZES are fixed widths; cap them so a narrow container
+                // shrinks the placeholder instead of being overflowed.
                 SIZES[size],
+                'max-w-full',
                 classNames.item,
                 //
               )}
