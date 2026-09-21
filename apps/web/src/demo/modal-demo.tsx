@@ -6,7 +6,7 @@ export default function ModalDemo() {
   const [open, setOpen] = useState(false);
 
   return (
-    <Space>
+    <Space wrap>
       <Button type="primary" onClick={() => setOpen(true)}>
         Open modal
       </Button>

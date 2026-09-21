@@ -7,7 +7,12 @@ export default function SliderDemo() {
   const [range, setRange] = useState<number[]>([20, 60]);
 
   return (
-    <Space orientation="vertical" align="start" size="large" className="w-72">
+    <Space
+      orientation="vertical"
+      align="start"
+      size="large"
+      className="w-full max-w-72"
+    >
       <Space
         orientation="vertical"
         align="start"

@@ -28,7 +28,7 @@ export default function CollapseDemo() {
   return (
     <Collapse
       defaultActiveKey={['0']}
-      className="border-border w-100 rounded-md border p-4"
+      className="border-border w-full max-w-100 rounded-md border p-4"
       items={items}
     />
   );
