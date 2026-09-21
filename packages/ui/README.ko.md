@@ -9,8 +9,8 @@ TypeScript와 Tailwind CSS를 기반으로 구축된 현대적이고 재사용 �
 - **패키지명**: `@jbpark/ui-kit`
 - **라이선스**: MIT
 - **패키지 매니저**: pnpm
-- **Node.js 요구사항**: >= 18
-- **React 요구사항**: ^18.0.0 || ^19.0.0
+- **Node.js 요구사항**: >= 20
+- **React 요구사항**: ^19.0.0
 
 ## 🏗 아키텍처
 
@@ -27,8 +27,10 @@ src/
 │   └── templates/    # 📄 템플릿 - 페이지 레이아웃
 ├── core/             # ⚙️ 핵심 UI 로직 (Base UI 기반)
 ├── lib/
-│   ├── enums/        # 📋 열거형 타입
-│   └── utils/        # 🛠 유틸리티 함수
+│   ├── utils/        # 🛠 유틸리티 함수
+│   ├── colors.ts     # 🎨 색상 토큰 해석
+│   └── z-layers.ts   # 🪟 포털 공용 z-index 스케일
+├── providers/        # 🧩 Config 프로바이더 및 테마
 ├── globals.css       # 🎨 전역 스타일
 └── index.ts          # 📥 패키지 진입점
 ```
@@ -103,7 +105,7 @@ Base UI 기반의 접근성 우선 핵심 컴포넌트들:
 ### 유틸리티
 
 - **`cn()`** - 클래스명 병합 유틸리티 (clsx + tailwind-merge)
-- **`TEXT_LEVELS`** - 타이포그래피 레벨 상수
+- **`renderConditional()`** - 조건부 렌더 헬퍼
 
 ## 🚀 설치 및 사용법
 
@@ -171,13 +173,12 @@ import Typography from '@jbpark/ui-kit/Typography';
 > 이펙트로 불러오기 때문에 Node/SSR 빌드(예: Astro static build)에서 순수
 > `.css` import를 처리 못 해 빌드가 깨질 수 있습니다.
 
-### 유틸리티 및 열거형 import
+### 유틸리티 및 프로바이더 import
 
 ```tsx
 // 유틸리티 함수
-// 열거형 상수
-import { TEXT_LEVELS } from '@jbpark/ui-kit/enums';
-import { cn } from '@jbpark/ui-kit/utils';
+import { Config } from '@jbpark/ui-kit/providers';
+import { cn, renderConditional } from '@jbpark/ui-kit/utils';
 ```
 
 ### 스타일 import
@@ -210,28 +211,29 @@ import '@jbpark/ui-kit/style.css';
 
 ### 핵심 라이브러리
 
-- **React 19.1.0** - UI 라이브러리
-- **TypeScript 5.9.2** - 정적 타입 체크
-- **Tailwind CSS 4.1.12** - 유틸리티 CSS 프레임워크
+- **React 19.2** - UI 라이브러리
+- **TypeScript 6.0** - 정적 타입 체크
+- **Tailwind CSS 4.3** - 유틸리티 CSS 프레임워크
 
 ### UI 라이브러리
 
-- **Base UI** - 접근성 우선 헤드리스 UI 컴포넌트
-- **Lucide React 0.542.0** - 아이콘 라이브러리
-- **Motion 12.23.12** - 애니메이션 라이브러리
-- **Swiper 11.2.10** - 터치 슬라이더
-- **Vaul 1.1.2** - 드로어 컴포넌트
+- **Base UI 1.8** - 접근성 우선 헤드리스 UI 프리미티브
+- **Lucide React 1.45** - 아이콘 라이브러리
+- **Motion 13.1** - 애니메이션 라이브러리
+- **Swiper 14.1** - 터치 슬라이더
+- **TipTap 3.30** - RichTextEditor 엔진
+- **react-day-picker 10.0** - DatePicker 캘린더
+- **react-resizable-panels 4.12** - Splitter 패널
 
 ### 유틸리티
 
 - **class-variance-authority 0.7.1** - 컴포넌트 variants 관리
 - **clsx 2.1.1** - 조건부 클래스명
-- **tailwind-merge 3.3.1** - Tailwind 클래스 병합
-- **react-use 17.6.0** - React 훅 모음
-- **@uidotdev/usehooks 2.4.1** - 추가 React 훅
-- **uuid 11.1.0** - 고유 ID 생성
-- **@gsap/react 2.1.2** - GSAP 애니메이션
-- **tw-animate-css 1.3.7** - Tailwind 애니메이션
+- **tailwind-merge 3.6** - Tailwind 클래스 병합
+- **@jbpark/use-hooks 4.0** - React 훅 모음
+- **date-fns 4.4** - 날짜 포매팅/파싱
+- **react-colorful 5.8** - ColorPicker 입력
+- **GSAP 3.15 / @gsap/react 2.1** - GSAP 애니메이션
 
 ## 🔧 개발
 
@@ -267,10 +269,16 @@ pnpm run generate:component
 
 - `@jbpark/ui-kit` - 메인 패키지 (모든 컴포넌트)
 - `@jbpark/ui-kit/Typography` - Typography 컴포넌트
+- `@jbpark/ui-kit/Button` - Button 컴포넌트
+- `@jbpark/ui-kit/Tag` - Tag 컴포넌트
+- `@jbpark/ui-kit/Card` - Card 컴포넌트
+- `@jbpark/ui-kit/Space` - Space 컴포넌트
 - `@jbpark/ui-kit/Menu` - Menu 컴포넌트
 - `@jbpark/ui-kit/Reveals` - Reveals 컴포넌트
-- `@jbpark/ui-kit/utils` - 유틸리티 함수 (`cn` 등)
-- `@jbpark/ui-kit/enums` - 열거형 상수 (`TEXT_LEVELS` 등)
+- `@jbpark/ui-kit/CodeEditor` - CodeEditor 컴포넌트
+- `@jbpark/ui-kit/Layout` - Layout 템플릿
+- `@jbpark/ui-kit/utils` - 유틸리티 함수 (`cn`, `renderConditional`)
+- `@jbpark/ui-kit/providers` - Config 프로바이더 및 테마
 - `@jbpark/ui-kit/style.css` - 전역 스타일 (필수)
 
 ## 🤝 기여하기

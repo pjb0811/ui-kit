@@ -28,8 +28,8 @@ apps/docs/
 
 ### Requirements
 
-- **Node.js** >= 18
-- **pnpm** 9.0.0
+- **Node.js** >= 20
+- **pnpm** >= 10
 
 ### Installation
 
@@ -162,25 +162,25 @@ Page layout templates
 
 This project uses the latest Tailwind CSS 4 for styling:
 
-- **Tailwind CSS 4.1.12** - Utility-first CSS framework
+- **Tailwind CSS 4.3.3** - Utility-first CSS framework
 
 ## 🛠 Tech Stack
 
 ### Core Technologies
 
-- **Next.js 16.1.3** - React framework with Turbopack
-- **React 19.1.0** - UI library
-- **TypeScript 5.9.2** - Static type checking
+- **Next.js 16.3.1** - React framework with Turbopack
+- **React 19.2.8** - UI library
+- **TypeScript 6.0.3** - Static type checking
 
 ### Documentation Tools
 
-- **Storybook 10.1.11** - Component documentation and testing
-- **@storybook/nextjs-vite 10.1.11** - Next.js integration
+- **Storybook 10.5.8** - Component documentation and testing
+- **@storybook/nextjs-vite 10.5.8** - Next.js integration
 
 ### Development Tools
 
-- **ESLint 9.34.0** - Code linting
-- **eslint-plugin-storybook 10.1.11** - Storybook ESLint plugin
+- **ESLint 9.39.5** - Code linting
+- **eslint-plugin-storybook 10.5.8** - Storybook ESLint plugin
 
 ## 📦 Dependencies
 

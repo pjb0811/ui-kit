@@ -9,8 +9,8 @@ Turborepo 기반의 현대적인 UI 컴포넌트 라이브러리와 웹/문서 �
 ```
 ui-kit/
 ├── apps/                    # 애플리케이션들
-│   ├── docs/               # Storybook 기반 문서 사이트 (포트: 3001)
-│   └── web/                # Next.js 웹 데모/서비스 (포트: 3000)
+│   ├── docs/               # Next.js 데모 앱 (포트: 3001) + Storybook (포트: 6006)
+│   └── web/                # Docusaurus 문서 사이트 (포트: 3000)
 ├── packages/               # 공유 패키지들
 │   ├── ui/                 # 메인 UI 컴포넌트 라이브러리
 │   ├── eslint-config/      # ESLint 설정
@@ -83,7 +83,7 @@ Atomic Design 패턴을 따라 구성된 React 컴포넌트 라이브러리입�
 ### 핵심 기술
 
 - **[React 19](https://react.dev/)** - UI 라이브러리
-- **[TypeScript 5.9](https://www.typescriptlang.org/)** - 정적 타입 체크
+- **[TypeScript 6.0](https://www.typescriptlang.org/)** - 정적 타입 체크
 - **[Next.js 16](https://nextjs.org/)** - React 프레임워크
 - **[Tailwind CSS 4](https://tailwindcss.com/)** - 유틸리티 CSS 프레임워크
 
@@ -97,7 +97,7 @@ Atomic Design 패턴을 따라 구성된 React 컴포넌트 라이브러리입�
 ### 개발 도구
 
 - **[Turborepo](https://turborepo.com/)** - 모노레포 빌드 시스템
-- **[pnpm](https://pnpm.io/)** - 패키지 매니저 (v9.0.0)
+- **[pnpm](https://pnpm.io/)** - 패키지 매니저 (v10)
 - **[ESLint](https://eslint.org/)** - 코드 린팅
 - **[Prettier](https://prettier.io/)** - 코드 포매팅
 - **[Storybook](https://storybook.js.org/)** - 컴포넌트 문서화
