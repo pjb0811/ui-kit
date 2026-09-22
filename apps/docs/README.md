@@ -115,48 +115,70 @@ This documentation site systematically documents React components organized usin
 
 Basic UI building blocks
 
-| Component       | Description                  | Sub-components                       |
-| --------------- | ---------------------------- | ------------------------------------ |
-| **Button**      | Various button styles        | -                                    |
-| **Checkbox**    | Checkbox and checkbox groups | `Group`                              |
-| **FloatButton** | Floating action button       | `BackTop`                            |
-| **Progress**    | Progress indicator component | -                                    |
-| **Skeleton**    | Loading skeleton             | `Button`, `Node`                     |
-| **Spin**        | Loading spinner              | -                                    |
-| **Switch**      | Toggle switch component      | -                                    |
-| **Typography**  | Text components              | `Link`, `Paragraph`, `Text`, `Title` |
+| Component          | Description                                               | Sub-components                       |
+| ------------------ | --------------------------------------------------------- | ------------------------------------ |
+| **Button**         | Buttons with type, variant, size and loading states       | -                                    |
+| **Checkbox**       | A single checkbox, or a group sharing one value           | `Group`                              |
+| **CodeEditor**     | CodeMirror 6 editing surface with JS/TS highlighting      | -                                    |
+| **ColorPicker**    | A swatch that opens a popover for picking a hex colour    | -                                    |
+| **DatePicker**     | A button that opens a calendar popover for a single date  | -                                    |
+| **FloatButton**    | A circular button fixed to a corner of the viewport       | `BackTop`                            |
+| **Input**          | A text input, with search and multiline variants          | `Search`, `TextArea`                 |
+| **Popover**        | A floating panel anchored to a trigger element            | -                                    |
+| **Progress**       | A bar that fills to a percentage, horizontal or vertical  | -                                    |
+| **Radio**          | A single radio, or a group for mutually-exclusive options | `Group`                              |
+| **RichTextEditor** | A TipTap-based editor over an HTML string                 | -                                    |
+| **Select**         | A dropdown for choosing one value from a list             | -                                    |
+| **Skeleton**       | A placeholder that mimics content while it loads          | `Button`, `Node`                     |
+| **Slider**         | A draggable numeric range control                         | -                                    |
+| **Spin**           | A loading indicator, standalone or as an overlay          | -                                    |
+| **Switch**         | A boolean on/off toggle                                   | -                                    |
+| **Tag**            | A small labeled badge for categorising content            | -                                    |
+| **Typography**     | Headings, body text, paragraphs and links                 | `Link`, `Paragraph`, `Text`, `Title` |
+
+> `CodeEditor` is reached through its own subpath — `import CodeEditor from '@jbpark/ui-kit/CodeEditor'`.
+> It is deliberately kept out of the main barrel so CodeMirror stays an opt-in peer dependency.
 
 ### 🔬 Molecules
 
 Composite components combining multiple atoms
 
-| Component    | Description                | Sub-components |
-| ------------ | -------------------------- | -------------- |
-| **Collapse** | Collapsible content area   | -              |
-| **Dropdown** | Dropdown menu              | -              |
-| **Marquees** | Infinite scrolling marquee | `Item`         |
-| **Menu**     | Navigation menu            | -              |
-| **Reveals**  | Animation reveal component | `Item`         |
-| **Space**    | Spacing adjustment         | -              |
+| Component    | Description                                           | Sub-components |
+| ------------ | ----------------------------------------------------- | -------------- |
+| **Card**     | A content container with an optional title            | -              |
+| **Collapse** | Expandable panels, with an optional accordion mode    | -              |
+| **Dropdown** | Reveals a floating `Menu` from a trigger              | -              |
+| **Marquees** | Rows of content scrolling in a continuous loop        | `Item`         |
+| **Menu**     | Navigation menu with nested submenus                  | -              |
+| **Reveals**  | Animates children into view with a staggered cascade  | `Item`         |
+| **Space**    | Lays out children in a row or column with gaps        | -              |
+| **Splitter** | Resizable panels with a draggable handle between them | `Panel`        |
+| **Upload**   | A click-or-drag dropzone with a removable file list   | -              |
 
 ### 🦠 Organisms
 
 Complex UI sections
 
-| Component  | Description               | Sub-components |
-| ---------- | ------------------------- | -------------- |
-| **Drawer** | Side drawer panel         | -              |
-| **List**   | List and list items       | `Item`         |
-| **Modal**  | Modal dialog              | -              |
-| **Swiper** | Slider/carousel component | `Slide`        |
+| Component  | Description                                                 | Sub-components                                   |
+| ---------- | ----------------------------------------------------------- | ------------------------------------------------ |
+| **Drawer** | A controlled panel that slides in from any edge             | -                                                |
+| **List**   | A collection with loading, empty and infinite-scroll states | `Item`                                           |
+| **Modal**  | A dialog, controlled or fired imperatively                  | `confirm`, `info`, `success`, `warning`, `error` |
+| **Swiper** | A touch-friendly carousel over Swiper.js                    | `Slide`                                          |
+| **Toast**  | Imperative, auto-dismissing notifications                   | `info`, `success`, `warning`, `error`            |
 
 ### 📄 Templates
 
 Page layout templates
 
-| Component  | Description      | Sub-components                         |
-| ---------- | ---------------- | -------------------------------------- |
-| **Layout** | Full page layout | `Header`, `Sider`, `Content`, `Footer` |
+| Component      | Description                                             | Sub-components                         |
+| -------------- | ------------------------------------------------------- | -------------------------------------- |
+| **Container**  | Centres page content at a capped width with gutters     | -                                      |
+| **Empty**      | An inline placeholder for the "loaded, but empty" state | -                                      |
+| **Grid**       | A 24-column responsive grid                             | `Row`, `Col`                           |
+| **Layout**     | The page scaffold: header, sider, content and footer    | `Header`, `Sider`, `Content`, `Footer` |
+| **PageHeader** | A page title block with back button and actions         | -                                      |
+| **Result**     | A full-page screen for an operation's outcome           | -                                      |
 
 ## 🎨 Styling
 
