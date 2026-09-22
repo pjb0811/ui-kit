@@ -88,15 +88,31 @@ const ROUNDED_CLASSES: Record<'top' | 'bottom' | 'left' | 'right', string> = {
   right: 'rounded-l-[30px]!',
 };
 
+// A side drawer sized by a preset is sized by a percentage of the viewport,
+// which collapses on a phone: `small` is 30%, so it lands at ~112px on a 375px
+// screen — a sliver too narrow to read. Floor the preset widths so they stay
+// usable on small screens. A custom `size` is passed through untouched; an
+// explicit value is the caller's decision, not something to second-guess.
+const SIDE_MIN_WIDTH = '20rem';
+
 const getSizeStyles = (
   direction: 'top' | 'bottom' | 'left' | 'right',
   size: string,
 ): React.CSSProperties => {
-  const value = SIZES[size] || size;
+  if (direction === 'top' || direction === 'bottom') {
+    return { height: SIZES[size] || size };
+  }
 
-  return direction === 'top' || direction === 'bottom'
-    ? { height: value }
-    : { width: value };
+  const preset = SIZES[size];
+
+  return {
+    width: preset ? `max(${preset}, ${SIDE_MIN_WIDTH})` : size,
+    // Set inline so it beats `core/drawer`'s `sm:max-w-sm`, which would
+    // otherwise hold every side drawer at 24rem from the `sm` breakpoint up
+    // and leave `size` with no effect on anything wider than a phone. It also
+    // keeps the floor above from overflowing a container narrower than it.
+    maxWidth: '100%',
+  };
 };
 
 const Drawer = ({

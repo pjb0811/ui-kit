@@ -45,4 +45,4 @@ const [open, setOpen] = useState(false);
 | `classNames`   | `{ mask?; content?; handlebar?; header?; title?; close?; extra?; body?; footer? }` | - |
 | `className`    | `string`                                       | -          |
 
-`size` accepts the presets (`small` 30% / `medium` 50% / `large` 75% / `full` 90%) or any CSS length. Presets map to width for `left`/`right` and height for `top`/`bottom`.
+`size` accepts the presets (`small` 30% / `medium` 50% / `large` 75% / `full` 90%) or any CSS length. Presets map to width for `left`/`right` and height for `top`/`bottom`. On a `left`/`right` drawer the preset widths are floored at `20rem` so they stay readable on a phone, where `small` would otherwise land at about 112px; a custom `size` is used exactly as given.
