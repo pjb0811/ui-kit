@@ -2,4 +2,4 @@
 'docs': patch
 ---
 
-Add documentation for new UI components such as CodeEditor, ColorPicker, DatePicker, Input variants, Card, Splitter, Upload, and Toast, and update component tables accordingly.
+Complete the README component tables, which listed 19 of the 38 components and were missing every template except Layout, along with several existing sub-components.
