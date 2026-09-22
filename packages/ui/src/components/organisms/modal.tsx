@@ -222,21 +222,24 @@ const StaticModal = ({
     }, 200);
   };
 
+  // Confirming action first, dismissing action second — the same order as the
+  // controlled footer above, which used to run the other way round here and
+  // put the two footers of one component in opposite orders.
   const footer = isConfirm ? (
     <div className="grid w-full grid-cols-5 gap-x-2">
-      <Button
-        variant="outlined"
-        className="col-span-2"
-        onClick={() => closeModal(onCancel)}
-      >
-        {resolvedCancelText}
-      </Button>
       <Button
         type="primary"
         className="col-span-3"
         onClick={() => closeModal(onOk)}
       >
         {resolvedOkText}
+      </Button>
+      <Button
+        variant="outlined"
+        className="col-span-2"
+        onClick={() => closeModal(onCancel)}
+      >
+        {resolvedCancelText}
       </Button>
     </div>
   ) : (
