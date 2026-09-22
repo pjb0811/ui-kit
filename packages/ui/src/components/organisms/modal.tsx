@@ -161,7 +161,14 @@ const Modal = ({
           >
             {footer || (
               <>
-                <Button onClick={onOk}>
+                {/*
+                 * The confirming action is solid primary and the dismissing one
+                 * stays outlined, so the two read as different weights. Both
+                 * used to resolve to `outlined` — Button defaults to that
+                 * variant, so the unstyled OK button rendered identically to
+                 * the explicitly outlined Cancel beside it.
+                 */}
+                <Button type="primary" onClick={onOk}>
                   {okText ?? locale.ok ?? DEFAULT_LOCALE.ok}
                 </Button>
                 <Button variant="outlined" onClick={onCancel}>
@@ -224,12 +231,17 @@ const StaticModal = ({
       >
         {resolvedCancelText}
       </Button>
-      <Button className="col-span-3" onClick={() => closeModal(onOk)}>
+      <Button
+        type="primary"
+        className="col-span-3"
+        onClick={() => closeModal(onOk)}
+      >
         {resolvedOkText}
       </Button>
     </div>
   ) : (
     <Button
+      type="primary"
       className={cn(
         'grow',
         //
