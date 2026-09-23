@@ -27,7 +27,7 @@ const [open, setOpen] = useState(false);
 
 ## Imperative
 
-The static methods render a centered, status-styled modal and manage their own open state. `Modal.confirm` shows both OK/Cancel; the others show a single acknowledge button.
+The static methods render a centered, status-styled modal and manage their own open state. `Modal.confirm` shows both OK/Cancel; the others show a single acknowledge button. In every default footer the confirming button is solid primary and the dismissing one is outlined, so the two read as different weights; pass `footer` to take the whole row over.
 
 ```tsx
 Modal.confirm({
