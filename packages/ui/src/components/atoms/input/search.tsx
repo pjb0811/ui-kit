@@ -66,6 +66,7 @@ const Search = ({
 
   return (
     <div
+      data-slot="input-search"
       className={cn(
         'flex items-center',
         'rounded-md',
@@ -110,6 +111,7 @@ const Search = ({
         />
         <button
           type="button"
+          data-slot="input-search-clear"
           aria-label={locale.clear ?? DEFAULT_LOCALE.clear}
           disabled={disabled}
           className={cn(

@@ -4,7 +4,11 @@ export interface Props extends React.ComponentProps<'footer'> {}
 
 const Footer = ({ children, className, ...props }: Props) => {
   return (
-    <footer className={cn('w-full', className)} {...props}>
+    <footer
+      data-slot="layout-footer"
+      className={cn('w-full', className)}
+      {...props}
+    >
       {children}
     </footer>
   );

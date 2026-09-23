@@ -40,8 +40,20 @@ const requirements = [
     all: [':where([data-slot], [data-slot] *)', 'box-sizing: border-box', 'border-style: solid', 'border-width: 0'],
   },
   {
-    label: 'form-control reset (appearance + font/color inheritance) scoped to [data-slot]',
-    all: ['[data-slot] input', 'appearance: none', 'color: inherit', 'font: inherit'],
+    // The `[data-slot], …` half of the prefix is pinned on purpose. This rule
+    // used to self-match `button` only (`button[data-slot], [data-slot] button,
+    // [data-slot] input, …`), which missed a control that IS the slot root —
+    // `core/input.tsx`'s `<input data-slot="input">` and `core/textarea.tsx`'s
+    // `<textarea data-slot="textarea">` both rendered in the UA font on the
+    // docs site. Narrowing the prefix back to descendants-only would reinstate
+    // that, so assert the exact compound.
+    label: 'form-control reset (appearance + font/color inheritance) scoped to [data-slot], self-matching included',
+    all: [
+      ':where([data-slot], [data-slot] *):where(button, input, select, textarea)',
+      'appearance: none',
+      'color: inherit',
+      'font: inherit',
+    ],
   },
 ];
 

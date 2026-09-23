@@ -23,6 +23,7 @@ const Content = ({ children, className, render, ...props }: Props) => {
     defaultTagName: 'main',
     render,
     props: {
+      'data-slot': 'layout-content',
       ...props,
       className: cn(
         'min-w-0 shrink grow basis-auto',

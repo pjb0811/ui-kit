@@ -149,6 +149,7 @@ const Sider = ({
 
   return (
     <aside
+      data-slot="layout-sider"
       className={cn(
         // Below Header — and below every other floating/overlay primitive
         // in this library, which all share OVERLAY_LAYER (lib/z-layers.ts).
@@ -179,6 +180,7 @@ const Sider = ({
       {collapsible && trigger !== null && (
         <button
           type="button"
+          data-slot="layout-sider-trigger"
           aria-label={
             collapsed
               ? (locale.expand ?? DEFAULT_LOCALE.expand)

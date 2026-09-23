@@ -41,6 +41,18 @@
 //      merge their props/classes/children onto a replacement element without
 //      leaking button-only attributes onto a non-button host.
 //
+//   6. preflight-reset coverage: contract #4 asks "does this named component
+//      still emit its data-slot?", which only protects components someone
+//      thought to register. This asks the question from the other end — walk
+//      the rendered markup and assert every bare <button>/<input>/<select>/
+//      <textarea> is actually inside the reset's selector, i.e. carries
+//      data-slot itself or has an ancestor that does. A whole component family
+//      that never emitted a data-slot passes #2 and #4 vacuously (nothing is
+//      registered, no globals.css rule keys it) while its bare elements sit
+//      there with UA defaults — which is exactly how Layout's Sider trigger
+//      shipped as a 2px-outset UA button on the docs site, and how
+//      Input.Search's clear button did too.
+//
 // Run after `build`, via the css-stub loader (Swiper imports `.css`):
 //   node --import ./scripts/loaders/css-stub.mjs scripts/check-ssr-smoke.mjs
 import { createElement as h } from 'react';
@@ -118,16 +130,34 @@ const fixtures = {
   Menu: { items: [{ key: '1', label: 'Item' }] },
   Dropdown: {
     menu: { items: [{ key: '1', label: 'Item' }] },
-    children: h('button', null, 'trigger'),
+    // A `Button` rather than a bare `<button>`: the trigger these take is the
+    // caller's own element, and a bare one makes contract #6 flag the fixture
+    // instead of the library. This is also what the docs actually pass.
+    children: h(ui.Button, null, 'trigger'),
   },
-  Popover: { content: 'hi', children: h('button', null, 'trigger') },
+  Popover: { content: 'hi', children: h(ui.Button, null, 'trigger') },
   Drawer: { open: false, onClose: () => {}, children: 'x' },
   Modal: { open: false, onCancel: () => {} },
   Swiper: {
     data: [1, 2],
     renderItem: item => h(ui.Swiper.Slide, { key: item }, String(item)),
   },
-  Layout: { children: h(ui.Layout.Content, null, 'content') },
+  // The full shell, not a lone Content: Sider is the only part that renders a
+  // control of its own (the collapse trigger), and `collapsible` is what emits
+  // it. With a bare Content fixture the contracts below never see that button —
+  // which is how it shipped as a UA-default button on the docs site.
+  Layout: {
+    children: [
+      h(ui.Layout.Header, { key: 'header' }, 'header'),
+      h(
+        ui.Layout,
+        { key: 'body' },
+        h(ui.Layout.Sider, { collapsible: true }, 'sider'),
+        h(ui.Layout.Content, null, 'content'),
+      ),
+      h(ui.Layout.Footer, { key: 'footer' }, 'footer'),
+    ],
+  },
   Row: { children: h(ui.Col, { span: 12 }, 'col') },
   Col: { span: 12, children: 'col' },
   Splitter: {
@@ -146,6 +176,43 @@ const fixtures = {
 // named here because nothing enumerates them for us.
 const SUBPATH_COMPONENTS = {
   CodeEditor: { module: codeEditor, props: { value: 'const a = 1;\n' } },
+};
+
+// Compound parts (`Input.Search`, `Layout.Sider`, …). The loop over `ui` only
+// sees the barrel's own keys, so a part is exercised only when some parent's
+// fixture happens to render it — `Input.Search`'s clear button was never
+// rendered here at all, and it shipped as a UA-default button on the docs
+// site. Render each part on its own so the contracts see the whole public
+// surface, not just the roots. Keep props minimal, as in `fixtures`.
+const COMPOUND_COMPONENTS = {
+  'Checkbox.Group': [
+    ui.Checkbox.Group,
+    { options: [{ label: 'A', value: 'a' }] },
+  ],
+  'FloatButton.BackTop': [ui.FloatButton.BackTop, {}],
+  // `defaultValue` on purpose: the clear button carries `hidden` until the
+  // field has a value, and contract #6 skips hidden controls — so an empty
+  // Search would render the button in the one state where nothing checks it.
+  'Input.Search': [ui.Input.Search, { defaultValue: 'q' }],
+  'Input.TextArea': [ui.Input.TextArea, {}],
+  'Layout.Content': [ui.Layout.Content, { children: 'content' }],
+  'Layout.Footer': [ui.Layout.Footer, { children: 'footer' }],
+  'Layout.Header': [ui.Layout.Header, { children: 'header' }],
+  'Layout.Sider': [ui.Layout.Sider, { collapsible: true, children: 'sider' }],
+  'List.Item': [ui.List.Item, { children: 'item' }],
+  'Marquees.Item': [ui.Marquees.Item, { children: 'item' }],
+  'Radio.Group': [ui.Radio.Group, { options: [{ label: 'A', value: 'a' }] }],
+  'Reveals.Item': [ui.Reveals.Item, { children: 'item' }],
+  'Skeleton.Button': [ui.Skeleton.Button, {}],
+  'Skeleton.Node': [ui.Skeleton.Node, {}],
+  // Splitter.Panel is deliberately absent: react-resizable-panels throws
+  // ("Group Context not found") on a Panel rendered outside its Group, so it
+  // can only be exercised through the `Splitter` fixture above — which does.
+  'Swiper.Slide': [ui.Swiper.Slide, { children: 'slide' }],
+  'Typography.Link': [ui.Typography.Link, { children: 'link' }],
+  'Typography.Paragraph': [ui.Typography.Paragraph, { children: 'paragraph' }],
+  'Typography.Text': [ui.Typography.Text, { children: 'text' }],
+  'Typography.Title': [ui.Typography.Title, { children: 'title' }],
 };
 
 // Exports that aren't renderable components (providers-as-values, hooks,
@@ -192,6 +259,21 @@ for (const [name, { module: mod, props }] of Object.entries(
       throw new Error('subpath module has no default-exported component');
     }
     markupByName[name] = renderToStaticMarkup(h(Config, null, h(Comp, props)));
+    results.push({ name, ok: true });
+  } catch (err) {
+    results.push({ name, ok: false, err });
+  }
+}
+
+for (const [name, [Comp, fixture]] of Object.entries(COMPOUND_COMPONENTS)) {
+  const { children, ...props } = fixture;
+  try {
+    if (!isComponent(Comp)) {
+      throw new Error('compound part is not a component');
+    }
+    markupByName[name] = renderToStaticMarkup(
+      h(Config, null, h(Comp, props, children ?? undefined)),
+    );
     results.push({ name, ok: true });
   } catch (err) {
     results.push({ name, ok: false, err });
@@ -347,6 +429,101 @@ for (const { name, markup, expected, forbidden } of compositionCases) {
   }
 }
 
+// 6. preflight-reset coverage over the rendered markup.
+//
+// globals.css resets bare form controls with
+// `:where([data-slot], [data-slot] *):where(button, input, select, textarea)`,
+// so a control is covered iff it carries data-slot itself or descends from an
+// element that does. Walk the tags rather than string-matching: coverage is an
+// ancestor relationship, which substring checks can't see.
+const RESET_CONTROLS = new Set(['button', 'input', 'select', 'textarea']);
+// Emitted without a closing tag, so they never open a scope to pop.
+const VOID_ELEMENTS = new Set([
+  'area',
+  'base',
+  'br',
+  'col',
+  'embed',
+  'hr',
+  'img',
+  'input',
+  'link',
+  'meta',
+  'param',
+  'source',
+  'track',
+  'wbr',
+]);
+const TAG_RE = /<(\/?)([a-zA-Z][a-zA-Z0-9-]*)((?:"[^"]*"|'[^']*'|[^>"'])*)>/g;
+
+// A control nobody can see can't leak UA chrome, so it needs no reset. Base UI
+// pairs Select/Switch with a visually-hidden sibling <input> for form value —
+// rendered *outside* the slot root and already neutered inline
+// (`clip-path: inset(50%)`, `border: 0`), and Upload/Checkbox/Radio keep their
+// own `hidden` proxy inputs. Flagging those would be noise that trains people
+// to sprinkle data-slot at random.
+function isVisuallyHidden(attrs) {
+  if (/\shidden(?=[\s/>=])/.test(attrs)) {
+    return true;
+  }
+
+  if (/\sstyle="[^"]*clip-path:\s*inset\(50%\)/.test(attrs)) {
+    return true;
+  }
+
+  const className = /\sclass="([^"]*)"/.exec(attrs);
+
+  return !!className && className[1].split(/\s+/).includes('hidden');
+}
+
+function findUncoveredControls(markup) {
+  // Each entry is "is this element, or any ancestor, inside a data-slot?".
+  const coverageStack = [false];
+  const uncovered = new Set();
+
+  for (const [, closing, rawTag, attrs] of markup.matchAll(TAG_RE)) {
+    const tag = rawTag.toLowerCase();
+
+    if (closing) {
+      if (coverageStack.length > 1) {
+        coverageStack.pop();
+      }
+
+      continue;
+    }
+
+    const covered =
+      coverageStack[coverageStack.length - 1] || /\sdata-slot=/.test(attrs);
+
+    if (!covered && RESET_CONTROLS.has(tag) && !isVisuallyHidden(attrs)) {
+      uncovered.add(tag);
+    }
+
+    if (!VOID_ELEMENTS.has(tag) && !attrs.trimEnd().endsWith('/')) {
+      coverageStack.push(covered);
+    }
+  }
+
+  return [...uncovered].sort();
+}
+
+for (const [name, markup] of Object.entries(markupByName)) {
+  const uncovered = findUncoveredControls(markup);
+
+  if (uncovered.length) {
+    errors.push(
+      `${name} preflight-reset coverage: renders <${uncovered.join('> / <')}> ` +
+        'with no data-slot on the element or any ancestor.\n' +
+        '    globals.css scopes the non-Tailwind-host reset to\n' +
+        '    :where([data-slot], [data-slot] *):where(button, input, select, textarea),\n' +
+        '    so an uncovered control keeps the UA defaults (2px outset border, UA\n' +
+        '    font) on hosts without their own preflight — Docusaurus, plain Vite,\n' +
+        '    any consumer that only imports our stylesheet (#253/#256).\n' +
+        "    Put a data-slot on the control or on the component's root element.",
+    );
+  }
+}
+
 if (errors.length) {
   console.error('✘ SSR smoke / rendered-output contract failed:\n');
   for (const e of errors) console.error('  - ' + e + '\n');
@@ -359,5 +536,6 @@ console.log(
   `✓ SSR smoke + contracts passed: ${passed.length} components render, ` +
     `data-slot [${[...cssSlots].sort().join(', ')}] present, Button/Tag chassis intact, ` +
     `reset-slot ${resetSlots.length ? `[${resetSlots.join(', ')}] present` : 'registry empty'}, ` +
-    'render composition intact.',
+    'render composition intact, every rendered form control covered by the ' +
+    'preflight reset.',
 );
