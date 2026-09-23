@@ -129,6 +129,7 @@ const Upload = ({
 
   return (
     <div
+      data-slot="upload"
       className={cn(
         'flex flex-col gap-3',
         className,

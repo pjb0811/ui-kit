@@ -133,6 +133,7 @@ const Checkbox = ({
 
   return (
     <div
+      data-slot="checkbox-field"
       className={cn(
         'flex items-center gap-x-2',
         placement === 'right' && 'flex-row-reverse',

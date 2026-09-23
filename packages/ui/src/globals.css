@@ -199,13 +199,21 @@
     border-style: solid;
   }
 
-  :where(
-    button[data-slot],
-    [data-slot] button,
-    [data-slot] input,
-    [data-slot] select,
-    [data-slot] textarea
-  ) {
+  /*
+   * Same `[data-slot]` subtree as the rule above — deliberately spelled with
+   * the identical `:where([data-slot], [data-slot] *)` prefix so the two stay
+   * in sync.
+   *
+   * The `[data-slot], …` half (the element carrying the attribute itself) is
+   * load-bearing, not redundant: this list used to self-match `button` only
+   * (`button[data-slot], [data-slot] button, …`), so a form control that is
+   * *itself* the slot root with no slotted ancestor — `core/input.tsx`'s
+   * `<input data-slot="input">`, `core/textarea.tsx`'s
+   * `<textarea data-slot="textarea">` — matched nothing and kept the UA
+   * defaults. Measured on the Docusaurus docs site: `Input` rendered in Arial
+   * and `Input.TextArea` in monospace rather than the page font.
+   */
+  :where([data-slot], [data-slot] *):where(button, input, select, textarea) {
     appearance: none;
     background-color: transparent;
     color: inherit;

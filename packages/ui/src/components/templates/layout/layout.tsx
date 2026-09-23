@@ -55,6 +55,7 @@ const Layout = ({ children, className, ...props }: Props) => {
     <LayoutNestedContext.Provider value>
       <SiderRegistryContext.Provider value={registry}>
         <div
+          data-slot="layout"
           className={cn(
             'flex w-full flex-1',
             // A nested Layout (the Sider row wrapper) must stay free to

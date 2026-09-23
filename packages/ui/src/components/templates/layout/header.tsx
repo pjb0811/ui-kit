@@ -14,6 +14,7 @@ const Header = ({
 }: Props) => {
   return (
     <header
+      data-slot="layout-header"
       className={cn(
         position !== 'static' && OVERLAY_LAYER,
         position === 'sticky' && 'sticky top-0',

@@ -157,6 +157,7 @@ const Radio = ({
 
   return (
     <div
+      data-slot="radio-field"
       className={cn(
         'flex items-center',
         icons && placement === 'right' && 'flex-row-reverse',
