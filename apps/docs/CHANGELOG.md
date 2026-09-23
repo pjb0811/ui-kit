@@ -1,5 +1,14 @@
 # docs
 
+## 0.5.23
+
+### Patch Changes
+
+- 8927e24: Complete the README component tables, which listed 19 of the 38 components and were missing every template except Layout, along with several existing sub-components.
+- Updated dependencies [7bcd44a]
+- Updated dependencies [28749ee]
+  - @repo/ui@10.0.3
+
 ## 0.5.22
 
 ### Patch Changes
