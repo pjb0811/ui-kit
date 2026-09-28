@@ -144,6 +144,7 @@ const Menu = ({
 
   return (
     <ul
+      data-slot="menu"
       role="menu"
       className={cn(
         MENU_CLASSNAMES,

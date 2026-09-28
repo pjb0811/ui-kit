@@ -51,7 +51,11 @@
 //      registered, no globals.css rule keys it) while its bare elements sit
 //      there with UA defaults — which is exactly how Layout's Sider trigger
 //      shipped as a 2px-outset UA button on the docs site, and how
-//      Input.Search's clear button did too.
+//      Input.Search's clear button did too. The same walk covers the
+//      typographic tags the margin reset targets (<p>, <h1>–<h6>, <ul>, …,
+//      #408): Empty, Result, PageHeader and Toast rendered bare <p>s with no
+//      data-slot anywhere above them, so their UA `margin-block: 1em` stacked
+//      on top of the declared flex gaps.
 //
 // Run after `build`, via the css-stub loader (Swiper imports `.css`):
 //   node --import ./scripts/loaders/css-stub.mjs scripts/check-ssr-smoke.mjs
@@ -432,11 +436,29 @@ for (const { name, markup, expected, forbidden } of compositionCases) {
 // 6. preflight-reset coverage over the rendered markup.
 //
 // globals.css resets bare form controls with
-// `:where([data-slot], [data-slot] *):where(button, input, select, textarea)`,
-// so a control is covered iff it carries data-slot itself or descends from an
-// element that does. Walk the tags rather than string-matching: coverage is an
-// ancestor relationship, which substring checks can't see.
+// `:where([data-slot], [data-slot] *):where(button, input, select, textarea)`
+// and typographic block margins with the same prefix, so an element is covered
+// iff it carries data-slot itself or descends from an element that does. Walk
+// the tags rather than string-matching: coverage is an ancestor relationship,
+// which substring checks can't see.
 const RESET_CONTROLS = new Set(['button', 'input', 'select', 'textarea']);
+// Mirrors the tag list of the margin rule in globals.css (#408).
+const RESET_MARGIN_TAGS = new Set([
+  'p',
+  'h1',
+  'h2',
+  'h3',
+  'h4',
+  'h5',
+  'h6',
+  'ul',
+  'ol',
+  'dl',
+  'dd',
+  'blockquote',
+  'figure',
+  'pre',
+]);
 // Emitted without a closing tag, so they never open a scope to pop.
 const VOID_ELEMENTS = new Set([
   'area',
@@ -495,7 +517,11 @@ function findUncoveredControls(markup) {
     const covered =
       coverageStack[coverageStack.length - 1] || /\sdata-slot=/.test(attrs);
 
-    if (!covered && RESET_CONTROLS.has(tag) && !isVisuallyHidden(attrs)) {
+    if (
+      !covered &&
+      (RESET_CONTROLS.has(tag) || RESET_MARGIN_TAGS.has(tag)) &&
+      !isVisuallyHidden(attrs)
+    ) {
       uncovered.add(tag);
     }
 
@@ -515,11 +541,12 @@ for (const [name, markup] of Object.entries(markupByName)) {
       `${name} preflight-reset coverage: renders <${uncovered.join('> / <')}> ` +
         'with no data-slot on the element or any ancestor.\n' +
         '    globals.css scopes the non-Tailwind-host reset to\n' +
-        '    :where([data-slot], [data-slot] *):where(button, input, select, textarea),\n' +
-        '    so an uncovered control keeps the UA defaults (2px outset border, UA\n' +
-        '    font) on hosts without their own preflight — Docusaurus, plain Vite,\n' +
-        '    any consumer that only imports our stylesheet (#253/#256).\n' +
-        "    Put a data-slot on the control or on the component's root element.",
+        '    :where([data-slot], [data-slot] *), so an uncovered element keeps the\n' +
+        '    UA defaults on hosts without their own preflight — Docusaurus, plain\n' +
+        '    Vite, any consumer that only imports our stylesheet: a 2px outset\n' +
+        '    border and UA font on form controls (#253/#256), `margin-block: 1em`\n' +
+        '    on <p>/<h1>–<h6>/<ul>/… (#408).\n' +
+        "    Put a data-slot on the element or on the component's root element.",
     );
   }
 }
@@ -536,6 +563,6 @@ console.log(
   `✓ SSR smoke + contracts passed: ${passed.length} components render, ` +
     `data-slot [${[...cssSlots].sort().join(', ')}] present, Button/Tag chassis intact, ` +
     `reset-slot ${resetSlots.length ? `[${resetSlots.join(', ')}] present` : 'registry empty'}, ` +
-    'render composition intact, every rendered form control covered by the ' +
-    'preflight reset.',
+    'render composition intact, every rendered form control and typographic ' +
+    'element covered by the preflight reset.',
 );

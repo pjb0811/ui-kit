@@ -64,6 +64,7 @@ const Group = ({
 
   return (
     <ul
+      data-slot="checkbox-group"
       {...props}
       className={cn(
         // Spacing comes from `gap`, not `space-y`'s child margins, so the
