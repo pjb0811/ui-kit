@@ -55,6 +55,16 @@ const requirements = [
       'font: inherit',
     ],
   },
+  {
+    // #408: without this, a bare <p> keeps `margin-block: 1em`, which adds to
+    // a flex column's `gap-*` rather than collapsing into it — Empty and Result
+    // rendered ~20% taller than designed on a host with no preflight.
+    label: 'typographic margin reset scoped to [data-slot], self-matching included',
+    all: [
+      ':where([data-slot], [data-slot] *):where(p, h1, h2, h3, h4, h5, h6, ul, ol, dl, dd, blockquote, figure, pre)',
+      'margin: 0',
+    ],
+  },
 ];
 
 const failures = [];

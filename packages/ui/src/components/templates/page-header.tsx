@@ -38,7 +38,11 @@ const PageHeader = ({
   const { locale } = useConfig();
 
   return (
-    <div className={cn('flex flex-col gap-2', className)} {...props}>
+    <div
+      data-slot="page-header"
+      className={cn('flex flex-col gap-2', className)}
+      {...props}
+    >
       <div className="flex items-start gap-2">
         {onBack && (
           <Button

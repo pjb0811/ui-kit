@@ -48,6 +48,7 @@ const Result = ({
 }: Props) => {
   return (
     <div
+      data-slot="result"
       className={cn(
         'flex flex-col items-center justify-center gap-2 py-16 text-center',
         className,

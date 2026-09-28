@@ -219,6 +219,34 @@
     color: inherit;
     font: inherit;
   }
+
+  /*
+   * Same prefix again, for the UA block margins on typographic elements
+   * (#408). A bare `<p>` keeps `margin-block: 1em`, sized off its own font, and
+   * inside a flex column that margin *adds* to the declared `gap-*` instead of
+   * collapsing into it: `Empty` rendered its 12px gaps as 26–40px and `Result`
+   * its 8px gaps as 36–42px on a host without its own preflight. Zero
+   * specificity in the base layer, so every margin utility (`space-y-*`,
+   * `ml-4`, `mt-4`, …) still wins.
+   */
+  :where([data-slot], [data-slot] *):where(
+    p,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    ul,
+    ol,
+    dl,
+    dd,
+    blockquote,
+    figure,
+    pre
+  ) {
+    margin: 0;
+  }
 }
 
 @layer components {

@@ -56,6 +56,7 @@ const Toast = ({
 
   return (
     <div
+      data-slot="toast"
       role={status === 'error' ? 'alert' : 'status'}
       className={cn(
         'pointer-events-auto flex w-80 items-start gap-3 rounded-lg',
