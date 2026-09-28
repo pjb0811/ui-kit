@@ -250,8 +250,8 @@ importers:
         specifier: ^2.1.2
         version: 2.1.2(gsap@3.15.0)(react@19.2.8)
       '@jbpark/use-hooks':
-        specifier: ^4.0.1
-        version: 4.0.1(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+        specifier: ^4.1.0
+        version: 4.1.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       '@tiptap/core':
         specifier: ^3.30.1
         version: 3.31.3(@tiptap/pm@3.31.3)
@@ -2099,8 +2099,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@jbpark/use-hooks@4.0.1':
-    resolution: {integrity: sha512-d+dRZRrwLUaOYiI8LGySqTEyewB+LWO+k0blb70xv0Gg2Ome9x3gxlXg0Dbjyq6mrVKzXOrHnpLY0uof3gZlaQ==}
+  '@jbpark/use-hooks@4.1.0':
+    resolution: {integrity: sha512-JoYcZYgFbuD9lcb9DoUruo+s+ivUd7/lLW//CpTCVkhx2xdwnbOBO0psC/8zr618gRN8vJ8AJE1vgYI/VCHmLA==}
     peerDependencies:
       react: ^19.1.1
       react-dom: ^19.1.1
@@ -12145,7 +12145,7 @@ snapshots:
   '@img/sharp-win32-x64@0.35.3':
     optional: true
 
-  '@jbpark/use-hooks@4.0.1(react-dom@19.2.8(react@19.2.8))(react@19.2.8)':
+  '@jbpark/use-hooks@4.1.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8)':
     dependencies:
       react: 19.2.8
       react-dom: 19.2.8(react@19.2.8)
