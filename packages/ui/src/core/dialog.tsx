@@ -25,14 +25,15 @@ import { OVERLAY_LAYER } from '../lib/z-layers';
  *   in Base UI (`disablePointerDismissal`), not a Content event. See
  *   `organisms/modal`.
  *
- * Local patches retained from the shadcn version:
- * - `OVERLAY_LAYER` (src/lib/z-layers.ts) replaces upstream's `z-50` on the
+ * Deviations from the shadcn Base UI styles this file was seeded from (#375;
+ * there is no upstream to track any more):
+ * - `OVERLAY_LAYER` (src/lib/z-layers.ts) replaces the seed's `z-50` on the
  *   backdrop and popup — this package is published and can't own the app's
- *   z-index scale (#359).
+ *   z-index scale (#359, re-evaluated in #411).
  * - `DialogContent` takes a `container` prop (default `useConfig().getContainer()`)
  *   passed to the portal, so portalled content stays inside the themed wrapper.
  * - `DialogContent` exposes `closable`/`closeIcon`/`classNames.mask` instead of
- *   upstream's `showCloseButton`.
+ *   the seed's `showCloseButton`.
  * - `DialogFooter`'s close button uses this library's Button vocabulary.
  */
 function Dialog({

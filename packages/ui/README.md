@@ -145,6 +145,13 @@ Put `data-ui-root` on your application layout root. The included stylesheet
 applies `isolation: isolate` there so Base UI portals render above page content
 without competing with z-index values inside the app.
 
+It also works in the other direction. Overlays (Modal, Drawer, Select,
+Popover) and in-flow chrome (sticky/fixed `Layout.Header`, `FloatButton`,
+Dropdown menus) share `z-index: 1000`. Without an isolated root, that
+chrome paints over your own dialogs if they use a lower z-index (for example
+shadcn's `z-50`). With `data-ui-root`, any overlay you portal to `body`
+covers the whole app, including this chrome.
+
 ### Import Individual Components
 
 ```tsx

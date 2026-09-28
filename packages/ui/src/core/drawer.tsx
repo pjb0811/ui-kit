@@ -25,9 +25,10 @@ import { OVERLAY_LAYER } from '../lib/z-layers';
  *   (`disablePointerDismissal`), and mask/modal behaviour is driven by the
  *   consumer — see `organisms/drawer`.
  *
- * Retained local patches: `OVERLAY_LAYER` (#359) over upstream's z-index, the
- * themed portal `container` (default `useConfig().getContainer()`), and the
- * `classNames`/`handlebar`/`mask` custom props.
+ * Local additions: `OVERLAY_LAYER` (#359, #411) rather than a hard-coded
+ * z-index, the themed portal `container` (default
+ * `useConfig().getContainer()`), and the `classNames`/`handlebar`/`mask` custom
+ * props.
  */
 type Direction = 'top' | 'bottom' | 'left' | 'right';
 

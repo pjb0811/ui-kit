@@ -145,6 +145,13 @@ function App() {
 해당 요소에 `isolation: isolate`를 적용해 Base UI 포털이 앱 내부의 z-index와
 경쟁하지 않고 페이지 콘텐츠 위에 표시되도록 합니다.
 
+반대 방향으로도 효과가 있습니다. 오버레이(Modal, Drawer, Select, Popover)와
+페이지 흐름 안에 고정되는 요소(sticky/fixed `Layout.Header`, `FloatButton`,
+Dropdown 메뉴)는 모두 `z-index: 1000`을 씁니다. 루트를 격리하지 않으면 이
+요소들이 z-index가 더 낮은 앱 자체의 다이얼로그(예: shadcn의 `z-50`)를 덮습니다.
+`data-ui-root`를 지정하면 `body`로 포털되는 앱의 오버레이가 이 요소들을 포함한
+앱 전체를 덮습니다.
+
 ### 개별 컴포넌트 import
 
 ```tsx
