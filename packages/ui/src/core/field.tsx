@@ -125,9 +125,6 @@ function FieldLabel({
         `has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col
         has-[>[data-slot=field]]:rounded-md has-[>[data-slot=field]]:border
         [&>*]:data-[slot=field]:p-4`,
-        `has-data-[state=checked]:bg-primary/5
-        has-data-[state=checked]:border-primary
-        dark:has-data-[state=checked]:bg-primary/10`,
         className,
       )}
       {...props}
