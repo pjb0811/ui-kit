@@ -14,4 +14,5 @@ export { default as Slider } from './slider';
 export { default as Spin } from './spin';
 export { default as Switch } from './switch';
 export { default as Tag } from './tag';
+export { default as Tooltip } from './tooltip';
 export { default as Typography } from './typography';

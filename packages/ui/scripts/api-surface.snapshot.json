@@ -55,6 +55,7 @@
     "Tabs",
     "Tag",
     "Toast",
+    "Tooltip",
     "Typography",
     "Upload",
     "getRootConfigValue",

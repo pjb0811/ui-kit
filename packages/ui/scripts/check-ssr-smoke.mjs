@@ -141,6 +141,7 @@ const fixtures = {
     children: h(ui.Button, null, 'trigger'),
   },
   Popover: { content: 'hi', children: h(ui.Button, null, 'trigger') },
+  Tooltip: { content: 'Hint', children: h(ui.Button, null, 'trigger') },
   Drawer: { open: false, onClose: () => {}, children: 'x' },
   Modal: { open: false, onCancel: () => {} },
   Swiper: {
