@@ -21,6 +21,7 @@
     "Col",
     "Collapse",
     "ColorPicker",
+    "Combobox",
     "Config",
     "ConfigSnapshotProvider",
     "Container",
