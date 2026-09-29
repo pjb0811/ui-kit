@@ -7,8 +7,9 @@ import SelectDemo from '../../../src/demo/select-demo';
 
 # Select
 
-A dropdown for choosing one value from a list, built on Base UI's Select
-primitive. Options can be flat or grouped.
+A dropdown for choosing one value from a list. It uses Base UI Select by
+default and Base UI Combobox when `searchable` is enabled. Options can be flat
+or grouped in either mode.
 
 ```tsx
 import { Select } from '@jbpark/ui-kit';
@@ -25,19 +26,48 @@ import { Select } from '@jbpark/ui-kit';
 
 <SelectDemo />
 
+For a long list of predefined options, add `searchable` to show a search field
+inside the popup while keeping the same closed trigger. The `label` is required
+in this mode to give the trigger and popup accessible names. Searchable option
+and group labels must be strings so they can be filtered.
+
+```tsx
+<Select
+  searchable
+  label="Choose a framework"
+  placeholder="Select a framework"
+  searchPlaceholder="Search frameworks"
+  options={[
+    { label: 'React', value: 'react' },
+    { label: 'Vue', value: 'vue' },
+  ]}
+  onChange={value => console.log(value)}
+/>
+```
+
+Use the default Select for short lists. Use Input.Search when users should enter
+free-form text rather than choose a predefined value.
+
 ## Props
 
-| Prop          | Type                        | Default |
-| ------------- | ----------------------------- | ------- |
-| `options`     | `(Option \| OptionGroup)[]`  | -       |
-| `placeholder` | `string`                      | -       |
-| `onChange`    | `(value: string) => void`     | -       |
-| `className`   | `string`                      | -       |
+| Prop                | Type                                                           | Default             |
+| ------------------- | -------------------------------------------------------------- | ------------------- |
+| `options`           | `(Option \| OptionGroup)[]`                                    | -                   |
+| `placeholder`       | `string`                                                       | -                   |
+| `onChange`          | `(value: string) => void`                                      | -                   |
+| `className`         | `string`                                                       | -                   |
+| `searchable`        | `boolean`                                                      | `false`             |
+| `label`             | `string` (searchable mode)                                     | -                   |
+| `searchPlaceholder` | `string` (searchable mode)                                     | `Search...`         |
+| `emptyText`         | `React.ReactNode` (searchable mode)                            | `No results found.` |
+| `allowClear`        | `boolean` (searchable mode)                                    | `true`              |
+| `classNames`        | `{ input?, content?, list?, item?, empty? }` (searchable mode) | -                   |
 
 ```ts
 interface Option {
   label: React.ReactNode;
   value: string;
+  disabled?: boolean;
 }
 
 interface OptionGroup {
@@ -49,4 +79,7 @@ interface OptionGroup {
 An `OptionGroup` entry (an `options` array instead of `value`) renders as a
 labeled group. `Select` also accepts the rest of Base UI's `Select` root
 props (e.g. `value`, `defaultValue`, `disabled`, `name`, `required`) except
-`onValueChange`, which is renamed to `onChange` above.
+`onValueChange`, which is renamed to `onChange` above. In searchable mode,
+`onChange` receives `string | null`, because clearing a selection emits `null`.
+It accepts the corresponding Base UI Combobox root props instead of Select root
+props.

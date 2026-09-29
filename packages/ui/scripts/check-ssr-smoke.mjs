@@ -124,10 +124,6 @@ const fixtures = {
   Space: { children: 'x' },
   Card: { children: 'x' },
   Collapse: { items: [{ key: '1', label: 'L', children: 'C' }] },
-  Combobox: {
-    label: 'Choose an option',
-    options: [{ value: 'a', label: 'Option A' }],
-  },
   Tabs: { items: [{ key: '1', label: 'Tab', children: 'Panel' }] },
   Container: { children: 'x' },
   PageHeader: { title: 'Title' },
@@ -258,6 +254,23 @@ for (const name of Object.keys(ui).sort()) {
   } catch (err) {
     results.push({ name, ok: false, err });
   }
+}
+
+try {
+  markupByName['Select.searchable'] = renderToStaticMarkup(
+    h(
+      Config,
+      null,
+      h(ui.Select, {
+        searchable: true,
+        label: 'Choose an option',
+        options: [{ value: 'a', label: 'Option A' }],
+      }),
+    ),
+  );
+  results.push({ name: 'Select.searchable', ok: true });
+} catch (err) {
+  results.push({ name: 'Select.searchable', ok: false, err });
 }
 
 for (const [name, { module: mod, props }] of Object.entries(

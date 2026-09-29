@@ -17,9 +17,13 @@ export type RootProps<Value, Item = Value> = ComboboxPrimitive.Root.Props<
 >;
 
 const Combobox = ComboboxPrimitive.Root;
-const ComboboxInputGroup = ComboboxPrimitive.InputGroup;
 const ComboboxInput = ComboboxPrimitive.Input;
 const ComboboxTrigger = ComboboxPrimitive.Trigger;
+const ComboboxValue = ComboboxPrimitive.Value;
+const ComboboxIcon = ComboboxPrimitive.Icon;
+const ComboboxGroup = ComboboxPrimitive.Group;
+const ComboboxGroupLabel = ComboboxPrimitive.GroupLabel;
+const ComboboxCollection = ComboboxPrimitive.Collection;
 const ComboboxClear = ComboboxPrimitive.Clear;
 const createItems = ComboboxPrimitive.createItems;
 
@@ -39,7 +43,7 @@ function ComboboxContent({
         side="bottom"
         align="start"
         sideOffset={4}
-        className={cn(OVERLAY_LAYER, 'w-(--anchor-width)')}
+        className={cn(OVERLAY_LAYER, 'min-w-(--anchor-width)')}
       >
         <ComboboxPrimitive.Popup
           data-slot="combobox-content"
@@ -122,12 +126,16 @@ function ComboboxEmpty({
 export {
   Combobox,
   ComboboxClear,
+  ComboboxCollection,
   ComboboxContent,
   ComboboxEmpty,
+  ComboboxGroup,
+  ComboboxGroupLabel,
+  ComboboxIcon,
   ComboboxInput,
-  ComboboxInputGroup,
   ComboboxItem,
   ComboboxList,
   ComboboxTrigger,
+  ComboboxValue,
   createItems,
 };

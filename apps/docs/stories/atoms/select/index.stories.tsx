@@ -4,11 +4,18 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
 import { Config, Select } from '@repo/ui';
 
-const meta: Meta<typeof Select> = {
+// Storybook's props inference reduces the two Select modes to never.
+const meta: Meta = {
   title: 'Data Entry/Select',
   component: Select,
   parameters: {
     layout: 'centered',
+    docs: {
+      description: {
+        component:
+          'Use the default Select for short lists. Set `searchable` for long lists of predefined values; its search field opens inside the popup. Searchable mode requires an accessible `label` and string option labels. Use Input.Search for free-text search instead of selecting a predefined value.',
+      },
+    },
   },
 };
 
@@ -101,4 +108,121 @@ export const Scrollable: Story = {
       value: String(index + 1),
     })),
   },
+};
+
+const fruits = [
+  'Apple',
+  'Apricot',
+  'Banana',
+  'Blackberry',
+  'Blueberry',
+  'Cherry',
+  'Grape',
+  'Grapefruit',
+  'Kiwi',
+  'Lemon',
+  'Lime',
+  'Mango',
+  'Orange',
+  'Peach',
+  'Pear',
+  'Pineapple',
+  'Raspberry',
+  'Strawberry',
+  'Watermelon',
+].map(label => ({ label, value: label.toLowerCase() }));
+
+export const Searchable: Story = {
+  args: {
+    searchable: true,
+    label: 'Choose a fruit',
+    placeholder: 'Select a fruit',
+    searchPlaceholder: 'Search fruit',
+    options: fruits,
+  },
+};
+
+export const SearchableGrouped: Story = {
+  args: {
+    searchable: true,
+    label: 'Choose a font',
+    placeholder: 'Select a font',
+    options: [
+      {
+        label: 'Sans serif',
+        options: [
+          { label: 'Inter', value: 'inter' },
+          { label: 'Pretendard', value: 'pretendard' },
+        ],
+      },
+      {
+        label: 'Monospace',
+        options: [
+          { label: 'JetBrains Mono', value: 'jetbrains-mono' },
+          { label: 'Geist Mono', value: 'geist-mono' },
+        ],
+      },
+    ],
+  },
+};
+
+export const SearchableControlled: Story = {
+  render: function ControlledSearchableSelect() {
+    const [value, setValue] = useState<string | null>('banana');
+
+    return (
+      <div className="flex flex-col gap-3">
+        <Select
+          searchable
+          label="Choose a fruit"
+          placeholder="Select a fruit"
+          options={fruits}
+          value={value}
+          onChange={setValue}
+        />
+        <span data-testid="selected-value">Selected: {value ?? 'none'}</span>
+      </div>
+    );
+  },
+};
+
+export const SearchableDisabledOption: Story = {
+  args: {
+    searchable: true,
+    label: 'Choose a fruit',
+    options: [
+      { label: 'Apple', value: 'apple' },
+      { label: 'Banana (unavailable)', value: 'banana', disabled: true },
+      { label: 'Cherry', value: 'cherry' },
+    ],
+  },
+};
+
+export const SearchableNoResults: Story = {
+  args: {
+    ...Searchable.args,
+    defaultInputValue: 'no-match',
+    emptyText: 'Try a different fruit.',
+  },
+};
+
+export const SearchableDisabled: Story = {
+  args: {
+    ...Searchable.args,
+    disabled: true,
+  },
+};
+
+export const SearchableThemedRtl: Story = {
+  render: () => (
+    <Config direction="rtl" theme={{ dark: 'dark' }}>
+      <Select
+        searchable
+        label="اختر فاكهة"
+        placeholder="اختر فاكهة"
+        searchPlaceholder="ابحث عن فاكهة"
+        options={fruits}
+      />
+    </Config>
+  ),
 };

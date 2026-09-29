@@ -25,6 +25,21 @@ const GROUPED_FOODS = [
   },
 ];
 
+const FRUITS = [
+  'Apple',
+  'Apricot',
+  'Banana',
+  'Blackberry',
+  'Blueberry',
+  'Cherry',
+  'Grape',
+  'Grapefruit',
+  'Kiwi',
+  'Mango',
+  'Peach',
+  'Pineapple',
+].map(label => ({ label, value: label.toLowerCase() }));
+
 export default function SelectDemo() {
   const [value, setValue] = useState<string>();
 
@@ -41,6 +56,13 @@ export default function SelectDemo() {
         </Typography.Text>
       </Space>
       <Select placeholder="Choose a food" options={GROUPED_FOODS} />
+      <Select
+        searchable
+        label="Choose a fruit"
+        placeholder="Select a fruit"
+        searchPlaceholder="Search fruit"
+        options={FRUITS}
+      />
     </Space>
   );
 }
