@@ -256,6 +256,23 @@ for (const name of Object.keys(ui).sort()) {
   }
 }
 
+try {
+  markupByName['Select.searchable'] = renderToStaticMarkup(
+    h(
+      Config,
+      null,
+      h(ui.Select, {
+        searchable: true,
+        label: 'Choose an option',
+        options: [{ value: 'a', label: 'Option A' }],
+      }),
+    ),
+  );
+  results.push({ name: 'Select.searchable', ok: true });
+} catch (err) {
+  results.push({ name: 'Select.searchable', ok: false, err });
+}
+
 for (const [name, { module: mod, props }] of Object.entries(
   SUBPATH_COMPONENTS,
 )) {

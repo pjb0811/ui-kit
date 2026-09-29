@@ -3,6 +3,9 @@ import React from 'react';
 import { cn } from '@repo/ui/utils';
 
 import { select } from '../../core';
+import SearchableSelect, {
+  type Props as SearchableProps,
+} from './select-searchable';
 
 const {
   Select: Core,
@@ -17,6 +20,7 @@ const {
 interface Option {
   label: React.ReactNode;
   value: string;
+  disabled?: boolean;
 }
 
 interface OptionGroup {
@@ -28,23 +32,28 @@ const isGroup = (option: Option | OptionGroup): option is OptionGroup => {
   return 'options' in option && Array.isArray(option.options);
 };
 
-export interface Props extends Omit<
+interface StaticProps extends Omit<
   React.ComponentProps<typeof Core>,
   'onValueChange'
 > {
+  searchable?: false;
   placeholder?: string;
   className?: string;
   options?: (Option | OptionGroup)[];
   onChange?: (value: string) => void;
 }
 
-const Select = ({
+export type Props = StaticProps | SearchableProps;
+
+const StaticSelect = ({
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- Do not forward the public mode switch to Base UI.
+  searchable: _searchable,
   className,
   placeholder,
   options,
   onChange,
   ...props
-}: Props) => {
+}: StaticProps) => {
   const items = options?.flatMap(option =>
     isGroup(option) ? option.options : option,
   );
@@ -68,13 +77,21 @@ const Select = ({
             <SelectGroup key={index}>
               <SelectLabel>{option.label}</SelectLabel>
               {option.options.map(item => (
-                <SelectItem key={item.value} value={item.value}>
+                <SelectItem
+                  key={item.value}
+                  value={item.value}
+                  disabled={item.disabled}
+                >
                   {item.label}
                 </SelectItem>
               ))}
             </SelectGroup>
           ) : (
-            <SelectItem key={option.value} value={option.value}>
+            <SelectItem
+              key={option.value}
+              value={option.value}
+              disabled={option.disabled}
+            >
               {option.label}
             </SelectItem>
           ),
@@ -82,6 +99,14 @@ const Select = ({
       </SelectContent>
     </Core>
   );
+};
+
+const Select = (props: Props) => {
+  if (props.searchable) {
+    return <SearchableSelect {...props} />;
+  }
+
+  return <StaticSelect {...props} />;
 };
 
 export default Select;

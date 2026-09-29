@@ -3,6 +3,7 @@ export * as badge from './badge';
 export * as button from './button';
 export * as calendar from './calendar';
 export * as checkbox from './checkbox';
+export * as combobox from './combobox';
 export * as dialog from './dialog';
 export * as drawer from './drawer';
 export * as field from './field';
