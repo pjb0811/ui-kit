@@ -124,6 +124,7 @@ const fixtures = {
   Space: { children: 'x' },
   Card: { children: 'x' },
   Collapse: { items: [{ key: '1', label: 'L', children: 'C' }] },
+  Tabs: { items: [{ key: '1', label: 'Tab', children: 'Panel' }] },
   Container: { children: 'x' },
   PageHeader: { title: 'Title' },
   Empty: {},

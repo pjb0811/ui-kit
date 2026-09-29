@@ -17,4 +17,5 @@ export * as separator from './separator';
 export * as skeleton from './skeleton';
 export * as slider from './slider';
 export * as switchComponent from './switch';
+export * as tabs from './tabs';
 export * as textarea from './textarea';
