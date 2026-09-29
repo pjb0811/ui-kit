@@ -19,14 +19,24 @@ const meta: Meta<typeof Tooltip> = {
   },
   argTypes: {
     content: { control: 'text' },
-    side: {
+    placement: {
       control: 'select',
-      options: ['top', 'right', 'bottom', 'left'],
+      options: [
+        'top',
+        'right',
+        'bottom',
+        'left',
+        'topLeft',
+        'topRight',
+        'bottomLeft',
+        'bottomRight',
+        'leftTop',
+        'leftBottom',
+        'rightTop',
+        'rightBottom',
+      ],
     },
-    align: {
-      control: 'select',
-      options: ['start', 'center', 'end'],
-    },
+    offset: { control: 'number' },
     delay: { control: 'number' },
     closeDelay: { control: 'number' },
     children: { control: false },
@@ -51,9 +61,14 @@ export const Default: Story = {
 export const Positions: Story = {
   render: () => (
     <div className="grid grid-cols-2 gap-8 p-12">
-      {(['top', 'right', 'bottom', 'left'] as const).map(side => (
-        <Tooltip key={side} content={`On the ${side}`} side={side} delay={0}>
-          <Button>{side}</Button>
+      {(['top', 'right', 'bottom', 'left'] as const).map(placement => (
+        <Tooltip
+          key={placement}
+          content={`On the ${placement}`}
+          placement={placement}
+          delay={0}
+        >
+          <Button>{placement}</Button>
         </Tooltip>
       ))}
     </div>
