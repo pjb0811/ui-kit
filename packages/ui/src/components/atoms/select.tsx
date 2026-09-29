@@ -3,6 +3,7 @@ import React from 'react';
 import { cn } from '@repo/ui/utils';
 
 import { select } from '../../core';
+import MultipleSelect, { type Props as MultipleProps } from './select-multiple';
 import SearchableSelect, {
   type Props as SearchableProps,
 } from './select-searchable';
@@ -43,7 +44,7 @@ interface StaticProps extends Omit<
   onChange?: (value: string) => void;
 }
 
-export type Props = StaticProps | SearchableProps;
+export type Props = StaticProps | SearchableProps | MultipleProps;
 
 const StaticSelect = ({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars -- Do not forward the public mode switch to Base UI.
@@ -102,6 +103,10 @@ const StaticSelect = ({
 };
 
 const Select = (props: Props) => {
+  if (props.multiple) {
+    return <MultipleSelect {...props} />;
+  }
+
   if (props.searchable) {
     return <SearchableSelect {...props} />;
   }

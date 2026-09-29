@@ -10,14 +10,15 @@ import { cn } from '@repo/ui/utils';
 
 import { OVERLAY_LAYER } from '../lib/z-layers';
 
-export type RootProps<Value, Item = Value> = ComboboxPrimitive.Root.Props<
+export type RootProps<
   Value,
-  false,
-  Item
->;
+  Item = Value,
+  Multiple extends boolean | undefined = false,
+> = ComboboxPrimitive.Root.Props<Value, Multiple, Item>;
 
 const Combobox = ComboboxPrimitive.Root;
 const ComboboxInput = ComboboxPrimitive.Input;
+const ComboboxInputGroup = ComboboxPrimitive.InputGroup;
 const ComboboxTrigger = ComboboxPrimitive.Trigger;
 const ComboboxValue = ComboboxPrimitive.Value;
 const ComboboxIcon = ComboboxPrimitive.Icon;
@@ -25,6 +26,9 @@ const ComboboxGroup = ComboboxPrimitive.Group;
 const ComboboxGroupLabel = ComboboxPrimitive.GroupLabel;
 const ComboboxCollection = ComboboxPrimitive.Collection;
 const ComboboxClear = ComboboxPrimitive.Clear;
+const ComboboxChips = ComboboxPrimitive.Chips;
+const ComboboxChip = ComboboxPrimitive.Chip;
+const ComboboxChipRemove = ComboboxPrimitive.ChipRemove;
 const createItems = ComboboxPrimitive.createItems;
 
 function ComboboxContent({
@@ -126,6 +130,9 @@ function ComboboxEmpty({
 export {
   Combobox,
   ComboboxClear,
+  ComboboxChip,
+  ComboboxChipRemove,
+  ComboboxChips,
   ComboboxCollection,
   ComboboxContent,
   ComboboxEmpty,
@@ -133,6 +140,7 @@ export {
   ComboboxGroupLabel,
   ComboboxIcon,
   ComboboxInput,
+  ComboboxInputGroup,
   ComboboxItem,
   ComboboxList,
   ComboboxTrigger,

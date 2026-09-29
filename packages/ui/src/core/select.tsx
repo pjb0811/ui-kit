@@ -122,9 +122,10 @@ function SelectContent({
         <SelectPrimitive.Popup
           data-slot="select-content"
           className={cn(
-            `bg-popover text-popover-foreground max-h-(--available-height)
-            min-w-[8rem] origin-(--transform-origin) overflow-hidden rounded-md
-            border shadow-md transition-[opacity,transform] duration-150
+            `bg-popover text-popover-foreground relative
+            max-h-(--available-height) min-w-[8rem] origin-(--transform-origin)
+            overflow-hidden rounded-md border shadow-md
+            transition-[opacity,transform] duration-150
             data-ending-style:scale-95 data-ending-style:opacity-0
             data-starting-style:scale-95 data-starting-style:opacity-0`,
             className,
@@ -133,7 +134,7 @@ function SelectContent({
           {...props}
         >
           <SelectScrollUpButton />
-          <SelectPrimitive.List className="overflow-y-auto p-1">
+          <SelectPrimitive.List className="scroll-py-6 overflow-y-auto p-1">
             {children}
           </SelectPrimitive.List>
           <SelectScrollDownButton />
@@ -208,7 +209,8 @@ function SelectScrollUpButton({
     <SelectPrimitive.ScrollUpArrow
       data-slot="select-scroll-up-button"
       className={cn(
-        'flex cursor-default items-center justify-center py-1',
+        `bg-popover text-popover-foreground absolute top-0 z-1 flex h-6 w-full
+        cursor-default items-center justify-center`,
         className,
       )}
       {...props}
@@ -226,7 +228,8 @@ function SelectScrollDownButton({
     <SelectPrimitive.ScrollDownArrow
       data-slot="select-scroll-down-button"
       className={cn(
-        'flex cursor-default items-center justify-center py-1',
+        `bg-popover text-popover-foreground absolute bottom-0 z-1 flex h-6
+        w-full cursor-default items-center justify-center`,
         className,
       )}
       {...props}

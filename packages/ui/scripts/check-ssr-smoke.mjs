@@ -273,6 +273,25 @@ try {
   results.push({ name: 'Select.searchable', ok: false, err });
 }
 
+try {
+  markupByName['Select.multiple'] = renderToStaticMarkup(
+    h(
+      Config,
+      null,
+      h(ui.Select, {
+        searchable: true,
+        multiple: true,
+        label: 'Choose options',
+        options: [{ value: 'a', label: 'Option A' }],
+        defaultValue: ['a'],
+      }),
+    ),
+  );
+  results.push({ name: 'Select.multiple', ok: true });
+} catch (err) {
+  results.push({ name: 'Select.multiple', ok: false, err });
+}
+
 for (const [name, { module: mod, props }] of Object.entries(
   SUBPATH_COMPONENTS,
 )) {

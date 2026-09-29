@@ -13,7 +13,7 @@ const meta: Meta = {
     docs: {
       description: {
         component:
-          'Use the default Select for short lists. Set `searchable` for long lists of predefined values; its search field opens inside the popup. Searchable mode requires an accessible `label` and string option labels. Use Input.Search for free-text search instead of selecting a predefined value.',
+          'Use the default Select for short lists. Set `searchable` for long lists of predefined values; its search field opens inside the popup. Add `multiple` to searchable mode for removable selection chips and an array of values. Searchable modes require an accessible `label` and string option labels. Use Input.Search for free-text search instead of selecting a predefined value.',
       },
     },
   },
@@ -222,6 +222,86 @@ export const SearchableThemedRtl: Story = {
         placeholder="اختر فاكهة"
         searchPlaceholder="ابحث عن فاكهة"
         options={fruits}
+      />
+    </Config>
+  ),
+};
+
+export const SearchableMultiple: Story = {
+  args: {
+    searchable: true,
+    multiple: true,
+    label: 'Choose fruits',
+    placeholder: 'Select fruits',
+    searchPlaceholder: 'Search fruit',
+    options: fruits,
+    defaultValue: ['apple', 'banana'],
+  },
+};
+
+export const SearchableMultipleControlled: Story = {
+  render: function ControlledMultipleSelect() {
+    const [values, setValues] = useState<string[]>(['banana', 'cherry']);
+
+    return (
+      <div className="flex flex-col gap-3">
+        <Select
+          searchable
+          multiple
+          label="Choose fruits"
+          options={fruits}
+          value={values}
+          onChange={setValues}
+        />
+        <span data-testid="selected-values">
+          Selected: {values.length ? values.join(', ') : 'none'}
+        </span>
+      </div>
+    );
+  },
+};
+
+export const SearchableMultipleGrouped: Story = {
+  args: {
+    searchable: true,
+    multiple: true,
+    label: 'Choose fonts',
+    options: [
+      {
+        label: 'Sans serif',
+        options: [
+          { label: 'Inter', value: 'inter' },
+          { label: 'Pretendard', value: 'pretendard' },
+        ],
+      },
+      {
+        label: 'Monospace',
+        options: [
+          { label: 'JetBrains Mono', value: 'jetbrains-mono' },
+          { label: 'Geist Mono (unavailable)', value: 'geist', disabled: true },
+        ],
+      },
+    ],
+  },
+};
+
+export const SearchableMultipleDisabled: Story = {
+  args: {
+    ...SearchableMultiple.args,
+    disabled: true,
+  },
+};
+
+export const SearchableMultipleThemedRtl: Story = {
+  render: () => (
+    <Config direction="rtl" theme={{ dark: 'dark' }}>
+      <Select
+        searchable
+        multiple
+        label="اختر فواكه"
+        placeholder="اختر فواكه"
+        options={fruits}
+        defaultValue={['apple', 'banana']}
       />
     </Config>
   ),

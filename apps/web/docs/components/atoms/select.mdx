@@ -7,9 +7,9 @@ import SelectDemo from '../../../src/demo/select-demo';
 
 # Select
 
-A dropdown for choosing one value from a list. It uses Base UI Select by
+A dropdown for choosing from a predefined list. It uses Base UI Select by
 default and Base UI Combobox when `searchable` is enabled. Options can be flat
-or grouped in either mode.
+or grouped in every mode.
 
 ```tsx
 import { Select } from '@jbpark/ui-kit';
@@ -48,20 +48,44 @@ and group labels must be strings so they can be filtered.
 Use the default Select for short lists. Use Input.Search when users should enter
 free-form text rather than choose a predefined value.
 
+For multiple selections, combine `searchable` with `multiple`. The input and
+selected chips remain visible while filtering, and each chip has a remove
+button. Unlike the single searchable mode, the input sits alongside the chips
+outside the popup so selected values remain visible. The selected value is an
+array of option IDs; clearing it returns `[]`.
+
+```tsx
+<Select
+  searchable
+  multiple
+  label="Choose frameworks"
+  options={[
+    { label: 'React', value: 'react' },
+    { label: 'Vue', value: 'vue' },
+    { label: 'Svelte', value: 'svelte' },
+  ]}
+  defaultValue={['react']}
+  onChange={values => console.log(values)}
+/>
+```
+
 ## Props
 
-| Prop                | Type                                                           | Default             |
-| ------------------- | -------------------------------------------------------------- | ------------------- |
-| `options`           | `(Option \| OptionGroup)[]`                                    | -                   |
-| `placeholder`       | `string`                                                       | -                   |
-| `onChange`          | `(value: string) => void`                                      | -                   |
-| `className`         | `string`                                                       | -                   |
-| `searchable`        | `boolean`                                                      | `false`             |
-| `label`             | `string` (searchable mode)                                     | -                   |
-| `searchPlaceholder` | `string` (searchable mode)                                     | `Search...`         |
-| `emptyText`         | `React.ReactNode` (searchable mode)                            | `No results found.` |
-| `allowClear`        | `boolean` (searchable mode)                                    | `true`              |
-| `classNames`        | `{ input?, content?, list?, item?, empty? }` (searchable mode) | -                   |
+| Prop                | Type                                                                 | Default                       |
+| ------------------- | -------------------------------------------------------------------- | ----------------------------- |
+| `options`           | `(Option \| OptionGroup)[]`                                          | -                             |
+| `placeholder`       | `string`                                                             | -                             |
+| `onChange`          | `string` / `string \| null` / `string[]` callback, depending on mode | -                             |
+| `className`         | `string`                                                             | -                             |
+| `searchable`        | `boolean`                                                            | `false`                       |
+| `multiple`          | `true` (with `searchable`)                                           | `false`                       |
+| `label`             | `string` (searchable modes)                                          | -                             |
+| `searchPlaceholder` | `string` (searchable modes)                                          | `Search...`                   |
+| `emptyText`         | `React.ReactNode` (searchable modes)                                 | `No results found.`           |
+| `allowClear`        | `boolean` (searchable modes)                                         | `true`                        |
+| `classNames`        | `{ input?, content?, list?, item?, empty?, chips?, chip? }`          | -                             |
+| `chipDescription`   | `string` (multiple mode)                                             | Keyboard removal hint         |
+| `inputDescription`  | `(selectedCount: number) => string` (multiple mode)                  | Keyboard chip navigation hint |
 
 ```ts
 interface Option {
@@ -82,4 +106,5 @@ props (e.g. `value`, `defaultValue`, `disabled`, `name`, `required`) except
 `onValueChange`, which is renamed to `onChange` above. In searchable mode,
 `onChange` receives `string | null`, because clearing a selection emits `null`.
 It accepts the corresponding Base UI Combobox root props instead of Select root
-props.
+props. In multiple mode, `onChange` receives `string[]`; chips can be removed
+with their buttons or by focusing a chip and pressing Backspace or Delete.
