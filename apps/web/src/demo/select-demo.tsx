@@ -63,6 +63,14 @@ export default function SelectDemo() {
         searchPlaceholder="Search fruit"
         options={FRUITS}
       />
+      <Select
+        searchable
+        multiple
+        label="Choose fruits"
+        placeholder="Select fruits"
+        options={FRUITS}
+        defaultValue={['apple', 'banana']}
+      />
     </Space>
   );
 }

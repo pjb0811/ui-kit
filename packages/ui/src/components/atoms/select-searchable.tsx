@@ -1,6 +1,6 @@
 'use client';
 
-import { type ReactNode, useMemo } from 'react';
+import { type ReactNode } from 'react';
 
 import { ChevronDownIcon, XIcon } from 'lucide-react';
 
@@ -10,45 +10,22 @@ import { cn } from '@repo/ui/utils';
 import { combobox, select } from '../../core';
 import Button from './button';
 import Input from './input';
+import SearchableOptions, {
+  type ClassNames,
+  type Option,
+  type OptionGroup,
+  useSelectItems,
+} from './select-searchable-options';
 
 const {
   Combobox: Core,
   ComboboxClear,
-  ComboboxCollection,
   ComboboxContent,
-  ComboboxEmpty,
-  ComboboxGroup,
-  ComboboxGroupLabel,
   ComboboxIcon,
   ComboboxInput,
-  ComboboxItem,
-  ComboboxList,
   ComboboxTrigger,
   ComboboxValue,
-  createItems,
 } = combobox;
-
-export interface Option {
-  value: string;
-  label: string;
-  disabled?: boolean;
-}
-
-export interface OptionGroup {
-  label: string;
-  options: Option[];
-}
-
-interface ItemsGroup {
-  key: number;
-  value: string;
-  items: Option[];
-  grouped: boolean;
-}
-
-const isGroup = (option: Option | OptionGroup): option is OptionGroup => {
-  return 'options' in option && Array.isArray(option.options);
-};
 
 export interface Props extends Omit<
   combobox.RootProps<string, Option>,
@@ -62,6 +39,7 @@ export interface Props extends Omit<
   | 'isItemEqualToValue'
 > {
   searchable: true;
+  multiple?: false;
   /** Accessible name for the trigger and search popup. */
   label: string;
   options: (Option | OptionGroup)[];
@@ -70,13 +48,7 @@ export interface Props extends Omit<
   emptyText?: ReactNode;
   allowClear?: boolean;
   className?: string;
-  classNames?: {
-    input?: string;
-    content?: string;
-    list?: string;
-    item?: string;
-    empty?: string;
-  };
+  classNames?: ClassNames;
   onChange?: (value: string | null) => void;
 }
 
@@ -92,46 +64,12 @@ const SearchableSelect = ({
   onChange,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars -- Do not forward the public mode switch to Base UI.
   searchable: _searchable,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- The single-select primitive fixes this mode internally.
+  multiple: _multiple,
   ...props
 }: Props) => {
   const { locale } = useConfig();
-  const groups = useMemo(() => {
-    const result: ItemsGroup[] = [];
-
-    options.forEach((option, index) => {
-      if (isGroup(option)) {
-        result.push({
-          key: index,
-          value: option.label,
-          items: option.options,
-          grouped: true,
-        });
-      } else {
-        const previous = result.at(-1);
-
-        if (previous && !previous.grouped) {
-          previous.items.push(option);
-        } else {
-          result.push({
-            key: index,
-            value: '',
-            items: [option],
-            grouped: false,
-          });
-        }
-      }
-    });
-
-    return result;
-  }, [options]);
-  const items = useMemo(
-    () =>
-      createItems<Option, string>(groups, {
-        getValue: option => option.value,
-        getLabel: option => option.label,
-      }),
-    [groups],
-  );
+  const items = useSelectItems(options);
 
   return (
     <Core items={items} onValueChange={value => onChange?.(value)} {...props}>
@@ -179,33 +117,7 @@ const SearchableSelect = ({
             )}
           </div>
         </div>
-        <ComboboxEmpty className={classNames?.empty}>{emptyText}</ComboboxEmpty>
-        <ComboboxList className={classNames?.list}>
-          {(group: ItemsGroup) => (
-            <ComboboxGroup key={group.key} items={group.items}>
-              {group.grouped && (
-                <ComboboxGroupLabel
-                  data-slot="combobox-group-label"
-                  className="text-muted-foreground px-2 py-1.5 text-xs"
-                >
-                  {group.value}
-                </ComboboxGroupLabel>
-              )}
-              <ComboboxCollection>
-                {(option: Option) => (
-                  <ComboboxItem
-                    key={option.value}
-                    value={option.value}
-                    disabled={option.disabled}
-                    className={classNames?.item}
-                  >
-                    {option.label}
-                  </ComboboxItem>
-                )}
-              </ComboboxCollection>
-            </ComboboxGroup>
-          )}
-        </ComboboxList>
+        <SearchableOptions emptyText={emptyText} classNames={classNames} />
       </ComboboxContent>
     </Core>
   );
