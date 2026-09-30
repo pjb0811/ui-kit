@@ -8,6 +8,8 @@ export { default as Marquees } from './marquees';
 export type { Props as MarqueesProps } from './marquees';
 export { default as Menu } from './menu';
 export type { Props as MenuProps } from './menu';
+export { default as Pagination } from './pagination';
+export type { Props as PaginationProps } from './pagination';
 export { default as Reveals } from './reveals';
 export type { RevealsProps } from './reveals';
 export { default as Splitter } from './splitter';

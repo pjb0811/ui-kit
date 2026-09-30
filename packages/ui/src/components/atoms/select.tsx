@@ -42,6 +42,7 @@ interface StaticProps extends Omit<
   className?: string;
   options?: (Option | OptionGroup)[];
   onChange?: (value: string) => void;
+  'aria-label'?: string;
 }
 
 export type Props = StaticProps | SearchableProps | MultipleProps;
@@ -53,6 +54,7 @@ const StaticSelect = ({
   placeholder,
   options,
   onChange,
+  'aria-label': ariaLabel,
   ...props
 }: StaticProps) => {
   const items = options?.flatMap(option =>
@@ -69,7 +71,10 @@ const StaticSelect = ({
       }}
       {...props}
     >
-      <SelectTrigger className={cn('w-full max-w-48', className)}>
+      <SelectTrigger
+        aria-label={ariaLabel}
+        className={cn('w-full max-w-48', className)}
+      >
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent>
