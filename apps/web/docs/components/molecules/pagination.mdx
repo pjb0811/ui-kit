@@ -1,0 +1,96 @@
+---
+sidebar_position: 1
+title: Pagination
+---
+
+import PaginationDemo from '../../../src/demo/pagination-demo';
+
+# Pagination
+
+Navigate a numbered set of results. `total` is the number of items; `pageSize` determines the number of pages. Pagination manages page selection and optional page-size selection; the consumer fetches or slices the data.
+
+```tsx
+import { Pagination } from '@jbpark/ui-kit';
+
+<Pagination total={200} pageSize={10} defaultPage={5} />;
+```
+
+<PaginationDemo />
+
+## Controlled usage
+
+```tsx
+const [page, setPage] = useState(1);
+
+<Pagination
+  total={totalResults}
+  pageSize={20}
+  page={page}
+  onChange={setPage}
+/>;
+```
+
+Pages are 1-based. When `total` or `pageSize` shrinks the range, the displayed page is clamped. Uncontrolled state is clamped as well, without calling `onChange`; a controlled parent still owns its `page` prop and should update it if that state matters outside the component. With `total={0}`, only disabled previous/next controls render.
+
+## More navigation options
+
+```tsx
+<Pagination
+  total={200}
+  pageSize={10}
+  page={page}
+  onChange={setPage}
+  showFirstLast
+  getPageHref={target => `/results?page=${target}`}
+/>
+```
+
+`showFirstLast` adds direct first/last controls. `getPageHref` makes available page controls real links, including the current page. Disabled controls remain buttons without an `href`. A normal link activation still calls `onChange`; modified clicks (for example Ctrl-click to open a new tab) leave local state untouched. The current page link does not navigate again. Use `page` from your route when URLs are the source of truth.
+
+Set `hideOnSinglePage` to remove the navigation when there are zero or one pages.
+
+## Item counts, page size, and quick navigation
+
+```tsx
+<Pagination
+  total={totalResults}
+  defaultPage={5}
+  defaultPageSize={10}
+  showTotal={(total, [start, end]) => `${start}–${end} of ${total} items`}
+  showSizeChanger
+  pageSizeOptions={[10, 20, 50]}
+  showQuickJumper
+  onChange={setPage}
+  onPageSizeChange={setPageSize}
+/>
+```
+
+Omit `pageSize` for internal page-size state, initialized by `defaultPageSize` (`10` by default). Pass `pageSize` and update it through `onPageSizeChange` to control it. Changing the size resets the page to 1 and calls `onChange(1)` when the current page differs. The parent must also update a controlled `page`. `showTotal` receives the sanitized item count and an inclusive, 1-based item range; an empty collection yields `[0, 0]`. The quick jumper accepts a whole page number within the current range, then navigates on Enter or Go. Invalid input leaves the page unchanged. With `getPageHref`, synchronize page and size with your route as needed.
+
+## Props
+
+| Prop               | Type                                                                                            | Default                              |
+| ------------------ | ----------------------------------------------------------------------------------------------- | ------------------------------------ |
+| `total`            | `number` (item count)                                                                           | Required                             |
+| `pageSize`         | `number` (controlled items per page)                                                            | -                                    |
+| `defaultPageSize`  | `number` (uncontrolled initial size)                                                            | `10`                                 |
+| `onPageSizeChange` | `(pageSize: number) => void`                                                                    | -                                    |
+| `pageSizeOptions`  | `number[]`                                                                                      | `[10, 20, 50, 100]`                  |
+| `showSizeChanger`  | `boolean`                                                                                       | `false`                              |
+| `showTotal`        | `(total: number, range: [number, number]) => ReactNode`                                         | -                                    |
+| `showQuickJumper`  | `boolean`                                                                                       | `false`                              |
+| `page`             | `number` (controlled, 1-based)                                                                  | -                                    |
+| `defaultPage`      | `number` (uncontrolled initial page)                                                            | `1`                                  |
+| `onChange`         | `(page: number) => void`                                                                        | -                                    |
+| `siblingCount`     | `number`                                                                                        | `1`                                  |
+| `boundaryCount`    | `number`                                                                                        | `1`                                  |
+| `showFirstLast`    | `boolean`                                                                                       | `false`                              |
+| `hideOnSinglePage` | `boolean`                                                                                       | `false`                              |
+| `getPageHref`      | `(page: number) => string`                                                                      | -                                    |
+| `disabled`         | `boolean`                                                                                       | `false`                              |
+| `size`             | `'small' \| 'middle' \| 'large'`                                                                | `Config.componentSize` or `'middle'` |
+| `labels`           | `{ navigation?, page?, previous?, next?, first?, last?, pageSize?, jump?, go? }`                | English labels                       |
+| `classNames`       | `{ item?, active?, previous?, next?, first?, last?, ellipsis?, total?, sizeChanger?, jumper? }` | -                                    |
+| `className`        | `string`                                                                                        | -                                    |
+
+`labels.page` is a function of the 1-based page number. The other labels are strings. The component also accepts native `<nav>` attributes, including `aria-label` to override the navigation label. `Config.direction="rtl"` reverses the arrow icons while preserving previous/next page meaning. Data fetching or slicing remains the consumer's responsibility.

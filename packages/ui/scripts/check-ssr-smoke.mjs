@@ -125,6 +125,7 @@ const fixtures = {
   Card: { children: 'x' },
   Collapse: { items: [{ key: '1', label: 'L', children: 'C' }] },
   Tabs: { items: [{ key: '1', label: 'Tab', children: 'Panel' }] },
+  Pagination: { total: 100 },
   Container: { children: 'x' },
   PageHeader: { title: 'Title' },
   Empty: {},
