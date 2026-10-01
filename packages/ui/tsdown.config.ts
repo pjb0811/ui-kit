@@ -11,6 +11,7 @@ export default defineConfig({
     CodeEditor: 'src/components/atoms/code-editor.tsx',
     Tag: 'src/components/atoms/tag.tsx',
     Card: 'src/components/molecules/card.tsx',
+    Breadcrumb: 'src/components/molecules/breadcrumb.tsx',
     Pagination: 'src/components/molecules/pagination.tsx',
     Space: 'src/components/molecules/space.tsx',
     Menu: 'src/components/molecules/menu/index.ts',
