@@ -31,6 +31,11 @@
       "import": "./dist/Card.mjs",
       "default": "./dist/Card.mjs"
     },
+    "./Breadcrumb": {
+      "types": "./dist/Breadcrumb.d.mts",
+      "import": "./dist/Breadcrumb.mjs",
+      "default": "./dist/Breadcrumb.mjs"
+    },
     "./Pagination": {
       "types": "./dist/Pagination.d.mts",
       "import": "./dist/Pagination.mjs",

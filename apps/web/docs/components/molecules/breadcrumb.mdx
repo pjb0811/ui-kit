@@ -1,0 +1,84 @@
+---
+sidebar_position: 1
+title: Breadcrumb
+---
+
+import BreadcrumbDemo from '../../../src/demo/breadcrumb-demo';
+
+# Breadcrumb
+
+Show the current page's location in a hierarchy with links to its ancestors. The `items` array follows Ant Design's current Breadcrumb API: each item supplies a `title` and can supply a link, an icon, or a separator override.
+
+```tsx
+import { Breadcrumb } from '@jbpark/ui-kit';
+
+<Breadcrumb
+  items={[
+    { title: 'Home', href: '/' },
+    { title: 'Components', href: '/components' },
+    { title: 'Breadcrumb' },
+  ]}
+/>;
+```
+
+<BreadcrumbDemo />
+
+The trail renders as a labelled `<nav>` containing an ordered list. The last item is marked `aria-current="page"`, whether it is linked or plain text. Separators are hidden from assistive technology. Links use native browser navigation and keyboard behavior; an item with `onClick` but no `href` renders as a button. Set `aria-label` on the component to localize the navigation landmark.
+
+## Separators, icons, and long paths
+
+```tsx
+import { House } from 'lucide-react';
+
+<Breadcrumb
+  separator="›"
+  maxItems={4}
+  itemsBeforeCollapse={1}
+  itemsAfterCollapse={1}
+  items={[
+    { title: 'Home', href: '/', icon: <House className="size-4" /> },
+    { title: 'Library', href: '/library' },
+    { title: 'Documents', href: '/library/documents', separator: '→' },
+    { title: 'Reports', href: '/library/documents/reports' },
+    { title: 'Annual report' },
+  ]}
+  expandText="Show full path"
+/>;
+```
+
+When `items.length` exceeds `maxItems` (default `8`), middle entries move into an expandable popover. The first and last entries always stay visible; `itemsBeforeCollapse` and `itemsAfterCollapse` control how many remain at each end. The popover keeps hidden entries as real links. `maxItems` is clamped to at least `3`. Icons receive regular spacing before the title; supply an accessible title or `aria-label` for an icon-only item. `Config.direction="rtl"` sets the trail's text direction unless you pass `dir` directly.
+
+For a router-specific link, use `itemRender` and set `aria-current="page"` on the rendered current-page link or element:
+
+```tsx
+import Link from 'next/link';
+
+<Breadcrumb
+  items={items}
+  itemRender={(item, _index, isCurrent) =>
+    item.href ? (
+      <Link href={item.href} aria-current={isCurrent ? 'page' : undefined}>
+        {item.title}
+      </Link>
+    ) : (
+      <span aria-current={isCurrent ? 'page' : undefined}>{item.title}</span>
+    )
+  }
+/>;
+```
+
+## Props
+
+| Prop                  | Type                                                                | Default       |
+| --------------------- | ------------------------------------------------------------------- | ------------- |
+| `items`               | `Item[]`                                                            | Required      |
+| `separator`           | `ReactNode`                                                         | `'/'`         |
+| `maxItems`            | `number`                                                            | `8`           |
+| `itemsBeforeCollapse` | `number`                                                            | `1`           |
+| `itemsAfterCollapse`  | `number`                                                            | `1`           |
+| `expandText`          | `string`                                                            | `'Show path'` |
+| `itemRender`          | `(item, index, isCurrent) => ReactNode`                             | -             |
+| `classNames`          | `{ list?, item?, link?, current?, separator?, collapsed?, popup? }` | -             |
+| `className`           | `string`                                                            | -             |
+
+Each item requires `title` and optionally accepts `key`, `href`, `target`, `rel`, `onClick`, `className`, `aria-label`, `icon`, and a `separator` override for the separator after it. The component also accepts native `<nav>` attributes. `itemRender` replaces the default item rendering, including the link and current-page semantics.

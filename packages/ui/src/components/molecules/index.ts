@@ -1,5 +1,7 @@
 export { default as Card } from './card';
 export type { Props as CardProps } from './card';
+export { default as Breadcrumb } from './breadcrumb';
+export type { Props as BreadcrumbProps } from './breadcrumb';
 export { default as Collapse } from './collapse';
 export type { Props as CollapseProps } from './collapse';
 export { default as Dropdown } from './dropdown';

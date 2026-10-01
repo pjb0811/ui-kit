@@ -123,6 +123,7 @@ const fixtures = {
   Typography: { children: 'Text' },
   Space: { children: 'x' },
   Card: { children: 'x' },
+  Breadcrumb: { items: [{ title: 'Home', href: '/' }, { title: 'Current' }] },
   Collapse: { items: [{ key: '1', label: 'L', children: 'C' }] },
   Tabs: { items: [{ key: '1', label: 'Tab', children: 'Panel' }] },
   Pagination: { total: 100 },
