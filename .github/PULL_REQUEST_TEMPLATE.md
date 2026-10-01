@@ -1,23 +1,33 @@
 ## Summary
 
-<!-- Briefly describe the changes -->
+<!-- What this changes and why. For a bug: what triggers it, and the behavior before and after. For a feature: what was missing. -->
+
+<!-- Closes #123 (or Part of #123 when the issue stays open) -->
 
 ## Changes
 
-<!-- Describe the changes in detail -->
+<!-- What the final branch actually changes, by behavior rather than by file: public API or behavior changes, docs, and the changeset. -->
 
 -
+
+## How to test
+
+<!-- Checks that actually ran, and how a reviewer can confirm the change (a Storybook story, for example). Say what wasn't checked. -->
+
+## Notes for reviewers
+
+<!-- Optional: design choices, differences from the issue's proposal, limitations, remaining scope. Delete if empty. -->
 
 ## Type of Change
 
 <!-- Check all that apply -->
 
-- [ ] ✨ feat — new feature
-- [ ] 🐛 fix — bug fix
-- [ ] ♻️ refactor — code refactoring
-- [ ] 💄 style — UI / style changes
-- [ ] 📝 docs — documentation update
-- [ ] 🔧 chore — build or config changes
+- [ ] feat — new feature
+- [ ] fix — bug fix
+- [ ] refactor — code refactoring
+- [ ] style — UI / style changes
+- [ ] docs — documentation update
+- [ ] chore — build or config changes
 
 ## Screenshots
 
