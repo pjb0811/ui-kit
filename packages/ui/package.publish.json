@@ -41,6 +41,11 @@
       "import": "./dist/Pagination.mjs",
       "default": "./dist/Pagination.mjs"
     },
+    "./Table": {
+      "types": "./dist/Table.d.mts",
+      "import": "./dist/Table.mjs",
+      "default": "./dist/Table.mjs"
+    },
     "./Space": {
       "types": "./dist/Space.d.mts",
       "import": "./dist/Space.mjs",

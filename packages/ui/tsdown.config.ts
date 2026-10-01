@@ -13,6 +13,7 @@ export default defineConfig({
     Card: 'src/components/molecules/card.tsx',
     Breadcrumb: 'src/components/molecules/breadcrumb.tsx',
     Pagination: 'src/components/molecules/pagination.tsx',
+    Table: 'src/components/organisms/table.tsx',
     Space: 'src/components/molecules/space.tsx',
     Menu: 'src/components/molecules/menu/index.ts',
     Reveals: 'src/components/molecules/reveals/index.ts',

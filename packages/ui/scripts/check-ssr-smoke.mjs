@@ -132,6 +132,10 @@ const fixtures = {
   Empty: {},
   Result: { title: 'Done' },
   List: { data: [1, 2], renderItem: item => h('div', null, String(item)) },
+  Table: {
+    columns: [{ key: 'name', title: 'Name', dataIndex: 'name' }],
+    data: [{ name: 'Ada' }],
+  },
   Marquees: { children: h('span', null, 'scrolling') },
   Reveals: { children: h('div', null, 'reveal') },
   Menu: { items: [{ key: '1', label: 'Item' }] },
@@ -325,6 +329,60 @@ for (const [name, [Comp, fixture]] of Object.entries(COMPOUND_COMPONENTS)) {
 }
 
 const errors = [];
+
+// Table keeps native semantics and one body row for each display state.
+const tableMarkup = markupByName.Table;
+if (
+  tableMarkup &&
+  (!tableMarkup.includes('<table') ||
+    !tableMarkup.includes('scope="col"') ||
+    !tableMarkup.includes('Ada'))
+) {
+  errors.push('Table must render native column headers and record cells.');
+}
+
+for (const [state, props, expected] of [
+  ['loading', { loading: true, data: [{ name: 'Ada' }] }, 'aria-busy="true"'],
+  ['empty', { data: [] }, 'No data'],
+]) {
+  const markup = renderToStaticMarkup(
+    h(ui.Table, { ...fixtures.Table, ...props }),
+  );
+
+  if (!markup.includes(expected) || markup.includes('>Ada</td>')) {
+    errors.push(`Table ${state} state did not replace data rows as expected.`);
+  }
+}
+
+const paginationFixture = {
+  columns: fixtures.Table.columns,
+  data: [{ name: 'Ada' }, { name: 'Grace' }, { name: 'Alan' }],
+};
+const clientPage = renderToStaticMarkup(
+  h(ui.Table, {
+    ...paginationFixture,
+    pagination: { page: 2, pageSize: 1 },
+  }),
+);
+const serverPage = renderToStaticMarkup(
+  h(ui.Table, {
+    ...paginationFixture,
+    data: [{ name: 'Grace' }],
+    pagination: { mode: 'server', total: 3, page: 2, pageSize: 1 },
+  }),
+);
+
+if (
+  !clientPage.includes('>Grace</td>') ||
+  clientPage.includes('>Ada</td>') ||
+  !clientPage.includes('data-slot="table-pagination"') ||
+  !serverPage.includes('>Grace</td>') ||
+  !serverPage.includes('data-slot="table-pagination"')
+) {
+  errors.push(
+    'Table pagination must slice client rows and preserve server rows.',
+  );
+}
 
 // 1. Render throws.
 const failed = results.filter(r => !r.ok);

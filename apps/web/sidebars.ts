@@ -51,6 +51,7 @@ const sidebars: SidebarsConfig = {
         'components/molecules/reveals',
         'components/molecules/marquees',
         'components/organisms/list',
+        'components/organisms/table',
         'components/organisms/swiper',
         'components/templates/empty',
       ],

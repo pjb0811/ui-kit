@@ -1,0 +1,87 @@
+---
+sidebar_position: 6
+title: Table
+---
+
+import TableDemo from '../../../src/demo/table-demo';
+
+# Table
+
+Display structured records in a native HTML table. `columns` defines headers and values; `render` customizes a cell. The container scrolls horizontally when the table is wider than its available space.
+
+```tsx
+import { Table, type TableColumn } from '@jbpark/ui-kit';
+
+const columns: TableColumn<Person>[] = [
+  { key: 'name', title: 'Name', dataIndex: 'name' },
+  {
+    key: 'role',
+    title: 'Role',
+    render: person => <strong>{person.role}</strong>,
+  },
+];
+
+<Table
+  caption="People"
+  columns={columns}
+  data={people}
+  rowKey={person => person.id}
+/>;
+```
+
+<TableDemo />
+
+`rowKey` should return a stable key when rows can change order or page. If omitted, the row index is used. A column's `render` takes precedence over `dataIndex`; without `render`, the field is displayed as text. `null` and `undefined` display as an empty cell.
+
+Pass `pagination` to render the existing Pagination component below the table. With `pagination={true}` or a client-mode configuration, Table slices the full `data` array. Omit `pagination` to show all rows.
+
+```tsx
+<Table
+  columns={columns}
+  data={people}
+  rowKey={person => person.id}
+  pagination={{ defaultPageSize: 10, showSizeChanger: true }}
+/>
+```
+
+For server-side pagination, provide only the current page's rows and the total item count. The parent fetches new rows in `onChange` and, if page size changes, `onPageSizeChange`.
+
+```tsx
+<Table
+  columns={columns}
+  data={currentPagePeople}
+  rowKey={person => person.id}
+  pagination={{
+    mode: 'server',
+    total: totalPeople,
+    page,
+    pageSize,
+    onChange: setPage,
+    onPageSizeChange: setPageSize,
+  }}
+/>
+```
+
+## Props
+
+| Prop         | Type                                                               | Default                              |
+| ------------ | ------------------------------------------------------------------ | ------------------------------------ |
+| `columns`    | `TableColumn<T>[]`                                                 | Required                             |
+| `data`       | `T[]`                                                              | `[]`                                 |
+| `rowKey`     | `(record: T, index: number) => React.Key`                          | row index                            |
+| `caption`    | `ReactNode`                                                        | -                                    |
+| `loading`    | `boolean`                                                          | `false`                              |
+| `empty`      | `ReactNode`                                                        | `<Empty />`                          |
+| `size`       | `'small' \| 'middle' \| 'large'`                                   | `Config.componentSize` or `'middle'` |
+| `bordered`   | `boolean`                                                          | `false`                              |
+| `striped`    | `boolean`                                                          | `false`                              |
+| `hoverable`  | `boolean`                                                          | `true`                               |
+| `pagination` | `boolean \| TablePaginationOptions`                                | `false`                              |
+| `classNames` | `{ container?, header?, body?, row?, cell?, empty?, pagination? }` | -                                    |
+| `className`  | `string` (table element)                                           | -                                    |
+
+The component also accepts native `<table>` attributes. `caption` provides an accessible name for the table. Loading replaces rows with a skeleton while preserving headers. `empty` appears only when loading is false and there are no rows.
+
+Each column has a required `key` and `title`, plus optional `dataIndex`, `render(record, index)`, `align`, `width`, `className`, and `headerClassName`. Use `render` for rich content or non-text field values.
+
+`TablePaginationOptions` accepts Pagination's props except `total`. Client mode derives `total` from `data.length`; server mode requires `total`. Pages are 1-based. Use `page`/`pageSize` with callbacks to control them, or `defaultPage`/`defaultPageSize` for internal state. Pagination resets to page 1 when page size changes and clamps the displayed page when the row count shrinks. The rendered table row index passed to `render` and `rowKey` is relative to the visible page.
