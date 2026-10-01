@@ -1,8 +1,8 @@
 {
   "exports": [
     ".",
-    "./Button",
     "./Breadcrumb",
+    "./Button",
     "./Card",
     "./CodeEditor",
     "./Layout",
@@ -10,6 +10,7 @@
     "./Pagination",
     "./Reveals",
     "./Space",
+    "./Table",
     "./Tag",
     "./Typography",
     "./providers",
@@ -17,8 +18,8 @@
     "./utils"
   ],
   "names": [
-    "Button",
     "Breadcrumb",
+    "Button",
     "Card",
     "Checkbox",
     "Col",
@@ -56,6 +57,7 @@
     "Splitter",
     "Swiper",
     "Switch",
+    "Table",
     "Tabs",
     "Tag",
     "Toast",
