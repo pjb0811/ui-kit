@@ -250,7 +250,7 @@ import './local';
 | UI 프리미티브 | Base UI                                                                         |
 | 아이콘        | lucide-react                                                                    |
 | 애니메이션    | motion (framer), GSAP                                                           |
-| 패키지 매니저 | pnpm 10                                                                         |
+| 패키지 매니저 | `package.json`의 `packageManager`에 고정된 pnpm                                 |
 | 모노레포      | turborepo                                                                       |
 | 빌드          | tsdown                                                                          |
 | 포맷          | prettier (single quote, 2 spaces, trailing comma)                               |

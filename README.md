@@ -97,7 +97,7 @@ Theme and configuration providers
 ### Development Tools
 
 - **[Turborepo](https://turborepo.com/)** - Monorepo build system
-- **[pnpm](https://pnpm.io/)** - Package manager (v10)
+- **[pnpm](https://pnpm.io/)** - Package manager (version pinned in `package.json`)
 - **[ESLint](https://eslint.org/)** - Code linting
 - **[Prettier](https://prettier.io/)** - Code formatting
 - **[Storybook](https://storybook.js.org/)** - Component documentation
@@ -108,7 +108,7 @@ Theme and configuration providers
 ### Requirements
 
 - Node.js: package metadata declares `>=20`; repository development/builds and CI use the version pinned in `.nvmrc` (currently 24.18.0)
-- pnpm: 10.x or higher
+- pnpm: use the version pinned in `package.json` (`packageManager`)
 
 ### Installation
 

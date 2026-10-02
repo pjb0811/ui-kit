@@ -29,7 +29,7 @@ apps/docs/
 ### Requirements
 
 - **Node.js** >= 20
-- **pnpm** >= 10
+- **pnpm**: version pinned in the root `package.json` (`packageManager`)
 
 ### Installation
 

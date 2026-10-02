@@ -29,7 +29,7 @@ apps/docs/
 ### 필수 요구사항
 
 - **Node.js** >= 20
-- **pnpm** >= 10
+- **pnpm**: 루트 `package.json`의 `packageManager`에 고정된 버전
 
 ### 설치
 
