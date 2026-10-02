@@ -61,6 +61,7 @@ const sidebars: SidebarsConfig = {
       label: 'Feedback',
       collapsed: false,
       items: [
+        'components/molecules/alert',
         'components/atoms/progress',
         'components/atoms/spin',
         'components/atoms/skeleton',

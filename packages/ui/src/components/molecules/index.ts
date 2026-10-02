@@ -1,5 +1,7 @@
 export { default as Card } from './card';
 export type { Props as CardProps } from './card';
+export { default as Alert } from './alert';
+export type { Props as AlertProps } from './alert';
 export { default as Breadcrumb } from './breadcrumb';
 export type { Props as BreadcrumbProps } from './breadcrumb';
 export { default as Collapse } from './collapse';

@@ -403,6 +403,48 @@
     --tag-fg: var(--color-yellow-400);
   }
 
+  /* Alert uses a semantic accent while body text stays on the theme's normal
+   * foreground. The filled variant is a tinted surface, not solid accent text. */
+  [data-slot='alert'] {
+    color: var(--foreground);
+    border-color: color-mix(in oklch, var(--alert-accent), transparent 55%);
+    background-color: var(--background);
+  }
+  [data-slot='alert'][data-variant='filled'] {
+    background-color: color-mix(
+      in oklab,
+      var(--alert-accent) 10%,
+      var(--background)
+    );
+  }
+  [data-slot='alert'] > [aria-hidden='true'] {
+    color: var(--alert-accent);
+  }
+  [data-slot='alert'][data-status='info'] {
+    --alert-accent: var(--color-blue-600);
+  }
+  [data-slot='alert'][data-status='success'] {
+    --alert-accent: var(--color-green-600);
+  }
+  [data-slot='alert'][data-status='warning'] {
+    --alert-accent: var(--color-yellow-700);
+  }
+  [data-slot='alert'][data-status='error'] {
+    --alert-accent: var(--destructive);
+  }
+  :is(.dark, [data-theme='dark']) [data-slot='alert'][data-status='info'] {
+    --alert-accent: var(--color-blue-400);
+  }
+  :is(.dark, [data-theme='dark']) [data-slot='alert'][data-status='success'] {
+    --alert-accent: var(--color-green-400);
+  }
+  :is(.dark, [data-theme='dark']) [data-slot='alert'][data-status='warning'] {
+    --alert-accent: var(--color-yellow-400);
+  }
+  :is(.dark, [data-theme='dark']) [data-slot='alert'][data-status='error'] {
+    --alert-accent: var(--color-red-400);
+  }
+
   /* Row/Col's 24-column responsive grid (templates/grid/col.tsx) — Col
    * hands over one CSS custom property per breakpoint tier, already
    * resolved via its own mobile-first cascade (pure prop math, no
