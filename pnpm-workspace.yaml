@@ -18,3 +18,7 @@ allowBuilds:
   '@swc/core': false
   core-js: false
   esbuild: false
+
+# Allow sibling @jbpark packages to be used on the day they are published.
+minimumReleaseAgeExclude:
+  - '@jbpark/*'

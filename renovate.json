@@ -14,6 +14,12 @@
       "matchDepTypes": ["packageManager", "engines"],
       "matchPackageNames": ["pnpm"],
       "groupName": "pnpm"
+    },
+    {
+      "description": "Update sibling @jbpark packages when they are released, matching pnpm's release-age exemption.",
+      "matchPackageNames": ["@jbpark/**"],
+      "groupName": "@jbpark packages",
+      "minimumReleaseAge": null
     }
   ]
 }
