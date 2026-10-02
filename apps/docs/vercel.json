@@ -1,5 +1,6 @@
 {
   "framework": null,
-  "buildCommand": "pnpm build-storybook",
+  "installCommand": "corepack pnpm install --frozen-lockfile",
+  "buildCommand": "corepack pnpm build-storybook",
   "outputDirectory": "storybook-static"
 }

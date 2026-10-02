@@ -13,12 +13,12 @@ permissions:
 jobs:
   draft:
     # Skip PRs from forks (bot token can't push back to them) and skip the
-    # changesets bot's own Version Packages PR (nothing to draft a
-    # changeset for — and drafting one would just describe its own version
-    # bump).
+    # changesets bot's Version Packages PR and Renovate update PRs. A commit
+    # from this workflow would prevent Renovate from updating its own branch.
     if: >-
       github.event.pull_request.head.repo.full_name == github.repository &&
-      !startsWith(github.event.pull_request.head.ref, 'changeset-release/')
+      !startsWith(github.event.pull_request.head.ref, 'changeset-release/') &&
+      !startsWith(github.event.pull_request.head.ref, 'renovate/')
     runs-on: ubuntu-latest
 
     steps:

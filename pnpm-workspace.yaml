@@ -1,3 +1,24 @@
 packages:
   - apps/*
   - packages/*
+
+# pnpm settings live here so pnpm 11+ keeps reading them and npm sees only
+# registry configuration in .npmrc.
+nodeLinker: hoisted
+shamefullyHoist: true
+linkWorkspacePackages: true
+strictPeerDependencies: false
+autoInstallPeers: true
+publicHoistPattern:
+  - '*eslint*'
+  - '*prettier*'
+
+# pnpm 10 ignored these transitive install scripts; keep the same policy.
+allowBuilds:
+  '@swc/core': false
+  core-js: false
+  esbuild: false
+
+# Allow sibling @jbpark packages to be used on the day they are published.
+minimumReleaseAgeExclude:
+  - '@jbpark/*'

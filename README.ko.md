@@ -97,7 +97,7 @@ Atomic Design 패턴을 따라 구성된 React 컴포넌트 라이브러리입�
 ### 개발 도구
 
 - **[Turborepo](https://turborepo.com/)** - 모노레포 빌드 시스템
-- **[pnpm](https://pnpm.io/)** - 패키지 매니저 (v10)
+- **[pnpm](https://pnpm.io/)** - 패키지 매니저 (`package.json`에 버전 고정)
 - **[ESLint](https://eslint.org/)** - 코드 린팅
 - **[Prettier](https://prettier.io/)** - 코드 포매팅
 - **[Storybook](https://storybook.js.org/)** - 컴포넌트 문서화
@@ -108,7 +108,7 @@ Atomic Design 패턴을 따라 구성된 React 컴포넌트 라이브러리입�
 ### 필수 요구사항
 
 - Node.js: 패키지 메타데이터는 `>=20`을 선언합니다. 저장소 개발·빌드와 CI는 `.nvmrc`에 고정된 버전(현재 24.18.0)을 사용합니다.
-- pnpm: 10.x 이상
+- pnpm: `package.json`의 `packageManager`에 고정된 버전 사용
 
 ### 설치
 

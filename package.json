@@ -9,7 +9,7 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "turbo run check-types",
     "check-dynamic-classes": "turbo run check-dynamic-classes",
-  "check-regression-net": "turbo run check-regression-net",
+    "check-regression-net": "turbo run check-regression-net",
     "prepare": "husky",
     "publish-ui": "cd packages/ui && npm publish"
   },
@@ -27,9 +27,9 @@
   },
   "engines": {
     "node": ">=20",
-    "pnpm": ">=10"
+    "pnpm": ">=12"
   },
-  "packageManager": "pnpm@10.28.0",
+  "packageManager": "pnpm@12.8.1",
   "workspaces": [
     "apps/*",
     "packages/*"
