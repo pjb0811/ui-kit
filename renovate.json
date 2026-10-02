@@ -8,6 +8,9 @@
   "major": {
     "dependencyDashboardApproval": true
   },
+  "lockFileMaintenance": {
+    "enabled": true
+  },
   "packageRules": [
     {
       "description": "Update the pnpm packageManager pin and engine range in their own PR.",
