@@ -1,5 +1,24 @@
 # web
 
+## 1.5.9
+
+### Patch Changes
+
+- Updated dependencies [638d0d2]
+- Updated dependencies [fa133a2]
+- Updated dependencies [e38cd18]
+- Updated dependencies [a48ec49]
+- Updated dependencies [f19fda3]
+- Updated dependencies [91b598a]
+- Updated dependencies [b7a4b20]
+- Updated dependencies [d885357]
+- Updated dependencies [97aa7fa]
+- Updated dependencies [7bcd44a]
+- Updated dependencies [28749ee]
+- Updated dependencies [6b05eff]
+- Updated dependencies [c7507b7]
+  - @repo/ui@10.1.0
+
 ## 1.5.8
 
 ### Patch Changes

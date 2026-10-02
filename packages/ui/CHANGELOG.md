@@ -1,5 +1,121 @@
 # @repo/ui
 
+## 10.1.0
+
+### Minor Changes
+
+- 638d0d2: Add an items-driven Breadcrumb molecule with accessible hierarchy navigation, optional icons and separators, custom item rendering, RTL support, and collapsible long paths.
+- fa133a2: Add a reusable Pagination molecule with controlled and uncontrolled page and page-size navigation, compact ranges, accessible labels, total and item-range display, a quick page jumper, size and RTL support, first/last controls, single-page hiding and page links.
+- e38cd18: Add an opt-in searchable mode to Select with filtering, grouped and disabled choices, an empty state, and controlled or uncontrolled selection.
+- a48ec49: Add a searchable multi-select mode to Select with removable chips, grouped options, controlled or uncontrolled arrays of values, and keyboard support.
+- f19fda3: Add a typed Table organism with custom cells, loading and empty states, responsive overflow, native table semantics, and optional built-in pagination for client or server data.
+- 91b598a: Add an items-driven Tabs component with horizontal and vertical layouts, controlled and uncontrolled selection, optional panel preservation, focus activation, scrolling, fitted tabs, extra actions, and consistently spaced tab icons.
+- b7a4b20: Add a Tooltip component for supplementary hover and keyboard-focus hints, with configurable positioning, delay, disabled state, and controlled visibility.
+
+### Patch Changes
+
+- d885357: Document how `data-ui-root` and the shared overlay z-index interact
+
+  The README now explains the other half of the `data-ui-root` recommendation.
+  Overlays and in-flow chrome (sticky/fixed `Layout.Header`, `FloatButton`,
+  Dropdown menus) share `z-index: 1000`, so without an isolated root that chrome
+  paints over a host dialog with a lower z-index, such as shadcn's `z-50`.
+  Marking the root lets any overlay the host portals to `body` cover the whole
+  app. No runtime change.
+
+- 97aa7fa: Drop `FieldLabel`'s dead Radix-era `has-data-[state=checked]` classes
+
+  `core/field.tsx`'s `FieldLabel` still carried shadcn's choice-card checked
+  highlight keyed off Radix's `data-state="checked"`. Since the Base UI migration
+  nothing emits that attribute (Base UI marks checked controls with a bare
+  `data-checked`), and the only consumer, `Radio`, renders the label beside its
+  item rather than around it, so the three classes could never match. They are
+  removed, which also drops three unused rules from `dist/style.css`. No visual
+  change.
+
+- 7bcd44a: Keep side drawer widths usable and tell the modal's footer buttons apart
+
+  `organisms/drawer` turns a preset `size` into a viewport percentage in an
+  inline style, so a left/right drawer collapsed on phones: `small` is 30%,
+  about 112px on a 375px screen. The same seam had the opposite problem above
+  `sm` — `core/drawer` puts `sm:max-w-sm` on side drawers and an inline `width`
+  does not beat a `max-width`, so every side drawer was held at 24rem from the
+  `sm` breakpoint up and `size` had no effect on anything wider than a phone.
+  Preset widths are now floored at `20rem` and `max-width: 100%` is set inline;
+  a custom `size` is still used exactly as given.
+
+  `Button` defaults to the `outlined` variant, so the modal's unstyled OK button
+  rendered with the same classes as the explicitly outlined Cancel beside it, in
+  the controlled footer and in `Modal.confirm`'s alike. The confirming action is
+  now solid primary and the dismissing one stays outlined, including the single
+  acknowledge button on the other statics. `Modal.confirm` also ran cancel-then-ok
+  while the controlled footer ran ok-then-cancel; both now put the confirming
+  action first.
+
+- 28749ee: Cover the rest of the library with the non-Tailwind-host preflight reset
+
+  The library ships no global preflight on purpose, so `globals.css` carries a
+  self-scoped normalize instead — the one thing standing between a bare
+  `<button>`/`<input>` and the host's UA defaults on a host that runs no Tailwind
+  of its own (the docs site, plain Vite, any consumer that only imports our
+  stylesheet). Two independent gaps let controls out from under it.
+
+  **The selector never self-matched anything but `button`.** It read
+  `button[data-slot], [data-slot] button, [data-slot] input, …`, so a control
+  that _is_ the slot root with no slotted ancestor above it matched nothing:
+  `core/input.tsx`'s `<input data-slot="input">` and `core/textarea.tsx`'s
+  `<textarea data-slot="textarea">` both fell through. Measured on the docs site,
+  `Input` rendered in Arial and `Input.TextArea` in monospace instead of the page
+  font. The prefix is now the same `:where([data-slot], [data-slot] *)` the
+  box-sizing rule beside it already used.
+
+  **Several components emitted no `data-slot` at all.** The whole `Layout` family
+  was bare, so `Layout.Sider`'s collapse trigger rendered as a UA button —
+  `appearance: auto`, a 2px outset border, `#efefef`, Arial 13.3px — inside an
+  otherwise correctly styled demo. `Input.Search`'s clear button was in the same
+  position. `Layout`, `Layout.Header`, `Layout.Sider` (and its trigger),
+  `Layout.Content`, `Layout.Footer`, `Input.Search` (and its clear button),
+  `Checkbox`, `Radio` and `Upload` now all carry one.
+
+  The regression net grew a matching contract. `check-ssr-smoke` used to ask only
+  "does this registered component still emit its `data-slot`?", which a family
+  that never had one passes vacuously; it now walks the rendered markup and
+  fails on any visible `<button>`/`<input>`/`<select>`/`<textarea>` with no
+  `data-slot` on itself or an ancestor. Compound parts (`Input.Search`,
+  `Layout.Sider`, …) are rendered individually rather than only when some
+  parent's fixture happens to include them — which is why neither button was
+  covered before.
+
+- 6b05eff: Reset UA block margins inside the library's `[data-slot]` subtree
+
+  The self-scoped preflight reset restored `box-sizing`, borders and form-control
+  fonts, but not `margin`, so on a host with no preflight of its own every bare
+  `<p>` kept the UA `margin-block: 1em`. In a flex column that margin adds to the
+  declared `gap-*` instead of collapsing into it: `Empty`'s 12px gaps rendered as
+  26px and 40px, `Result`'s 8px title→subtitle gap as 42px, `PageHeader`'s 2px
+  title→subtitle gap as 34px, and a title-only `Toast` sat 12px below its status
+  icon in a box 22px taller than designed.
+
+  `globals.css` now zeroes the margin of `p`, `h1`–`h6`, `ul`, `ol`, `dl`, `dd`,
+  `blockquote`, `figure` and `pre` under the same zero-specificity
+  `:where([data-slot], [data-slot] *)` prefix, so margin utilities still win.
+  `Empty`, `Result`, `PageHeader` and `Toast` had no `data-slot` at all and now
+  carry one, as do `Menu`, `Checkbox.Group`, `Typography.Title` and
+  `Typography.Paragraph`, which the extended rendered-markup contract in
+  `check-ssr-smoke` caught next (those four already set `m-0` themselves).
+
+  This is a visual change for consumers without a preflight: the affected
+  components now render at their declared spacing.
+
+- c7507b7: Delegate the system dark-mode subscription to `@jbpark/use-hooks`' `useMediaQuery`
+
+  `Config`'s `theme.dark: 'system'` resolution used a hand-rolled
+  `matchMedia` + `useSyncExternalStore` subscription that `useMediaQuery` was
+  extracted from. It now calls `useMediaQuery('(prefers-color-scheme: dark)')`
+  instead, and the `@jbpark/use-hooks` dependency moves to `^4.1.0`, the first
+  release that ships the hook. Behaviour is unchanged: the server snapshot is
+  still `false` (light), and the client value follows the OS setting live.
+
 ## 10.0.2
 
 ### Patch Changes
