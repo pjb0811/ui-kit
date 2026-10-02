@@ -1,0 +1,47 @@
+---
+sidebar_position: 1
+title: Alert
+---
+
+import AlertDemo from '../../../src/demo/alert-demo';
+
+# Alert
+
+Show a message that stays beside the content it concerns, such as a form or settings section. Use `Toast` for temporary notifications and `Result` for page-level outcomes.
+
+```tsx
+import { Alert } from '@jbpark/ui-kit';
+
+<Alert
+  status="success"
+  title="Changes saved"
+  description="Your settings are ready to use."
+  closable
+/>;
+```
+
+<AlertDemo />
+
+## Announcements and dismissal
+
+`Alert` defaults to `role="status"`, a polite announcement for ordinary updates. Set `role="alert"` only for urgent, time-sensitive information. `status="error"` changes the appearance but does not change the announcement priority. An alert already present at page load may not be announced; keep essential information visible in the page. Neither role moves keyboard focus.
+
+The message stays visible until the user dismisses it. Set `closable` to show a localized close button; `onClose` runs when the user activates it. The component then hides itself. To reset it, remount it with a new `key`.
+
+Pass `icon={null}` to hide the default status icon, or pass your own icon. The icon is decorative; include the meaning in the title or description. `action` can hold a button or link, and the component accepts native `<div>` and ARIA attributes.
+
+## Props
+
+| Prop          | Type                                               | Default      |
+| ------------- | -------------------------------------------------- | ------------ |
+| `status`      | `'info' \| 'success' \| 'warning' \| 'error'`      | `'info'`     |
+| `variant`     | `'outlined' \| 'filled'`                           | `'outlined'` |
+| `title`       | `ReactNode`                                        | Required     |
+| `description` | `ReactNode`                                        | -            |
+| `icon`        | `ReactNode`                                        | Status icon  |
+| `action`      | `ReactNode`                                        | -            |
+| `closable`    | `boolean`                                          | `false`      |
+| `onClose`     | `() => void`                                       | -            |
+| `role`        | `AriaRole`                                         | `'status'`   |
+| `className`   | `string`                                           | -            |
+| `classNames`  | `{ icon?, title?, description?, action?, close? }` | -            |

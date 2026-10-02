@@ -118,6 +118,7 @@ const RESET_SLOTS = {};
 // Minimal valid props per component that needs them. Anything not listed is
 // rendered with no props. Keep entries tiny — just enough to render.
 const fixtures = {
+  Alert: { title: 'Status', description: 'Details' },
   Button: { children: 'Button' },
   Tag: { children: 'Tag' },
   Typography: { children: 'Text' },
