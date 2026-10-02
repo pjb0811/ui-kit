@@ -80,9 +80,7 @@ Human co-authors are legitimate. `github-actions[bot]` trailers on `chore: versi
 
 ### Relationship to the Global Convention
 
-This document is the source of truth for this repository and **takes precedence** over the global commit rules (`~/.claude/commands/commit.md`, `~/.copilot/instructions/commit-message.instructions.md`), which default to Korean summaries and no scope.
-
-The two deliberate differences are **English** and the **optional scope**, both because this repository's commit history is a public artifact — it is published to npm as `@jbpark/ui-kit` and read by outside contributors and release notes, the same reasoning the global rules apply to issues and PRs. Everything else (no emoji/gitmoji, commit types, no trailers, `CHANGELOG.md` exclusion, lock-file exclusion) matches the global rules.
+These rules match the global `commit` skill that agents use in every pjb0811 repository (English, optional scope, no emoji/gitmoji, no trailers, `CHANGELOG.md` and lock-file exclusions). This repository has no commit skill of its own. This document stays because a machine-local global skill doesn't reach the Copilot cloud agent, other machines or outside contributors; if the two ever disagree, update both.
 
 ### Examples
 
