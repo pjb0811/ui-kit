@@ -24,6 +24,13 @@ export default function InputDemo() {
         </Typography.Text>
       </Space>
       <Input.TextArea placeholder="Text area" className="max-w-64" rows={3} />
+      <Input.Number
+        label="Quantity"
+        min={0}
+        max={10}
+        defaultValue={2}
+        className="max-w-64"
+      />
     </Space>
   );
 }

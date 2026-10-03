@@ -209,6 +209,7 @@ const COMPOUND_COMPONENTS = {
   // field has a value, and contract #6 skips hidden controls — so an empty
   // Search would render the button in the one state where nothing checks it.
   'Input.Search': [ui.Input.Search, { defaultValue: 'q' }],
+  'Input.Number': [ui.Input.Number, { label: 'Amount', defaultValue: 2 }],
   'Input.TextArea': [ui.Input.TextArea, {}],
   'Layout.Content': [ui.Layout.Content, { children: 'content' }],
   'Layout.Footer': [ui.Layout.Footer, { children: 'footer' }],
@@ -425,6 +426,26 @@ if (
   errors.push(
     'Badge SSR must preserve overflow, zero visibility, and labeled dots.',
   );
+}
+
+const inputNumberMarkup = renderToStaticMarkup(
+  h(ui.Input.Number, {
+    id: 'quantity',
+    label: 'Quantity',
+    name: 'quantity',
+    defaultValue: 2,
+    min: 0,
+    max: 10,
+  }),
+);
+
+if (
+  !inputNumberMarkup.includes('for="quantity"') ||
+  !inputNumberMarkup.includes('aria-label="Increase value"') ||
+  !inputNumberMarkup.includes('aria-label="Decrease value"') ||
+  !inputNumberMarkup.includes('name="quantity" value="2"')
+) {
+  errors.push('Input.Number SSR must preserve labels, controls, and form value.');
 }
 
 // 1. Render throws.
