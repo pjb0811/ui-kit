@@ -118,6 +118,7 @@ const RESET_SLOTS = {};
 // Minimal valid props per component that needs them. Anything not listed is
 // rendered with no props. Keep entries tiny — just enough to render.
 const fixtures = {
+  Avatar: { alt: 'Ada Lovelace', fallback: 'AL' },
   Alert: { title: 'Status', description: 'Details' },
   Button: { children: 'Button' },
   Tag: { children: 'Tag' },
@@ -382,6 +383,26 @@ if (
 ) {
   errors.push(
     'Table pagination must slice client rows and preserve server rows.',
+  );
+}
+
+const avatarMarkup = renderToStaticMarkup(
+  h(ui.Avatar, { src: '/ada.png', alt: 'Ada Lovelace', fallback: 'AL' }),
+);
+const decorativeAvatarMarkup = renderToStaticMarkup(
+  h(ui.Avatar, { alt: '', fallback: 'AL' }),
+);
+
+if (
+  !avatarMarkup.includes('role="img" aria-label="Ada Lovelace"') ||
+  !avatarMarkup.includes('>AL</span>') ||
+  !avatarMarkup.includes('src="/ada.png"') ||
+  !avatarMarkup.includes('data-error:invisible') ||
+  !decorativeAvatarMarkup.includes('aria-hidden="true"') ||
+  decorativeAvatarMarkup.includes('role="img"')
+) {
+  errors.push(
+    'Avatar SSR must expose its name and fallback, and hide decorative content.',
   );
 }
 

@@ -1,0 +1,33 @@
+---
+title: Avatar
+---
+
+import AvatarDemo from '../../../src/demo/avatar-demo';
+
+# Avatar
+
+Display a profile image with initials or an icon while the image loads or if it fails.
+
+```tsx
+import { Avatar } from '@jbpark/ui-kit';
+
+<Avatar src="/ada.png" alt="Ada Lovelace" fallback="AL" />;
+```
+
+<AvatarDemo />
+
+## Props
+
+| Prop         | Type                                    | Default                              |
+| ------------ | --------------------------------------- | ------------------------------------ |
+| `src`        | `string`                                | -                                    |
+| `alt`        | `string`                                | Required                             |
+| `fallback`   | `ReactNode`                             | Person icon                          |
+| `size`       | `'small' \| 'middle' \| 'large'`        | `Config.componentSize` or `'middle'` |
+| `loading`    | `'eager' \| 'lazy'`                     | Browser default                      |
+| `className`  | `string`                                | -                                    |
+| `classNames` | `{ image?: string; fallback?: string }` | -                                    |
+
+Pass the person's name in `alt`, including when the fallback contains initials or an icon. Avatar exposes that name while the image loads and after a loading error. For a decorative image, use `alt=""`; it is hidden from assistive technology. When Avatar is the only content in a button, give the button its own accessible name.
+
+The image stays mounted so `loading="lazy"` works and server rendering can start the request before hydration. Its loading and error states are hidden visually, leaving the fallback visible. Use `classNames.image` and `classNames.fallback` to style the inner elements.

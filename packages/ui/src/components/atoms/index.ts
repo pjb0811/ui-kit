@@ -1,3 +1,5 @@
+export { default as Avatar } from './avatar';
+export type { Props as AvatarProps } from './avatar';
 export { default as Button } from './button';
 export { default as Checkbox } from './checkbox';
 export { default as ColorPicker } from './color-picker';
