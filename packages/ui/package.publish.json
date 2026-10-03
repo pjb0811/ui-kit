@@ -51,6 +51,11 @@
       "import": "./dist/Breadcrumb.mjs",
       "default": "./dist/Breadcrumb.mjs"
     },
+    "./Steps": {
+      "types": "./dist/Steps.d.mts",
+      "import": "./dist/Steps.mjs",
+      "default": "./dist/Steps.mjs"
+    },
     "./Pagination": {
       "types": "./dist/Pagination.d.mts",
       "import": "./dist/Pagination.mjs",

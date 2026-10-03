@@ -20,6 +20,8 @@ export { default as Splitter } from './splitter';
 export type { Props as SplitterProps } from './splitter';
 export { default as Space } from './space';
 export type { Props as SpaceProps } from './space';
+export { default as Steps } from './steps';
+export type { Props as StepsProps, Item as StepItem } from './steps';
 export { default as Tabs } from './tabs';
 export type { Props as TabsProps } from './tabs';
 export { default as Upload } from './upload';
