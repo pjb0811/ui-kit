@@ -1,0 +1,39 @@
+---
+title: Steps
+---
+
+import StepsDemo from '../../../src/demo/steps-demo';
+
+# Steps
+
+Show the named stages of an ordered workflow. Steps is a display-only indicator; keep the current index and any form or panel state in your application.
+
+```tsx
+import { Steps } from '@jbpark/ui-kit';
+
+<Steps
+  current={1}
+  items={[
+    { title: 'Account', description: 'Create your account' },
+    { title: 'Profile', description: 'Add your details' },
+    { title: 'Review', description: 'Confirm and submit' },
+  ]}
+/>;
+```
+
+<StepsDemo />
+
+## Props
+
+| Prop          | Type                                                             | Default        | Description                                                                          |
+| ------------- | ---------------------------------------------------------------- | -------------- | ------------------------------------------------------------------------------------ |
+| `items`       | `readonly Item[]`                                                | required       | Ordered workflow stages.                                                             |
+| `current`     | `number`                                                         | `0`            | Zero-based current index. Out-of-range values are clamped to the first or last item. |
+| `orientation` | `'horizontal' \| 'vertical'`                                     | `'horizontal'` | Layout direction.                                                                    |
+| `className`   | `string`                                                         | -              | Navigation root class.                                                               |
+| `classNames`  | `{ list?, item?, indicator?, title?, description?, connector? }` | -              | Classes for internal parts.                                                          |
+| `aria-label`  | `string`                                                         | `'Progress'`   | Accessible name of the workflow.                                                     |
+
+Each `Item` has a required `title` and optional `key`, `description`, `icon`, and `status: 'error'`. Steps before `current` are completed; later steps are upcoming. An error overrides the derived visual state. The current list item always receives `aria-current="step"`, including when it is in error. Status text is available to screen readers. Custom icons are decorative, so provide meaningful stage names in `title`.
+
+The component also accepts native `<nav>` props such as `dir`, `style`, and `id`. It does not render links or buttons; use your own navigation controls to move through a workflow.
