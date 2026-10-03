@@ -119,6 +119,7 @@ const RESET_SLOTS = {};
 // rendered with no props. Keep entries tiny — just enough to render.
 const fixtures = {
   Avatar: { alt: 'Ada Lovelace', fallback: 'AL' },
+  Badge: { count: 3, children: h(ui.Button, null, 'Inbox') },
   Alert: { title: 'Status', description: 'Details' },
   Button: { children: 'Button' },
   Tag: { children: 'Tag' },
@@ -403,6 +404,26 @@ if (
 ) {
   errors.push(
     'Avatar SSR must expose its name and fallback, and hide decorative content.',
+  );
+}
+
+const badgeMarkup = renderToStaticMarkup(
+  h(ui.Badge, { count: 120, maxCount: 99 }, h(ui.Avatar, fixtures.Avatar)),
+);
+const hiddenZeroMarkup = renderToStaticMarkup(h(ui.Badge, { count: 0 }));
+const dotMarkup = renderToStaticMarkup(
+  h(ui.Badge, { dot: true, indicatorLabel: 'Online', color: 'success' }),
+);
+
+if (
+  !badgeMarkup.includes('data-slot="badge-indicator"') ||
+  !badgeMarkup.includes('>99+</span>') ||
+  hiddenZeroMarkup !== '' ||
+  !dotMarkup.includes('aria-label="Online"') ||
+  !dotMarkup.includes('data-color="success"')
+) {
+  errors.push(
+    'Badge SSR must preserve overflow, zero visibility, and labeled dots.',
   );
 }
 

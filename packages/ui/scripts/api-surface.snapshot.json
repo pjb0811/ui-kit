@@ -3,6 +3,7 @@
     ".",
     "./Alert",
     "./Avatar",
+    "./Badge",
     "./Breadcrumb",
     "./Button",
     "./Card",
@@ -22,6 +23,7 @@
   "names": [
     "Alert",
     "Avatar",
+    "Badge",
     "Breadcrumb",
     "Button",
     "Card",

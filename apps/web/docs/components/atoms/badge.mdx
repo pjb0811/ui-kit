@@ -1,0 +1,40 @@
+---
+title: Badge
+---
+
+import BadgeDemo from '../../../src/demo/badge-demo';
+
+# Badge
+
+Show a notification count or status dot beside an Avatar, Button, or other element. Unlike `Tag`, Badge decorates another element rather than labeling content.
+
+```tsx
+import { Avatar, Badge } from '@jbpark/ui-kit';
+
+<Badge dot color="success" indicatorLabel="Online">
+  <Avatar alt="Ada Lovelace" fallback="AL" />
+</Badge>;
+```
+
+<BadgeDemo />
+
+## Props
+
+| Prop             | Type                                              | Default    | Description                                                      |
+| ---------------- | ------------------------------------------------- | ---------- | ---------------------------------------------------------------- |
+| `count`          | `number`                                          | -          | Count shown in the indicator.                                    |
+| `dot`            | `boolean`                                         | `false`    | Show a dot instead of the count.                                 |
+| `maxCount`       | `number`                                          | `99`       | Show `maxCount+` above this value.                               |
+| `showZero`       | `boolean`                                         | `false`    | Show a count of zero.                                            |
+| `color`          | `'primary' \| 'success' \| 'warning' \| 'danger'` | `'danger'` | Indicator color.                                                 |
+| `offset`         | `readonly [number, number]`                       | `[0, 0]`   | Pixel inset from the wrapped element's top and inline end edges. |
+| `indicatorLabel` | `string`                                          | -          | Accessible name for the count or dot.                            |
+| `children`       | `ReactNode`                                       | -          | Element decorated by the indicator. Omit for a standalone Badge. |
+| `className`      | `string`                                          | -          | Root class.                                                      |
+| `classNames`     | `{ indicator?: string }`                          | -          | Indicator class.                                                 |
+
+A count of zero is hidden unless `showZero` is set. `dot` takes precedence over `count`; a dot displays whenever `dot` is true. If neither is visible and there are no children, Badge renders nothing.
+
+Give a meaningful `indicatorLabel` to a status dot, such as `"Online"`. Without it, the dot is decorative and hidden from assistive technology. A count is readable by default; add `indicatorLabel` when its context is unclear or when you want an exact accessible count despite `maxCount+` visual truncation.
+
+Badge also accepts standard `<span>` props such as `title`, `style`, `aria-*`, and `data-*`.

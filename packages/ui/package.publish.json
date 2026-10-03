@@ -11,6 +11,11 @@
       "import": "./dist/Avatar.mjs",
       "default": "./dist/Avatar.mjs"
     },
+    "./Badge": {
+      "types": "./dist/Badge.d.mts",
+      "import": "./dist/Badge.mjs",
+      "default": "./dist/Badge.mjs"
+    },
     "./Typography": {
       "types": "./dist/Typography.d.mts",
       "import": "./dist/Typography.mjs",
