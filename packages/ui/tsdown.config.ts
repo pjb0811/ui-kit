@@ -8,6 +8,7 @@ export default defineConfig({
     index: 'src/index.ts',
     Avatar: 'src/components/atoms/avatar.tsx',
     Badge: 'src/components/atoms/badge.tsx',
+    Segmented: 'src/components/atoms/segmented.tsx',
     Typography: 'src/components/atoms/typography/index.ts',
     Button: 'src/components/atoms/button.tsx',
     CodeEditor: 'src/components/atoms/code-editor.tsx',
