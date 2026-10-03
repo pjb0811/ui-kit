@@ -1,5 +1,15 @@
 # docs
 
+## 0.5.24
+
+### Patch Changes
+
+- 1c9cdba: Update pnpm installation instructions to use corepack and pinned version.
+- Updated dependencies [186ec05]
+- Updated dependencies [0ad5e32]
+- Updated dependencies [fa0cf07]
+  - @repo/ui@10.2.0
+
 ## 0.5.23
 
 ### Patch Changes

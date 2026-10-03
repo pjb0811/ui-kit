@@ -1,5 +1,13 @@
 # @repo/ui
 
+## 10.2.0
+
+### Minor Changes
+
+- 186ec05: Add an Avatar atom with Base UI image loading and fallback behavior, accessible naming, three sizes, and styling slots.
+- 0ad5e32: Add a Badge atom for counts and status dots on avatars, buttons, and other content.
+- fa0cf07: Add an inline Alert molecule with semantic statuses, outlined and filled styles, optional action and dismissal, and configurable accessible announcement role.
+
 ## 10.1.0
 
 ### Minor Changes
