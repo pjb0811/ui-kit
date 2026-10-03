@@ -2,6 +2,7 @@
   "exports": [
     ".",
     "./Alert",
+    "./Avatar",
     "./Breadcrumb",
     "./Button",
     "./Card",
@@ -20,6 +21,7 @@
   ],
   "names": [
     "Alert",
+    "Avatar",
     "Breadcrumb",
     "Button",
     "Card",

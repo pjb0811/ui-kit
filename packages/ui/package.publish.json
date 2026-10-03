@@ -6,6 +6,11 @@
       "import": "./dist/index.mjs",
       "default": "./dist/index.mjs"
     },
+    "./Avatar": {
+      "types": "./dist/Avatar.d.mts",
+      "import": "./dist/Avatar.mjs",
+      "default": "./dist/Avatar.mjs"
+    },
     "./Typography": {
       "types": "./dist/Typography.d.mts",
       "import": "./dist/Typography.mjs",

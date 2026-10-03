@@ -6,6 +6,7 @@ import postcss from 'rollup-plugin-postcss';
 export default defineConfig({
   entry: {
     index: 'src/index.ts',
+    Avatar: 'src/components/atoms/avatar.tsx',
     Typography: 'src/components/atoms/typography/index.ts',
     Button: 'src/components/atoms/button.tsx',
     CodeEditor: 'src/components/atoms/code-editor.tsx',
