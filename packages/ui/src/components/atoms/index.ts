@@ -13,6 +13,8 @@ export { default as Progress } from './progress';
 export { default as Radio } from './radio';
 export { default as RichTextEditor } from './rich-text-editor';
 export { default as Select } from './select';
+export { default as Segmented } from './segmented';
+export type { Props as SegmentedProps } from './segmented';
 export { default as Skeleton } from './skeleton';
 export { default as Slider } from './slider';
 export { default as Spin } from './spin';

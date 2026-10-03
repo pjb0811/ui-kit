@@ -1,0 +1,38 @@
+---
+title: Segmented
+---
+
+import SegmentedDemo from '../../../src/demo/segmented-demo';
+
+# Segmented
+
+Use Segmented for a compact choice that switches a view or filter. Use Tabs when each choice owns a panel, or Radio.Group for a conventional form field.
+
+```tsx
+import { Segmented } from '@jbpark/ui-kit';
+
+<Segmented
+  aria-label="View"
+  options={['Grid', 'List', 'Compact']}
+  defaultValue="Grid"
+  onChange={value => console.log(value)}
+/>;
+```
+
+<SegmentedDemo />
+
+## Props
+
+| Prop           | Type                                                                                            | Default                 | Description                                      |
+| -------------- | ----------------------------------------------------------------------------------------------- | ----------------------- | ------------------------------------------------ |
+| `options`      | `readonly (string \| { label: string; value: string; icon?: ReactNode; disabled?: boolean })[]` | required                | Choices in display order. Values must be unique. |
+| `value`        | `string`                                                                                        | -                       | Controlled selected value.                       |
+| `defaultValue` | `string`                                                                                        | first enabled option    | Initially selected value when uncontrolled.      |
+| `onChange`     | `(value: string) => void`                                                                       | -                       | Called when selection changes.                   |
+| `size`         | `'small' \| 'middle' \| 'large'`                                                                | Config size or `middle` | Control density.                                 |
+| `orientation`  | `'horizontal' \| 'vertical'`                                                                    | `'horizontal'`          | Layout and arrow-key direction.                  |
+| `disabled`     | `boolean`                                                                                       | `false`                 | Disable the entire group.                        |
+| `className`    | `string`                                                                                        | -                       | Root class.                                      |
+| `classNames`   | `{ item?: string; activeItem?: string }`                                                        | -                       | Item classes.                                    |
+
+Supply `aria-label` or `aria-labelledby` so assistive technology can identify the group. The selected value cannot be cleared by clicking it again. When there are no enabled options, the group starts without a selection. Segmented also accepts Base UI Toggle Group root props such as `dir`, `loopFocus`, and `ref`.
