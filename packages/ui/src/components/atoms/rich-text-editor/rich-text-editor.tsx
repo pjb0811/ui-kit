@@ -30,6 +30,11 @@ export interface Props {
   toolbar?: boolean | ToolbarPreset[];
   /** Extra buttons appended after the built-in presets. */
   toolbarItems?: ToolbarItem[];
+  /** Called after each document edit with the current HTML. */
+  onUpdate?: (value: string) => void;
+  /** Called when the editor loses focus with the current HTML. */
+  onCommit?: (value: string) => void;
+  /** @deprecated Use `onCommit` for the existing blur-only behavior. */
   onChange?: (value: string) => void;
 }
 
@@ -40,6 +45,8 @@ const RichTextEditor = ({
   classNames,
   toolbar = false,
   toolbarItems,
+  onUpdate,
+  onCommit,
   onChange,
 }: Props) => {
   const presets = toolbar === true ? DEFAULT_TOOLBAR_PRESETS : toolbar || [];
@@ -60,8 +67,14 @@ const RichTextEditor = ({
       }),
     ],
     content: value,
+    onUpdate: ({ editor: e }) => {
+      onUpdate?.(e.getHTML());
+    },
     onBlur: ({ editor: e }) => {
-      onChange?.(e.getHTML());
+      const html = e.getHTML();
+
+      onCommit?.(html);
+      onChange?.(html);
     },
     // @tiptap/react v3 only re-renders on selection/transaction changes when
     // explicitly opted in — the toolbar's isActive()/getAttributes() reads

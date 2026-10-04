@@ -20,7 +20,7 @@ const meta: Meta<typeof Drawer> = {
     },
     size: {
       control: { type: 'select' },
-      options: ['small', 'medium', 'large', 'full'],
+      options: ['small', 'middle', 'large', 'full'],
     },
     maskClosable: {
       control: { type: 'boolean' },
@@ -78,7 +78,7 @@ export const Default: Story = {
     open: false,
     title: '드로어 제목',
     direction: 'bottom',
-    size: 'medium',
+    size: 'middle',
     maskClosable: true,
     closable: true,
     handlebar: true,
@@ -92,7 +92,7 @@ export const WithExtra: Story = {
     open: false,
     title: '드로어 제목',
     direction: 'bottom',
-    size: 'medium',
+    size: 'middle',
     maskClosable: true,
     closable: true,
     handlebar: true,

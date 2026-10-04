@@ -28,7 +28,7 @@ const meta: Meta<typeof Skeleton> = {
     gap: {
       control: { type: 'number', min: 0, max: 20 },
     },
-    direction: {
+    orientation: {
       control: { type: 'radio' },
       options: ['horizontal', 'vertical'],
     },
@@ -59,7 +59,7 @@ export const Default: Story = {
     loading: true,
     count: 3,
     size: 'default',
-    direction: 'vertical',
+    orientation: 'vertical',
     gap: 8,
     children: '실제 콘텐츠가 여기에 표시됩니다',
   },
@@ -79,7 +79,7 @@ export const MultipleSize: Story = {
     loading: true,
     count: 3,
     size: 'default',
-    direction: 'vertical',
+    orientation: 'vertical',
     gap: 8,
     children: '실제 콘텐츠가 여기에 표시됩니다',
     width: [100, '200px', 300],

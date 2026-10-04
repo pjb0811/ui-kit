@@ -19,9 +19,13 @@ export interface Item {
 
 export interface Props extends Omit<
   React.ComponentProps<typeof Core>,
-  'children'
+  'children' | 'onChange'
 > {
   items: Item[];
+  /** Called when the selected tab changes. */
+  onChange?: (value: string | number | null) => void;
+  /** @deprecated Use `onChange` for the selected value. */
+  onValueChange?: React.ComponentProps<typeof Core>['onValueChange'];
   listLabel?: string;
   /** Preserve inactive panel DOM and local state. */
   keepMounted?: boolean;
@@ -51,6 +55,8 @@ const Tabs = ({
   extra,
   classNames,
   defaultValue,
+  onChange,
+  onValueChange,
   orientation = 'horizontal',
   ...props
 }: Props) => {
@@ -63,6 +69,10 @@ const Tabs = ({
     <Core
       defaultValue={props.value === undefined ? initialValue : undefined}
       orientation={orientation}
+      onValueChange={(value, eventDetails) => {
+        onChange?.(value);
+        onValueChange?.(value, eventDetails);
+      }}
       {...props}
     >
       <div

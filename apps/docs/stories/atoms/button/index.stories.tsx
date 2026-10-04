@@ -45,6 +45,12 @@ const meta: Meta<typeof Button> = {
   argTypes: {
     render: { table: { disable: true } },
     nativeButton: { table: { disable: true } },
+    type: {
+      description: 'Visual preset; use htmlType for the native button type.',
+    },
+    htmlType: {
+      description: 'Native button type: button, submit, or reset.',
+    },
     icon: {
       options: Object.keys(icons),
       mapping: icons,

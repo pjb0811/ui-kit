@@ -35,7 +35,7 @@ const isGroup = (option: Option | OptionGroup): option is OptionGroup => {
 
 interface StaticProps extends Omit<
   React.ComponentProps<typeof Core>,
-  'onValueChange'
+  'onValueChange' | 'items'
 > {
   searchable?: false;
   placeholder?: string;
@@ -63,13 +63,13 @@ const StaticSelect = ({
 
   return (
     <Core
+      {...props}
       items={items}
       onValueChange={value => {
         if (value !== null) {
           onChange?.(value);
         }
       }}
-      {...props}
     >
       <SelectTrigger
         aria-label={ariaLabel}

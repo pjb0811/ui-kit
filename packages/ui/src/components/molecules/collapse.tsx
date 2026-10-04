@@ -9,18 +9,18 @@ import { accordion } from '../../core';
 const { Accordion, AccordionItem, AccordionTrigger, AccordionContent } =
   accordion;
 
-interface Item {
-  key: React.Key;
+interface Item<Key extends React.Key = string> {
+  key: Key;
   label: React.ReactNode;
   disabled?: boolean;
   children: React.ReactNode;
 }
 
-export interface Props extends Omit<
+export interface Props<Key extends React.Key = string> extends Omit<
   React.ComponentPropsWithoutRef<'div'>,
   'onChange' | 'defaultValue' | 'value' | 'dir'
 > {
-  items?: Item[];
+  items?: Item<Key>[];
   accordion?: boolean;
   expandIcon?: React.ReactNode;
   classNames?: {
@@ -28,12 +28,12 @@ export interface Props extends Omit<
     header?: string;
     body?: string;
   };
-  defaultActiveKey?: string[] | number[];
-  activeKey?: string[] | number[];
-  onChange?: (keys: string[]) => void;
+  defaultActiveKey?: Key[];
+  activeKey?: Key[];
+  onChange?: (keys: Key[]) => void;
 }
 
-const Collapse = ({
+const Collapse = <Key extends React.Key = string>({
   expandIcon,
   accordion = false,
   items = [],
@@ -43,8 +43,15 @@ const Collapse = ({
   activeKey: _activeKey,
   onChange: _onChange,
   ...props
-}: Props) => {
+}: Props<Key>) => {
   const controlled = _activeKey !== undefined;
+  const keysByValue = new Map<string, Key>(
+    [
+      ...(defaultActiveKey ?? []),
+      ...(_activeKey ?? []),
+      ...items.map(item => item.key),
+    ].map(key => [String(key), key]),
+  );
 
   // Base UI's accordion has no `type` and always models the open set as an
   // array; `multiple` (default false) is the only single-vs-multiple switch.
@@ -52,11 +59,17 @@ const Collapse = ({
   const accordionProps = {
     multiple: !accordion,
     onValueChange: (values: string[]) => {
-      _onChange?.(values);
+      _onChange?.(
+        values.flatMap(value => {
+          const key = keysByValue.get(value);
+
+          return key === undefined ? [] : [key];
+        }),
+      );
     },
     ...(controlled
-      ? { value: (_activeKey ?? []).map(key => `${key}`) }
-      : { defaultValue: (defaultActiveKey ?? []).map(key => `${key}`) }),
+      ? { value: (_activeKey ?? []).map(key => String(key)) }
+      : { defaultValue: (defaultActiveKey ?? []).map(key => String(key)) }),
   };
 
   return (

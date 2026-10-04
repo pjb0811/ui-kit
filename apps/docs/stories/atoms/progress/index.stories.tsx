@@ -31,6 +31,6 @@ export const Default: Story = {
 export const Vertical: Story = {
   args: {
     value: 50,
-    direction: 'vertical',
+    orientation: 'vertical',
   },
 };

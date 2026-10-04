@@ -50,7 +50,7 @@ export interface Props {
   closable?: boolean;
   closeIcon?: React.ReactNode;
   direction?: 'top' | 'bottom' | 'left' | 'right';
-  size?: 'small' | 'medium' | 'large' | 'full' | string;
+  size?: 'small' | 'middle' | 'medium' | 'large' | 'full' | string;
   maskClosable?: boolean;
   handlebar?: boolean;
   rounded?: boolean;
@@ -74,6 +74,7 @@ export interface Props {
 
 const SIZES: Record<string, string> = {
   small: '30%',
+  middle: '50%',
   medium: '50%',
   large: '75%',
   full: '90%',
@@ -123,7 +124,7 @@ const Drawer = ({
   closable = true,
   closeIcon,
   direction = 'bottom',
-  size = 'medium',
+  size = 'middle',
   maskClosable = true,
   handlebar = true,
   rounded = false,

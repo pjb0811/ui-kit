@@ -77,7 +77,7 @@ export const Controlled: Story = {
   args: {
     activeKey: ['0'],
   },
-  render: function Render({ activeKey: _activeKey, ...props }) {
+  render: function Render({ activeKey: _activeKey }) {
     const [activeKeys, setActiveKeys] = useState<string[]>([]);
 
     useEffect(() => {
@@ -85,7 +85,7 @@ export const Controlled: Story = {
     }, [_activeKey]);
 
     return (
-      <Collapse
+      <Collapse<string>
         accordion={false}
         expandIcon={<ChevronDown className="h-4 w-4" />}
         activeKey={activeKeys}
@@ -121,7 +121,23 @@ export const Controlled: Story = {
             ),
           },
         ]}
-        {...props}
+      />
+    );
+  },
+};
+
+export const NumericKeys: Story = {
+  render: function Render() {
+    const [activeKeys, setActiveKeys] = useState<number[]>([1]);
+
+    return (
+      <Collapse<number>
+        activeKey={activeKeys}
+        onChange={setActiveKeys}
+        items={[
+          { key: 1, label: 'First', children: 'First panel' },
+          { key: 2, label: 'Second', children: 'Second panel' },
+        ]}
       />
     );
   },

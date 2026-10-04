@@ -6,6 +6,8 @@ const { Progress: Core } = progress;
 
 export interface Props extends React.ComponentPropsWithoutRef<'div'> {
   value: number;
+  orientation?: 'horizontal' | 'vertical';
+  /** @deprecated Use `orientation`. */
   direction?: 'horizontal' | 'vertical';
   classNames?: {
     background?: string;
@@ -16,11 +18,12 @@ export interface Props extends React.ComponentPropsWithoutRef<'div'> {
 const Progress = ({
   value,
   className,
+  orientation,
   direction = 'horizontal',
   classNames,
   ...props
 }: Props) => {
-  const isHorizontal = direction === 'horizontal';
+  const isHorizontal = (orientation ?? direction) === 'horizontal';
   const normalizedValue = Number.isFinite(value)
     ? Math.min(100, Math.max(0, value))
     : 0;
