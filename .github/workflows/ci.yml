@@ -29,7 +29,7 @@ jobs:
         run: pnpm install
 
       - name: Validate changesets
-        run: pnpm exec changeset status
+        run: pnpm exec changeset status --since=origin/main
 
       - name: Lint
         run: pnpm run lint
