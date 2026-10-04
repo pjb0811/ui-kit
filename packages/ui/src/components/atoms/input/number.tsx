@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 
-import { NumberField } from '@base-ui/react/number-field';
+import { NumberField, type NumberFieldRoot } from '@base-ui/react/number-field';
 import { Minus, Plus } from 'lucide-react';
 
 import { type ComponentSize, useConfig } from '@repo/ui/providers';
@@ -19,10 +19,15 @@ const sizes: Record<ComponentSize, string> = {
 
 export interface Props extends Omit<
   React.ComponentProps<typeof NumberField.Root>,
-  'children'
+  'children' | 'onValueChange'
 > {
   /** Visible input label. Alternatively, pair `id` with an external label. */
   label?: string;
+  /** Called with the numeric value (or null when cleared). */
+  onChange?: (
+    value: number | null,
+    eventDetails: NumberFieldRoot.ChangeEventDetails,
+  ) => void;
   placeholder?: string;
   size?: ComponentSize;
   classNames?: {
@@ -38,6 +43,7 @@ const Number = ({
   ref,
   id,
   label,
+  onChange,
   placeholder,
   size,
   className,
@@ -57,6 +63,7 @@ const Number = ({
       {...props}
       ref={ref}
       id={inputId}
+      onValueChange={onChange}
       data-slot="input-number"
       className={cn('w-full', className)}
     >

@@ -28,7 +28,7 @@ export const Controlled: Story = {
           {...args}
           defaultValue={undefined}
           value={value}
-          onValueChange={setValue}
+          onChange={setValue}
         />
         <p>Current value: {value ?? 'empty'}</p>
       </div>
