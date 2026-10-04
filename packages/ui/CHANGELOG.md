@@ -8,6 +8,8 @@
 - 0ad5e32: Add a Badge atom for counts and status dots on avatars, buttons, and other content.
 - fa0cf07: Add an inline Alert molecule with semantic statuses, outlined and filled styles, optional action and dismissal, and configurable accessible announcement role.
 - c48f74b: Add an accessible Input.Number with Base UI numeric parsing, step controls, and form support.
+- b50fb40: Add a Segmented atom for accessible single-choice view and filter controls, with keyboard selection, optional icons, disabled options, orientation, RTL, and sizes.
+- 6106132: Add a Steps molecule to show progress through ordered workflows, with completed, current, upcoming, and error states, descriptions, and horizontal or vertical layouts.
 - e88c848: Align public component callbacks and prop names: add Tabs `onChange`, RichTextEditor `onUpdate`/`onCommit`, and orientation and Drawer size aliases; preserve numeric Collapse keys and standard React change events when clearing Input.Search; prevent Select and Menu internal props from leaking into their public APIs.
 
 ## 10.1.0
