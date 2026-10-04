@@ -1,5 +1,15 @@
 # @repo/ui
 
+## 10.2.0
+
+### Minor Changes
+
+- 186ec05: Add an Avatar atom with Base UI image loading and fallback behavior, accessible naming, three sizes, and styling slots.
+- 0ad5e32: Add a Badge atom for counts and status dots on avatars, buttons, and other content.
+- fa0cf07: Add an inline Alert molecule with semantic statuses, outlined and filled styles, optional action and dismissal, and configurable accessible announcement role.
+- c48f74b: Add an accessible Input.Number with Base UI numeric parsing, step controls, and form support.
+- e88c848: Align public component callbacks and prop names: add Tabs `onChange`, RichTextEditor `onUpdate`/`onCommit`, and orientation and Drawer size aliases; preserve numeric Collapse keys and standard React change events when clearing Input.Search; prevent Select and Menu internal props from leaking into their public APIs.
+
 ## 10.1.0
 
 ### Minor Changes
