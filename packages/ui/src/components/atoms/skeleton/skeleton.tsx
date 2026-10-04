@@ -18,6 +18,8 @@ export interface Props extends React.ComponentPropsWithoutRef<'div'> {
   size?: 'default' | 'small' | 'large';
   count?: number;
   gap?: number;
+  orientation?: 'horizontal' | 'vertical';
+  /** @deprecated Use `orientation`. */
   direction?: 'horizontal' | 'vertical';
   width?: string | number | (string | number)[];
   height?: string | number | (string | number)[];
@@ -39,6 +41,7 @@ const Skeleton = ({
   loading = true,
   avatar,
   size = 'default',
+  orientation,
   direction = 'vertical',
   count = 1,
   gap = 6,
@@ -83,7 +86,7 @@ const Skeleton = ({
       <div
         className={cn(
           'flex min-w-0 grow',
-          direction === 'vertical' && 'flex-col',
+          (orientation ?? direction) === 'vertical' && 'flex-col',
           classNames.wrapper,
         )}
         style={{

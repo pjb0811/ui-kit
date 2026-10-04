@@ -17,7 +17,7 @@ const meta: Meta<typeof RichTextEditor> = {
   argTypes: {
     value: {
       control: { type: 'text' },
-      description: 'HTML 문자열 값 (blur 시 onChange로 커밋됨)',
+      description: 'HTML 문자열 값 (blur 시 onCommit으로 커밋됨)',
     },
     placeholder: {
       control: { type: 'text' },
@@ -79,10 +79,13 @@ export const Controlled: Story = {
   },
   render: function Render({ value: initialValue = '' }) {
     const [value, setValue] = useState(initialValue);
+    const [draft, setDraft] = useState(initialValue);
 
     return (
       <div className={cn('w-96')}>
-        <RichTextEditor value={value} onChange={setValue} />
+        <RichTextEditor value={value} onUpdate={setDraft} onCommit={setValue} />
+        <output className="mt-3 block text-xs">Editing: {draft}</output>
+        <output className="mt-3 block text-xs">Committed: {value}</output>
       </div>
     );
   },

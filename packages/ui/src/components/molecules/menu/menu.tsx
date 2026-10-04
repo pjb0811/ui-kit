@@ -41,7 +41,7 @@ export interface Props {
 
 export interface MenuProps
   extends
-    Props,
+    Omit<Props, 'selectionMap'>,
     Omit<React.ComponentPropsWithoutRef<'ul'>, 'onClick' | 'onSelect'> {
   items?: MenuItem[];
 }
@@ -131,6 +131,10 @@ const Menu = ({
     () => buildSelectionMap(items ?? [], selectedKeysSet),
     [items, selectedKeysSet],
   );
+  const rootProps = { ...props };
+
+  // Ignore stale JavaScript callers that still supply this internal prop.
+  Reflect.deleteProperty(rootProps, 'selectionMap');
 
   const onSelect = (params: {
     domEvent: React.SyntheticEvent;
@@ -151,7 +155,7 @@ const Menu = ({
         mode === 'horizontal' ? 'flex' : 'inline-block',
         className,
       )}
-      {...props}
+      {...rootProps}
     >
       {items?.map((item, index) => (
         <Item

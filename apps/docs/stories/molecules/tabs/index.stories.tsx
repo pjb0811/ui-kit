@@ -35,7 +35,7 @@ const meta: Meta<typeof Tabs> = {
       control: 'select',
       options: ['horizontal', 'vertical'],
     },
-    onValueChange: { action: 'valueChanged' },
+    onChange: { action: 'valueChanged' },
     keepMounted: { control: 'boolean' },
     activateOnFocus: { control: 'boolean' },
     scrollable: { control: 'boolean' },
@@ -165,7 +165,7 @@ export const Controlled: Story = {
         {...props}
         defaultValue={undefined}
         value={value}
-        onValueChange={next => setValue(String(next))}
+        onChange={next => setValue(String(next))}
       />
     );
   },

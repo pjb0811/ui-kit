@@ -15,9 +15,6 @@ const { Input: Core } = input;
 
 export interface Props extends React.ComponentPropsWithRef<'input'> {
   allowClear?: boolean;
-  onChange?: (
-    e: React.ChangeEvent<HTMLInputElement> | { target: { value: string } },
-  ) => void;
   onSearch?: (value: string) => void;
 }
 
@@ -43,16 +40,21 @@ const Search = ({
   const hasValue = value !== undefined ? !!value : uncontrolledHasValue;
 
   const onClear = () => {
-    if (!inputRef.current) {
+    const input = inputRef.current;
+
+    if (!input) {
       return;
     }
 
-    if (value === undefined) {
-      inputRef.current.value = '';
-      setUncontrolledHasValue(false);
-    }
+    // Use the native setter so React detects the value change and emits the
+    // same ChangeEvent as typing, including for controlled inputs.
+    const setter = Object.getOwnPropertyDescriptor(
+      Object.getPrototypeOf(input),
+      'value',
+    )?.set;
 
-    onChange?.({ target: { value: '' } });
+    setter?.call(input, '');
+    input.dispatchEvent(new Event('input', { bubbles: true }));
   };
 
   const onSearch = () => {
