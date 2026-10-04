@@ -84,6 +84,7 @@ const sidebars: SidebarsConfig = {
         'components/molecules/menu',
         'components/molecules/breadcrumb',
         'components/molecules/pagination',
+        'components/molecules/steps',
       ],
     },
     {

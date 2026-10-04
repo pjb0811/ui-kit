@@ -50,6 +50,7 @@
     "./Card": "./src/components/molecules/card.tsx",
     "./Alert": "./src/components/molecules/alert.tsx",
     "./Breadcrumb": "./src/components/molecules/breadcrumb.tsx",
+    "./Steps": "./src/components/molecules/steps.tsx",
     "./Pagination": "./src/components/molecules/pagination.tsx",
     "./Table": "./src/components/organisms/table.tsx",
     "./Space": "./src/components/molecules/space.tsx",
