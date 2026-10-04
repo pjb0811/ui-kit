@@ -16,6 +16,11 @@
       "import": "./dist/Badge.mjs",
       "default": "./dist/Badge.mjs"
     },
+    "./Segmented": {
+      "types": "./dist/Segmented.d.mts",
+      "import": "./dist/Segmented.mjs",
+      "default": "./dist/Segmented.mjs"
+    },
     "./Typography": {
       "types": "./dist/Typography.d.mts",
       "import": "./dist/Typography.mjs",

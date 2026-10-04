@@ -120,6 +120,7 @@ const RESET_SLOTS = {};
 const fixtures = {
   Avatar: { alt: 'Ada Lovelace', fallback: 'AL' },
   Badge: { count: 3, children: h(ui.Button, null, 'Inbox') },
+  Segmented: { 'aria-label': 'View', options: ['Grid', 'List'] },
   Alert: { title: 'Status', description: 'Details' },
   Button: { children: 'Button' },
   Tag: { children: 'Tag' },
