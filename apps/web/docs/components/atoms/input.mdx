@@ -8,7 +8,8 @@ import InputDemo from '../../../src/demo/input-demo';
 # Input
 
 A text input. `Input.Search` adds a clear button and a search action;
-`Input.TextArea` is the multi-line variant.
+`Input.TextArea` is the multi-line variant. `Input.Number` handles exact
+numeric values with step controls.
 
 ```tsx
 import { Input } from '@jbpark/ui-kit';
@@ -16,6 +17,13 @@ import { Input } from '@jbpark/ui-kit';
 <Input placeholder="Basic input" />
 <Input.Search placeholder="Search..." onSearch={value => console.log(value)} />
 <Input.TextArea placeholder="Text area" rows={3} />;
+<Input.Number
+  label="Quantity"
+  min={0}
+  max={10}
+  defaultValue={2}
+  onChange={value => console.log(value)}
+/>;
 ```
 
 <InputDemo />
@@ -26,11 +34,11 @@ A thin wrapper with no props beyond `React.ComponentPropsWithRef<'input'>`.
 
 ## Input.Search {/* #input-search */}
 
-| Prop         | Type                                                | Default |
-| ------------ | ------------------------------------------------------ | ------- |
-| `allowClear` | `boolean`                                               | `true`  |
-| `onChange`   | `(e: ChangeEvent<HTMLInputElement> \| { target: { value: string } }) => void` | - |
-| `onSearch`   | `(value: string) => void`                               | -       |
+| Prop         | Type                                                                          | Default |
+| ------------ | ----------------------------------------------------------------------------- | ------- |
+| `allowClear` | `boolean`                                                                     | `true`  |
+| `onChange`   | `(e: ChangeEvent<HTMLInputElement> \| { target: { value: string } }) => void` | -       |
+| `onSearch`   | `(value: string) => void`                                                     | -       |
 
 `onSearch` fires on pressing Enter or clicking the search button. Also
 accepts the rest of `React.ComponentPropsWithRef<'input'>`.
@@ -39,3 +47,34 @@ accepts the rest of `React.ComponentPropsWithRef<'input'>`.
 
 A thin wrapper with no props beyond
 `React.ComponentPropsWithRef<'textarea'>`.
+
+## Input.Number {/* #input-number */}
+
+`Input.Number` uses Base UI Number Field for numeric parsing, keyboard steps,
+validation, and form integration. Supply a visible `label`, an `aria-label`, or
+an external `<label htmlFor>` paired with `id`.
+
+| Prop           | Type                                                 | Default                              |
+| -------------- | ---------------------------------------------------- | ------------------------------------ |
+| `label`        | `string`                                             | -                                    |
+| `value`        | `number \| null`                                     | -                                    |
+| `defaultValue` | `number`                                             | -                                    |
+| `onChange`     | `(value, eventDetails) => void`                      | -                                    |
+| `min` / `max`  | `number`                                             | -                                    |
+| `step`         | `number \| 'any'`                                    | `1`                                  |
+| `size`         | `'small' \| 'middle' \| 'large'`                     | `Config.componentSize` or `'middle'` |
+| `placeholder`  | `string`                                             | -                                    |
+| `disabled`     | `boolean`                                            | `false`                              |
+| `readOnly`     | `boolean`                                            | `false`                              |
+| `name`         | `string`                                             | -                                    |
+| `required`     | `boolean`                                            | `false`                              |
+| `className`    | `string`                                             | -                                    |
+| `classNames`   | `{ label?, group?, input?, decrement?, increment? }` | -                                    |
+
+The callback receives `null` when the field is cleared. By default, direct
+typing is clamped to `min`/`max` on blur while step buttons and keyboard
+interactions clamp immediately. Use `allowOutOfRange` if form validation should
+report an out-of-range typed value. `step="any"` disables step validation while
+the buttons and arrows still step by 1. The component also passes through the
+remaining Base UI Number Field root props, including `format`, `locale`, and
+`onValueCommitted`.
