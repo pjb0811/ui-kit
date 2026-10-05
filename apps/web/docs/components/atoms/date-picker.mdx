@@ -7,26 +7,39 @@ import DatePickerDemo from '../../../src/demo/date-picker-demo';
 
 # Date Picker
 
-A button that opens a calendar popover for picking a single date.
+A button that opens a calendar popover for picking a single date. Set `showTime`
+to choose a local date and time together.
 
 ```tsx
 import { DatePicker } from '@jbpark/ui-kit';
 
 <DatePicker onChange={date => console.log(date)} />;
+
+<DatePicker
+  showTime={{ minuteStep: 15 }}
+  onChange={date => console.log(date)}
+/>;
 ```
 
 <DatePickerDemo />
 
 ## Props
 
-| Prop           | Type                              | Default        |
-| -------------- | ----------------------------------- | -------------- |
-| `value`        | `Date`                              | -               |
-| `defaultValue` | `Date`                              | -               |
-| `placeholder`  | `string`                            | `'Pick a date'` |
-| `disabled`     | `boolean`                           | -               |
-| `onChange`     | `(date: Date \| undefined) => void` | -               |
-| `className`    | `string`                            | -               |
+| Prop           | Type                                 | Default         |
+| -------------- | ------------------------------------ | --------------- |
+| `value`        | `Date`                               | -               |
+| `defaultValue` | `Date`                               | -               |
+| `placeholder`  | `string`                             | `'Pick a date'` |
+| `disabled`     | `boolean`                            | -               |
+| `showTime`     | `boolean \| { minuteStep?: number }` | `false`         |
+| `onChange`     | `(date: Date \| undefined) => void`  | -               |
+| `className`    | `string`                             | -               |
 
 Works both controlled (pass `value` + `onChange`) and uncontrolled (pass
 `defaultValue`, or neither).
+
+With `showTime`, selecting a date or changing the time only updates the popup's
+draft. **OK** commits one local `Date` and calls `onChange`; **Cancel**, Escape,
+and clicking outside discard the draft. The time starts at `00:00` when no
+value is set, and the trigger displays the committed time in 24-hour format.
+`minuteStep` sets the native time input's minute interval.

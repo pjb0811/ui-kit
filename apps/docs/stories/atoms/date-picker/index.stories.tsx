@@ -66,3 +66,22 @@ export const Controlled: Story = {
     );
   },
 };
+
+export const WithTime: Story = {
+  render: function Render() {
+    const [date, setDate] = useState<Date>();
+
+    return (
+      <div className="w-80 rounded-md border p-6">
+        <DatePicker
+          showTime={{ minuteStep: 15 }}
+          onChange={setDate}
+          placeholder="Pick a date and time"
+        />
+        <p className="mt-3 text-sm">
+          Selected: {date ? date.toLocaleString() : 'none'}
+        </p>
+      </div>
+    );
+  },
+};

@@ -9,6 +9,7 @@ export default defineConfig({
     Avatar: 'src/components/atoms/avatar.tsx',
     Badge: 'src/components/atoms/badge.tsx',
     Segmented: 'src/components/atoms/segmented.tsx',
+    TimePicker: 'src/components/atoms/time-picker.tsx',
     Typography: 'src/components/atoms/typography/index.ts',
     Button: 'src/components/atoms/button.tsx',
     CodeEditor: 'src/components/atoms/code-editor.tsx',

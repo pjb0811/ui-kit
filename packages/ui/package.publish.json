@@ -21,6 +21,11 @@
       "import": "./dist/Segmented.mjs",
       "default": "./dist/Segmented.mjs"
     },
+    "./TimePicker": {
+      "types": "./dist/TimePicker.d.mts",
+      "import": "./dist/TimePicker.mjs",
+      "default": "./dist/TimePicker.mjs"
+    },
     "./Typography": {
       "types": "./dist/Typography.d.mts",
       "import": "./dist/Typography.mjs",
