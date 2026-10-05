@@ -1,0 +1,55 @@
+---
+sidebar_position: 6
+title: Time Picker
+---
+
+import TimePickerDemo from '../../../src/demo/time-picker-demo';
+
+# Time Picker
+
+Select or type a local time of day without a date or timezone. The native time
+control handles the picker, touch, and keyboard interaction. Its visible
+12/24-hour format follows the browser and operating-system locale; the value
+passed to `onChange` is always a 24-hour `HH:mm` string.
+
+```tsx
+import { TimePicker } from '@jbpark/ui-kit';
+
+<TimePicker
+  label="Start time"
+  defaultValue="09:30"
+  minuteStep={15}
+  onChange={time => console.log(time)}
+/>;
+```
+
+<TimePickerDemo />
+
+## Props
+
+| Prop           | Type                              | Default                              | Description                                           |
+| -------------- | --------------------------------- | ------------------------------------ | ----------------------------------------------------- |
+| `label`        | `string`                          | -                                    | Visible input label.                                  |
+| `value`        | `string \| null`                  | -                                    | Controlled `HH:mm`; use `null` to keep it empty.      |
+| `defaultValue` | `string`                          | -                                    | Initial uncontrolled `HH:mm`.                         |
+| `onChange`     | `(value: string \| null) => void` | -                                    | Reports a complete time or `null` when cleared.       |
+| `minuteStep`   | `number`                          | `1`                                  | Positive whole-minute interval for the native picker. |
+| `allowClear`   | `boolean`                         | `true`                               | Show a clear button when a value is present.          |
+| `clearLabel`   | `string`                          | `'Clear time'`                       | Accessible name of the clear button.                  |
+| `size`         | `'small' \| 'middle' \| 'large'`  | `Config.componentSize` or `'middle'` | Input and clear-button size.                          |
+| `className`    | `string`                          | -                                    | Root class.                                           |
+| `classNames`   | `{ label?, input?, clear? }`      | -                                    | Classes for internal elements.                        |
+
+The remaining native input props are passed to the time input. Useful examples
+are `id`, `name`, `required`, `disabled`, `readOnly`, `min`, `max`, `form`,
+`autoComplete`, `aria-label`, `aria-describedby`, `onBlur`, and `onFocus`.
+Supply a visible `label`, an `aria-label`, or an external `<label htmlFor>` paired
+with `id`.
+
+`min` and `max` use `HH:mm` and follow native form validation; they do not
+clamp a typed value. `minuteStep` controls selectable increments and native
+step validity. A browser may allow editing an incomplete time, but the
+component only reports its complete native `HH:mm` value or `null` when empty.
+
+For controlled usage, pass `value` and update it from `onChange`. Keep `null` as
+the empty controlled value; omitting `value` switches to uncontrolled usage.

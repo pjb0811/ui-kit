@@ -121,6 +121,7 @@ const fixtures = {
   Avatar: { alt: 'Ada Lovelace', fallback: 'AL' },
   Badge: { count: 3, children: h(ui.Button, null, 'Inbox') },
   Segmented: { 'aria-label': 'View', options: ['Grid', 'List'] },
+  TimePicker: { label: 'Start time', defaultValue: '09:30' },
   Alert: { title: 'Status', description: 'Details' },
   Button: { children: 'Button' },
   Tag: { children: 'Tag' },
@@ -448,6 +449,28 @@ if (
   !inputNumberMarkup.includes('name="quantity" value="2"')
 ) {
   errors.push('Input.Number SSR must preserve labels, controls, and form value.');
+}
+
+const timePickerMarkup = renderToStaticMarkup(
+  h(ui.TimePicker, {
+    id: 'start-time',
+    label: 'Start time',
+    name: 'startTime',
+    defaultValue: '09:30',
+  }),
+);
+
+if (
+  !timePickerMarkup.includes('for="start-time"') ||
+  !timePickerMarkup.includes('type="time"') ||
+  !timePickerMarkup.includes('name="startTime"') ||
+  !timePickerMarkup.includes('value="09:30"') ||
+  !timePickerMarkup.includes('data-slot="button"') ||
+  !timePickerMarkup.includes('data-time-picker-clear=""')
+) {
+  errors.push(
+    'TimePicker SSR must preserve its label, form value, and Button styling.',
+  );
 }
 
 // 1. Render throws.
