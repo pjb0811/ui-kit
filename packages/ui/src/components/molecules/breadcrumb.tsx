@@ -192,7 +192,7 @@ const Breadcrumb = ({
       <ol
         data-slot="breadcrumb-list"
         className={cn(
-          'm-0 flex min-w-0 flex-wrap items-center p-0',
+          'm-0 flex min-w-0 list-none flex-wrap items-center p-0',
           classNames?.list,
           //
         )}
