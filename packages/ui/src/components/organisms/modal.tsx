@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 import {
@@ -58,6 +58,8 @@ export interface Props {
   children?: React.ReactNode;
   onOk?: () => void;
   onCancel?: () => void;
+  /** Called after the opening or closing animations finish. */
+  onOpenChangeComplete?: (open: boolean) => void;
 }
 
 type ModalStatus = 'info' | 'success' | 'error' | 'warning';
@@ -92,6 +94,7 @@ const Modal = ({
   cancelText,
   onOk,
   onCancel,
+  onOpenChangeComplete,
   ...props
 }: Props) => {
   const { locale, defaultProps } = useConfig();
@@ -108,6 +111,7 @@ const Modal = ({
   return (
     <Dialog
       open={open}
+      onOpenChangeComplete={onOpenChangeComplete}
       onOpenChange={(open: boolean) => {
         if (!open) {
           onCancel?.();
@@ -203,10 +207,12 @@ const StaticModal = ({
   icon,
   onOk,
   onCancel,
+  onOpenChangeComplete,
   ...props
 }: StaticProps & { id: string }): React.ReactPortal | null => {
   const { locale } = useConfig();
   const [open, setOpen] = useState(true);
+  const closing = useRef(false);
   const resolvedOkText = okText ?? locale.ok ?? DEFAULT_LOCALE.ok;
   const resolvedCancelText =
     cancelText ?? locale.cancel ?? DEFAULT_LOCALE.cancel;
@@ -215,11 +221,13 @@ const StaticModal = ({
   const isConfirm = mode === 'confirm';
 
   const closeModal = (callback?: () => void) => {
-    callback?.();
+    if (closing.current) {
+      return;
+    }
+
+    closing.current = true;
     setOpen(false);
-    setTimeout(() => {
-      modalStack.destroy(id);
-    }, 200);
+    callback?.();
   };
 
   // Confirming action first, dismissing action second — the same order as the
@@ -293,6 +301,13 @@ const StaticModal = ({
       container={container}
       onCancel={() => closeModal(onCancel)}
       {...props}
+      onOpenChangeComplete={open => {
+        if (!open) {
+          modalStack.destroy(id);
+        }
+
+        onOpenChangeComplete?.(open);
+      }}
     >
       {content}
     </Modal>,
@@ -318,8 +333,10 @@ const modalStack: ImperativeStack<StaticProps> =
     StackItem: StaticModal,
   });
 
+/** Immediately removes a modal without waiting for its closing animation. */
 Modal.destroy = modalStack.destroy;
 
+/** Immediately removes all modals, including those currently closing. */
 Modal.destroyAll = () => {
   modalStack.destroy();
 };
