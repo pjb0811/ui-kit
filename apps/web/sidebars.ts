@@ -66,6 +66,7 @@ const sidebars: SidebarsConfig = {
       collapsed: false,
       items: [
         'components/molecules/alert',
+        'components/molecules/popconfirm',
         'components/atoms/progress',
         'components/atoms/spin',
         'components/atoms/skeleton',

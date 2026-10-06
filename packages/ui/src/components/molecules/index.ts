@@ -26,3 +26,5 @@ export { default as Tabs } from './tabs';
 export type { Props as TabsProps } from './tabs';
 export { default as Upload } from './upload';
 export type { Props as UploadProps, UploadFile } from './upload';
+export { default as Popconfirm } from './popconfirm';
+export type { Props as PopconfirmProps } from './popconfirm';
