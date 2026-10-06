@@ -109,6 +109,11 @@
     "./style.css": {
       "import": "./dist/style.css",
       "default": "./dist/style.css"
+    },
+    "./Popconfirm": {
+      "types": "./dist/Popconfirm.d.mts",
+      "import": "./dist/Popconfirm.mjs",
+      "default": "./dist/Popconfirm.mjs"
     }
   },
   "type": "module"

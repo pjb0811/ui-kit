@@ -1,0 +1,82 @@
+---
+title: Popconfirm
+---
+
+import PopconfirmDemo from '../../../src/demo/popconfirm-demo';
+
+# Popconfirm
+
+Confirm an action in a small popup beside its trigger. Use `Modal.confirm()` when
+a decision needs a larger dialog or more detailed content.
+
+```tsx
+import { Button, Popconfirm } from '@jbpark/ui-kit';
+
+<Popconfirm
+  title="Delete this item?"
+  description="This action cannot be undone."
+  confirmText="Delete"
+  cancelText="Cancel"
+  confirmButtonProps={{ danger: true }}
+  onConfirm={async () => {
+    await deleteItem();
+  }}
+>
+  <Button>Delete</Button>
+</Popconfirm>;
+```
+
+<PopconfirmDemo />
+
+## Props
+
+| Prop                 | Type                                                            | Default                                              | Description                                                     |
+| -------------------- | --------------------------------------------------------------- | ---------------------------------------------------- | --------------------------------------------------------------- |
+| `children`           | `ReactElement`                                                  | Required                                             | One trigger accepting merged props and a ref, such as Button.   |
+| `title`              | `ReactNode`                                                     | Required                                             | Accessible popup title; supply meaningful text.                 |
+| `description`        | `ReactNode`                                                     | -                                                    | Additional explanation linked to the popup.                     |
+| `onConfirm`          | `() => void \| Promise<void>`                                   | -                                                    | Confirm action; fulfillment closes the popup.                   |
+| `onCancel`           | `() => void`                                                    | -                                                    | Called only by the Cancel button.                               |
+| `onConfirmError`     | `(error: unknown) => void`                                      | -                                                    | Reports a thrown error or rejected promise.                     |
+| `errorMessage`       | `ReactNode`                                                     | `'Unable to complete the action. Please try again.'` | Accessible error shown after failure.                           |
+| `confirmText`        | `ReactNode`                                                     | `'Confirm'`                                          | Confirm button label.                                           |
+| `cancelText`         | `ReactNode`                                                     | `'Cancel'`                                           | Cancel button label.                                            |
+| `open`               | `boolean`                                                       | -                                                    | Controlled visibility.                                          |
+| `defaultOpen`        | `boolean`                                                       | `false`                                              | Initial uncontrolled visibility.                                |
+| `onOpenChange`       | `(open: boolean) => void`                                       | -                                                    | Requests visibility changes; update `open` in controlled usage. |
+| `disabled`           | `boolean`                                                       | `false`                                              | Suppresses the popup; does not disable the supplied trigger.    |
+| `placement`          | `Placement`                                                     | `'top'`                                              | Preferred position, adjusted by the positioning primitive.      |
+| `nativeButton`       | `boolean`                                                       | Inferred                                             | Set false for a custom trigger rendering a non-button.          |
+| `confirmButtonProps` | `ActionProps`                                                   | -                                                    | Button customization, e.g. danger, icon, size, variant, color.  |
+| `cancelButtonProps`  | `ActionProps`                                                   | -                                                    | Cancel button customization.                                    |
+| `className`          | `string`                                                        | -                                                    | Popup class.                                                    |
+| `classNames`         | `{ title?, description?, actions?, confirm?, cancel?, error? }` | -                                                    | Internal styling slots.                                         |
+
+`Placement` supports `top`, `bottom`, `left`, `right`, `topLeft`, `topRight`,
+`bottomLeft`, `bottomRight`, `leftTop`, `leftBottom`, `rightTop`, and `rightBottom`.
+
+`ActionProps` inherits Button props except `children`, `onClick`, `loading`, and
+`disabled`. Popconfirm owns those behaviors and forces `htmlType="button"` to
+prevent accidental form submission. Both buttons default to small size; Confirm
+uses primary styling. Explicit button props can override visual defaults.
+
+Other div attributes and event handlers are forwarded to the popup, including
+`id`, `style`, `aria-*`, `onFocus`, and `onBlur`. The title and description own
+accessible labeling; `aria-describedby` is derived from `description`.
+
+## Confirmation behavior
+
+Only Confirm invokes `onConfirm`. Cancel, Escape, outside interaction, and trigger
+dismissal never invoke it. Only the Cancel button invokes `onCancel`.
+
+While confirmation is pending, both action buttons are disabled and ordinary
+popup dismissal is blocked. Rejection keeps the popup open, announces the error,
+and allows retry. No raw exception text is displayed. Returning `false` is not a
+cancellation contract; throw or reject to report failure.
+
+Controlled parents can still hide the popup or unmount it while work is pending.
+The operation itself is not cancelled, but its stale result cannot close a later
+popup session. Keep `open` synchronized with `onOpenChange`.
+
+Use a focusable trigger. Popup positioning, keyboard focus, Escape behavior, and
+focus return are supplied by the existing Base UI Popover foundation.

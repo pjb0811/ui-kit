@@ -153,6 +153,7 @@ const fixtures = {
     children: h(ui.Button, null, 'trigger'),
   },
   Popover: { content: 'hi', children: h(ui.Button, null, 'trigger') },
+  Popconfirm: { title: 'Delete item?', children: h(ui.Button, null, 'Delete') },
   Tooltip: { content: 'Hint', children: h(ui.Button, null, 'trigger') },
   Drawer: { open: false, onClose: () => {}, children: 'x' },
   Modal: { open: false, onCancel: () => {} },
@@ -448,7 +449,9 @@ if (
   !inputNumberMarkup.includes('aria-label="Decrease value"') ||
   !inputNumberMarkup.includes('name="quantity" value="2"')
 ) {
-  errors.push('Input.Number SSR must preserve labels, controls, and form value.');
+  errors.push(
+    'Input.Number SSR must preserve labels, controls, and form value.',
+  );
 }
 
 const timePickerMarkup = renderToStaticMarkup(

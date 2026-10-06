@@ -18,6 +18,7 @@ export default defineConfig({
     Alert: 'src/components/molecules/alert.tsx',
     Breadcrumb: 'src/components/molecules/breadcrumb.tsx',
     Steps: 'src/components/molecules/steps.tsx',
+    Popconfirm: 'src/components/molecules/popconfirm.tsx',
     Pagination: 'src/components/molecules/pagination.tsx',
     Table: 'src/components/organisms/table.tsx',
     Space: 'src/components/molecules/space.tsx',

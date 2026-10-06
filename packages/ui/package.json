@@ -60,7 +60,8 @@
     "./Layout": "./src/components/templates/layout/index.ts",
     "./utils": "./src/lib/utils/index.ts",
     "./providers": "./src/providers/index.ts",
-    "./style.css": "./src/globals.css"
+    "./style.css": "./src/globals.css",
+    "./Popconfirm": "./src/components/molecules/popconfirm.tsx"
   },
   "scripts": {
     "build": "tsdown",
