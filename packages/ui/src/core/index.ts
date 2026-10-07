@@ -13,6 +13,7 @@ export * as popover from './popover';
 export * as progress from './progress';
 export * as radio from './radio-group';
 export * as resizable from './resizable';
+export * as scrollArea from './scroll-area';
 export * as select from './select';
 export * as separator from './separator';
 export * as skeleton from './skeleton';
