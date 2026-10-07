@@ -99,6 +99,7 @@ const sidebars: SidebarsConfig = {
         'components/templates/grid',
         'components/templates/page-header',
         'components/molecules/splitter',
+        'components/molecules/scroll-area',
       ],
     },
   ],

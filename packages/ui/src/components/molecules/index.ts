@@ -18,6 +18,8 @@ export { default as Reveals } from './reveals';
 export type { RevealsProps } from './reveals';
 export { default as Splitter } from './splitter';
 export type { Props as SplitterProps } from './splitter';
+export { default as ScrollArea } from './scroll-area';
+export type { Props as ScrollAreaProps } from './scroll-area';
 export { default as Space } from './space';
 export type { Props as SpaceProps } from './space';
 export { default as Steps } from './steps';

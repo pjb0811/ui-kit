@@ -127,6 +127,11 @@ const fixtures = {
   Tag: { children: 'Tag' },
   Typography: { children: 'Text' },
   Space: { children: 'x' },
+  ScrollArea: {
+    label: 'Items',
+    style: { height: 160 },
+    children: 'Scroll content',
+  },
   Card: { children: 'x' },
   Breadcrumb: { items: [{ title: 'Home', href: '/' }, { title: 'Current' }] },
   Steps: { items: [{ title: 'Account' }, { title: 'Profile' }], current: 1 },
@@ -337,6 +342,21 @@ for (const [name, [Comp, fixture]] of Object.entries(COMPOUND_COMPONENTS)) {
 }
 
 const errors = [];
+
+const scrollAreaMarkup = markupByName.ScrollArea;
+
+if (
+  !scrollAreaMarkup?.includes('Scroll content') ||
+  !scrollAreaMarkup.includes('role="region"') ||
+  !scrollAreaMarkup.includes('aria-label="Items"') ||
+  !scrollAreaMarkup.includes('tabindex="0"') ||
+  !scrollAreaMarkup.includes('overflow-y:auto') ||
+  !scrollAreaMarkup.includes('overflow-x:hidden')
+) {
+  errors.push(
+    'ScrollArea SSR must preserve content, viewport focus and naming, and native scrolling.',
+  );
+}
 
 // Table keeps native semantics and one body row for each display state.
 const tableMarkup = markupByName.Table;

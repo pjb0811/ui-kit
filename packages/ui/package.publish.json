@@ -76,6 +76,11 @@
       "import": "./dist/Table.mjs",
       "default": "./dist/Table.mjs"
     },
+    "./ScrollArea": {
+      "types": "./dist/ScrollArea.d.mts",
+      "import": "./dist/ScrollArea.mjs",
+      "default": "./dist/ScrollArea.mjs"
+    },
     "./Space": {
       "types": "./dist/Space.d.mts",
       "import": "./dist/Space.mjs",

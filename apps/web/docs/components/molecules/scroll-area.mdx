@@ -1,0 +1,70 @@
+---
+sidebar_position: 2
+title: ScrollArea
+---
+
+import ScrollAreaDemo from '../../../src/demo/scroll-area-demo';
+
+# ScrollArea
+
+A bounded native scroll container with themed scrollbars. Vertical scrolling is the default; choose horizontal or both-axis scrolling when content needs more width. Base UI handles thumb dragging, track clicks, overflow measurement, and native scrolling.
+
+```tsx
+import { ScrollArea } from '@jbpark/ui-kit';
+
+<ScrollArea label="Recent activity" style={{ height: 224, width: 256 }}>
+  <ActivityList />
+</ScrollArea>;
+```
+
+<ScrollAreaDemo />
+
+## Sizing and orientation
+
+Set a height or block size on the root to bound vertical scrolling, and a width or inline size to bound horizontal scrolling. `className` and `style` are forwarded to the root. With percentage heights, the parent must have a definite height. A `max-height` alone does not define the viewport's percentage height; use an explicit height for a bounded area.
+
+`orientation="vertical"` disables horizontal scrolling. `orientation="horizontal"` disables vertical scrolling; give the area enough height for its contents. `orientation="both"` allows both axes and includes a corner between the tracks. Wide content must have its own width or an intrinsic width larger than the viewport. Content reserves space next to the enabled scrollbars; customize it with `classNames.content`.
+
+Scrollbars are shown only when their axis overflows. Children stay in the server-rendered HTML, and the viewport is a native scroll container before hydration or with JavaScript disabled. Custom thumb measurement and dragging require JavaScript. This component does not virtualize content.
+
+## Accessibility and direction
+
+Provide `label` to name the viewport as a region. The viewport is in the tab order, including before hydration; Arrow keys, Page Up/Down, and Home/End use native browser scrolling. Tab can move into interactive children and out of the area. Scrolling does not trap focus. A non-overflowing viewport remains focusable; set `viewportProps={{ tabIndex: -1 }}` if the application should omit that stop.
+
+Use `Config direction="rtl"` to synchronize DOM direction and Base UI's horizontal scrollbar behavior. Scrollbar colors follow theme tokens, including `Config theme={{ dark: 'dark' }}`. Use plain CSS overflow instead when a themed scrollbar is unnecessary.
+
+## Viewport access
+
+The root's `ref` points to the outer element. Pass a viewport ref through `viewportProps` to scroll programmatically or read its offsets. Native scroll events belong on the viewport rather than the root.
+
+```tsx
+const viewport = useRef<HTMLDivElement>(null);
+
+<ScrollArea
+  label="Messages"
+  style={{ height: 240 }}
+  viewportProps={{
+    ref: viewport,
+    onScroll: event => console.log(event.currentTarget.scrollTop),
+  }}
+>
+  <MessageList />
+</ScrollArea>;
+
+viewport.current?.scrollTo({ top: 200, behavior: 'smooth' });
+```
+
+## Props
+
+| Prop            | Type                                                                          | Default      |
+| --------------- | ----------------------------------------------------------------------------- | ------------ |
+| `orientation`   | `'vertical' \| 'horizontal' \| 'both'`                                        | `'vertical'` |
+| `label`         | `string` — accessible viewport region name                                    | —            |
+| `children`      | `ReactNode`                                                                   | —            |
+| `className`     | `string` — root classes                                                       | —            |
+| `style`         | `CSSProperties` — root size and styling                                       | —            |
+| `ref`           | `Ref<HTMLDivElement>` — root element                                          | —            |
+| `viewportProps` | Native div props and ref, excluding `children` and `className`                | —            |
+| `classNames`    | `{ viewport?, content?, scrollbar?, thumb?, corner? }` — string styling slots | —            |
+
+Other native div props are forwarded to the root. `viewportProps` can override the viewport role, accessible name, tab index, and inline styles; its overflow styles take precedence over `orientation`. Use `classNames.viewport` for viewport classes. The shared scrollbar and thumb slots apply to both axes; use `[data-orientation]` selectors when the axes need different styling.

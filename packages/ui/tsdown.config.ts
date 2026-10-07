@@ -22,6 +22,7 @@ export default defineConfig({
     Pagination: 'src/components/molecules/pagination.tsx',
     Table: 'src/components/organisms/table.tsx',
     Space: 'src/components/molecules/space.tsx',
+    ScrollArea: 'src/components/molecules/scroll-area.tsx',
     Menu: 'src/components/molecules/menu/index.ts',
     Reveals: 'src/components/molecules/reveals/index.ts',
     Layout: 'src/components/templates/layout/index.ts',
