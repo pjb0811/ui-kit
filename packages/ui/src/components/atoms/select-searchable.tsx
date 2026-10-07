@@ -113,7 +113,9 @@ const SearchableSelect = ({
                     className="absolute end-0"
                   />
                 }
-              />
+              >
+                {null}
+              </ComboboxClear>
             )}
           </div>
         </div>

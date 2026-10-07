@@ -192,7 +192,9 @@ const MultipleSelect = ({
                 aria-label={locale.clear ?? DEFAULT_LOCALE.clear}
               />
             }
-          />
+          >
+            {null}
+          </ComboboxClear>
         )}
         <ComboboxTrigger
           render={
