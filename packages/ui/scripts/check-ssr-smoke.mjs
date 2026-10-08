@@ -133,6 +133,14 @@ const fixtures = {
     children: 'Scroll content',
   },
   Card: { children: 'x' },
+  Descriptions: {
+    title: 'Record',
+    items: [
+      { key: 'name', label: 'Name', value: 'Ada' },
+      { key: 'count', label: 'Count', value: 0 },
+      { key: 'empty', label: 'Notes', value: null },
+    ],
+  },
   Breadcrumb: { items: [{ title: 'Home', href: '/' }, { title: 'Current' }] },
   Steps: { items: [{ title: 'Account' }, { title: 'Profile' }], current: 1 },
   Collapse: { items: [{ key: '1', label: 'L', children: 'C' }] },
@@ -342,6 +350,22 @@ for (const [name, [Comp, fixture]] of Object.entries(COMPOUND_COMPONENTS)) {
 }
 
 const errors = [];
+
+const descriptionsMarkup = markupByName.Descriptions;
+
+if (
+  !descriptionsMarkup?.includes('<dl') ||
+  !descriptionsMarkup.includes('>Name</dt>') ||
+  !descriptionsMarkup.includes('>Ada</dd>') ||
+  !descriptionsMarkup.includes('>0</dd>') ||
+  !descriptionsMarkup.includes('></dd>') ||
+  descriptionsMarkup.indexOf('>Name</dt>') >
+    descriptionsMarkup.indexOf('>Count</dt>')
+) {
+  errors.push(
+    'Descriptions SSR must retain semantic label/value pairs, item order, zero, and empty values.',
+  );
+}
 
 const scrollAreaMarkup = markupByName.ScrollArea;
 

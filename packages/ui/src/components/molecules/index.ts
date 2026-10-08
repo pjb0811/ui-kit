@@ -1,5 +1,11 @@
 export { default as Card } from './card';
 export type { Props as CardProps } from './card';
+export { default as Descriptions } from './descriptions';
+export type {
+  Props as DescriptionsProps,
+  Item as DescriptionItem,
+  Columns as DescriptionsColumns,
+} from './descriptions';
 export { default as Alert } from './alert';
 export type { Props as AlertProps } from './alert';
 export { default as Breadcrumb } from './breadcrumb';

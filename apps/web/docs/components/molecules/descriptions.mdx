@@ -1,0 +1,48 @@
+---
+title: Descriptions
+---
+
+import DescriptionsDemo from '../../../src/demo/descriptions-demo';
+
+# Descriptions
+
+Display one record as labeled values. Each item renders a `<dt>` followed by a `<dd>` inside a grouped `<dl>`. The supplied item order is preserved at every screen width.
+
+```tsx
+import { Descriptions } from '@jbpark/ui-kit';
+
+<Descriptions
+  title="Account details"
+  items={[
+    { key: 'name', label: 'Name', value: 'Ada Lovelace' },
+    { key: 'tasks', label: 'Open tasks', value: 0 },
+  ]}
+/>;
+```
+
+<DescriptionsDemo />
+
+## Layout
+
+`columns` accepts a count from 1 to 4, or a responsive object using `base`, `sm`, `md`, `lg`, `xl`, and `2xl`. A numeric count applies at every viewport width. Object entries take effect at the corresponding Tailwind breakpoint (640, 768, 1024, 1280, and 1536 px); omitted entries inherit the previous count, starting with one column. The default is `{ base: 1, md: 2, lg: 3 }`. Counts passed by untyped callers are clamped to 1–4; non-finite values retain the previous count.
+
+Use `orientation="horizontal"` to show each label beside its value, or `orientation="vertical"` to place it above. Responsive behavior uses CSS rather than JavaScript and viewport breakpoints rather than container queries. No layout changes the DOM reading order.
+
+## Values and accessibility
+
+Use stable unique keys. Labels and values accept React nodes, including links and buttons. The component does not own form state or disable interactive values. Long text wraps; wide custom content may need its own width constraints. Missing, null, and empty values render an empty `<dd>`; `0` remains visible. Supply your own placeholder when needed. An empty items array renders an empty `<dl>`.
+
+`title` is an optional visual title rendered in a div. Supply a heading node when a heading is appropriate in your page hierarchy. Native root props, including ref, `aria-label`, and `aria-labelledby`, are forwarded. RTL follows the surrounding document or `Config direction="rtl"`; theme colors follow Config tokens. All content and responsive styles are available before hydration and with JavaScript disabled.
+
+## Props
+
+| Prop                  | Type                                                    | Default                     |
+| --------------------- | ------------------------------------------------------- | --------------------------- |
+| `items`               | `readonly Item[]`                                       | Required                    |
+| `title`               | `ReactNode`                                             | —                           |
+| `columns`             | `1 \| 2 \| 3 \| 4` or responsive object                 | `{ base: 1, md: 2, lg: 3 }` |
+| `orientation`         | `'horizontal' \| 'vertical'`                            | `'horizontal'`              |
+| `className` / `style` | Root classes / CSS properties                           | —                           |
+| `classNames`          | `{ title?, list?, item?, label?, value? }` string slots | —                           |
+
+Each item has a required `key: React.Key`, a `label: ReactNode`, and optional `value: ReactNode`. The package root exports `DescriptionsProps`, `DescriptionItem`, and `DescriptionsColumns`. The `Descriptions` subpath exports the default component and `Props`, `Item`, and `Columns` types.
