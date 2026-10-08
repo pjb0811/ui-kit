@@ -53,7 +53,8 @@ const CATEGORIES = [
   },
   {
     name: 'Data Display',
-    components: 'Card, Collapse, List, Marquees, Popover, Swiper, Empty',
+    components:
+      'Card, Descriptions, Collapse, List, Marquees, Popover, Swiper, Empty',
   },
   {
     name: 'Feedback',

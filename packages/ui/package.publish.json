@@ -46,6 +46,11 @@
       "import": "./dist/Tag.mjs",
       "default": "./dist/Tag.mjs"
     },
+    "./Descriptions": {
+      "types": "./dist/Descriptions.d.mts",
+      "import": "./dist/Descriptions.mjs",
+      "default": "./dist/Descriptions.mjs"
+    },
     "./Card": {
       "types": "./dist/Card.d.mts",
       "import": "./dist/Card.mjs",
