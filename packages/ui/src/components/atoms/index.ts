@@ -25,3 +25,5 @@ export { default as TimePicker } from './time-picker';
 export type { Props as TimePickerProps } from './time-picker';
 export { default as Tooltip } from './tooltip';
 export { default as Typography } from './typography';
+export { default as Rate } from './rate';
+export type { Props as RateProps } from './rate';

@@ -29,6 +29,7 @@ const sidebars: SidebarsConfig = {
       items: [
         'components/atoms/select',
         'components/atoms/segmented',
+        'components/atoms/rate',
         'components/atoms/date-picker',
         'components/atoms/time-picker',
         'components/atoms/color-picker',
