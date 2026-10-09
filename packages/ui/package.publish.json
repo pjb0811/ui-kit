@@ -51,6 +51,11 @@
       "import": "./dist/Descriptions.mjs",
       "default": "./dist/Descriptions.mjs"
     },
+    "./Timeline": {
+      "types": "./dist/Timeline.d.mts",
+      "import": "./dist/Timeline.mjs",
+      "default": "./dist/Timeline.mjs"
+    },
     "./Card": {
       "types": "./dist/Card.d.mts",
       "import": "./dist/Card.mjs",

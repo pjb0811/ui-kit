@@ -141,6 +141,17 @@ const fixtures = {
       { key: 'empty', label: 'Notes', value: null },
     ],
   },
+  Timeline: {
+    items: [
+      {
+        key: 'first',
+        title: 'First event',
+        timestamp: { label: '8 October 2026', dateTime: '2026-10-08' },
+        description: 0,
+      },
+      { key: 'second', title: 'Second event' },
+    ],
+  },
   Breadcrumb: { items: [{ title: 'Home', href: '/' }, { title: 'Current' }] },
   Steps: { items: [{ title: 'Account' }, { title: 'Profile' }], current: 1 },
   Collapse: { items: [{ key: '1', label: 'L', children: 'C' }] },
@@ -350,6 +361,23 @@ for (const [name, [Comp, fixture]] of Object.entries(COMPOUND_COMPONENTS)) {
 }
 
 const errors = [];
+
+const timelineMarkup = markupByName.Timeline;
+
+if (
+  !timelineMarkup?.includes('<ol') ||
+  !timelineMarkup.includes('<li') ||
+  !timelineMarkup.includes('dateTime="2026-10-08"') ||
+  !timelineMarkup.includes('>8 October 2026</time>') ||
+  !timelineMarkup.includes('>0</div>') ||
+  timelineMarkup.indexOf('First event') >
+    timelineMarkup.indexOf('Second event') ||
+  (timelineMarkup.match(/data-slot="timeline-connector"/g) ?? []).length !== 1
+) {
+  errors.push(
+    'Timeline SSR must retain ordered list semantics, timestamp data and text, zero descriptions, and connectors between events only.',
+  );
+}
 
 const descriptionsMarkup = markupByName.Descriptions;
 
