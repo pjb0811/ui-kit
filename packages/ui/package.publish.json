@@ -139,6 +139,11 @@
       "types": "./dist/Popconfirm.d.mts",
       "import": "./dist/Popconfirm.mjs",
       "default": "./dist/Popconfirm.mjs"
+    },
+    "./Transfer": {
+      "types": "./dist/Transfer.d.mts",
+      "import": "./dist/Transfer.mjs",
+      "default": "./dist/Transfer.mjs"
     }
   },
   "type": "module"

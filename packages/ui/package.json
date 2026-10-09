@@ -66,7 +66,8 @@
     "./utils": "./src/lib/utils/index.ts",
     "./providers": "./src/providers/index.ts",
     "./style.css": "./src/globals.css",
-    "./Popconfirm": "./src/components/molecules/popconfirm.tsx"
+    "./Popconfirm": "./src/components/molecules/popconfirm.tsx",
+    "./Transfer": "./src/components/molecules/transfer.tsx"
   },
   "scripts": {
     "build": "tsdown",

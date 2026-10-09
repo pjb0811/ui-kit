@@ -17,6 +17,7 @@ export default defineConfig({
     Card: 'src/components/molecules/card.tsx',
     Descriptions: 'src/components/molecules/descriptions.tsx',
     Timeline: 'src/components/molecules/timeline.tsx',
+    Transfer: 'src/components/molecules/transfer.tsx',
     Rate: 'src/components/atoms/rate.tsx',
     Cascader: 'src/components/atoms/cascader.tsx',
     Alert: 'src/components/molecules/alert.tsx',
