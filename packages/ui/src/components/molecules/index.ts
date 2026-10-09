@@ -30,6 +30,12 @@ export { default as Space } from './space';
 export type { Props as SpaceProps } from './space';
 export { default as Steps } from './steps';
 export type { Props as StepsProps, Item as StepItem } from './steps';
+export { default as Timeline } from './timeline';
+export type {
+  Props as TimelineProps,
+  Item as TimelineItem,
+  Timestamp as TimelineTimestamp,
+} from './timeline';
 export { default as Tabs } from './tabs';
 export type { Props as TabsProps } from './tabs';
 export { default as Upload } from './upload';

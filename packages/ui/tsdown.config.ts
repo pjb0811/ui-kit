@@ -16,6 +16,7 @@ export default defineConfig({
     Tag: 'src/components/atoms/tag.tsx',
     Card: 'src/components/molecules/card.tsx',
     Descriptions: 'src/components/molecules/descriptions.tsx',
+    Timeline: 'src/components/molecules/timeline.tsx',
     Alert: 'src/components/molecules/alert.tsx',
     Breadcrumb: 'src/components/molecules/breadcrumb.tsx',
     Steps: 'src/components/molecules/steps.tsx',

@@ -1,0 +1,53 @@
+---
+title: Timeline
+---
+
+import TimelineDemo from '../../../src/demo/timeline-demo';
+
+# Timeline
+
+Display event history as a vertical ordered list. Events remain in the supplied order: pass oldest-first or newest-first data according to your page. Timeline does not sort, reverse, or infer a current workflow step.
+
+```tsx
+import { Timeline } from '@jbpark/ui-kit';
+
+<Timeline
+  aria-label="Activity history"
+  items={[
+    {
+      key: 'created',
+      title: 'Record created',
+      timestamp: {
+        label: '8 October 2026, 09:00 UTC',
+        dateTime: '2026-10-08T09:00:00Z',
+      },
+      description: 'Created by Ada.',
+      status: 'primary',
+    },
+  ]}
+/>;
+```
+
+<TimelineDemo />
+
+## Timestamps and content
+
+Each item requires a stable unique `key` and a `title`. Descriptions and timestamp labels accept React nodes. Missing descriptions/timestamps are omitted; numeric zero is retained. A timestamp with `dateTime` renders a `<time>` with the caller's exact value and label. Supply a valid HTML time value (for example an ISO date or timestamp) and text describing the same instant and timezone. Timeline performs no parsing, validation, timezone conversion, or relative-time updates. A label-only timestamp renders a span, allowing text such as "A few minutes ago"; supply `dateTime` when an absolute time is available. Format labels on the server or use a consistent locale/timezone to avoid hydration differences.
+
+Long text wraps at narrow widths. Custom wide content must provide its own width constraints. Links and buttons can be included in the title or description. Use `Steps` instead when communicating workflow progress and a current step.
+
+## Markers and accessibility
+
+Markers and connectors are decorative and hidden from assistive technology. `status` changes marker color (`neutral`, `primary`, or `error`); include meaningful status in the title or description so information does not depend on color. `marker` accepts a decorative icon or node; keep interactive elements in the event content. The last item has no connector. Empty arrays render an empty list; a single event has no connector.
+
+Native ordered-list props and ref are forwarded. Use `aria-label` or `aria-labelledby` when the history needs a name. The ordered list retains `role="list"` when browser styles remove numbering. RTL follows the surrounding document or `Config direction="rtl"`, and colors use theme tokens. Layout and content are available during SSR without client hooks.
+
+## Props
+
+| Prop                  | Type                                                                                      | Default  |
+| --------------------- | ----------------------------------------------------------------------------------------- | -------- |
+| `items`               | `readonly Item[]`                                                                         | Required |
+| `className` / `style` | Root classes / CSS properties                                                             | —        |
+| `classNames`          | `{ item?, marker?, connector?, content?, title?, description?, timestamp? }` string slots | —        |
+
+Items support `key`, `title`, optional `description`, optional `timestamp: { label: ReactNode; dateTime?: string }`, optional `status`, and optional `marker`. The package root exports `Timeline`, `TimelineProps`, `TimelineItem`, and `TimelineTimestamp`. The `Timeline` subpath exports the default component and `Props`, `Item`, and `Timestamp` types. Timeline supports vertical event history; horizontal, alternating, and virtualized layouts are outside this API.
