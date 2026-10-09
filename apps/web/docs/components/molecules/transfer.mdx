@@ -1,0 +1,63 @@
+---
+title: Transfer
+---
+
+import TransferDemo from '../../../src/demo/transfer-demo';
+
+# Transfer
+
+Move selected items between available and chosen lists. Membership is controlled with `targetKeys`; each panel keeps its own temporary checkbox selection. Both lists render in `items` order, regardless of the order of target keys.
+
+```tsx
+import { useState } from 'react';
+
+import { Transfer } from '@jbpark/ui-kit';
+
+function Permissions() {
+  const [targetKeys, setTargetKeys] = useState<string[]>([]);
+
+  return (
+    <Transfer
+      items={[
+        { key: 'read', label: 'Read' },
+        { key: 'write', label: 'Write' },
+      ]}
+      targetKeys={targetKeys}
+      onChange={setTargetKeys}
+      searchable
+    />
+  );
+}
+```
+
+<TransferDemo />
+
+## Selection and search
+
+Use stable, unique string item keys. Moving requests a new, deduplicated target-key array through `onChange`; membership changes only when the caller supplies updated keys. Existing target keys retain their order and additions follow source item order. Unknown target keys are retained in change requests but have no visible row. Disabled items keep their membership and cannot be selected, including through select all.
+
+Search matches the label by case-insensitive substring after trimming the query. Each panel searches independently. Select all, clear all, selected counts, and move actions operate only on **visible enabled items**. Hidden checkbox selections remain staged and reappear when the filter is cleared; they are never moved by a filtered action. Moving clears the moved keys from temporary selection, even if the caller declines the change. Keep item keys stable when replacing data; previously selected keys can remain staged across data updates.
+
+## Accessibility and layout
+
+Each panel is a named region containing a named list, independently labelled search field, item checkboxes and a select-all checkbox. Tab reaches the controls; Space toggles checkboxes and Enter or Space activates move buttons. Select-all is checked when all visible enabled items are selected; partial selection is communicated by the selected count. Panel counts are repeated in a polite live region so moving items announces resulting membership. Item descriptions are displayed separately from the checkbox's label.
+
+The layout stacks on narrow screens and places actions between the lists on wider screens. It inherits RTL direction from Config or the root `dir` prop, and uses theme colors. SSR includes both lists, counts and disabled controls; interactions require hydration. Table/tree renderers, pagination and drag and drop are outside this API.
+
+## Props
+
+| Prop                      | Type                                                                        | Default                                   |
+| ------------------------- | --------------------------------------------------------------------------- | ----------------------------------------- |
+| `items`                   | `readonly Item[]`                                                           | Required                                  |
+| `targetKeys`              | `readonly string[]`                                                         | Required                                  |
+| `onChange`                | `(targetKeys: string[]) => void`                                            | —                                         |
+| `disabled` / `searchable` | `boolean`                                                                   | `false`                                   |
+| `titles`                  | `readonly [string, string]`                                                 | `['Available', 'Chosen']`                 |
+| `moveLabels`              | `readonly [string, string]` (to target, to source)                          | `['Move to chosen', 'Move to available']` |
+| `selectAllLabel`          | `string`                                                                    | `Select all visible items`                |
+| `searchLabel`             | `string` (prefixed to the panel title)                                      | `Search`                                  |
+| `emptyText`               | `ReactNode`                                                                 | `No items`                                |
+| `formatCount`             | `(visible: number, total: number, selected: number) => string`              | `N of M items, K selected`                |
+| `classNames`              | `{ panel?, header?, search?, list?, item?, actions?, empty? }` string slots | —                                         |
+
+Items have `key`, `label`, optional `description` and optional `disabled`. Descriptions accept noninteractive React content. Root DOM props and ref are forwarded. The root package exports `Transfer`, `TransferProps` and `TransferItem`; the `Transfer` subpath exports the default component and `Props`/`Item` types. Customize titles, action/search labels, empty text and the count formatter for localization.

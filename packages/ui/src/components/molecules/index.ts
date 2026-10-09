@@ -42,3 +42,5 @@ export { default as Upload } from './upload';
 export type { Props as UploadProps, UploadFile } from './upload';
 export { default as Popconfirm } from './popconfirm';
 export type { Props as PopconfirmProps } from './popconfirm';
+export { default as Transfer } from './transfer';
+export type { Props as TransferProps, Item as TransferItem } from './transfer';

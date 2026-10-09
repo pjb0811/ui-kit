@@ -42,6 +42,7 @@ const sidebars: SidebarsConfig = {
         'components/atoms/checkbox',
         'components/atoms/radio',
         'components/molecules/upload',
+        'components/molecules/transfer',
       ],
     },
     {

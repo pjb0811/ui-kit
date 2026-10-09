@@ -152,6 +152,14 @@ const fixtures = {
       { key: 'second', title: 'Second event' },
     ],
   },
+  Transfer: {
+    items: [
+      { key: 'a', label: 'Alpha' },
+      { key: 'b', label: 'Beta', disabled: true },
+    ],
+    targetKeys: ['b'],
+    searchable: true,
+  },
   Rate: { defaultValue: 3, 'aria-label': 'Product rating' },
   Cascader: {
     options: [
@@ -373,6 +381,23 @@ for (const [name, [Comp, fixture]] of Object.entries(COMPOUND_COMPONENTS)) {
 }
 
 const errors = [];
+
+const transferMarkup = markupByName.Transfer;
+
+if (
+  !transferMarkup?.includes('data-slot="transfer"') ||
+  (transferMarkup.match(/data-slot="transfer-panel"/g) ?? []).length !== 2 ||
+  (transferMarkup.match(/data-slot="transfer-list"/g) ?? []).length !== 2 ||
+  !transferMarkup.includes('aria-label="Search Available"') ||
+  !transferMarkup.includes('aria-label="Search Chosen"') ||
+  !transferMarkup.includes('Move to chosen') ||
+  !transferMarkup.includes('role="status"') ||
+  (transferMarkup.match(/data-slot="transfer-item"/g) ?? []).length !== 2
+) {
+  errors.push(
+    'Transfer SSR must render both named panels, search fields, unique items, move actions, and live counts.',
+  );
+}
 
 const cascaderMarkup = markupByName.Cascader;
 
