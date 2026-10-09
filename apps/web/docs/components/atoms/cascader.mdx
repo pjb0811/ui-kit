@@ -1,0 +1,57 @@
+---
+title: Cascader
+---
+
+import CascaderDemo from '../../../src/demo/cascader-demo';
+
+# Cascader
+
+Select one leaf path from nested options. A popup displays one level at a time, keeping the visible level count bounded even for deep hierarchies. Choose a parent to move into its children; choose a leaf to commit the path and close the popup. The trigger displays the full selected path separated by " / ".
+
+```tsx
+import { Cascader } from '@jbpark/ui-kit';
+
+<Cascader
+  aria-label="Category"
+  options={[
+    {
+      value: 'hardware',
+      label: 'Hardware',
+      children: [{ value: 'keyboard', label: 'Keyboard' }],
+    },
+  ]}
+  onChange={path => console.log(path)}
+/>;
+```
+
+<CascaderDemo />
+
+## Values and options
+
+Use stable string values unique among siblings. The same value may occur under different parents because selection identifies the entire path. Labels are strings for accessible names and typeahead. Missing or empty `children` makes a leaf. A disabled node blocks its entire subtree; disabled options are skipped by Select keyboard navigation.
+
+`defaultValue` initializes an uncontrolled path. Use `value` and `onChange` to control it. Only a complete enabled leaf path displays a selected value. Invalid, disabled, or incomplete paths display the placeholder and can be cleared; they are not silently rewritten and do not emit a change. `onChange` receives a new path array only for leaf selection or clearing (`[]`), never for browsing parents or going back. Controlled values remain unchanged until the caller updates them.
+
+Opening starts at the selected leaf's parent, or at the root when no valid selection exists. Back moves one level up without changing the selection. Closing without selecting a leaf discards browsing progress; reopening starts from the committed value. Replacing options invalidates an unavailable browsing path and falls back to the root. Search, multiple selection, lazy loading, and simultaneous multi-column menus are outside this API.
+
+## Keyboard and accessibility
+
+Provide `aria-label` or `aria-labelledby` for the trigger. The selected path is also supplied through an accessible description and a polite live region. Enter or Space opens the popup. Tab moves among Back and the current level's Select; use the Select's arrow keys/typeahead and Enter or Space to choose a node. Parent choice keeps the popup open at the next level; leaf choice closes it. Escape dismisses a nested Select first, then the Cascader popup. Popup dismissal returns focus through Base UI overlay management. Clear selection is a separate named button.
+
+Popover and Select own popup positioning, keyboard navigation, and focus behavior. RTL follows Config or an explicit `dir`. Theme colors and focus rings use existing atoms. The trigger truncates long paths; the full path is retained in accessible text and the popup breadcrumb wraps. SSR includes the trigger and committed path; opening and navigating require hydration.
+
+## Props
+
+| Prop                                     | Type                                                              | Default                                   |
+| ---------------------------------------- | ----------------------------------------------------------------- | ----------------------------------------- |
+| `options`                                | `readonly Option[]`                                               | Required                                  |
+| `value` / `defaultValue`                 | `readonly string[]`                                               | Uncontrolled `[]`                         |
+| `onChange`                               | `(path: string[]) => void`                                        | —                                         |
+| `disabled`                               | `boolean`                                                         | `false`                                   |
+| `allowClear`                             | `boolean`                                                         | `true`                                    |
+| `placeholder`                            | `string`                                                          | `Choose a path`                           |
+| `backLabel` / `clearLabel` / `emptyText` | `string`                                                          | `Back` / `Clear selection` / `No options` |
+| `getLevelLabel`                          | `(level: number) => string`                                       | `Level N` (one-based)                     |
+| `classNames`                             | `{ trigger?, popup?, breadcrumb?, select?, clear? }` string slots | —                                         |
+
+Options have `value`, `label`, optional `disabled`, and optional nested `children`. Root DOM props and ref are forwarded to the wrapper. Accessible label/description props name the trigger. The package root exports `Cascader`, `CascaderProps`, and `CascaderOption`; the `Cascader` subpath exports the default component and `Props`/`Option` types.

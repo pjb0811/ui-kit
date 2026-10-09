@@ -61,6 +61,11 @@
       "import": "./dist/Rate.mjs",
       "default": "./dist/Rate.mjs"
     },
+    "./Cascader": {
+      "types": "./dist/Cascader.d.mts",
+      "import": "./dist/Cascader.mjs",
+      "default": "./dist/Cascader.mjs"
+    },
     "./Card": {
       "types": "./dist/Card.d.mts",
       "import": "./dist/Card.mjs",

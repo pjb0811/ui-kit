@@ -153,6 +153,17 @@ const fixtures = {
     ],
   },
   Rate: { defaultValue: 3, 'aria-label': 'Product rating' },
+  Cascader: {
+    options: [
+      {
+        value: 'parent',
+        label: 'Parent',
+        children: [{ value: 'leaf', label: 'Leaf' }],
+      },
+    ],
+    defaultValue: ['parent', 'leaf'],
+    'aria-label': 'Category',
+  },
   Breadcrumb: { items: [{ title: 'Home', href: '/' }, { title: 'Current' }] },
   Steps: { items: [{ title: 'Account' }, { title: 'Profile' }], current: 1 },
   Collapse: { items: [{ key: '1', label: 'L', children: 'C' }] },
@@ -362,6 +373,20 @@ for (const [name, [Comp, fixture]] of Object.entries(COMPOUND_COMPONENTS)) {
 }
 
 const errors = [];
+
+const cascaderMarkup = markupByName.Cascader;
+
+if (
+  !cascaderMarkup?.includes('data-slot="cascader"') ||
+  !cascaderMarkup.includes('Parent / Leaf') ||
+  !cascaderMarkup.includes('aria-label="Category"') ||
+  !cascaderMarkup.includes('aria-expanded="false"') ||
+  !cascaderMarkup.includes('aria-label="Clear selection"')
+) {
+  errors.push(
+    'Cascader SSR must retain its named closed trigger, selected path, and accessible clear action.',
+  );
+}
 
 const rateMarkup = markupByName.Rate;
 
