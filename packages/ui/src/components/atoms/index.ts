@@ -26,4 +26,9 @@ export type { Props as TimePickerProps } from './time-picker';
 export { default as Tooltip } from './tooltip';
 export { default as Typography } from './typography';
 export { default as Rate } from './rate';
+export { default as Cascader } from './cascader';
+export type {
+  Props as CascaderProps,
+  Option as CascaderOption,
+} from './cascader';
 export type { Props as RateProps } from './rate';
