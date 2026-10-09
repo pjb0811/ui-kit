@@ -49,7 +49,8 @@ const CATEGORIES = [
   },
   {
     name: 'Data Entry',
-    components: 'Input, Checkbox, Radio, Select, Switch, DatePicker, Upload',
+    components:
+      'Input, Checkbox, Radio, Rate, Select, Switch, DatePicker, Upload',
   },
   {
     name: 'Data Display',

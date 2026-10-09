@@ -1,0 +1,51 @@
+---
+title: Rate
+---
+
+import RateDemo from '../../../src/demo/rate-demo';
+
+# Rate
+
+Choose a whole-step rating using pointer or keyboard input. Rate renders a radio group with one option per score. The selected score is checked; preceding icons are filled to show the total.
+
+```tsx
+import { Rate } from '@jbpark/ui-kit';
+
+<Rate
+  aria-label="Product rating"
+  defaultValue={3}
+  onChange={value => console.log(value)}
+/>;
+```
+
+<RateDemo />
+
+## Values and clearing
+
+Use `defaultValue` for an uncontrolled rating or `value` and `onChange` for a controlled one. `0` means no rating. Values are rounded down and clamped to `0–count`; non-finite values become zero. `count` defaults to five, rounds down to a minimum of one, and falls back to five for non-finite values. When count shrinks, the displayed score is clamped without firing `onChange`.
+
+`allowClear` defaults to true. Clicking the selected score or pressing Space on it clears the value to zero. Set `allowClear={false}` to retain it. Arrow keys move and select a score using Base UI radio navigation; Space selects the focused score. Tab enters/leaves the group as one control. Enter follows radio semantics and does not select a score. Half-step ratings and hover previews are outside this API.
+
+Disabled controls cannot be changed or focused. Read-only controls retain their value and remain available for keyboard focus. `name` enables native radio form submission: a selected score is submitted as a string, an unrated field has no selected value, and disabled ratings are omitted.
+
+## Accessibility and styling
+
+Provide `aria-label` or `aria-labelledby` for a meaningful group name (default: "Rating"). Every score has an accessible label and the current score is described and announced through a visually hidden polite live region. Use `getItemLabel` and `getValueText` to localize labels; callbacks receive `(score, count)`. Custom `icon` nodes are decorative and must not include interactive content. Interactive behavior uses Base UI radio parts rendered through the shared Button atom.
+
+RTL follows `Config direction` or an explicit `dir="rtl"`. Theme tokens style filled icons and focus rings. `classNames` customizes each item, filled items, and icons. A large count wraps to the available width. Server-rendered output includes the initial score and radio semantics; interactions require hydration.
+
+## Props
+
+| Prop                            | Type                                         | Default              |
+| ------------------------------- | -------------------------------------------- | -------------------- |
+| `count`                         | `number`                                     | `5`                  |
+| `value` / `defaultValue`        | `number`                                     | Uncontrolled `0`     |
+| `onChange`                      | `(value: number) => void`                    | —                    |
+| `allowClear`                    | `boolean`                                    | `true`               |
+| `disabled` / `readOnly`         | `boolean`                                    | `false`              |
+| `name`                          | `string`                                     | —                    |
+| `icon`                          | `ReactNode`                                  | Star                 |
+| `getItemLabel` / `getValueText` | `(value: number, count: number) => string`   | English score labels |
+| `classNames`                    | `{ item?, filledItem?, icon? }` string slots | —                    |
+
+Root DOM props, styles, and ref are forwarded. The package root exports `Rate` and `RateProps`; the `Rate` subpath exports the default component and `Props`.

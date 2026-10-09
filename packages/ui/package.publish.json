@@ -56,6 +56,11 @@
       "import": "./dist/Timeline.mjs",
       "default": "./dist/Timeline.mjs"
     },
+    "./Rate": {
+      "types": "./dist/Rate.d.mts",
+      "import": "./dist/Rate.mjs",
+      "default": "./dist/Rate.mjs"
+    },
     "./Card": {
       "types": "./dist/Card.d.mts",
       "import": "./dist/Card.mjs",

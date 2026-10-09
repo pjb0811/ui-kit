@@ -152,6 +152,7 @@ const fixtures = {
       { key: 'second', title: 'Second event' },
     ],
   },
+  Rate: { defaultValue: 3, 'aria-label': 'Product rating' },
   Breadcrumb: { items: [{ title: 'Home', href: '/' }, { title: 'Current' }] },
   Steps: { items: [{ title: 'Account' }, { title: 'Profile' }], current: 1 },
   Collapse: { items: [{ key: '1', label: 'L', children: 'C' }] },
@@ -361,6 +362,21 @@ for (const [name, [Comp, fixture]] of Object.entries(COMPOUND_COMPONENTS)) {
 }
 
 const errors = [];
+
+const rateMarkup = markupByName.Rate;
+
+if (
+  !rateMarkup?.includes('role="radiogroup"') ||
+  !rateMarkup.includes('aria-label="Product rating"') ||
+  (rateMarkup.match(/role="radio"/g) ?? []).length !== 5 ||
+  (rateMarkup.match(/aria-checked="true"/g) ?? []).length !== 1 ||
+  (rateMarkup.match(/data-filled=""/g) ?? []).length !== 3 ||
+  !rateMarkup.includes('3 of 5 stars')
+) {
+  errors.push(
+    'Rate SSR must retain its named radio group, five scores, selected score, filled icons, and score text.',
+  );
+}
 
 const timelineMarkup = markupByName.Timeline;
 
