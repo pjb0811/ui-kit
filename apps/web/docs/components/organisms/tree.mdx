@@ -1,0 +1,69 @@
+---
+title: Tree
+---
+
+import TreeDemo from '../../../src/demo/tree-demo';
+
+# Tree
+
+Browse an inline hierarchy with expansion, selection, and optional checking. Node order follows the supplied data. Use string labels and stable keys that are unique across the entire tree, including collapsed branches. Icons are decorative React content.
+
+<TreeDemo />
+
+```tsx
+import { Tree } from '@jbpark/ui-kit';
+
+<Tree
+  aria-label="Files"
+  nodes={[
+    {
+      key: 'project',
+      label: 'Project',
+      children: [{ key: 'readme', label: 'README' }],
+    },
+  ]}
+  defaultExpandedKeys={['project']}
+  onSelect={keys => console.log(keys)}
+/>;
+```
+
+## Expansion and selection
+
+`expandedKeys`/`defaultExpandedKeys` control visible branches. Expand/collapse requests call `onExpand`; collapsing retains descendants' expansion keys for reopening. A missing or empty children array makes a leaf. Unknown keys have no visible effect and are retained in expansion requests.
+
+`selectedKeys`/`defaultSelectedKeys` describe selection, independently of checking. Single selection uses the first key and selecting a node replaces it. In `multiple` mode, click, Enter, or Space (when not checkable) toggles the node without requiring a modifier key. Arrows move focus without selecting. Multiple-selection requests deduplicate keys and preserve other supplied keys, including unavailable ones. Disabled nodes and their descendants cannot be expanded, selected, or checked through user actions; supplied state is retained. Disabled nodes remain reachable by keyboard to announce their state.
+
+Controlled values change only when callers update the corresponding prop. Callbacks receive complete key arrays. Replacing data does not rewrite supplied expansion, selection, or checked state; unknown keys remain available for later data restoration.
+
+## Checking policy
+
+Set `checkable` to display checkboxes and expose `aria-checked` on tree items. Space and the checkbox area toggle checking; clicking the label or Enter changes selection. Checkbox visuals are inert and hidden from assistive technology so tree items remain the only keyboard tab stops and state owners.
+
+Checking a node checks its enabled descendants. Fully checked enabled children make their parent checked; some checked children make it indeterminate. Checking an indeterminate parent checks all enabled descendants. Unchecking removes the enabled branch and recomputes ancestors. Disabled nodes block propagation through their entire subtree and are excluded when computing enabled parents. Explicit checked keys in disabled subtrees retain their exact values. An enabled branch with no enabled children behaves as its own checkable node.
+
+`checkedKeys` may contain a parent to check all enabled descendants, or leaf keys to derive parents. `onCheck` returns fully checked nodes in source preorder, including derived parents, followed by unknown supplied keys. Indeterminate parents are excluded. Selection and checking never implicitly update one another.
+
+## Keyboard and focus
+
+Provide `aria-label` or `aria-labelledby`; the default label is `Tree`. The root, items and child groups use `tree`, `treeitem` and `group` roles. Items expose level, sibling position/count, expansion, selection, checking and disabled state. One visible tree item is tabbable. Up/Down move through visible nodes; Home/End reach the first/last. Right expands or moves to the first child; Left collapses or moves to the parent. RTL reverses Left/Right. Enter selects; Space checks when checkable or selects otherwise. A printable character moves to the next visible label starting with it. Modifier keys do not change this selection model.
+
+Collapsing a focused branch or removing a focused node moves focus to the nearest surviving visible ancestor, or the first visible item. External data changes do not take focus from outside the tree. Empty trees display `emptyText` with no item tab stop. Long labels wrap; direction and theme follow Config or root `dir`. SSR renders the same hierarchy and initial states; interaction requires hydration.
+
+Data is eager and all expanded nodes are rendered. Collapsed descendants are unmounted. State derivation inspects the full data tree, so large trees require application-side data sizing; this component does not virtualize. Drag and drop, lazy loading, search, and TreeSelect are outside this API. Installed Base UI has no Tree primitive; the component owns hierarchy navigation and reuses Checkbox for visual checking.
+
+## Props
+
+| Prop                                   | Type                                                                              | Default           |
+| -------------------------------------- | --------------------------------------------------------------------------------- | ----------------- |
+| `nodes`                                | `readonly Node[]`                                                                 | Required          |
+| `expandedKeys` / `defaultExpandedKeys` | `readonly string[]`                                                               | Uncontrolled `[]` |
+| `onExpand`                             | `(keys: string[]) => void`                                                        | —                 |
+| `selectedKeys` / `defaultSelectedKeys` | `readonly string[]`                                                               | Uncontrolled `[]` |
+| `onSelect`                             | `(keys: string[]) => void`                                                        | —                 |
+| `checkedKeys` / `defaultCheckedKeys`   | `readonly string[]`                                                               | Uncontrolled `[]` |
+| `onCheck`                              | `(keys: string[]) => void`                                                        | —                 |
+| `multiple` / `checkable` / `disabled`  | `boolean`                                                                         | `false`           |
+| `emptyText`                            | `ReactNode`                                                                       | `No nodes`        |
+| `classNames`                           | `{ item?, row?, group?, label?, icon?, toggle?, checkbox?, empty? }` string slots | —                 |
+
+Nodes have `key`, `label`, optional `icon`, optional `children`, and optional `disabled`. Root DOM props/ref and className are forwarded. The root package exports `Tree`, `TreeProps`, and `TreeNode`; the `Tree` subpath exports the default component and `Props`/`Node` types. Checkbox also accepts an `indeterminate` boolean and optional `icons.indeterminate` for mixed states.

@@ -68,7 +68,8 @@
     "./style.css": "./src/globals.css",
     "./Popconfirm": "./src/components/molecules/popconfirm.tsx",
     "./Transfer": "./src/components/molecules/transfer.tsx",
-    "./Tour": "./src/components/organisms/tour.tsx"
+    "./Tour": "./src/components/organisms/tour.tsx",
+    "./Tree": "./src/components/organisms/tree.tsx"
   },
   "scripts": {
     "build": "tsdown",

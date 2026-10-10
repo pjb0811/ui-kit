@@ -19,6 +19,7 @@ export default defineConfig({
     Timeline: 'src/components/molecules/timeline.tsx',
     Transfer: 'src/components/molecules/transfer.tsx',
     Tour: 'src/components/organisms/tour.tsx',
+    Tree: 'src/components/organisms/tree.tsx',
     Rate: 'src/components/atoms/rate.tsx',
     Cascader: 'src/components/atoms/cascader.tsx',
     Alert: 'src/components/molecules/alert.tsx',

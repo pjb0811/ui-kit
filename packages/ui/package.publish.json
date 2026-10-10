@@ -149,6 +149,11 @@
       "types": "./dist/Tour.d.mts",
       "import": "./dist/Tour.mjs",
       "default": "./dist/Tour.mjs"
+    },
+    "./Tree": {
+      "types": "./dist/Tree.d.mts",
+      "import": "./dist/Tree.mjs",
+      "default": "./dist/Tree.mjs"
     }
   },
   "type": "module"

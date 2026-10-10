@@ -16,3 +16,5 @@ export { default as Toast } from './toast';
 export type { ToastOptions } from './toast';
 export { default as Tour } from './tour';
 export type { Props as TourProps, Step as TourStep } from './tour';
+export { default as Tree } from './tree';
+export type { Props as TreeProps, Node as TreeNode } from './tree';

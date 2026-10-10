@@ -37,6 +37,18 @@ export const Default: Story = {
   },
 };
 
+export const Indeterminate: Story = {
+  args: { children: 'Partial selection', indeterminate: true },
+};
+
+export const IndeterminateIcons: Story = {
+  args: {
+    children: 'Partial selection with icons',
+    indeterminate: true,
+    icons: {},
+  },
+};
+
 export const Controlled: Story = {
   args: {
     children: '체크박스',
