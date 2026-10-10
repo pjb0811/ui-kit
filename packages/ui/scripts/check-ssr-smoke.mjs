@@ -118,6 +118,18 @@ const RESET_SLOTS = {};
 // Minimal valid props per component that needs them. Anything not listed is
 // rendered with no props. Keep entries tiny — just enough to render.
 const fixtures = {
+  Form: {
+    children: h(
+      ui.Form.Field,
+      {
+        name: 'email',
+        label: 'Email',
+        description: 'Work email',
+        required: true,
+      },
+      h(ui.Form.Control, { type: 'email', defaultValue: 'ada@example.com' }),
+    ),
+  },
   Avatar: { alt: 'Ada Lovelace', fallback: 'AL' },
   Badge: { count: 3, children: h(ui.Button, null, 'Inbox') },
   Segmented: { 'aria-label': 'View', options: ['Grid', 'List'] },
@@ -283,6 +295,16 @@ const SUBPATH_COMPONENTS = {
 // site. Render each part on its own so the contracts see the whole public
 // surface, not just the roots. Keep props minimal, as in `fixtures`.
 const COMPOUND_COMPONENTS = {
+  'Form.Field': [
+    ui.Form.Field,
+    {
+      name: 'field',
+      label: 'Field',
+      error: 'Invalid field',
+      children: h(ui.Form.Control),
+    },
+  ],
+  'Form.Control': [ui.Form.Control, { 'aria-label': 'Standalone control' }],
   'Checkbox.Group': [
     ui.Checkbox.Group,
     { options: [{ label: 'A', value: 'a' }] },
@@ -416,6 +438,43 @@ for (const [name, [Comp, fixture]] of Object.entries(COMPOUND_COMPONENTS)) {
 }
 
 const errors = [];
+
+const formMarkup = markupByName.Form;
+if (
+  !/<form\b/.test(formMarkup) ||
+  !/name="email"/.test(formMarkup) ||
+  !/required=""/.test(formMarkup) ||
+  !/ada@example.com/.test(formMarkup) ||
+  !/data-slot="form-description"/.test(formMarkup)
+) {
+  errors.push(
+    'Form SSR must retain native form/control values, required state, and its description.',
+  );
+}
+
+const serverErrorMarkup = renderToStaticMarkup(
+  h(
+    Config,
+    null,
+    h(
+      ui.Form,
+      { errors: { email: 'This email is unavailable.' } },
+      h(
+        ui.Form.Field,
+        { name: 'email', label: 'Email' },
+        h(ui.Form.Control, { defaultValue: 'ada@example.com' }),
+      ),
+    ),
+  ),
+);
+if (
+  !serverErrorMarkup.includes('This email is unavailable.') ||
+  !serverErrorMarkup.includes('data-slot="form-error"')
+) {
+  errors.push(
+    'Form must render the externally supplied field error without overriding its message.',
+  );
+}
 
 const autoCompleteMarkup = markupByName.AutoComplete;
 

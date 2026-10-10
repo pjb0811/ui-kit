@@ -23,3 +23,4 @@ export * as tabs from './tabs';
 export * as textarea from './textarea';
 export * as tooltip from './tooltip';
 export * as autocomplete from './autocomplete';
+export * as form from './form';

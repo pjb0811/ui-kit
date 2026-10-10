@@ -159,6 +159,11 @@
       "types": "./dist/AutoComplete.d.mts",
       "import": "./dist/AutoComplete.mjs",
       "default": "./dist/AutoComplete.mjs"
+    },
+    "./Form": {
+      "types": "./dist/Form.d.mts",
+      "import": "./dist/Form.mjs",
+      "default": "./dist/Form.mjs"
     }
   },
   "type": "module"
