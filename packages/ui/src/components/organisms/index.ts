@@ -24,3 +24,8 @@ export type {
   FieldProps as FormFieldProps,
   ControlProps as FormControlProps,
 } from './form';
+export { default as TreeSelect } from './tree-select';
+export type {
+  Props as TreeSelectProps,
+  Node as TreeSelectNode,
+} from './tree-select';

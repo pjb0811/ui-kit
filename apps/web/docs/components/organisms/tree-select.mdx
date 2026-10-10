@@ -1,0 +1,76 @@
+---
+title: TreeSelect
+---
+
+import TreeSelectDemo from '../../../src/demo/tree-select-demo';
+
+# TreeSelect
+
+Choose a parent or leaf from a hierarchy in a compact popup. Use Tree when the hierarchy should stay visible, or Cascader when users must progressively choose a leaf path.
+
+<TreeSelectDemo />
+
+```tsx
+import { TreeSelect } from '@jbpark/ui-kit';
+
+<TreeSelect
+  aria-label="Folder"
+  nodes={[
+    {
+      key: 'project',
+      label: 'Project',
+      children: [{ key: 'src', label: 'Source' }],
+    },
+  ]}
+  defaultExpandedKeys={['project']}
+  onChange={(key, node) => setFolder(key)}
+/>;
+```
+
+## Value and expansion
+
+Nodes use the same `TreeNode` contract as Tree: globally unique stable string `key`, string `label`, optional decorative `icon`, `disabled`, and nested `children`. Enabled parents and leaves are selectable. Disabled branches block expansion and selection for themselves and descendants; a previously supplied disabled selection can still be displayed and cleared.
+
+`value` is a string key or `null` for no selection. `undefined` selects uncontrolled behavior, initialized by `defaultValue`. Selecting a different node emits `onChange(key, node)` once and closes the popup. Re-selecting the current node closes it without a value-change callback. Controlled values change only when the caller supplies a new value. Clearing emits `onChange(null, null)` and returns focus to the trigger.
+
+Unknown keys are preserved, shown as their raw key, and submitted unchanged. Removing or renaming nodes does not emit value changes. A missing key displays its label again when the node returns.
+
+`expandedKeys` / `defaultExpandedKeys` and `onExpand` manage expansion independently from selection. Uncontrolled expansion survives closing/reopening; controlled expansion only changes when the caller supplies new keys. Opening does not automatically expand the selected node's ancestors.
+
+## Keyboard and accessibility
+
+The trigger is a native button opening a named dialog containing the existing Tree. It is not an editable combobox. Use `aria-label`, `aria-labelledby`, or a native associated label to name the field; `popupLabel` names the popup and tree.
+
+Enter/Space or ArrowDown/ArrowUp opens the popup. Opening focuses the selected node if it is visible, otherwise the first Tree tab stop. Empty trees fall back to popup focus. Tree owns hierarchy navigation: Up/Down, Home/End, typeahead, and Left/Right expansion (mirrored in RTL). Enter/Space selects an enabled node. Expansion does not change the value. Base UI owns popup placement, dismissal, and focus return; Escape closes the popup before an enclosing Modal/Drawer. Tab follows the popup's nonmodal focus order and dismisses when focus leaves it.
+
+`ref`, `id`, keyboard/click handlers, and native button ARIA attributes target the trigger. `className` styles the wrapper; `classNames.trigger` styles the button. The clear action is a separate sibling button. TreeSelect inherits Config theme/direction and portal container, with explicit `dir` / `container` overrides.
+
+## Forms and limits
+
+Setting `name` adds a hidden input containing the selected key (empty string for `null`), including unknown keys. `form` associates it with an external native form. Disabled TreeSelect values are excluded from FormData. Picking a node does not submit the form. Native reset does not reset React selection/expansion; control the value in the caller's reset handler when needed.
+
+This first version provides native FormData support, not automatic Form.Field registration or required constraint validation. Supply external labels/errors/validation explicitly; a hidden input cannot provide native required validation. Do not wrap TreeSelect in Form.Control, which expects a real input/textarea adapter.
+
+Data is eager and uses Tree's traversal and navigation. Multiple/checkable selection, search, lazy loading, virtualization, and drag and drop are outside this API.
+
+## Props
+
+| Prop                                   | Type                                                          | Default             |
+| -------------------------------------- | ------------------------------------------------------------- | ------------------- |
+| `nodes`                                | `readonly TreeSelectNode[]`                                   | required            |
+| `value` / `defaultValue`               | `string \| null`                                              | `null`              |
+| `onChange`                             | `(key: string \| null, node: TreeSelectNode \| null) => void` | —                   |
+| `expandedKeys` / `defaultExpandedKeys` | `readonly string[]`                                           | `[]`                |
+| `onExpand`                             | `(keys: string[]) => void`                                    | —                   |
+| `open` / `defaultOpen`                 | `boolean`                                                     | `false`             |
+| `onOpenChange`                         | `(open: boolean) => void`                                     | —                   |
+| `disabled`                             | `boolean`                                                     | `false`             |
+| `allowClear`                           | `boolean`                                                     | `true`              |
+| `clearLabel`                           | `string`                                                      | Config clear locale |
+| `placeholder` / `popupLabel`           | `string`                                                      | `Choose a node`     |
+| `emptyText`                            | `ReactNode`                                                   | `No nodes`          |
+| `name` / `form`                        | `string`                                                      | —                   |
+| `container`                            | `HTMLElement`                                                 | Config container    |
+| `classNames`                           | `trigger`, `value`, `clear`, `popup`, `tree`, `nodes`         | —                   |
+
+`classNames.nodes` forwards Tree's item/row/group/label/icon/toggle styling slots. Disabled state suppresses opening, selection, and clearing. Labels truncate in the trigger and wrap in the popup.

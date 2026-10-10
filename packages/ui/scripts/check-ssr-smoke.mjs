@@ -118,6 +118,12 @@ const RESET_SLOTS = {};
 // Minimal valid props per component that needs them. Anything not listed is
 // rendered with no props. Keep entries tiny — just enough to render.
 const fixtures = {
+  TreeSelect: {
+    nodes: [{ key: 'folder', label: 'Folder' }],
+    defaultValue: 'missing',
+    name: 'folder',
+    'aria-label': 'Folder picker',
+  },
   Form: {
     children: h(
       ui.Form.Field,
@@ -473,6 +479,19 @@ if (
 ) {
   errors.push(
     'Form must render the externally supplied field error without overriding its message.',
+  );
+}
+
+const treeSelectMarkup = markupByName.TreeSelect;
+if (
+  !treeSelectMarkup.includes('data-slot="tree-select"') ||
+  !treeSelectMarkup.includes('name="folder"') ||
+  !treeSelectMarkup.includes('value="missing"') ||
+  !treeSelectMarkup.includes('aria-label="Folder picker"') ||
+  treeSelectMarkup.includes('role="tree"')
+) {
+  errors.push(
+    'TreeSelect SSR must retain unknown selected keys and its named native field without mounting a closed tree popup.',
   );
 }
 

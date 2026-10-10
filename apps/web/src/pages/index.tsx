@@ -50,7 +50,7 @@ const CATEGORIES = [
   {
     name: 'Data Entry',
     components:
-      'Input, AutoComplete, Form, Checkbox, Radio, Rate, Cascader, Select, Switch, DatePicker, Upload, Transfer',
+      'Input, AutoComplete, Form, Checkbox, Radio, Rate, Cascader, Select, TreeSelect, Switch, DatePicker, Upload, Transfer',
   },
   {
     name: 'Data Display',
