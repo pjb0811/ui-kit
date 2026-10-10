@@ -164,6 +164,11 @@
       "types": "./dist/Form.d.mts",
       "import": "./dist/Form.mjs",
       "default": "./dist/Form.mjs"
+    },
+    "./TreeSelect": {
+      "types": "./dist/TreeSelect.d.mts",
+      "import": "./dist/TreeSelect.mjs",
+      "default": "./dist/TreeSelect.mjs"
     }
   },
   "type": "module"

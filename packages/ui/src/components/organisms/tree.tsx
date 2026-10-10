@@ -302,6 +302,7 @@ const Tree = ({
           }}
           onKeyDown={event => {
             if (event.target !== event.currentTarget) return;
+            if (event.key === 'Escape' || event.key === 'Tab') return;
 
             event.stopPropagation();
             const position = visible.findIndex(

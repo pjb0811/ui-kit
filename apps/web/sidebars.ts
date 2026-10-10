@@ -30,6 +30,7 @@ const sidebars: SidebarsConfig = {
         'components/atoms/select',
         'components/atoms/auto-complete',
         'components/organisms/form',
+        'components/organisms/tree-select',
         'components/atoms/segmented',
         'components/atoms/rate',
         'components/atoms/cascader',
