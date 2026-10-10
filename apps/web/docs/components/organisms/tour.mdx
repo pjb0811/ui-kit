@@ -1,0 +1,71 @@
+---
+title: Tour
+---
+
+import TourDemo from '../../../src/demo/tour-demo';
+
+# Tour
+
+Guide users through ordered interface targets. Each step displays a title, optional description, and Previous/Next/Finish/Close controls in a modal popup. A decorative outline identifies a visible target; interaction stays inside the popup.
+
+<TourDemo />
+
+```tsx
+import { useRef, useState } from 'react';
+
+import { Button, Tour } from '@jbpark/ui-kit';
+
+function Guide() {
+  const target = useRef<HTMLButtonElement>(null);
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <Button onClick={() => setOpen(true)}>Start tour</Button>
+      <Button ref={target}>Create</Button>
+      <Tour
+        open={open}
+        onOpenChange={setOpen}
+        steps={[
+          {
+            key: 'create',
+            title: 'Create a document',
+            target: () => target.current,
+          },
+        ]}
+      />
+    </>
+  );
+}
+```
+
+## State and callbacks
+
+`current`/`defaultCurrent` are zero-based. Next and Previous request a step through `onChange`. Controlled steps change only when the caller supplies a new index. Rendering clamps out-of-range values and rounds down finite values; nonfinite values display the first step without emitting a change. An empty steps array displays no overlay.
+
+`open`/`defaultOpen` control visibility through `onOpenChange`. Close and Escape call `onClose` and request `open=false`. Finish calls `onFinish` and requests `open=false`, without calling `onClose` or advancing past the final step. Closing preserves the current step; set controlled `current` to zero to restart. Keep the Tour mounted while closing so Base UI can complete its transition and return focus.
+
+## Targets, scrolling and focus
+
+Target getters run only after hydration. Use stable step keys and getters returning an HTMLElement or null. Visible, connected targets are scrolled into view at the start of each step, using instant center alignment; disable `scrollIntoView` to leave scrolling to the application. Hidden (`display:none` or `visibility:hidden`), missing, and removed targets use a centered popup with no outline or arrow. They do not skip the step or emit navigation callbacks. Target mutations, removal, scroll and resize update placement/highlighting; a newly available target is resolved again.
+
+Base UI owns popup placement, collision handling, modal focus trapping, Escape dismissal, page scroll locking, and return to the previously focused element. The popup is named by its title and described by the step description. Progress is announced in a polite live region. Tab stays among popup controls; Enter and Space activate them. Step changes keep the popup mounted and preserve control focus. The mask blocks interaction with both targets and the rest of the page; clicking the mask does not dismiss the guide. Run one active Tour per tree. The application owns persistence and analytics.
+
+The popup follows Config direction and theme and remains within narrow viewports. Root `dir` also applies to the popup. SSR renders only the root marker, including when initially open, without calling target getters. Browser overlays appear after hydration.
+
+## Props
+
+| Prop                                                         | Type                                                     | Default                                       |
+| ------------------------------------------------------------ | -------------------------------------------------------- | --------------------------------------------- |
+| `steps`                                                      | `readonly Step[]`                                        | Required                                      |
+| `open` / `defaultOpen`                                       | `boolean`                                                | Uncontrolled `false`                          |
+| `onOpenChange`                                               | `(open: boolean) => void`                                | —                                             |
+| `current` / `defaultCurrent`                                 | `number` (zero-based)                                    | Uncontrolled `0`                              |
+| `onChange`                                                   | `(current: number) => void`                              | —                                             |
+| `onClose` / `onFinish`                                       | `() => void`                                             | —                                             |
+| `scrollIntoView`                                             | `boolean`                                                | `true`                                        |
+| `previousLabel` / `nextLabel` / `finishLabel` / `closeLabel` | `string`                                                 | `Previous` / `Next` / `Finish` / `Close tour` |
+| `formatProgress`                                             | `(current: number, total: number) => string` (one-based) | `Step N of M`                                 |
+| `classNames`                                                 | `{ popup?, mask?, highlight?, actions? }` string slots   | —                                             |
+
+Steps have unique `key`, `title`, optional `description`, optional `target`, and optional `placement` (`top`, `bottom`, `left`, `right`, default `bottom`). Root DOM props/ref are forwarded to the root marker; popup customization uses `classNames.popup`. The package root exports `Tour`, `TourProps`, and `TourStep`; the `Tour` subpath exports the default component and `Props`/`Step` types.

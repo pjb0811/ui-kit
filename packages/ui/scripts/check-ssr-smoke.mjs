@@ -152,6 +152,18 @@ const fixtures = {
       { key: 'second', title: 'Second event' },
     ],
   },
+  Tour: {
+    steps: [
+      {
+        key: 'first',
+        title: 'First step',
+        target: () => {
+          throw new Error('Targets must not resolve during SSR');
+        },
+      },
+    ],
+    defaultOpen: true,
+  },
   Transfer: {
     items: [
       { key: 'a', label: 'Alpha' },
@@ -381,6 +393,25 @@ for (const [name, [Comp, fixture]] of Object.entries(COMPOUND_COMPONENTS)) {
 }
 
 const errors = [];
+
+const emptyTourMarkup = renderToStaticMarkup(
+  h(Config, null, h(ui.Tour, { steps: [], defaultOpen: true })),
+);
+
+if (!emptyTourMarkup.includes('data-slot="tour"')) {
+  errors.push(
+    'An initially open Tour with no steps must render its root safely.',
+  );
+}
+
+if (
+  !markupByName.Tour?.includes('data-slot="tour"') ||
+  markupByName.Tour.includes('data-slot="tour-popup"')
+) {
+  errors.push(
+    'Tour SSR must render its root without resolving targets or mounting browser-only overlays.',
+  );
+}
 
 const transferMarkup = markupByName.Transfer;
 
