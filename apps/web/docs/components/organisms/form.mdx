@@ -1,0 +1,103 @@
+---
+title: Form
+---
+
+import FormDemo from '../../../src/demo/form-demo';
+
+# Form
+
+Compose labels, descriptions, controls, and validation feedback without adding a separate form-state library. Base UI owns field registration, accessible associations, and validation; applications own their values, submission, and server requests.
+
+<FormDemo />
+
+```tsx
+import { Button, Form } from '@jbpark/ui-kit';
+
+<Form
+  onSubmit={event => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    save(data);
+  }}
+>
+  <Form.Field
+    name="email"
+    label="Email"
+    description="Use your work email."
+    required
+  >
+    <Form.Control type="email" />
+  </Form.Field>
+  <Button htmlType="submit">Save</Button>
+</Form>;
+```
+
+## Controls and accessibility
+
+`Form.Field` groups **one control** with a label, description, and error. Base UI connects the label and mounted messages to supported controls. Give each field a unique `name`; the Field name takes precedence over the Control name. Labels are optional only when the control has another accessible name.
+
+`Form.Control` renders the library's Input by default, adds Base UI field wiring, and inherits `required` from its Field. Native input constraints such as `type`, `pattern`, `min`, and `max` remain available. Its `ref` points to the DOM control (`HTMLElement`), and Form's ref points to the native `HTMLFormElement`. For a textarea, use `render={<Input.TextArea />}`. Apply control attributes to Form.Control, rather than only to the replacement element.
+
+| Control                       | Integration                                                                                                                                                              |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Input                         | Use `Form.Control` (default render) or `Form.Control render={<Input />}`. A plain Input does not register for Base UI validation.                                        |
+| Input.TextArea                | Use `Form.Control render={<Input.TextArea />}`.                                                                                                                          |
+| Single Select, without search | Place directly in Form.Field; it already integrates with Base UI. Pass `required` to Select explicitly.                                                                  |
+| Default Checkbox              | Place directly in Form.Field without its own children label; the Field label names it. Its checked value participates in FormData.                                       |
+| Other modes or controls       | Not covered by this initial contract. Checkbox custom icons and arbitrary composite controls must not be wrapped in Form.Control; a div wrapper is not an input adapter. |
+
+A Field's `required` displays a marker and supplies the default for Form.Control. It does not add required constraints to independently integrated Select/Checkbox controls. Disabled Fields disable supported controls; disabled inputs are excluded from native FormData. A read-only text Control remains submitted.
+
+## Validation and submission
+
+`validationMode` defaults to `onSubmit`: an invalid submit displays inline errors and focuses the first invalid registered control. After the failed submit, changes revalidate the field. `onBlur` and `onChange` are also available, and a Field can override the Form mode. Base UI uses native constraint validity with inline feedback instead of the browser validation bubble.
+
+Use `onSubmit` with `event.preventDefault()` and `new FormData(event.currentTarget)` for native successful-control semantics, repeated names, and unchecked/disabled omissions. Native form `action` is also forwarded. `onFormSubmit(values, details)` instead receives Base UI's registered-field object and prevents native submission; it is not identical to FormData. The generic `FormProps<T>` / `<Form<T>>` types describe that object but do not validate its runtime shape.
+
+For synchronous custom validation, `Form.Field validate(value, formValues)` returns a string/string array or nothing when valid. Asynchronous validators do **not** block an onSubmit submission in the installed primitive; perform server checks in the caller's submit handler.
+
+```tsx
+const [errors, setErrors] = useState<FormProps['errors']>({});
+const [pending, setPending] = useState(false);
+
+<Form
+  errors={errors}
+  onSubmit={async event => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    setPending(true);
+    try {
+      setErrors(await submit(data));
+    } finally {
+      setPending(false);
+    }
+  }}
+>
+  <Form.Field name="username" label="Username" required>
+    <Form.Control />
+  </Form.Field>
+  <Button htmlType="submit" disabled={pending}>
+    Save
+  </Button>
+</Form>;
+```
+
+`errors` maps Field names to strings or string arrays. Base UI displays them and clears the field's external error on a value change. Applications own request cancellation, stale responses, and pending state. Use a Field's `error` with `invalid` for caller-owned validation feedback; a nonempty `error` marks the field invalid and remains visible until the caller removes it.
+
+## Reset and layout
+
+`Button htmlType="reset"` and `onReset` retain native behavior. Uncontrolled text inputs return to their default DOM values. Reset controlled values and composite controls in the caller's `onReset`; native reset does not reset React state or promise to clear field validity and external errors. Clear application errors and remount the Form with a changed `key` when a complete pristine state is needed.
+
+`layout="vertical"` stacks each label and control. `horizontal` uses a label/content grid when the Form container is at least the Tailwind `@md` size; narrow containers stack vertically. Config direction and theme are inherited, with a native `dir` override on Form. Errors wrap even when they contain long unbroken text.
+
+## Props
+
+| Component    | Props                                                                                                                                                                                                                            |
+| ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Form         | `layout`, `className`, `validationMode`, `errors`, `onSubmit`, `onFormSubmit`, `actionsRef`, native form attributes/ref                                                                                                          |
+| Form.Field   | `name`, `label`, `description`, `required` (default false), `error`, `invalid`, `disabled`, `layout`, `validate`, `validationMode`, `validationDebounceTime`, `actionsRef`, `className`, `classNames`, native div attributes/ref |
+| Form.Control | Native input attributes/ref, `value`, `defaultValue`, `onChange` (native event), `onValueChange(value, details)`, `render`, `className`                                                                                          |
+
+Field styling slots are `label`, `required`, `content`, `description`, and `error`. Control className styles the actual input. Form/Field keep their native form/div structure; polymorphic rendering is exposed only on Control. Schema validators and form-state libraries remain optional consumers of this layer.
+
+See [Base UI Form](https://base-ui.com/react/components/form) and [Field](https://base-ui.com/react/components/field) for the primitive validation and accessibility contract.

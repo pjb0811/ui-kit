@@ -70,7 +70,8 @@
     "./Transfer": "./src/components/molecules/transfer.tsx",
     "./Tour": "./src/components/organisms/tour.tsx",
     "./Tree": "./src/components/organisms/tree.tsx",
-    "./AutoComplete": "./src/components/atoms/auto-complete.tsx"
+    "./AutoComplete": "./src/components/atoms/auto-complete.tsx",
+    "./Form": "./src/components/organisms/form/index.ts"
   },
   "scripts": {
     "build": "tsdown",

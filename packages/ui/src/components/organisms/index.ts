@@ -18,3 +18,9 @@ export { default as Tour } from './tour';
 export type { Props as TourProps, Step as TourStep } from './tour';
 export { default as Tree } from './tree';
 export type { Props as TreeProps, Node as TreeNode } from './tree';
+export { default as Form } from './form';
+export type {
+  Props as FormProps,
+  FieldProps as FormFieldProps,
+  ControlProps as FormControlProps,
+} from './form';
