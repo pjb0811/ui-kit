@@ -9,6 +9,8 @@ import ModalDemo from '../../../src/demo/modal-demo';
 
 A dialog with two ways to use it: **controlled** (drive `open` yourself and handle `onOk` / `onCancel`) or **imperative** (`Modal.confirm`, `Modal.info`, … fire a self-managing modal from anywhere). The mask is not click-closable by default.
 
+The default two-button footer places Cancel before OK in both controlled modals and `Modal.confirm`, with the same order for keyboard Tab navigation. The confirming button is solid primary and the dismissing button is outlined. Pass `footer` to customize the actions.
+
 ```tsx
 import { Modal } from '@jbpark/ui-kit';
 
@@ -27,7 +29,7 @@ const [open, setOpen] = useState(false);
 
 ## Imperative
 
-The static methods render a centered, status-styled modal and manage their own open state. `Modal.confirm` shows both OK/Cancel; the others show a single acknowledge button. In every default footer the confirming button is solid primary and the dismissing one is outlined, so the two read as different weights; pass `footer` to take the whole row over.
+The static methods render a centered, status-styled modal and manage their own open state. `Modal.confirm` shows Cancel followed by OK; the others show a single acknowledge button.
 
 ```tsx
 Modal.confirm({
@@ -68,7 +70,7 @@ Normal dismissal keeps the modal mounted until its closing animation finishes, i
 | Method                                         | Notes                                      |
 | ---------------------------------------------- | ------------------------------------------ |
 | `Modal.info` / `success` / `error` / `warning` | single acknowledge button                  |
-| `Modal.confirm`                                | OK + Cancel                                |
+| `Modal.confirm`                                | Cancel + OK                                |
 | `Modal.destroy(id)` / `Modal.destroyAll()`     | immediate removal; skips closing animation |
 
 Each imperative status renders a matching icon next to the title. `Modal.info` / `success` / `error` / `warning` set the `status` axis; `Modal.confirm` is a separate interaction mode (two-button footer), not a status.
