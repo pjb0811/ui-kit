@@ -35,7 +35,7 @@
 
 ## Checklist
 
-- [ ] Commit messages follow the [convention](.github/COMMIT_CONVENTION.md)
+- [ ] Commit messages follow the commit rules in AGENTS.md
 - [ ] Storybook stories are added for new components / features
 - [ ] No type or lint errors (`pnpm lint`, `pnpm typecheck`)
 - [ ] Build completes successfully (`pnpm build`)

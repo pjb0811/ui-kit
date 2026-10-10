@@ -4,7 +4,7 @@
 
 pnpm + turborepo 기반 모노레포. `packages/ui`가 퍼블리시되는 React 컴포넌트 라이브러리이며, `apps/docs`가 Next.js + Storybook 문서 앱이다.
 
-**이 저장소는 재사용 가능한 UI 컴포넌트의 정본(canonical home)이다.** `live-editor` 같은 앱 저장소에서 새 컴포넌트를 만들 때, 그게 다른 프로젝트에서도 쓸 만한 범용 UI 프리미티브/합성 컴포넌트라면 그 앱 저장소에 바로 구현하지 말고 여기(`packages/ui`)에 먼저 구현하고 배포한 뒤 의존성으로 가져다 쓰게 한다. 자세한 판단 기준과 절차는 `.claude/skills/coding-style/SKILL.md`의 "D. 재사용 가능한 UI/훅은 공유 라이브러리에 먼저 구현" 참고.
+**이 저장소는 재사용 가능한 UI 컴포넌트의 정본(canonical home)이다.** `live-editor` 같은 앱 저장소에서 새 컴포넌트를 만들 때, 그게 다른 프로젝트에서도 쓸 만한 범용 UI 프리미티브/합성 컴포넌트라면 그 앱 저장소에 바로 구현하지 말고 여기(`packages/ui`)에 먼저 구현하고 배포한 뒤 의존성으로 가져다 쓰게 한다. 자세한 판단 기준과 절차는 공유 `shared-library-first` 스킬 참고.
 
 ```
 ui-kit/
@@ -107,6 +107,16 @@ grep -rn 'variant="' packages/ui/src/components/ | grep -v 'resolvedVariant\|{va
 `core`로 직접 향하는 히트가 나오면 둘 중 하나를 택한다: 그 프리미티브를 소비 atom으로 흡수하거나, 공유 기반이라면 **왜 그 변형에 고정했는지 코드에 주석으로 남긴다** (`atoms/tag.tsx`의 `CORE_VARIANT` 참고 — core `outline`이 Tag가 원하는 중립 베이스와 정확히 일치해서 고정한 경우다). 주석 없는 하드코딩은 여전히 smell이다. (`float-button`/`modal` 등이 **우리 자신의 `Button`**에 넘기는 `variant=`는 정상 — `core` 프리미티브로 곧장 가는 것만 해당한다.)
 
 고정 자체를 피하는 방법도 있다: **cva는 변형 축에 `null`을 넘기면 그 축을 통째로 건너뛴다.** `atoms/button.tsx`가 `variant={null} size={null}`로 core/button을 감싸는 이유이며, 이러면 프리미티브는 베이스 문자열만 기여하고 색·사이즈 클래스는 전부 atom이 소유한다. 고정할 중립 변형이 마땅치 않으면 이쪽을 먼저 고려한다.
+
+### 기본 요소는 기존 atoms로 조합한다
+
+`src/core/`는 **headless 래퍼를 새로 만들 때만** 손대는 최하위 레이어다. 새 컴포넌트가 어느 계층이든(atom 포함) 버튼·인풋 같은 기본 요소가 필요하면 `src/core/*`를 직접 import하거나 raw 엘리먼트(`<button>`, `<input>` 등)를 새로 만들지 않고, 이미 있는 atom(`atoms/button`, `atoms/input` 등)을 그 atom의 prop으로 조합한다.
+
+- atom도 다른 atom을 조합한다. 예: `atoms/date-picker`는 트리거로 `atoms/button`을, 팝업으로 `atoms/popover`를 쓴다. 유일한 방향 제약은 상위 계층을 import하지 않는 것(atom이 molecule/organism을 import하지 않음)이다.
+- 같은 역할의 atom이 있으면 그 atom을 쓴다. `type`/`variant`/`icon`/`shape`/`size`처럼 이미 있는 prop으로 표현되는 것을 raw 엘리먼트나 `className`으로 다시 만들지 않는다. 없으면 atom을 먼저 만들고 가져다 쓴다.
+- 기존 prop으로 표현이 안 되면 atom에 prop/variant를 추가하는 것부터 검토한다. 이 컴포넌트에만 필요한 특수한 경우라면 atom 위에 `className`을 얹는 것까지만 허용하고, atom을 건너뛰어 core나 raw 엘리먼트로 내려가지 않는다.
+- 전용 atom이 없어 보여도 기존 atom의 prop 조합으로 되는지 먼저 본다. 예: 아이콘 버튼은 `Button`의 `type="text"` + `shape="circle"` + `icon`.
+- 기존 조합 예: `organisms/modal.tsx`, `organisms/drawer.tsx`의 `<Button variant="outlined" …>`.
 
 ### 컴포넌트 작성 패턴
 
@@ -242,7 +252,7 @@ import './local';
 
 ## 주석
 
-주석은 지금 코드를 처음 읽는 사람을 위해 씁니다. 무엇을 하는지 먼저 쓰고, 이유는 지켜야 할 제약일 때만 현재형으로 쓰며, 과거 이야기는 이슈 번호(`(#N)`)로 대신합니다. 자세한 규칙과 예시는 `.claude/skills/coding-style/SKILL.md`의 "F. 주석 작성"을 따릅니다.
+주석은 지금 코드를 처음 읽는 사람을 위해 씁니다. 무엇을 하는지 먼저 쓰고, 이유는 지켜야 할 제약일 때만 현재형으로 쓰며, 과거 이야기는 이슈 번호(`(#N)`)로 대신합니다. 자세한 규칙과 예시는 공유 `coding-style` 스킬의 "C. 주석 작성"을 따릅니다.
 
 ## Changeset
 
@@ -269,41 +279,38 @@ import './local';
 
 ---
 
-## 유용한 스킬 (슬래시 커맨드)
+## 공유 스킬
 
-### `/run`
+모든 pjb0811 저장소가 함께 쓰는 절차는 비공개 저장소 `pjb0811/skills`의 전역 Claude Code 스킬입니다. 그 스킬을 읽을 수 없는 에이전트는 이 파일의 요약을 따릅니다.
 
-앱을 실제로 실행해서 변경 사항을 브라우저에서 확인할 때 사용.
-Storybook이나 apps/web(Docusaurus)을 띄워 UI를 직접 검증한다.
+| 스킬                                  | 용도                                                                           |
+| ------------------------------------- | ------------------------------------------------------------------------------ |
+| `commit`, `pr`, `issue`               | 커밋 메시지, PR·이슈 본문                                                      |
+| `coding-style`                        | 컨벤션, 일괄 리네임, 주석(C), boolean 이름(D), 중괄호(E), 서브컴포넌트 구조(F) |
+| `changesets-release`, `publish-check` | 릴리스 흐름과 배포 전 점검                                                     |
+| `shared-library-first`                | 재사용 UI는 ui-kit, 훅은 use-hooks에 먼저 구현                                 |
+| `ref-verification`                    | 저장소 상태를 작업 트리가 아니라 git ref 기준으로 확인                         |
 
-### `/verify`
+### 커밋 메시지
 
-코드 변경이 실제로 의도대로 동작하는지 앱을 구동해 확인.
-PR 반영 전 수동 검증이나 버그 픽스 후 회귀 확인에 활용.
+- `type(scope): summary`: 영어 명령문, 소문자로 시작, 마침표 없음, gitmoji 없음.
+- 스코프는 변경이 한 영역에 한정될 때만 붙입니다. 브랜치 이름은 쓰지 않습니다.
+- 호환성을 깨는 변경은 타입이나 스코프 뒤에 `!`를 붙입니다(`refactor(api)!: …`).
+- 본문은 무엇을 바꿨는지 구체적으로 쓴 `-` 불릿입니다. 호환성을 깨는 변경이면 무엇이 깨지고 무엇으로 대체하는지 씁니다.
+- `Co-Authored-By` 같은 트레일러는 붙이지 않습니다.
 
-### `/code-review`
+### 저장소 스킬
 
-현재 브랜치 diff를 대상으로 코드 리뷰.
+| 스킬                    | 경로                                    | 설명                                 |
+| ----------------------- | --------------------------------------- | ------------------------------------ |
+| `version-management`    | `.claude/skills/version-management/`    | 이 저장소의 패키지·배포 세부 사항    |
+| `component-naming`      | `.claude/skills/component-naming/`      | 컴포넌트 네이밍·구조 점검 체크리스트 |
+| `/new-component`        | `.claude/commands/new-component.md`     | 새 컴포넌트 스캐폴딩                 |
+| `/new-story`            | `.claude/commands/new-story.md`         | Storybook 스토리 추가·동기화         |
+| `react-best-practices`  | `.claude/skills/react-best-practices/`  | Vercel, React 성능 규칙              |
+| `composition-patterns`  | `.claude/skills/composition-patterns/`  | Vercel, 컴포넌트 합성 패턴           |
+| `web-design-guidelines` | `.claude/skills/web-design-guidelines/` | Vercel, UI·접근성 리뷰               |
+| `writing-guidelines`    | `.claude/skills/writing-guidelines/`    | Vercel, 문서 문체 리뷰               |
+| `deploy-to-vercel`      | `.claude/skills/deploy-to-vercel/`      | Vercel, `apps/docs`·`apps/web` 배포  |
 
-- `/code-review` — 기본 리뷰
-- `/code-review ultra` — 멀티 에이전트 클라우드 딥리뷰 (로컬 브랜치 전체)
-- `/code-review ultra <PR번호>` — GitHub PR 딥리뷰
-- `--fix` 옵션으로 지적사항 자동 수정 가능
-
-### `/simplify`
-
-변경된 코드에서 중복·비효율·불필요한 추상화를 찾아 정리.
-버그 수정이 아닌 품질 개선 목적. 버그는 `/code-review` 사용.
-
-### `/security-review`
-
-현재 브랜치의 변경 사항을 대상으로 보안 취약점 검토.
-외부 입력 처리, XSS, 의존성 이슈 등 확인.
-
-### `/review <PR번호>`
-
-GitHub PR 전체를 검토할 때 사용.
-
-### `/init`
-
-CLAUDE.md가 없는 새 패키지/앱 디렉터리에 진입했을 때 가이드 초기화.
+Vercel 스킬은 [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills) `063bee9`에서 수정 없이 가져왔습니다(패키징 파일 `Archive.zip` 제외). `.prettierignore`에 있어 포매터가 바꾸지 않습니다. 갱신할 때는 새 커밋에서 디렉터리를 다시 복사하고 이 커밋을 바꿉니다.

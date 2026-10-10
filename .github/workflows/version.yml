@@ -42,7 +42,7 @@ jobs:
         uses: changesets/action@v1
         with:
           version: pnpm exec changeset version
-          # No emoji prefix — see .github/COMMIT_CONVENTION.md. These strings
+          # No emoji prefix — see "커밋 메시지" in CLAUDE.md. These strings
           # become a real commit on the release branch and the PR title that
           # lands on main, so they follow the same `type: summary` shape as a
           # hand-written commit.
