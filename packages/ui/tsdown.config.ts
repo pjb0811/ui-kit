@@ -6,6 +6,7 @@ import postcss from 'rollup-plugin-postcss';
 export default defineConfig({
   entry: {
     index: 'src/index.ts',
+    AutoComplete: 'src/components/atoms/auto-complete.tsx',
     Avatar: 'src/components/atoms/avatar.tsx',
     Badge: 'src/components/atoms/badge.tsx',
     Segmented: 'src/components/atoms/segmented.tsx',

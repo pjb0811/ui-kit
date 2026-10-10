@@ -122,6 +122,12 @@ const fixtures = {
   Badge: { count: 3, children: h(ui.Button, null, 'Inbox') },
   Segmented: { 'aria-label': 'View', options: ['Grid', 'List'] },
   TimePicker: { label: 'Start time', defaultValue: '09:30' },
+  AutoComplete: {
+    options: [{ value: 'alpha' }],
+    defaultValue: 'unlisted',
+    name: 'project',
+    'aria-label': 'Project',
+  },
   Alert: { title: 'Status', description: 'Details' },
   Button: { children: 'Button' },
   Tag: { children: 'Tag' },
@@ -410,6 +416,20 @@ for (const [name, [Comp, fixture]] of Object.entries(COMPOUND_COMPONENTS)) {
 }
 
 const errors = [];
+
+const autoCompleteMarkup = markupByName.AutoComplete;
+
+if (
+  !autoCompleteMarkup.includes('role="combobox"') ||
+  !autoCompleteMarkup.includes('aria-label="Project"') ||
+  !autoCompleteMarkup.includes('value="unlisted"') ||
+  !autoCompleteMarkup.includes('name="project"') ||
+  autoCompleteMarkup.includes('role="listbox"')
+) {
+  throw new Error(
+    'AutoComplete SSR must retain its named free-form input and form name without mounting a closed popup.',
+  );
+}
 
 const treeMarkup = markupByName.Tree;
 

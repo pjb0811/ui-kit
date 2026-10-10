@@ -1,0 +1,59 @@
+---
+title: AutoComplete
+---
+
+import AutoCompleteDemo from '../../../src/demo/auto-complete-demo';
+
+# AutoComplete
+
+An editable text field with optional suggestions. Unlike searchable Select, the value can be any string, including text outside the suggestion list. Use Select when users must choose an existing option.
+
+<AutoCompleteDemo />
+
+```tsx
+import { AutoComplete } from '@jbpark/ui-kit';
+
+<AutoComplete
+  aria-label="Project name"
+  options={[
+    { value: 'website', label: 'Website' },
+    { value: 'archive', disabled: true },
+  ]}
+  onChange={setName}
+/>;
+```
+
+## Value and suggestions
+
+`value` / `defaultValue` are text strings. Typing, selecting a suggestion, and clearing update the same value through `onChange`. Closing the popup or blurring keeps arbitrary text. Controlled values remain unchanged until the caller supplies a new value.
+
+Each option has a unique `value`, an optional string `label`, and optional `disabled`. Choosing an option inserts its **value**; its label only changes the displayed suggestion. Highlighting an option does not insert it. `onSelect(value, option)` reports activation by pointer or Enter, including activation of an already matching value. On activation, `onSelect` runs before `onChange`; if the inserted value is unchanged, no value-change callback is needed. Ordinary typing and clearing do not invoke `onSelect`.
+
+By default Base UI performs case-insensitive, accent-insensitive substring matching against option values. Provide `filterOption(query, option)` for custom matching, or `filterOption={false}` for suggestions already filtered by the caller. Requests, debounce, cancellation, loading feedback, and stale-response handling belong to the application. This component does not fetch data.
+
+## Keyboard and forms
+
+Base UI supplies combobox/listbox semantics, highlighting, popup positioning and dismissal. Arrow keys navigate suggestions, Enter chooses a highlighted enabled option, and Escape closes the popup. Tab leaves the input without committing highlighted text. IME composition follows the primitive's input handling. Provide a visible `<label htmlFor>` and input `id`, or an accessible name using `aria-label` / `aria-labelledby`.
+
+Native input props and `ref` target the actual input. Use `name` and `form` to submit the current text with native FormData, including arbitrary values. Picking a suggestion does not automatically submit the form. Read-only inputs do not allow editing or clearing; disabled inputs follow native disabled form behavior.
+
+## Props
+
+| Prop                         | Type                                                                | Default                   |
+| ---------------------------- | ------------------------------------------------------------------- | ------------------------- |
+| `options`                    | `readonly AutoCompleteOption[]`                                     | required                  |
+| `value` / `defaultValue`     | `string`                                                            | empty text                |
+| `onChange`                   | `(value: string) => void`                                           | —                         |
+| `onSelect`                   | `(value: string, option: AutoCompleteOption) => void`               | —                         |
+| `filterOption`               | `false \| ((query: string, option: AutoCompleteOption) => boolean)` | substring matching        |
+| `allowClear`                 | `boolean`                                                           | `true`                    |
+| `clearLabel`                 | `string`                                                            | Config locale clear label |
+| `emptyText`                  | `ReactNode`                                                         | `No suggestions`          |
+| `open` / `defaultOpen`       | `boolean`                                                           | Base UI default           |
+| `onOpenChange`               | `(open: boolean) => void`                                           | —                         |
+| `container`                  | `HTMLElement`                                                       | Config container          |
+| `className`                  | `string`                                                            | —                         |
+| `classNames`                 | `input`, `clear`, `content`, `list`, `option`, `empty`              | —                         |
+| Native input props and `ref` | native input attributes and `HTMLInputElement` ref                  | —                         |
+
+The input is always text-based; native `type`, `size`, `children`, and native `onChange`/`onSelect` are replaced by this component's contract. Theme and direction inherit Config, with an explicit `dir` override. Suggestions use eagerly supplied data; grouped/multiple selection, virtualization, and inline completion are outside this API.
