@@ -3,7 +3,7 @@
 import { useId, useRef } from 'react';
 
 import { useControllableState, useKeyPress } from '@jbpark/use-hooks';
-import { Square, SquareCheck } from 'lucide-react';
+import { Square, SquareCheck, SquareMinus } from 'lucide-react';
 
 import { cn } from '@repo/ui/utils';
 
@@ -20,11 +20,16 @@ export interface Props extends Omit<
   placement?: 'left' | 'right';
   defaultChecked?: boolean;
   checked?: boolean;
+  indeterminate?: boolean;
   value?: OptionValue;
   /** Native form field name — participates in `FormData` when set. */
   name?: string;
   disabled?: boolean;
-  icons?: Partial<{ checked: React.ReactNode; unchecked: React.ReactNode }>;
+  icons?: Partial<{
+    checked: React.ReactNode;
+    unchecked: React.ReactNode;
+    indeterminate: React.ReactNode;
+  }>;
   children?: React.ReactNode;
   onChange?: (checked: boolean) => void;
 }
@@ -36,6 +41,7 @@ const Checkbox = ({
   className,
   icons,
   disabled,
+  indeterminate = false,
   defaultChecked,
   checked: _checked,
   name,
@@ -75,6 +81,9 @@ const Checkbox = ({
   const renderContent = icons ? (
     <>
       <input
+        ref={element => {
+          if (element) element.indeterminate = indeterminate;
+        }}
         id={id}
         hidden
         type="checkbox"
@@ -89,7 +98,7 @@ const Checkbox = ({
       <span
         ref={iconTriggerRef}
         role="checkbox"
-        aria-checked={checked}
+        aria-checked={indeterminate ? 'mixed' : checked}
         aria-disabled={disabled}
         tabIndex={disabled ? -1 : 0}
         className={cn(cursorClassName, disabled && 'opacity-50')}
@@ -97,9 +106,11 @@ const Checkbox = ({
           onChange(!checked);
         }}
       >
-        {checked
-          ? (icons.checked ?? <SquareCheck />)
-          : (icons.unchecked ?? <Square />)}
+        {indeterminate
+          ? (icons.indeterminate ?? <SquareMinus />)
+          : checked
+            ? (icons.checked ?? <SquareCheck />)
+            : (icons.unchecked ?? <Square />)}
       </span>
       {children && (
         <label
@@ -117,6 +128,7 @@ const Checkbox = ({
         name={name}
         value={itemValue}
         checked={checked}
+        indeterminate={indeterminate}
         disabled={disabled}
         // Keep the atom's established 4px radius after the Base UI migration;
         // tailwind-merge lets this override the core primitive's radius (#361).

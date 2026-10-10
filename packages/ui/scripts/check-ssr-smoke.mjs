@@ -152,6 +152,23 @@ const fixtures = {
       { key: 'second', title: 'Second event' },
     ],
   },
+  Tree: {
+    nodes: [
+      {
+        key: 'root',
+        label: 'Root',
+        children: [
+          { key: 'a', label: 'Alpha' },
+          { key: 'b', label: 'Beta' },
+          { key: 'locked', label: 'Locked', disabled: true },
+        ],
+      },
+    ],
+    defaultExpandedKeys: ['root'],
+    defaultSelectedKeys: ['a'],
+    defaultCheckedKeys: ['a'],
+    checkable: true,
+  },
   Tour: {
     steps: [
       {
@@ -393,6 +410,22 @@ for (const [name, [Comp, fixture]] of Object.entries(COMPOUND_COMPONENTS)) {
 }
 
 const errors = [];
+
+const treeMarkup = markupByName.Tree;
+
+if (
+  !treeMarkup?.includes('role="tree"') ||
+  (treeMarkup.match(/role="treeitem"/g) ?? []).length !== 4 ||
+  !treeMarkup.includes('role="group"') ||
+  !treeMarkup.includes('aria-checked="mixed"') ||
+  !treeMarkup.includes('data-indeterminate') ||
+  !treeMarkup.includes('aria-selected="true"') ||
+  (treeMarkup.match(/role="treeitem"[^>]*tabindex="0"/g) ?? []).length !== 1
+) {
+  errors.push(
+    'Tree SSR must retain nested semantics, mixed checks, selection, and one tree-item tab stop.',
+  );
+}
 
 const emptyTourMarkup = renderToStaticMarkup(
   h(Config, null, h(ui.Tour, { steps: [], defaultOpen: true })),
