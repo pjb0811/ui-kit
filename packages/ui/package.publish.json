@@ -144,6 +144,11 @@
       "types": "./dist/Transfer.d.mts",
       "import": "./dist/Transfer.mjs",
       "default": "./dist/Transfer.mjs"
+    },
+    "./Tour": {
+      "types": "./dist/Tour.d.mts",
+      "import": "./dist/Tour.mjs",
+      "default": "./dist/Tour.mjs"
     }
   },
   "type": "module"

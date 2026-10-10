@@ -14,3 +14,5 @@ export type {
 } from './table';
 export { default as Toast } from './toast';
 export type { ToastOptions } from './toast';
+export { default as Tour } from './tour';
+export type { Props as TourProps, Step as TourStep } from './tour';

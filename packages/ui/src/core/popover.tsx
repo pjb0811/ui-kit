@@ -12,6 +12,9 @@ import { OVERLAY_LAYER } from '../lib/z-layers';
 // Base UI primitives with repo-owned styling; no longer vendored from shadcn.
 const Popover = PopoverPrimitive.Root;
 const PopoverTrigger = PopoverPrimitive.Trigger;
+const PopoverPortal = PopoverPrimitive.Portal;
+const PopoverBackdrop = PopoverPrimitive.Backdrop;
+const PopoverClose = PopoverPrimitive.Close;
 
 function PopoverContent({
   className,
@@ -19,6 +22,8 @@ function PopoverContent({
   side = 'bottom',
   sideOffset = 4,
   container,
+  anchor,
+  positionerStyle,
   ...props
 }: Omit<React.ComponentProps<typeof PopoverPrimitive.Popup>, 'className'> & {
   className?: string;
@@ -26,6 +31,8 @@ function PopoverContent({
   side?: PopoverPrimitive.Positioner.Props['side'];
   sideOffset?: number;
   container?: HTMLElement;
+  anchor?: PopoverPrimitive.Positioner.Props['anchor'];
+  positionerStyle?: React.CSSProperties;
 }) {
   const { getContainer } = useConfig();
 
@@ -36,6 +43,8 @@ function PopoverContent({
         align={align}
         sideOffset={sideOffset}
         arrowPadding={16}
+        anchor={anchor}
+        style={positionerStyle}
         className={OVERLAY_LAYER}
       >
         <PopoverPrimitive.Popup
@@ -124,6 +133,9 @@ function PopoverDescription({
 export {
   Popover,
   PopoverTrigger,
+  PopoverPortal,
+  PopoverBackdrop,
+  PopoverClose,
   PopoverContent,
   PopoverArrow,
   PopoverHeader,
