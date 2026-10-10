@@ -28,6 +28,7 @@ const sidebars: SidebarsConfig = {
       collapsed: false,
       items: [
         'components/atoms/select',
+        'components/atoms/auto-complete',
         'components/atoms/segmented',
         'components/atoms/rate',
         'components/atoms/cascader',

@@ -32,3 +32,8 @@ export type {
   Option as CascaderOption,
 } from './cascader';
 export type { Props as RateProps } from './rate';
+export { default as AutoComplete } from './auto-complete';
+export type {
+  Props as AutoCompleteProps,
+  Option as AutoCompleteOption,
+} from './auto-complete';

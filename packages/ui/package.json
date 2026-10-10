@@ -69,7 +69,8 @@
     "./Popconfirm": "./src/components/molecules/popconfirm.tsx",
     "./Transfer": "./src/components/molecules/transfer.tsx",
     "./Tour": "./src/components/organisms/tour.tsx",
-    "./Tree": "./src/components/organisms/tree.tsx"
+    "./Tree": "./src/components/organisms/tree.tsx",
+    "./AutoComplete": "./src/components/atoms/auto-complete.tsx"
   },
   "scripts": {
     "build": "tsdown",
