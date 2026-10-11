@@ -9,6 +9,8 @@ import { cn } from '@repo/ui/utils';
 
 import Input from './input';
 
+declare const process: { env: { NODE_ENV?: string } };
+
 const sizes: Record<ComponentSize, string> = {
   small: 'h-8 w-8',
   middle: 'h-9 w-9',
@@ -23,7 +25,10 @@ export interface Props extends Omit<
   | 'autoSubmit'
   | 'render'
   | 'className'
+  | 'length'
 > {
+  /** Positive safe integer slot count. Invalid or omitted values use six. */
+  length?: number;
   className?: string;
   label?: string;
   onChange?: (value: string, details: OTPFieldRoot.ChangeEventDetails) => void;
@@ -42,7 +47,7 @@ export interface Props extends Omit<
 const OTP = ({
   label,
   id,
-  length,
+  length = 6,
   size,
   onChange,
   onComplete,
@@ -59,15 +64,27 @@ const OTP = ({
   const generatedId = React.useId();
   const inputId = id ?? generatedId;
   const { componentSize } = useConfig();
-  if (!Number.isSafeInteger(length) || length < 1) {
-    throw new RangeError('Input.OTP length must be a positive safe integer.');
-  }
+  const isValidLength = Number.isSafeInteger(length) && length > 0;
+  const count = isValidLength ? length : 6;
+
+  React.useEffect(() => {
+    if (process.env.NODE_ENV !== 'production' && !isValidLength) {
+      console.warn(
+        'Input.OTP length must be a positive safe integer; using six.',
+      );
+    }
+  }, [isValidLength, length]);
+
   return (
-    <div data-slot="input-otp" className={className}>
+    <div data-slot="input-otp">
       {label && (
         <label
           htmlFor={inputId}
-          className={cn('mb-1.5 block text-sm font-medium', classNames?.label)}
+          className={cn(
+            'mb-1.5 block text-sm font-medium',
+            classNames?.label,
+            //
+          )}
         >
           {label}
         </label>
@@ -75,26 +92,31 @@ const OTP = ({
       <OTPField.Root
         {...props}
         id={inputId}
-        length={length}
+        length={count}
         autoSubmit={false}
         onValueChange={onChange}
         onValueComplete={onComplete}
         aria-describedby={describedBy}
-        className={cn('flex flex-wrap gap-2', classNames?.group)}
+        className={cn(
+          'flex flex-wrap gap-2',
+          classNames?.group,
+          className,
+          //
+        )}
       >
-        {Array.from({ length }, (_, index) => (
+        {Array.from({ length: count }, (_, index) => (
           <OTPField.Input
             key={index}
             ref={index === 0 ? inputRef : undefined}
             render={<Input />}
             placeholder={placeholder}
-            aria-label={index === 0 ? ariaLabel : getSlotLabel(index, length)}
+            aria-label={index === 0 ? ariaLabel : getSlotLabel(index, count)}
             aria-labelledby={index === 0 ? labelledBy : undefined}
-            aria-describedby={describedBy}
             className={cn(
               'shrink-0 px-0 text-center tabular-nums',
               sizes[size ?? componentSize ?? 'middle'],
               classNames?.input,
+              //
             )}
           />
         ))}

@@ -20,6 +20,49 @@ const meta: Meta<typeof Input.OTP> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 export const Default: Story = {};
+export const RootPropsAndDescription: Story = {
+  args: {
+    className: 'w-full',
+    style: { width: '100%' },
+    'aria-describedby': 'otp-help',
+  },
+  render: props => (
+    <>
+      <Input.OTP
+        {...props}
+        data-testid="otp-root"
+        ref={node => {
+          node?.setAttribute('data-ref-target', 'true');
+        }}
+      />
+      <p id="otp-help">Enter the six-digit verification code.</p>
+    </>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const root = canvas.getByTestId('otp-root');
+
+    await expect(root).toHaveClass('w-full');
+    await expect(root).toHaveStyle({ width: '100%' });
+    await expect(root).toHaveAttribute('data-ref-target', 'true');
+    await expect(root).toHaveAttribute('aria-describedby', 'otp-help');
+    await expect(root.querySelectorAll('input[aria-describedby]')).toHaveLength(
+      0,
+    );
+  },
+};
+export const InvalidLength: Story = {
+  args: { length: 0 },
+  play: async ({ canvasElement }) => {
+    await expect(
+      within(canvasElement).getByLabelText('Character 6 of 6'),
+    ).toBeVisible();
+  },
+};
+export const DefaultLength: Story = {
+  ...InvalidLength,
+  args: { length: undefined },
+};
 export const LeadingZeroes: Story = { args: { defaultValue: '012345' } };
 export const Masked: Story = { args: { defaultValue: '012345', mask: true } };
 export const Disabled: Story = {

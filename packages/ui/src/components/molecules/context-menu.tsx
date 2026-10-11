@@ -3,10 +3,13 @@
 import * as React from 'react';
 
 import { ContextMenu as BaseContextMenu } from '@base-ui/react/context-menu';
+import { DirectionProvider } from '@base-ui/react/direction-provider';
+import { Menu as BaseMenu } from '@base-ui/react/menu';
 
 import { useConfig } from '@repo/ui/providers';
 import { cn } from '@repo/ui/utils';
 
+import { OVERLAY_LAYER } from '../../lib/z-layers';
 import Button from '../atoms/button';
 
 export type Item =
@@ -51,105 +54,140 @@ const ContextMenu = ({
   triggerProps,
   classNames,
   disabled = false,
+  open,
+  defaultOpen = false,
+  onOpenChange,
   ...props
 }: Props) => {
-  const { getContainer } = useConfig();
+  const { getContainer, direction } = useConfig();
   const triggerRef = React.useRef<HTMLDivElement>(null);
-  const available = items.some(item => item.type !== 'separator');
-  const inactive = disabled || !available;
-  const openAt = (element: HTMLElement) => {
-    const rect = element.getBoundingClientRect();
-    element.dispatchEvent(
-      new MouseEvent('contextmenu', {
-        bubbles: true,
-        cancelable: true,
-        clientX: rect.left + rect.width / 2,
-        clientY: rect.top + rect.height / 2,
-        button: 2,
-      }),
-    );
+  const actionRef = React.useRef<HTMLButtonElement>(null);
+  const [isOpen, setIsOpen] = React.useState(defaultOpen);
+  const [source, setSource] = React.useState<'context' | 'action'>('context');
+  const hasActions = items.some(item => item.type !== 'separator');
+  const isInactive = disabled || !hasActions;
+  const resolvedOpen = open ?? isOpen;
+  const resolvedDirection =
+    triggerProps?.dir === 'rtl' || triggerProps?.dir === 'ltr'
+      ? triggerProps.dir
+      : direction;
+  const handleOpenChange = (
+    nextOpen: boolean,
+    details: Parameters<NonNullable<Props['onOpenChange']>>[1],
+    nextSource: typeof source,
+  ) => {
+    onOpenChange?.(nextOpen, details);
+
+    if (details.isCanceled) {
+      return;
+    }
+
+    if (nextOpen) {
+      setSource(nextSource);
+    }
+
+    setIsOpen(nextOpen);
   };
+
+  const popup = (
+    <BaseMenu.Portal container={getContainer()}>
+      <BaseMenu.Positioner sideOffset={4} className={OVERLAY_LAYER}>
+        <BaseMenu.Popup
+          data-slot="context-menu"
+          dir={resolvedDirection}
+          finalFocus={source === 'context' ? triggerRef : actionRef}
+          className={cn(
+            `bg-popover text-popover-foreground border-border
+            max-h-[var(--available-height)] max-w-[var(--available-width)]
+            min-w-40 overflow-auto rounded-md border p-1 shadow-md outline-none`,
+            classNames?.popup,
+            //
+          )}
+        >
+          {items.map(item =>
+            item.type === 'separator' ? (
+              <BaseMenu.Separator
+                key={item.key}
+                className={cn(
+                  'bg-border my-1 h-px',
+                  classNames?.separator,
+                  //
+                )}
+              />
+            ) : (
+              <BaseMenu.Item
+                key={item.key}
+                disabled={item.disabled}
+                className={cn(
+                  `data-highlighted:bg-accent
+                    data-highlighted:text-accent-foreground cursor-default
+                    rounded-sm px-3 py-2 text-sm break-words outline-none
+                    data-disabled:opacity-50`,
+                  classNames?.item,
+                  //
+                )}
+                onClick={() => {
+                  item.onSelect?.();
+                  onSelect?.(item.key, item);
+                }}
+              >
+                {item.label}
+              </BaseMenu.Item>
+            ),
+          )}
+        </BaseMenu.Popup>
+      </BaseMenu.Positioner>
+    </BaseMenu.Portal>
+  );
+
   return (
-    <BaseContextMenu.Root {...props} disabled={inactive}>
-      <BaseContextMenu.Trigger
-        {...triggerProps}
-        ref={triggerRef}
-        data-slot="context-menu-trigger"
-        tabIndex={triggerProps?.tabIndex ?? 0}
-        className={cn(
-          'focus-visible:ring-ring outline-none focus-visible:ring-2',
-          classNames?.trigger,
-          triggerProps?.className,
-        )}
-        onKeyDown={event => {
-          triggerProps?.onKeyDown?.(event);
-          if (
-            !inactive &&
-            !event.defaultPrevented &&
-            (event.key === 'ContextMenu' ||
-              (event.shiftKey && event.key === 'F10'))
-          ) {
-            event.preventDefault();
-            openAt(event.target as HTMLElement);
-          }
-        }}
+    <DirectionProvider direction={resolvedDirection}>
+      <BaseContextMenu.Root
+        {...props}
+        actionsRef={source === 'context' ? props.actionsRef : undefined}
+        disabled={isInactive}
+        open={resolvedOpen && source === 'context'}
+        onOpenChange={(nextOpen, details) =>
+          handleOpenChange(nextOpen, details, 'context')
+        }
       >
-        {children}
-        {actionLabel && (
-          <Button
-            disabled={inactive}
-            size="small"
-            variant="text"
-            aria-haspopup="menu"
-            onClick={event => openAt(event.currentTarget)}
+        <BaseContextMenu.Trigger
+          {...triggerProps}
+          ref={triggerRef}
+          data-slot="context-menu-trigger"
+          dir={triggerProps?.dir ?? resolvedDirection}
+          tabIndex={actionLabel ? -1 : (triggerProps?.tabIndex ?? 0)}
+          className={cn(
+            'focus-visible:ring-ring outline-none focus-visible:ring-2',
+            classNames?.trigger,
+            triggerProps?.className,
+            //
+          )}
+        >
+          {children}
+        </BaseContextMenu.Trigger>
+        {popup}
+      </BaseContextMenu.Root>
+      {actionLabel && (
+        <BaseMenu.Root
+          {...props}
+          actionsRef={source === 'action' ? props.actionsRef : undefined}
+          disabled={isInactive}
+          open={resolvedOpen && source === 'action'}
+          onOpenChange={(nextOpen, details) =>
+            handleOpenChange(nextOpen, details, 'action')
+          }
+        >
+          <BaseMenu.Trigger
+            ref={actionRef}
+            render={<Button size="small" variant="text" />}
           >
             {actionLabel}
-          </Button>
-        )}
-      </BaseContextMenu.Trigger>
-      <BaseContextMenu.Portal container={getContainer()}>
-        <BaseContextMenu.Positioner sideOffset={4} className="z-50">
-          <BaseContextMenu.Popup
-            data-slot="context-menu"
-            finalFocus={triggerRef}
-            className={cn(
-              `bg-popover text-popover-foreground border-border
-              max-h-[var(--available-height)] max-w-[var(--available-width)]
-              min-w-40 overflow-auto rounded-md border p-1 shadow-md
-              outline-none`,
-              classNames?.popup,
-            )}
-          >
-            {items.map(item =>
-              item.type === 'separator' ? (
-                <BaseContextMenu.Separator
-                  key={item.key}
-                  className={cn('bg-border my-1 h-px', classNames?.separator)}
-                />
-              ) : (
-                <BaseContextMenu.Item
-                  key={item.key}
-                  disabled={item.disabled}
-                  className={cn(
-                    `data-highlighted:bg-accent
-                      data-highlighted:text-accent-foreground cursor-default
-                      rounded-sm px-3 py-2 text-sm break-words outline-none
-                      data-disabled:opacity-50`,
-                    classNames?.item,
-                  )}
-                  onClick={() => {
-                    item.onSelect?.();
-                    onSelect?.(item.key, item);
-                  }}
-                >
-                  {item.label}
-                </BaseContextMenu.Item>
-              ),
-            )}
-          </BaseContextMenu.Popup>
-        </BaseContextMenu.Positioner>
-      </BaseContextMenu.Portal>
-    </BaseContextMenu.Root>
+          </BaseMenu.Trigger>
+          {popup}
+        </BaseMenu.Root>
+      )}
+    </DirectionProvider>
   );
 };
 export default ContextMenu;
