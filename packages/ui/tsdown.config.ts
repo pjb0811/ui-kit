@@ -4,6 +4,10 @@ import tailwindcss from '@tailwindcss/postcss';
 
 export default defineConfig({
   entry: {
+    Anchor: 'src/components/molecules/anchor.tsx',
+    Calendar: 'src/components/organisms/calendar.tsx',
+    Statistic: 'src/components/molecules/statistic.tsx',
+    Divider: 'src/components/atoms/divider.tsx',
     index: 'src/index.ts',
     ContextMenu: 'src/components/molecules/context-menu.tsx',
     TreeSelect: 'src/components/organisms/tree-select.tsx',

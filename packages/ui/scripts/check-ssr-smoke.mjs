@@ -118,6 +118,8 @@ const RESET_SLOTS = {};
 // Minimal valid props per component that needs them. Anything not listed is
 // rendered with no props. Keep entries tiny — just enough to render.
 const fixtures = {
+  Anchor: { items: [] },
+  Calendar: { defaultMonth: new Date(2026, 9, 1) },
   TreeSelect: {
     nodes: [{ key: 'folder', label: 'Folder' }],
     defaultValue: 'missing',
@@ -1107,6 +1109,140 @@ for (const [name, markup] of Object.entries(markupByName)) {
         "    Put a data-slot on the element or on the component's root element.",
     );
   }
+}
+
+const calendarMarkup = renderToStaticMarkup(
+  h(ui.Calendar, {
+    defaultMonth: new Date(2026, 9, 1),
+    defaultValue: new Date(2026, 9, 11),
+    minDate: new Date(2026, 9, 5),
+    maxDate: new Date(2026, 9, 20),
+    renderDate: date => (date.getDate() === 11 ? 'Meeting' : null),
+  }),
+);
+
+if (
+  !calendarMarkup.includes('data-slot="calendar"') ||
+  !calendarMarkup.includes('October') ||
+  !calendarMarkup.includes('Meeting') ||
+  !calendarMarkup.includes('data-selected-single="true"') ||
+  !calendarMarkup.includes('disabled=""')
+) {
+  errors.push(
+    'Calendar SSR must preserve its month, selected date, markers and disabled bounds.',
+  );
+}
+
+const emptyCalendarMarkup = renderToStaticMarkup(
+  h(ui.Calendar, {
+    value: null,
+    defaultValue: new Date(2026, 9, 11),
+    defaultMonth: new Date(2026, 9, 1),
+  }),
+);
+
+if (emptyCalendarMarkup.includes('data-selected-single="true"')) {
+  errors.push(
+    'An explicitly empty controlled Calendar must ignore defaultValue.',
+  );
+}
+
+const anchorMarkup = renderToStaticMarkup(
+  h(ui.Anchor, {
+    current: '#details',
+    items: [
+      {
+        key: 'intro',
+        href: '#intro',
+        title: 'Introduction',
+        children: [{ key: 'details', href: '#details', title: 'Details' }],
+      },
+    ],
+  }),
+);
+
+if (
+  !anchorMarkup.includes('<nav') ||
+  !anchorMarkup.includes('aria-label="On this page"') ||
+  !anchorMarkup.includes('href="#intro"') ||
+  !anchorMarkup.includes('href="#details"') ||
+  (anchorMarkup.match(/aria-current="location"/g) ?? []).length !== 1
+) {
+  errors.push(
+    'Anchor SSR must preserve real nested links and one controlled current location.',
+  );
+}
+
+for (const [value, props, expected] of [
+  [0, {}, '>0</span>'],
+  [1234.5, { precision: 2 }, '>1,234.50</span>'],
+  [1234.5, { locale: 'de-DE', precision: 2 }, '>1.234,50</span>'],
+  ['12 / 24', {}, '>12 / 24</span>'],
+  [NaN, {}, '>—</span>'],
+]) {
+  const markup = renderToStaticMarkup(h(ui.Statistic, { value, ...props }));
+
+  if (!markup.includes(expected)) {
+    errors.push(`Statistic ${String(value)} must retain its formatted value.`);
+  }
+}
+
+const loadingStatisticMarkup = renderToStaticMarkup(
+  h(ui.Statistic, {
+    title: 'Metric',
+    value: 42,
+    loading: true,
+    formatter: () => {
+      throw new Error('Loading must not format values');
+    },
+  }),
+);
+
+if (
+  !loadingStatisticMarkup.includes('aria-busy="true"') ||
+  !loadingStatisticMarkup.includes('Metric')
+) {
+  errors.push('Statistic loading must retain its title and busy state.');
+}
+
+// Divider exposes one semantic separator, with decorative line segments.
+for (const orientation of ['horizontal', 'vertical']) {
+  const markup = renderToStaticMarkup(
+    h(ui.Divider, {
+      orientation,
+      decorative: false,
+      children: 0,
+      id: 'divider-root',
+      className: 'divider-marker',
+      style: { opacity: 0.8 },
+    }),
+  );
+  const rootTag = markup.match(/^<[^>]+>/)?.[0];
+
+  if (
+    (markup.match(/role="separator"/g) ?? []).length !== 1 ||
+    !rootTag?.includes(`aria-orientation="${orientation}"`) ||
+    !rootTag.includes('aria-label="0"') ||
+    !rootTag.includes('id="divider-root"') ||
+    !rootTag.includes('divider-marker') ||
+    !rootTag.includes('opacity:0.8') ||
+    !markup.includes('>0</span>') ||
+    (markup.match(/aria-hidden="true"/g) ?? []).length !== 2
+  ) {
+    errors.push(
+      `Divider ${orientation} must retain one named separator, a zero label, decorative lines, and consistent root styling.`,
+    );
+  }
+}
+
+const decorativeDividerMarkup = renderToStaticMarkup(h(ui.Divider));
+
+if (
+  decorativeDividerMarkup.includes('role="separator"') ||
+  decorativeDividerMarkup.includes('aria-orientation=') ||
+  !decorativeDividerMarkup.includes('data-slot="divider"')
+) {
+  errors.push('Divider must be decorative by default and retain its root slot.');
 }
 
 if (errors.length) {

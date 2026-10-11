@@ -1,3 +1,5 @@
+export { default as Divider } from './divider';
+export type { Props as DividerProps } from './divider';
 export { default as Avatar } from './avatar';
 export type { Props as AvatarProps } from './avatar';
 export { default as Badge } from './badge';

@@ -54,10 +54,12 @@ const sidebars: SidebarsConfig = {
       collapsed: false,
       items: [
         'components/atoms/avatar',
+        'components/organisms/calendar',
         'components/atoms/badge',
         'components/atoms/popover',
         'components/molecules/card',
         'components/molecules/descriptions',
+        'components/molecules/statistic',
         'components/molecules/timeline',
         'components/molecules/collapse',
         'components/molecules/reveals',
@@ -92,6 +94,7 @@ const sidebars: SidebarsConfig = {
       collapsed: false,
       items: [
         'components/atoms/float-button',
+        'components/molecules/anchor',
         'components/molecules/dropdown',
         'components/molecules/menu',
         'components/molecules/context-menu',
@@ -106,6 +109,7 @@ const sidebars: SidebarsConfig = {
       collapsed: false,
       items: [
         'components/templates/layout',
+        'components/atoms/divider',
         'components/templates/container',
         'components/templates/grid',
         'components/templates/page-header',
