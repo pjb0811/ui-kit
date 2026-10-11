@@ -762,6 +762,44 @@ if (
   );
 }
 
+for (const length of [undefined, 0, -1, 1.5, NaN, Infinity]) {
+  const markup = renderToStaticMarkup(
+    h(ui.Input.OTP, {
+      length,
+      label: 'Code',
+      className: 'otp-root-marker',
+      style: { width: '100%' },
+      'data-root-marker': 'otp',
+      'aria-describedby': 'otp-help',
+    }),
+  );
+  const rootTag = markup.match(/<div[^>]*data-root-marker="otp"[^>]*>/)?.[0];
+
+  if (
+    !markup.includes('aria-label="Character 6 of 6"') ||
+    markup.includes('aria-label="Character 7 of 6"') ||
+    (markup.match(/aria-describedby="otp-help"/g) ?? []).length !== 1 ||
+    !rootTag?.includes('otp-root-marker') ||
+    !rootTag.includes('width:100%')
+  ) {
+    errors.push(
+      `Input.OTP length ${String(length)} must use six slots with one group description and consistent root styling.`,
+    );
+  }
+}
+
+const contextMenuMarkup = markupByName.ContextMenu;
+
+if (
+  !contextMenuMarkup?.includes('tabindex="-1"') ||
+  !contextMenuMarkup.includes('aria-haspopup="menu"') ||
+  !contextMenuMarkup.includes('aria-expanded="false"')
+) {
+  errors.push(
+    'ContextMenu with Actions must expose a closed menu button and exclude its outer trigger from the tab order.',
+  );
+}
+
 const inputNumberMarkup = renderToStaticMarkup(
   h(ui.Input.Number, {
     id: 'quantity',

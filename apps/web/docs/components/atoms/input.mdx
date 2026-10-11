@@ -84,7 +84,8 @@ remaining Base UI Number Field root props, including `format`, `locale`, and
 Segmented verification-code entry built on Base UI OTP Field. Values remain
 strings, preserving leading zeroes. Provide `label`, `aria-label`, or an external
 label paired with `id`. Each subsequent slot has its own accessible name;
-`getSlotLabel(index, length)` can localize it. `aria-describedby` reaches every slot.
+`getSlotLabel(index, length)` can localize it. `aria-describedby` describes the
+group once, rather than repeating the hint on every slot.
 
 ```tsx
 <Input.OTP
@@ -98,7 +99,7 @@ label paired with `id`. Each subsequent slot has its own accessible name;
 
 | Prop                                        | Type                                    | Default                         |
 | ------------------------------------------- | --------------------------------------- | ------------------------------- |
-| `length`                                    | positive integer                        | required                        |
+| `length`                                    | positive safe integer                   | `6`                             |
 | `value` / `defaultValue`                    | `string`                                | -                               |
 | `onChange` / `onComplete`                   | `(value, eventDetails) => void`         | -                               |
 | `label`                                     | `string`                                | -                               |
@@ -116,6 +117,10 @@ numbers. Whitespace is removed, values are clamped to length, and `normalizeValu
 can apply an idempotent transformation. Full paste replaces the code, partial paste
 starts at the focused slot. Typing advances focus; arrow keys navigate and Backspace
 removes characters. Base UI handles native editing, autofill and validation.
+
+Omitted or invalid lengths use six slots. Invalid lengths produce a development
+warning instead of throwing during render. `className`, `style`, `ref`, data
+attributes and event handlers all apply to the Base UI group root.
 
 `onComplete` follows `onChange` when user entry completes the code. Pasting a full
 code again can fire completion even if the value is unchanged. Initial or externally

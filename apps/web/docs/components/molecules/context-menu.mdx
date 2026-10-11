@@ -48,8 +48,11 @@ Right-clicking inside an enabled trigger suppresses the browser context menu.
 Outside the trigger, disabled menus and empty action lists preserve the native menu.
 Base UI also provides touch long press; supply `actionLabel` for a visible,
 discoverable button. Focus the trigger or a descendant and press Shift+F10 or the
-ContextMenu key to open at its center. Escape and action dismissal return focus to
-the trigger. Outside dismissal follows Base UI's focus rules. `triggerProps` handlers
+ContextMenu key to open through the browser's native context-menu event. The visible
+Actions button toggles a Base UI menu and announces its expanded state. With this
+button present, the outer context trigger is excluded from the tab order. Escape
+and action dismissal return focus to the trigger that opened the menu. Outside
+dismissal follows Base UI's focus rules. `triggerProps` handlers
 are composed, and a prevented keyboard event is respected.
 
 Use a separate ContextMenu per row/file when actions differ. Avoid overlapping
