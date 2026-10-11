@@ -39,6 +39,7 @@
   ],
   "type": "module",
   "exports": {
+    "./Mentions": "./src/components/atoms/mentions.tsx",
     "./Anchor": "./src/components/molecules/anchor.tsx",
     "./Calendar": "./src/components/organisms/calendar.tsx",
     "./Statistic": "./src/components/molecules/statistic.tsx",
@@ -87,7 +88,8 @@
     "check-preflight-reset": "node scripts/check-preflight-reset.mjs",
     "check-data-theme-dark": "node scripts/check-data-theme-dark.mjs",
     "check-ssr-smoke": "node --import ./scripts/loaders/css-stub.mjs scripts/check-ssr-smoke.mjs",
-    "check-regression-net": "pnpm run check-api-surface && pnpm run check-preflight-reset && pnpm run check-data-theme-dark && pnpm run check-ssr-smoke",
+    "check-mentions-token": "node scripts/check-mentions-token.mjs",
+    "check-regression-net": "pnpm run check-api-surface && pnpm run check-preflight-reset && pnpm run check-data-theme-dark && pnpm run check-ssr-smoke && pnpm run check-mentions-token",
     "generate:component": "turbo gen react-component",
     "check-types": "tsc -b",
     "prepublishOnly": "node scripts/prepare-publish.mjs",

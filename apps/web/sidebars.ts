@@ -29,6 +29,7 @@ const sidebars: SidebarsConfig = {
       items: [
         'components/atoms/select',
         'components/atoms/auto-complete',
+        'components/atoms/mentions',
         'components/organisms/form',
         'components/organisms/tree-select',
         'components/atoms/segmented',

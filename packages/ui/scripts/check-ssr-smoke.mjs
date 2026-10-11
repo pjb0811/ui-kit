@@ -118,6 +118,7 @@ const RESET_SLOTS = {};
 // Minimal valid props per component that needs them. Anything not listed is
 // rendered with no props. Keep entries tiny — just enough to render.
 const fixtures = {
+  Mentions: { options: [{ value: 'alice' }], defaultValue: 'Hello @alice' },
   Anchor: { items: [] },
   Calendar: { defaultMonth: new Date(2026, 9, 1) },
   TreeSelect: {
@@ -1243,6 +1244,34 @@ if (
   !decorativeDividerMarkup.includes('data-slot="divider"')
 ) {
   errors.push('Divider must be decorative by default and retain its root slot.');
+}
+
+for (const state of [{}, { disabled: true }, { readOnly: true }]) {
+  const markup = renderToStaticMarkup(h(ui.Mentions, {
+    options: [{ value: 'alice' }],
+    defaultValue: 'Hello @alice\nNext line',
+    id: 'mention-text',
+    name: 'message',
+    form: 'message-form',
+    'aria-label': 'Message',
+    className: 'custom-textarea',
+    style: { minHeight: 120 },
+    ...state,
+  }));
+  const textarea = markup.match(/<textarea[^>]*>/)?.[0] ?? '';
+
+  if (!textarea.includes('id="mention-text"') ||
+      !textarea.includes('name="message"') ||
+      !textarea.includes('form="message-form"') ||
+      !textarea.includes('aria-label="Message"') ||
+      !textarea.includes('custom-textarea') ||
+      !textarea.includes('min-height:120px') ||
+      !markup.includes('Hello @alice\nNext line') ||
+      markup.includes('role="listbox"') ||
+      (state.disabled && !textarea.includes('disabled=""')) ||
+      (state.readOnly && !textarea.includes('readOnly=""'))) {
+    errors.push('Mentions SSR must preserve textarea text, native root props and inactive suggestion state.');
+  }
 }
 
 if (errors.length) {
