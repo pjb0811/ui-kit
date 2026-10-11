@@ -14,7 +14,6 @@
 // This asserts the reset survives every build. It's a heuristic substring
 // tripwire (same spirit as check-dynamic-tailwind-classes.mjs), not a CSS
 // parser. Run after `build`.
-
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -24,12 +23,19 @@ const __dirname = path.dirname(__filename);
 const CSS_PATH = path.join(__dirname, '..', 'dist', 'style.css');
 
 if (!fs.existsSync(CSS_PATH)) {
-  console.error('✘ dist/style.css not found — run `pnpm --filter @repo/ui build` first.');
+  console.error(
+    '✘ dist/style.css not found — run `pnpm --filter @repo/ui build` first.',
+  );
   process.exit(1);
 }
 
 // Collapse whitespace so assertions don't depend on the minifier's formatting.
-const css = fs.readFileSync(CSS_PATH, 'utf8').replace(/\s+/g, ' ');
+const css = fs
+  .readFileSync(CSS_PATH, 'utf8')
+  .replace(/\s+/g, ' ')
+  // CSS formatters may wrap :where() arguments onto separate lines.
+  .replace(/\(\s+/g, '(')
+  .replace(/\s+\)/g, ')');
 
 // Each guarantee is (label, must-all-be-present substrings). The reset must be
 // scoped to `[data-slot]` — a global reset here would defeat the "no preflight
@@ -37,7 +43,12 @@ const css = fs.readFileSync(CSS_PATH, 'utf8').replace(/\s+/g, ' ');
 const requirements = [
   {
     label: 'box-sizing / border reset scoped to [data-slot]',
-    all: [':where([data-slot], [data-slot] *)', 'box-sizing: border-box', 'border-style: solid', 'border-width: 0'],
+    all: [
+      ':where([data-slot], [data-slot] *)',
+      'box-sizing: border-box',
+      'border-style: solid',
+      'border-width: 0',
+    ],
   },
   {
     // The `[data-slot], …` half of the prefix is pinned on purpose. This rule
@@ -47,7 +58,8 @@ const requirements = [
     // `<textarea data-slot="textarea">` both rendered in the UA font on the
     // docs site. Narrowing the prefix back to descendants-only would reinstate
     // that, so assert the exact compound.
-    label: 'form-control reset (appearance + font/color inheritance) scoped to [data-slot], self-matching included',
+    label:
+      'form-control reset (appearance + font/color inheritance) scoped to [data-slot], self-matching included',
     all: [
       ':where([data-slot], [data-slot] *):where(button, input, select, textarea)',
       'appearance: none',
@@ -59,7 +71,8 @@ const requirements = [
     // #408: without this, a bare <p> keeps `margin-block: 1em`, which adds to
     // a flex column's `gap-*` rather than collapsing into it — Empty and Result
     // rendered ~20% taller than designed on a host with no preflight.
-    label: 'typographic margin reset scoped to [data-slot], self-matching included',
+    label:
+      'typographic margin reset scoped to [data-slot], self-matching included',
     all: [
       ':where([data-slot], [data-slot] *):where(p, h1, h2, h3, h4, h5, h6, ul, ol, dl, dd, blockquote, figure, pre)',
       'margin: 0',
@@ -71,7 +84,9 @@ const failures = [];
 for (const { label, all } of requirements) {
   const missing = all.filter(s => !css.includes(s));
   if (missing.length) {
-    failures.push(`${label}\n      missing: ${missing.map(m => JSON.stringify(m)).join(', ')}`);
+    failures.push(
+      `${label}\n      missing: ${missing.map(m => JSON.stringify(m)).join(', ')}`,
+    );
   }
 }
 
@@ -88,4 +103,6 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log('✓ dist/style.css retains the [data-slot]-scoped preflight reset (#253/#256).');
+console.log(
+  '✓ dist/style.css retains the [data-slot]-scoped preflight reset (#253/#256).',
+);

@@ -1,7 +1,6 @@
 import { defineConfig } from 'tsdown';
 
 import tailwindcss from '@tailwindcss/postcss';
-import postcss from 'rollup-plugin-postcss';
 
 export default defineConfig({
   entry: {
@@ -38,7 +37,6 @@ export default defineConfig({
     Layout: 'src/components/templates/layout/index.ts',
     utils: 'src/lib/utils/index.ts',
     providers: 'src/providers/index.ts',
-    style: 'src/globals.css',
   },
   outDir: 'dist',
   format: ['esm'],
@@ -48,10 +46,13 @@ export default defineConfig({
   treeshake: true,
   unbundle: true,
   deps: { onlyBundle: ['gsap'] },
-  plugins: [
-    postcss({
-      extract: 'style.css',
-      plugins: [tailwindcss()],
-    }),
-  ],
+  // tsdown 0.23 owns CSS extraction; a second PostCSS plugin overwrites
+  // the emitted stylesheet with a JavaScript placeholder.
+  css: {
+    transformer: 'postcss',
+    splitting: false,
+    fileName: 'style.css',
+    target: false,
+    postcss: { plugins: [tailwindcss()] },
+  },
 });
