@@ -1,5 +1,33 @@
 # web
 
+## 1.5.11
+
+### Patch Changes
+
+- Updated dependencies [d85f8f9]
+- Updated dependencies [49d0074]
+- Updated dependencies [4fb2f9f]
+- Updated dependencies [7d2d08a]
+- Updated dependencies [a3f7551]
+- Updated dependencies [04beb35]
+- Updated dependencies [607ca78]
+- Updated dependencies [fe40567]
+- Updated dependencies [deed5e7]
+- Updated dependencies [ded9523]
+- Updated dependencies [8ecae5f]
+- Updated dependencies [9f5c26e]
+- Updated dependencies [7be0a75]
+- Updated dependencies [019993e]
+- Updated dependencies [858c5fd]
+- Updated dependencies [3fce945]
+- Updated dependencies [9188de5]
+- Updated dependencies [f1b4df4]
+- Updated dependencies [0356f72]
+- Updated dependencies [1ac0bc0]
+- Updated dependencies [cf80167]
+- Updated dependencies [019993e]
+  - @repo/ui@10.3.0
+
 ## 1.5.10
 
 ### Patch Changes
