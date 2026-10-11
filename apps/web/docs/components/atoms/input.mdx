@@ -78,3 +78,47 @@ report an out-of-range typed value. `step="any"` disables step validation while
 the buttons and arrows still step by 1. The component also passes through the
 remaining Base UI Number Field root props, including `format`, `locale`, and
 `onValueCommitted`.
+
+## Input.OTP {/* #input-otp */}
+
+Segmented verification-code entry built on Base UI OTP Field. Values remain
+strings, preserving leading zeroes. Provide `label`, `aria-label`, or an external
+label paired with `id`. Each subsequent slot has its own accessible name;
+`getSlotLabel(index, length)` can localize it. `aria-describedby` reaches every slot.
+
+```tsx
+<Input.OTP
+  length={6}
+  label="Verification code"
+  name="code"
+  onChange={value => console.log(value)}
+  onComplete={value => console.log('Complete:', value)}
+/>
+```
+
+| Prop                                        | Type                                    | Default                         |
+| ------------------------------------------- | --------------------------------------- | ------------------------------- |
+| `length`                                    | positive integer                        | required                        |
+| `value` / `defaultValue`                    | `string`                                | -                               |
+| `onChange` / `onComplete`                   | `(value, eventDetails) => void`         | -                               |
+| `label`                                     | `string`                                | -                               |
+| `size`                                      | `'small' \| 'middle' \| 'large'`        | Config size                     |
+| `validationType`                            | `'numeric' \| 'alphanumeric' \| 'none'` | `'numeric'`                     |
+| `mask`, `disabled`, `readOnly`, `required`  | `boolean`                               | `false`                         |
+| `name`, `form`, `inputMode`, `autoComplete` | native input settings                   | autocomplete: `'one-time-code'` |
+| `inputRef`                                  | `Ref<HTMLInputElement>`                 | first slot                      |
+| `ref`                                       | `Ref<HTMLDivElement>`                   | Base UI group                   |
+| `placeholder`                               | `string`                                | -                               |
+| `classNames`                                | `{ label?, group?, input? }`            | -                               |
+
+Numeric mode filters non-digits; alphanumeric mode accepts ASCII letters and
+numbers. Whitespace is removed, values are clamped to length, and `normalizeValue`
+can apply an idempotent transformation. Full paste replaces the code, partial paste
+starts at the focused slot. Typing advances focus; arrow keys navigate and Backspace
+removes characters. Base UI handles native editing, autofill and validation.
+
+`onComplete` follows `onChange` when user entry completes the code. Pasting a full
+code again can fire completion even if the value is unchanged. Initial or externally
+controlled complete values do not represent user completion. Completion never
+submits the form or sends/verifies a code. A named hidden input supplies the full
+string to native forms. SMS delivery and retry timers belong to the application.

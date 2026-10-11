@@ -24,6 +24,7 @@ export default function InputDemo() {
         </Typography.Text>
       </Space>
       <Input.TextArea placeholder="Text area" className="max-w-64" rows={3} />
+      <Input.OTP label="Verification code" length={6} name="code" />
       <Input.Number
         label="Quantity"
         min={0}

@@ -241,6 +241,11 @@ const fixtures = {
   },
   Marquees: { children: h('span', null, 'scrolling') },
   Reveals: { children: h('div', null, 'reveal') },
+  ContextMenu: {
+    items: [{ key: 'open', label: 'Open' }],
+    children: 'File',
+    actionLabel: 'Actions',
+  },
   Menu: { items: [{ key: '1', label: 'Item' }] },
   Dropdown: {
     menu: { items: [{ key: '1', label: 'Item' }] },
@@ -320,6 +325,10 @@ const COMPOUND_COMPONENTS = {
   // field has a value, and contract #6 skips hidden controls — so an empty
   // Search would render the button in the one state where nothing checks it.
   'Input.Search': [ui.Input.Search, { defaultValue: 'q' }],
+  'Input.OTP': [
+    ui.Input.OTP,
+    { length: 6, label: 'Code', name: 'code', defaultValue: '012345' },
+  ],
   'Input.Number': [ui.Input.Number, { label: 'Amount', defaultValue: 2 }],
   'Input.TextArea': [ui.Input.TextArea, {}],
   'Layout.Content': [ui.Layout.Content, { children: 'content' }],
@@ -729,6 +738,27 @@ if (
 ) {
   errors.push(
     'Badge SSR must preserve overflow, zero visibility, and labeled dots.',
+  );
+}
+
+const otpMarkup = renderToStaticMarkup(
+  h(ui.Input.OTP, {
+    length: 6,
+    id: 'otp',
+    label: 'Code',
+    name: 'code',
+    defaultValue: '012345',
+  }),
+);
+if (
+  !otpMarkup.includes('for="otp"') ||
+  !otpMarkup.includes('value="0"') ||
+  !otpMarkup.includes('name="code"') ||
+  !otpMarkup.includes('value="012345"') ||
+  !otpMarkup.includes('aria-label="Character 6 of 6"')
+) {
+  errors.push(
+    'Input.OTP SSR must preserve labels, leading zeroes and full form values.',
   );
 }
 

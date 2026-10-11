@@ -6,6 +6,7 @@ import postcss from 'rollup-plugin-postcss';
 export default defineConfig({
   entry: {
     index: 'src/index.ts',
+    ContextMenu: 'src/components/molecules/context-menu.tsx',
     TreeSelect: 'src/components/organisms/tree-select.tsx',
     Form: 'src/components/organisms/form/index.ts',
     AutoComplete: 'src/components/atoms/auto-complete.tsx',

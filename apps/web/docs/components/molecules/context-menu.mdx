@@ -1,0 +1,58 @@
+---
+title: ContextMenu
+---
+
+import ContextMenuDemo from '../../../src/demo/context-menu-demo';
+
+# ContextMenu
+
+Contextual actions for rows, files, or editor surfaces. Base UI owns positioning,
+collision handling, focus navigation, dismissal and nested overlay behavior.
+
+<ContextMenuDemo />
+
+```tsx
+import { ContextMenu } from '@jbpark/ui-kit';
+
+<ContextMenu
+  actionLabel="Actions"
+  items={[
+    { key: 'copy', label: 'Copy' },
+    { key: 'divider', type: 'separator' },
+    { key: 'delete', label: 'Delete', disabled: true },
+  ]}
+  onSelect={key => console.log(key)}
+>
+  Document
+</ContextMenu>;
+```
+
+| Prop                   | Type                                      | Default            |
+| ---------------------- | ----------------------------------------- | ------------------ |
+| `items`                | `ContextMenuItem[]`                       | required           |
+| `children`             | `ReactNode`                               | required           |
+| `open` / `defaultOpen` | `boolean`                                 | uncontrolled       |
+| `onOpenChange`         | `(open, eventDetails) => void`            | -                  |
+| `onSelect`             | `(key, item) => void`                     | -                  |
+| `disabled`             | `boolean`                                 | `false`            |
+| `actionLabel`          | `string`                                  | no explicit button |
+| `triggerProps`         | Base UI trigger DOM props                 | focusable div      |
+| `classNames`           | `{ trigger?, popup?, item?, separator? }` | -                  |
+
+Actions have `key`, `label`, optional `disabled` and `onSelect()`. Separators use
+`{ key, type: 'separator' }`. An action's callback runs before the component callback;
+selecting it closes the menu. Disabled actions cannot activate. Flat actions only:
+submenus and checkbox/radio actions are follow-ups.
+
+Right-clicking inside an enabled trigger suppresses the browser context menu.
+Outside the trigger, disabled menus and empty action lists preserve the native menu.
+Base UI also provides touch long press; supply `actionLabel` for a visible,
+discoverable button. Focus the trigger or a descendant and press Shift+F10 or the
+ContextMenu key to open at its center. Escape and action dismissal return focus to
+the trigger. Outside dismissal follows Base UI's focus rules. `triggerProps` handlers
+are composed, and a prevented keyboard event is respected.
+
+Use a separate ContextMenu per row/file when actions differ. Avoid overlapping
+triggers. Long labels wrap and the popup scrolls within the available viewport.
+Use inside Modal/Drawer normally; closed menus do not mount popup content during SSR.
+Theme tokens support dark mode and `Config.direction` sets RTL direction for the trigger and popup.

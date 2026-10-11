@@ -63,7 +63,7 @@ const CATEGORIES = [
   },
   {
     name: 'Navigation',
-    components: 'Menu, Dropdown, FloatButton',
+    components: 'Menu, ContextMenu, Dropdown, FloatButton',
   },
   {
     name: 'Layout',
