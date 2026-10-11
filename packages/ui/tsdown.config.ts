@@ -4,6 +4,7 @@ import tailwindcss from '@tailwindcss/postcss';
 
 export default defineConfig({
   entry: {
+    Mentions: 'src/components/atoms/mentions.tsx',
     Anchor: 'src/components/molecules/anchor.tsx',
     Calendar: 'src/components/organisms/calendar.tsx',
     Statistic: 'src/components/molecules/statistic.tsx',

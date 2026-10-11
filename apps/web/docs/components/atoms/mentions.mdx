@@ -1,0 +1,67 @@
+---
+title: Mentions
+---
+
+import MentionsDemo from '../../../src/demo/mentions-demo';
+
+# Mentions
+
+Complete a prefixed token in a plain-text message while preserving the surrounding text. Use AutoComplete for whole-field suggestions and RichTextEditor for a structured document.
+
+<MentionsDemo />
+
+```tsx
+import { Mentions } from '@jbpark/ui-kit';
+
+<Mentions
+  aria-label="Message"
+  options={[
+    { value: 'alice', label: 'Alice Park' },
+    { value: 'bob', disabled: true },
+  ]}
+  placeholder="Type @ to mention a person"
+  onChange={setMessage}
+/>;
+```
+
+## Tokens and insertion
+
+A token begins at the start of the text or immediately after whitespace. The default prefix is `@`; use `prefixes` for `#` or multi-character prefixes. Empty prefixes and prefixes containing whitespace are ignored, and the longest matching prefix wins. Email-like text such as `mail@example.com` does not trigger suggestions.
+
+The query is the text between the prefix and the selection's start. Choosing an option replaces the entire whitespace-delimited token, including any remaining characters after the caret, while preserving surrounding text. A selection entirely within the same token can be replaced; a selection spanning whitespace or other tokens closes suggestions. Selecting `alice` in `Hello @ali there` produces `Hello @alice there`.
+
+Insertion adds a trailing space only when there is no following whitespace. The caret moves immediately after the inserted mention and any added space; existing whitespace is preserved. Values must be unique, non-empty, and contain no whitespace or leading prefix. Invalid empty/whitespace options are omitted. Labels affect presentation and filtering, while insertion always uses the value. Optional `option.prefix` restricts an option to one trigger.
+
+`onChange(nextText)` runs before `onSelect(option, prefix)` on activation; an unchanged value does not require a change callback. Highlighting never inserts text. Controlled text changes only when the caller updates `value`; the caret is restored when the requested value is rendered while the textarea still has focus. `defaultValue` initializes uncontrolled text. Dismissing suggestions preserves the text and suppresses the same token/caret until text or selection changes or the field is refocused.
+
+## Search and keyboard
+
+The default case-insensitive substring filter checks both value and label. Use `filterOption(query, option)` to customize matching or `filterOption={false}` for caller-filtered suggestions. `onSearch(query, prefix)` reports active query/prefix changes after composition; no request, debounce, cache, or stale-response handling is built in. `loading` hides selectable options and shows `loadingText`; empty results show `emptyText`.
+
+With suggestions open, Arrow Up/Down highlight options, Enter activates an enabled option, and Escape dismisses. Tab moves focus without inserting highlighted text. IME composition suspends completion. Home/End retain native line navigation; Enter and arrow keys retain native textarea behavior when suggestions are closed. Disabled and read-only fields do not open suggestions.
+
+Base UI owns list navigation, popup focus, dismissal, portals, and collision positioning. The popup anchors to the textarea's outer box, not the individual caret; textarea scrolling does not move a separate caret anchor. The primitive tracks textarea resizing, page scrolling, and viewport edges. Test your container and overlay layout, especially custom fonts, RTL, narrow screens, and Modal/Drawer usage.
+
+## Forms and styling
+
+Provide a visible label with `htmlFor` and `id`, or an accessible name through `aria-label` / `aria-labelledby`. Native textarea props, `className`, `style`, `ref`, and event handlers target the actual textarea. `name` / `form` submit the entire plain-text message through native FormData. Mention activation does not submit the form. `onChange` / `onSelect` use this component's callback contracts.
+
+Config supplies theme, direction, and the default popup container. Set `dir` or `container` to override them. `classNames.root` styles the surrounding layout wrapper; the other slots customize the popup.
+
+## Props
+
+| Prop | Type | Default |
+| --- | --- | --- |
+| `options` | `readonly MentionsOption[]` | required |
+| `value` / `defaultValue` | `string` | empty text |
+| `onChange` | `(value: string) => void` | — |
+| `onSelect` | `(option: MentionsOption, prefix: string) => void` | — |
+| `onSearch` | `(query: string, prefix: string) => void` | — |
+| `prefixes` | `readonly string[]` | `['@']` |
+| `filterOption` | `false \| ((query: string, option: MentionsOption) => boolean)` | substring matching |
+| `loading` | `boolean` | `false` |
+| `loadingText` / `emptyText` | `ReactNode` | `Loading suggestions…` / `No suggestions` |
+| `container` | `HTMLElement` | Config container |
+| `classNames` | `root`, `content`, `list`, `option`, `empty` | — |
+
+Mention IDs, chips, remote networking, rich editor integration, and caret-positioned popups are outside this plain-text contract.

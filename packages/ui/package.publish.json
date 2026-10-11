@@ -1,6 +1,11 @@
 {
   "name": "@jbpark/ui-kit",
   "exports": {
+    "./Mentions": {
+      "types": "./dist/Mentions.d.mts",
+      "import": "./dist/Mentions.mjs",
+      "default": "./dist/Mentions.mjs"
+    },
     "./Anchor": {
       "types": "./dist/Anchor.d.mts",
       "import": "./dist/Anchor.mjs",

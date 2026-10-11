@@ -1,3 +1,8 @@
+export { default as Mentions } from './mentions';
+export type {
+  Props as MentionsProps,
+  Option as MentionsOption,
+} from './mentions';
 export { default as Divider } from './divider';
 export type { Props as DividerProps } from './divider';
 export { default as Avatar } from './avatar';
