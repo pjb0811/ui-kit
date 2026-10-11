@@ -39,6 +39,10 @@
   ],
   "type": "module",
   "exports": {
+    "./Anchor": "./src/components/molecules/anchor.tsx",
+    "./Calendar": "./src/components/organisms/calendar.tsx",
+    "./Statistic": "./src/components/molecules/statistic.tsx",
+    "./Divider": "./src/components/atoms/divider.tsx",
     ".": "./src/index.ts",
     "./Avatar": "./src/components/atoms/avatar.tsx",
     "./Badge": "./src/components/atoms/badge.tsx",

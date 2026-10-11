@@ -1,0 +1,49 @@
+---
+title: Anchor
+---
+
+import AnchorDemo from '../../../src/demo/anchor-demo';
+
+# Anchor
+
+Navigate sections of the same document with real fragment links and a current-location indicator.
+
+<AnchorDemo />
+
+```tsx
+import { Anchor } from '@jbpark/ui-kit';
+
+<Anchor
+  items={[{ key: 'details', href: '#details', title: 'Details' }]}
+  offset={64}
+  aria-label="Page sections"
+/>;
+```
+
+## Navigation
+
+Items require stable unique keys, fragment hrefs, text titles, and optional nested children. The component looks up targets in its own document. Missing targets retain normal browser link behavior. Modified clicks retain browser behavior, and links work without JavaScript.
+
+With JavaScript, ordinary activation scrolls the target to the configured offset and calls onSelect. The URL hash is updated by default through a new history entry. Set updateHash to false for embedded demonstrations or application-owned history. Keyboard focus stays on the navigation link. Smooth scrolling is opt-in and becomes immediate when the owning window prefers reduced motion.
+
+## Current section
+
+Without current, scroll and resize events choose the closest section at or above the configured offset. Before the first target, no section is highlighted. Scrolling does not update URL history. Use current and onChange for caller-controlled highlighting; onSelect reports explicit link activation independently.
+
+Pass an actual scrolling HTMLElement through container to track and scroll a panel instead of the owning window. Targets outside that container are ignored. Set sticky for CSS sticky placement; its containing block must permit sticking. Targets should already exist or be supplied with updated items; subsequent scroll/resize events remeasure positions. The initial server-rendered state follows defaultCurrent or current without DOM lookup.
+
+## Props
+
+| Prop | Type | Default |
+| --- | --- | --- |
+| `items` | `readonly AnchorItem[]` | Required |
+| `current` / `defaultCurrent` | `string` | No active link |
+| `onChange` | `(href: string) => void` | — |
+| `onSelect` | `(item: AnchorItem) => void` | — |
+| `container` | `HTMLElement \| null` | Owning window |
+| `offset` | `number` | `0` |
+| `smooth` / `sticky` | `boolean` | `false` |
+| `updateHash` | `boolean` | `true` |
+| `classNames` | `{ list?, link?, activeLink? }` | — |
+
+The root exports Anchor, AnchorProps and AnchorItem. The Anchor subpath exports the default component and Props/Item types. Root props and ref target the nav element. Direction and colors follow Config; aria-current is applied to the active link.

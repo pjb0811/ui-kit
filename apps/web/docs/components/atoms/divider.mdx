@@ -1,0 +1,43 @@
+---
+title: Divider
+---
+
+import DividerDemo from '../../../src/demo/divider-demo';
+
+# Divider
+
+Separate sections or inline content with a themed line. Optional labels sit between two decorative line segments.
+
+```tsx
+import { Divider } from '@jbpark/ui-kit';
+
+<Divider titlePlacement="start">Account details</Divider>;
+```
+
+<DividerDemo />
+
+## Layout
+
+Horizontal dividers fill their parent width and have vertical spacing. Use `orientation="vertical"` inside a flex container with a defined height; the divider stretches to that height. Labels are typically used horizontally, but can also appear between vertical segments.
+
+`titlePlacement="start"` or `"end"` shortens the line on that side. Horizontal placement follows the document or Config direction, including RTL. Long labels wrap. Supply a heading node when the label should participate in the page heading hierarchy.
+
+## Accessibility
+
+Dividers are decorative by default: the lines are hidden from assistive technology, while visible label text remains readable. Use `decorative={false}` for a semantic separator. The root exposes one separator with the correct orientation, and string or numeric children supply its accessible name. For custom label nodes, provide `aria-label` or `aria-labelledby` explicitly. Avoid interactive content inside a semantic separator, whose descendants are presentational.
+
+Root props, including `className`, `style`, `ref`, and data attributes, target the same root element. Colors follow theme tokens. No measurement or browser-only state is required for layout.
+
+## Props
+
+| Prop | Type | Default |
+| --- | --- | --- |
+| `children` | `ReactNode` | — |
+| `orientation` | `'horizontal' \| 'vertical'` | `'horizontal'` |
+| `decorative` | `boolean` | `true` |
+| `variant` | `'solid' \| 'dashed' \| 'dotted'` | `'solid'` |
+| `titlePlacement` | `'start' \| 'center' \| 'end'` | `'center'` |
+| `className` / `style` | Root classes / CSS properties | — |
+| `classNames` | `{ line?: string; label?: string }` | — |
+
+The package root exports `Divider` and `DividerProps`. The `Divider` subpath exports the default component and the `Props` type. Use Splitter for interactive resizing; Divider is static.

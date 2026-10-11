@@ -1,0 +1,42 @@
+---
+title: Statistic
+---
+
+import StatisticDemo from '../../../src/demo/statistic-demo';
+
+# Statistic
+
+Display a metric with a title, formatted value, and optional units.
+
+```tsx
+import { Statistic } from '@jbpark/ui-kit';
+
+<Statistic title="Completion" value={94.5} precision={1} suffix="%" />;
+```
+
+<StatisticDemo />
+
+## Formatting
+
+Numeric values use `Intl.NumberFormat`. The default locale is explicitly `en-US`, keeping server and browser output consistent. Pass `locale` for another format; unsupported locale strings fall back to `en-US`. This locale is independent of Config's translated UI labels. Set `precision` for fixed fractional digits; finite values are truncated and clamped to 0–20. Without precision, Intl's normal decimal defaults apply. String values are preserved without parsing.
+
+Missing, empty, and non-finite values display `—`. Zero and negative values remain visible. A `formatter` overrides formatting for valid values; invalid values retain the placeholder. Prefix and suffix accept React nodes. Custom formatting must be deterministic across server and browser.
+
+## Loading and accessibility
+
+`loading` replaces the value and affixes with Skeleton, retains the title, and marks the root busy. It does not invoke the formatter while loading. Values are readable text and updates do not create an automatic live region. Supply a heading node as the title when appropriate for the page hierarchy.
+
+## Props
+
+| Prop | Type | Default |
+| --- | --- | --- |
+| `title` | `ReactNode` | — |
+| `value` | `string \| number` | — |
+| `prefix` / `suffix` | `ReactNode` | — |
+| `precision` | `number` | Intl defaults |
+| `locale` | `string` | `'en-US'` |
+| `formatter` | `(value: string \| number) => ReactNode` | — |
+| `loading` | `boolean` | `false` |
+| `classNames` | `{ title?, value?, prefix?, suffix? }` | — |
+
+Native root props, including className, style, ref and accessibility attributes, are forwarded. The root exports `Statistic` and `StatisticProps`; the Statistic subpath exports the default component and `Props`.

@@ -1,6 +1,26 @@
 {
   "name": "@jbpark/ui-kit",
   "exports": {
+    "./Anchor": {
+      "types": "./dist/Anchor.d.mts",
+      "import": "./dist/Anchor.mjs",
+      "default": "./dist/Anchor.mjs"
+    },
+    "./Calendar": {
+      "types": "./dist/Calendar.d.mts",
+      "import": "./dist/Calendar.mjs",
+      "default": "./dist/Calendar.mjs"
+    },
+    "./Statistic": {
+      "types": "./dist/Statistic.d.mts",
+      "import": "./dist/Statistic.mjs",
+      "default": "./dist/Statistic.mjs"
+    },
+    "./Divider": {
+      "types": "./dist/Divider.d.mts",
+      "import": "./dist/Divider.mjs",
+      "default": "./dist/Divider.mjs"
+    },
     ".": {
       "types": "./dist/index.d.mts",
       "import": "./dist/index.mjs",

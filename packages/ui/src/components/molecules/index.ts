@@ -1,3 +1,7 @@
+export { default as Anchor } from './anchor';
+export type { Props as AnchorProps, Item as AnchorItem } from './anchor';
+export { default as Statistic } from './statistic';
+export type { Props as StatisticProps } from './statistic';
 export { default as Card } from './card';
 export type { Props as CardProps } from './card';
 export { default as Descriptions } from './descriptions';

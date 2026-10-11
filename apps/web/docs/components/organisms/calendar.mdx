@@ -1,0 +1,46 @@
+---
+title: Calendar
+---
+
+import CalendarDemo from '../../../src/demo/calendar-demo';
+
+# Calendar
+
+Display an inline month calendar with selectable dates and decorative date markers. Use DatePicker for a popup input.
+
+```tsx
+import { Calendar } from '@jbpark/ui-kit';
+
+<Calendar defaultMonth={new Date(2026, 9, 1)} />;
+```
+
+<CalendarDemo />
+
+## Selection and navigation
+
+`value` / `defaultValue` control the selected date; `month` / `defaultMonth` independently control the displayed month. Selecting a date calls `onChange`, while navigating calls `onMonthChange`. A selected date can be cleared by choosing it again; the callback receives undefined. Pass `value={null}` to keep a controlled calendar explicitly empty, including after clearing. Use valid local Date objects. With neither month prop, the initial month follows value, defaultValue, or the current local date. Supply defaultMonth explicitly when server and browser time zones may disagree.
+
+`minDate` and `maxDate` disable dates outside inclusive day boundaries. `disabledDate` adds a predicate; bounds restrict selection, not month navigation. Keyboard and date-grid behavior come from react-day-picker through the existing calendar foundation.
+
+## Date markers
+
+`renderDate(date)` adds decorative content below the day number, preserving the existing button and accessible date label. Do not put links, buttons or inputs inside it. Marker content is hidden from assistive technology; provide accessible event information elsewhere on the page. This is not an event scheduling or editing component.
+
+## Props
+
+| Prop | Type | Default |
+| --- | --- | --- |
+| `value` | `Date \| null` | — |
+| `defaultValue` | `Date` | — |
+| `onChange` | `(date: Date \| undefined) => void` | — |
+| `month` / `defaultMonth` | `Date` | Selected date or current month |
+| `onMonthChange` | `(month: Date) => void` | — |
+| `minDate` / `maxDate` | `Date` | — |
+| `disabledDate` | `(date: Date) => boolean` | — |
+| `locale` | react-day-picker locale object | Library default |
+| `weekStartsOn` | `0 \| 1 \| 2 \| 3 \| 4 \| 5 \| 6` | Locale default |
+| `expanded` | `boolean` | `false` |
+| `renderDate` | `(date: Date) => ReactNode` | — |
+| `classNames` | `{ calendar?: string }` | — |
+
+Expanded presentation fills the root width and enlarges date cells. Config controls theme and direction; date locale is supplied separately. Native root className, style, ref and accessibility attributes target the wrapper. The root exports Calendar and CalendarProps; the Calendar subpath exports the default component and Props.
