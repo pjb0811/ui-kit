@@ -31,7 +31,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      # No `publish` input here on purpose — this only opens/updates a
+      # No `publish-script` input here on purpose — this only opens/updates a
       # "Version Packages" PR against main from whatever .changeset/*.md
       # files have accumulated (via manual `pnpm changeset` or the
       # Changeset Draft workflow). It never publishes; the existing
@@ -39,14 +39,14 @@ jobs:
       # whatever version ends up in packages/ui/package.json once this PR
       # is reviewed and merged.
       - name: Open/update Version Packages PR
-        uses: changesets/action@v1
+        uses: changesets/action@v2
         with:
-          version: pnpm exec changeset version
+          version-script: pnpm exec changeset version
           # No emoji prefix — see "커밋 메시지" in CLAUDE.md. These strings
           # become a real commit on the release branch and the PR title that
           # lands on main, so they follow the same `type: summary` shape as a
           # hand-written commit.
-          commit: 'chore: version packages'
-          title: 'chore: version packages'
+          commit-message: 'chore: version packages'
+          pr-title: 'chore: version packages'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
