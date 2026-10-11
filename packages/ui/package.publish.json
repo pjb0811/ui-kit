@@ -169,6 +169,11 @@
       "types": "./dist/TreeSelect.d.mts",
       "import": "./dist/TreeSelect.mjs",
       "default": "./dist/TreeSelect.mjs"
+    },
+    "./ContextMenu": {
+      "types": "./dist/ContextMenu.d.mts",
+      "import": "./dist/ContextMenu.mjs",
+      "default": "./dist/ContextMenu.mjs"
     }
   },
   "type": "module"

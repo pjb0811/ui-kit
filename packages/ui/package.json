@@ -72,7 +72,8 @@
     "./Tree": "./src/components/organisms/tree.tsx",
     "./AutoComplete": "./src/components/atoms/auto-complete.tsx",
     "./Form": "./src/components/organisms/form/index.ts",
-    "./TreeSelect": "./src/components/organisms/tree-select.tsx"
+    "./TreeSelect": "./src/components/organisms/tree-select.tsx",
+    "./ContextMenu": "./src/components/molecules/context-menu.tsx"
   },
   "scripts": {
     "build": "tsdown",

@@ -94,6 +94,7 @@ const sidebars: SidebarsConfig = {
         'components/atoms/float-button',
         'components/molecules/dropdown',
         'components/molecules/menu',
+        'components/molecules/context-menu',
         'components/molecules/breadcrumb',
         'components/molecules/pagination',
         'components/molecules/steps',
