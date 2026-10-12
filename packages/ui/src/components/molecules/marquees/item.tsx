@@ -3,9 +3,8 @@
 import { useEffect, useRef, useState } from 'react';
 
 import { useGSAP } from '@gsap/react';
+import { useHoverOrFocusWithin } from '@jbpark/use-hooks';
 import { gsap } from 'gsap';
-
-import usePauseOnHover from './use-pause-on-hover';
 
 export interface ItemProps {
   key?: React.Key;
@@ -43,7 +42,7 @@ const Item = ({
   width: _width,
   speed = 100,
   autoFill = false,
-  pause: _pause = false,
+  pause = false,
   pauseOnHover = false,
   gap = 0,
   children,
@@ -53,7 +52,9 @@ const Item = ({
   const tweenRef = useRef<gsap.core.Tween | null>(null);
 
   const [width, setWidth] = useState<string | number>(_width);
-  const { pause, hoverEvents } = usePauseOnHover(pauseOnHover);
+  const { active: isHoverOrFocusPaused, handlers } = useHoverOrFocusWithin({
+    enabled: pauseOnHover,
+  });
   const [repeatCount, setRepeatCount] = useState(
     resolveInitialRepeatCount(autoFill),
   );
@@ -83,7 +84,7 @@ const Item = ({
     setRepeatCount(resolveInitialRepeatCount(autoFill));
   }
 
-  const isPaused = _pause || pause;
+  const isPaused = pause || isHoverOrFocusPaused;
 
   useEffect(() => {
     if (
@@ -164,7 +165,7 @@ const Item = ({
   return (
     <div
       className="flex overflow-hidden"
-      {...hoverEvents}
+      {...handlers}
       //
     >
       <div ref={containerRef} className="flex flex-nowrap">

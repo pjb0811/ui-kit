@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { expect, userEvent, waitFor } from 'storybook/test';
 
-import { Marquees } from '@repo/ui';
+import { Button, Marquees, Typography } from '@repo/ui';
 import { cn } from '@repo/ui/utils';
 
 const meta: Meta<typeof Marquees> = {
@@ -111,5 +112,102 @@ export const MultipleHoverEvent: Story = {
       pauseOnHover: i === 0,
       ...item,
     })),
+  },
+};
+
+const interactiveItems = [
+  {
+    key: 'links',
+    children: (
+      <div className="flex gap-6 px-6 py-4">
+        <Typography.Link href="#first">First link</Typography.Link>
+        <Typography.Link href="#second">Second link</Typography.Link>
+      </div>
+    ),
+  },
+];
+
+const expectTrackMotion = async (track: HTMLElement, isMoving: boolean) => {
+  await waitFor(
+    async () => {
+      const before = getComputedStyle(track).transform;
+
+      await new Promise(resolve => setTimeout(resolve, 200));
+
+      const after = getComputedStyle(track).transform;
+      const distance = Math.abs(
+        new DOMMatrixReadOnly(after).m41 - new DOMMatrixReadOnly(before).m41,
+      );
+
+      if (isMoving) {
+        await expect(distance).toBeGreaterThan(2);
+      } else {
+        await expect(distance).toBeLessThan(1);
+      }
+    },
+    { timeout: 4000, interval: 250 },
+  );
+};
+
+export const HoverAndFocus: Story = {
+  args: { speed: 80, autoFill: false, items: interactiveItems },
+  render: props => (
+    <div className="space-y-4 p-8">
+      <Marquees {...props} data-testid="interactive-marquee" />
+      <Button>Outside focus target</Button>
+    </div>
+  ),
+  play: async ({ canvas }) => {
+    const marquee = canvas.getByTestId('interactive-marquee');
+    const track = marquee.querySelector<HTMLElement>('.flex-nowrap');
+    const first = canvas.getAllByRole('link', { name: 'First link' })[0]!;
+    const second = canvas.getAllByRole('link', { name: 'Second link' })[0]!;
+    const outside = canvas.getByRole('button', {
+      name: 'Outside focus target',
+    });
+
+    await expect(track).not.toBeNull();
+    await expectTrackMotion(track!, true);
+    await userEvent.hover(first);
+    first.focus();
+    await expectTrackMotion(track!, false);
+    await userEvent.unhover(first);
+    await expect(first).toHaveFocus();
+    await expectTrackMotion(track!, false);
+    await userEvent.tab();
+    await expect(second).toHaveFocus();
+    await expectTrackMotion(track!, false);
+    await userEvent.hover(second);
+    outside.focus();
+    await expectTrackMotion(track!, false);
+    await userEvent.unhover(second);
+    await expectTrackMotion(track!, true);
+  },
+};
+
+export const RowHoverAndFocus: Story = {
+  ...HoverAndFocus,
+  args: {
+    ...HoverAndFocus.args,
+    pauseOnHover: false,
+    items: interactiveItems.map(item => ({ ...item, pauseOnHover: true })),
+  },
+};
+
+export const PauseDisabled: Story = {
+  ...HoverAndFocus,
+  args: { ...HoverAndFocus.args, pauseOnHover: false },
+  play: async ({ canvas }) => {
+    const marquee = canvas.getByTestId('interactive-marquee');
+    const track = marquee.querySelector<HTMLElement>('.flex-nowrap');
+    const first = canvas.getAllByRole('link', { name: 'First link' })[0]!;
+
+    await expect(track).not.toBeNull();
+    await userEvent.hover(first);
+    first.focus();
+    await expect(first).toHaveFocus();
+    await expectTrackMotion(track!, true);
+    await userEvent.unhover(first);
+    await expectTrackMotion(track!, true);
   },
 };

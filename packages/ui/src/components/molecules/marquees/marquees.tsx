@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 
 import {
+  useHoverOrFocusWithin,
   useMergedRef,
   useResponsiveSize,
   useThrottledValue,
@@ -11,7 +12,6 @@ import {
 import { cn } from '@repo/ui/utils';
 
 import Item, { type ItemProps } from './item';
-import usePauseOnHover from './use-pause-on-hover';
 
 export interface Props extends React.ComponentPropsWithoutRef<'div'> {
   speed?: number;
@@ -43,7 +43,9 @@ const Marquees = ({
     //
   );
   const [padding, setPadding] = useState(0);
-  const { pause, hoverEvents } = usePauseOnHover(pauseOnHover);
+  const { active: isPaused, handlers } = useHoverOrFocusWithin({
+    enabled: pauseOnHover,
+  });
 
   const throttledWidth = useThrottledValue(width, 200);
 
@@ -72,7 +74,7 @@ const Marquees = ({
         className,
         //
       )}
-      {...hoverEvents}
+      {...handlers}
       {...props}
     >
       <div
@@ -94,7 +96,7 @@ const Marquees = ({
           <Item
             key={itemKey || key}
             width={throttledWidth}
-            pause={pause}
+            pause={isPaused}
             speed={speed}
             autoFill={autoFill}
             gap={gap}
