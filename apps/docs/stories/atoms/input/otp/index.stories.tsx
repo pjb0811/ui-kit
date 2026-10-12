@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { expect, fn, userEvent, within } from 'storybook/test';
+import { expect, fn, userEvent, waitFor, within } from 'storybook/test';
 
-import { Config, Input } from '@repo/ui';
+import { Button, Config, Form, Input } from '@repo/ui';
 
 const meta: Meta<typeof Input.OTP> = {
   title: 'Data Entry/Input/OTP',
@@ -43,7 +43,7 @@ export const RootPropsAndDescription: Story = {
     const root = canvas.getByTestId('otp-root');
 
     await expect(root).toHaveClass('w-full');
-    await expect(root).toHaveStyle({ width: '100%' });
+    await expect(root.style.width).toBe('100%');
     await expect(root).toHaveAttribute('data-ref-target', 'true');
     await expect(root).toHaveAttribute('aria-describedby', 'otp-help');
     await expect(root.querySelectorAll('input[aria-describedby]')).toHaveLength(
@@ -96,7 +96,7 @@ export const Controlled: Story = {
 export const Editing: Story = {
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement);
-    const first = canvas.getByLabelText('Verification code');
+    const first = canvas.getByRole('textbox', { name: 'Verification code' });
     await userEvent.click(first);
     await userEvent.keyboard('012345');
     await expect(args.onComplete).toHaveBeenCalledTimes(1);
@@ -122,11 +122,15 @@ export const PasteAndForm: Story = {
   ),
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement);
-    await userEvent.click(canvas.getByLabelText('Verification code'));
+    await userEvent.click(
+      canvas.getByRole('textbox', { name: 'Verification code' }),
+    );
     await userEvent.paste('01x 23');
     await expect(canvas.getByLabelText('Character 4 of 6')).toHaveValue('3');
     await expect(args.onComplete).not.toHaveBeenCalled();
-    await userEvent.click(canvas.getByLabelText('Verification code'));
+    await userEvent.click(
+      canvas.getByRole('textbox', { name: 'Verification code' }),
+    );
     await userEvent.paste('012345');
     await expect(args.onComplete).toHaveBeenCalledWith(
       '012345',
@@ -134,5 +138,140 @@ export const PasteAndForm: Story = {
     );
     const form = canvas.getByRole('form') as HTMLFormElement;
     await expect(new FormData(form).get('code')).toBe('012345');
+  },
+};
+
+export const FieldError: Story = {
+  args: { label: undefined },
+  render: function Render(props) {
+    const [error, setError] = useState<string | undefined>(
+      'This code has expired. Request a new code.',
+    );
+
+    return (
+      <Form>
+        <Form.Field name="code" label="Verification code" error={error}>
+          <Input.OTP {...props} />
+        </Form.Field>
+        <Button onClick={() => setError(undefined)}>Clear error</Button>
+      </Form>
+    );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const slots = canvas.getAllByRole('textbox');
+
+    await expect(slots).toHaveLength(6);
+    await expect(canvas.getByRole('alert')).toHaveTextContent(
+      'This code has expired. Request a new code.',
+    );
+
+    for (const slot of slots) {
+      await expect(slot).toHaveAttribute('aria-invalid', 'true');
+    }
+
+    await userEvent.click(canvas.getByRole('button', { name: 'Clear error' }));
+
+    for (const slot of slots) {
+      await expect(slot).not.toHaveAttribute('aria-invalid', 'true');
+    }
+
+    await waitFor(() =>
+      expect(canvas.queryByRole('alert')).not.toBeInTheDocument(),
+    );
+  },
+};
+
+export const ControlledFormReset: Story = {
+  render: function Render(props) {
+    const [value, setValue] = useState('');
+    const [submitted, setSubmitted] = useState('');
+
+    return (
+      <form
+        aria-label="Verification form"
+        className="space-y-3"
+        onReset={() => {
+          setValue('');
+          setSubmitted('');
+        }}
+        onSubmit={event => {
+          event.preventDefault();
+          setSubmitted(String(new FormData(event.currentTarget).get('code')));
+        }}
+      >
+        <Input.OTP
+          {...props}
+          name="code"
+          value={value}
+          onChange={(nextValue, details) => {
+            setValue(nextValue);
+            props.onChange?.(nextValue, details);
+          }}
+        />
+        <div className="flex gap-2">
+          <Button htmlType="submit">Submit</Button>
+          <Button htmlType="reset" variant="outlined">
+            Reset
+          </Button>
+        </div>
+        <output aria-label="Submitted code">{submitted}</output>
+      </form>
+    );
+  },
+  play: async ({ canvasElement, args }) => {
+    const canvas = within(canvasElement);
+    const form = canvas.getByRole('form') as HTMLFormElement;
+
+    await userEvent.click(
+      canvas.getByRole('textbox', { name: 'Verification code' }),
+    );
+    await userEvent.paste('012345');
+    await expect(new FormData(form).get('code')).toBe('012345');
+    await expect(args.onComplete).toHaveBeenCalledTimes(1);
+    await expect(canvas.getByLabelText('Submitted code')).toBeEmptyDOMElement();
+    await userEvent.click(canvas.getByRole('button', { name: 'Submit' }));
+    await expect(canvas.getByLabelText('Submitted code')).toHaveTextContent(
+      '012345',
+    );
+    await userEvent.click(canvas.getByRole('button', { name: 'Reset' }));
+
+    for (const slot of canvas.getAllByRole('textbox')) {
+      await expect(slot).toHaveValue('');
+    }
+
+    await expect(new FormData(form).get('code')).toBe('');
+    await expect(canvas.getByLabelText('Submitted code')).toBeEmptyDOMElement();
+    await expect(args.onComplete).toHaveBeenCalledTimes(1);
+  },
+};
+
+export const InputRef: Story = {
+  args: { defaultValue: '012345' },
+  render: function Render(props) {
+    const inputRef = useRef<HTMLInputElement>(null);
+
+    return (
+      <div className="space-y-3">
+        <Input.OTP {...props} inputRef={inputRef} />
+        <Button onClick={() => inputRef.current?.focus()}>
+          Focus first slot
+        </Button>
+      </div>
+    );
+  },
+  play: async ({ canvasElement, args }) => {
+    const canvas = within(canvasElement);
+
+    await userEvent.click(canvas.getByLabelText('Character 4 of 6'));
+    await expect(canvas.getByLabelText('Character 4 of 6')).toHaveFocus();
+    await userEvent.click(
+      canvas.getByRole('button', { name: 'Focus first slot' }),
+    );
+    await expect(
+      canvas.getByRole('textbox', { name: 'Verification code' }),
+    ).toHaveFocus();
+    await expect(args.onChange).not.toHaveBeenCalled();
+    await expect(args.onComplete).not.toHaveBeenCalled();
   },
 };

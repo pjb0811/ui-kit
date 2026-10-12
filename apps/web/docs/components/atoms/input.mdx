@@ -127,3 +127,50 @@ code again can fire completion even if the value is unchanged. Initial or extern
 controlled complete values do not represent user completion. Completion never
 submits the form or sends/verifies a code. A named hidden input supplies the full
 string to native forms. SMS delivery and retry timers belong to the application.
+
+### Form errors, reset, and focus
+
+Wrap `Input.OTP` in `Form.Field` to display a caller-supplied error. Omit the OTP's
+`label` when the field supplies it. The field's invalid state applies to every
+editable slot; clearing the error also clears that state.
+
+```tsx
+<Form.Field
+  name="code"
+  label="Verification code"
+  error="This code has expired. Request a new code."
+>
+  <Input.OTP name="code" />
+</Form.Field>
+```
+
+Base UI OTP Field does not reset its uncontrolled value on native form reset.
+Use a controlled value and restore it in the form's `onReset` handler. `inputRef`
+points to the first editable slot, so a button can return focus to code entry.
+
+```tsx
+function VerificationForm() {
+  const [code, setCode] = useState('');
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  return (
+    <form onReset={() => setCode('')}>
+      <Input.OTP
+        label="Verification code"
+        name="code"
+        value={code}
+        onChange={setCode}
+        inputRef={inputRef}
+      />
+      <Button htmlType="reset">Reset</Button>
+      <Button onClick={() => inputRef.current?.focus()}>
+        Focus first slot
+      </Button>
+    </form>
+  );
+}
+```
+
+Import `useRef` and `useState` from React and `Button`, `Form`, and `Input` from
+`@jbpark/ui-kit` for these examples. Reset and focus actions do not complete,
+submit, or verify a code.
