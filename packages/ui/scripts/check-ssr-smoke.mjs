@@ -744,6 +744,34 @@ if (
   );
 }
 
+for (const error of ['This code has expired.', undefined]) {
+  const markup = renderToStaticMarkup(
+    h(
+      ui.Form,
+      {},
+      h(
+        ui.Form.Field,
+        { name: 'code', label: 'Verification code', error },
+        h(ui.Input.OTP, { name: 'code' }),
+      ),
+    ),
+  );
+  const slots = [...markup.matchAll(/<input\b[^>]*>/g)]
+    .map(match => match[0])
+    .filter(input => !input.includes('aria-hidden="true"'));
+
+  if (
+    slots.length !== 6 ||
+    slots.some(
+      input => input.includes('aria-invalid="true"') !== Boolean(error),
+    )
+  ) {
+    errors.push(
+      'Input.OTP SSR must propagate Form.Field errors to every editable slot without marking valid fields invalid.',
+    );
+  }
+}
+
 const otpMarkup = renderToStaticMarkup(
   h(ui.Input.OTP, {
     length: 6,
