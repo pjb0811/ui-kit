@@ -29,7 +29,9 @@ import { Tree } from '@jbpark/ui-kit';
 
 ## Expansion and selection
 
-`expandedKeys`/`defaultExpandedKeys` control visible branches. Expand/collapse requests call `onExpand`; collapsing retains descendants' expansion keys for reopening. A missing or empty children array makes a leaf. Unknown keys have no visible effect and are retained in expansion requests.
+`expandedKeys`/`defaultExpandedKeys` control visible branches. Expand/collapse requests call `onExpand(keys, { node, expanded })` with the complete key array, the requested node, and whether it is opening; collapsing retains descendants' expansion keys for reopening. By default a missing or empty children array makes a leaf. Set `leaf: false` to make a branch whose children are not loaded yet or a branch that loaded no children, and `leaf: true` to force a leaf and ignore `children`. Unknown keys have no visible effect and are retained in expansion requests.
+
+Set `expandOnClick` to toggle a branch when its row is clicked, in addition to selecting it. A file explorer can then open folders from their labels and activate files from `onSelect` by ignoring branch keys; the toggle, arrow keys, and Enter keep their usual roles.
 
 `selectedKeys`/`defaultSelectedKeys` describe selection, independently of checking. Single selection uses the first key and selecting a node replaces it. In `multiple` mode, click, Enter, or Space (when not checkable) toggles the node without requiring a modifier key. Arrows move focus without selecting. Multiple-selection requests deduplicate keys and preserve other supplied keys, including unavailable ones. Disabled nodes and their descendants cannot be expanded, selected, or checked through user actions; supplied state is retained. Disabled nodes remain reachable by keyboard to announce their state.
 
@@ -49,21 +51,68 @@ Provide `aria-label` or `aria-labelledby`; the default label is `Tree`. The root
 
 Collapsing a focused branch or removing a focused node moves focus to the nearest surviving visible ancestor, or the first visible item. External data changes do not take focus from outside the tree. Empty trees display `emptyText` with no item tab stop. Long labels wrap; direction and theme follow Config or root `dir`. SSR renders the same hierarchy and initial states; interaction requires hydration.
 
-Data is eager and all expanded nodes are rendered. Collapsed descendants are unmounted. State derivation inspects the full data tree, so large trees require application-side data sizing; this component does not virtualize. Drag and drop, lazy loading, search, and TreeSelect are outside this API. Installed Base UI has no Tree primitive; the component owns hierarchy navigation and reuses Checkbox for visual checking.
+## Lazy loading
+
+Pass `loadData(node, { signal })` and mark unloaded branches with `leaf: false` and no `children`. When such a branch is expanded and visible, through user input, `defaultExpandedKeys`, or `expandedKeys`, Tree calls `loadData` once and shows a busy toggle with `aria-busy`. The caller fetches and merges the children into `nodes`; Tree never edits data. Concurrent expansions of a pending branch do not start another load.
+
+A resolved promise marks the branch loaded. If the caller supplied `children: []` or no children, the branch stays expanded and empty, and it is not loaded again. A rejected promise shows a failure message and a retry control on the row; the forward arrow key, the retry control, or expanding the branch again starts a new load. Load state is dropped when a node gains children or leaves `nodes`, so replacing a branch's `children` with `undefined` loads it again on its next expansion.
+
+Tree aborts `signal` when the node is removed from `nodes` or the Tree unmounts, and ignores results that settle afterwards. Check `signal.aborted` before merging so a late response does not overwrite replaced data. Fetching, caching, adapters, and immutable merging stay in the application.
+
+Checking an unloaded branch records only its own key. Children loaded later inherit the checked state from that key, and `onCheck` then reports them as checked.
+
+```tsx
+const [nodes, setNodes] = useState<TreeNode[]>([
+  { key: 'src', label: 'src', leaf: false },
+]);
+
+<Tree
+  aria-label="Files"
+  nodes={nodes}
+  virtual
+  height={320}
+  expandOnClick
+  loadData={async (node, { signal }) => {
+    const children = await fetchChildren(node.key, { signal });
+
+    if (!signal.aborted) {
+      setNodes(current => replaceChildren(current, node.key, children));
+    }
+  }}
+/>;
+```
+
+## Virtual rendering
+
+Set `virtual` to render only the visible rows in a bounded scroll viewport. Give the root a height through `height` or CSS. Rows have a fixed `itemHeight` (default `32`) and `overscan` extra rows (default `8`) are rendered on each side. Scrolling and container resizing update the window. Rows are flat: indentation replaces nested groups, and every row keeps its `aria-level`, `aria-posinset`, `aria-setsize`, and expansion state. Long labels truncate to the row height.
+
+Keyboard navigation, Home/End, and typeahead reach offscreen rows by scrolling them into view. The focused row stays mounted while it is scrolled away so focus and the tab stop are not lost. Pass `actionRef` to get `scrollTo(key, { align })`, where `align` is `auto` (default), `start`, `center`, or `end`; it returns `false` when the key is unknown or inside a collapsed branch. `scrollTo` also works without `virtual`.
+
+In a Storybook development build with 10,000 nodes in a 320px viewport, the virtual Tree mounted 18 rows and kept between 18 and 37 rows through scrolling and resizing (160–640px). The eager Tree mounted 9,901 rows for the same data. These are rendered-row counts from one run, not a frame-rate measurement.
+
+## Scope
+
+Without `virtual`, all expanded nodes are rendered and collapsed descendants are unmounted. State derivation always inspects the full data tree. Drag and drop, search, and editable nodes are outside this API. Installed Base UI has no Tree primitive; the component owns hierarchy navigation and reuses Checkbox for visual checking.
 
 ## Props
 
-| Prop                                   | Type                                                                              | Default           |
-| -------------------------------------- | --------------------------------------------------------------------------------- | ----------------- |
-| `nodes`                                | `readonly Node[]`                                                                 | Required          |
-| `expandedKeys` / `defaultExpandedKeys` | `readonly string[]`                                                               | Uncontrolled `[]` |
-| `onExpand`                             | `(keys: string[]) => void`                                                        | —                 |
-| `selectedKeys` / `defaultSelectedKeys` | `readonly string[]`                                                               | Uncontrolled `[]` |
-| `onSelect`                             | `(keys: string[]) => void`                                                        | —                 |
-| `checkedKeys` / `defaultCheckedKeys`   | `readonly string[]`                                                               | Uncontrolled `[]` |
-| `onCheck`                              | `(keys: string[]) => void`                                                        | —                 |
-| `multiple` / `checkable` / `disabled`  | `boolean`                                                                         | `false`           |
-| `emptyText`                            | `ReactNode`                                                                       | `No nodes`        |
-| `classNames`                           | `{ item?, row?, group?, label?, icon?, toggle?, checkbox?, empty? }` string slots | —                 |
+| Prop                                   | Type                                                                                               | Default           |
+| -------------------------------------- | -------------------------------------------------------------------------------------------------- | ----------------- |
+| `nodes`                                | `readonly Node[]`                                                                                  | Required          |
+| `expandedKeys` / `defaultExpandedKeys` | `readonly string[]`                                                                                | Uncontrolled `[]` |
+| `onExpand`                             | `(keys: string[], info: { node: Node; expanded: boolean }) => void`                                | —                 |
+| `selectedKeys` / `defaultSelectedKeys` | `readonly string[]`                                                                                | Uncontrolled `[]` |
+| `onSelect`                             | `(keys: string[]) => void`                                                                         | —                 |
+| `checkedKeys` / `defaultCheckedKeys`   | `readonly string[]`                                                                                | Uncontrolled `[]` |
+| `onCheck`                              | `(keys: string[]) => void`                                                                         | —                 |
+| `multiple` / `checkable` / `disabled`  | `boolean`                                                                                          | `false`           |
+| `emptyText`                            | `ReactNode`                                                                                        | `No nodes`        |
+| `loadData`                             | `(node: Node, options: { signal: AbortSignal }) => Promise<void>`                                  | —                 |
+| `expandOnClick`                        | `boolean`                                                                                          | `false`           |
+| `virtual`                              | `boolean`                                                                                          | `false`           |
+| `height`                               | `CSSProperties['height']`                                                                          | —                 |
+| `itemHeight` / `overscan`              | `number`                                                                                           | `32` / `8`        |
+| `actionRef`                            | `Ref<{ scrollTo(key: string, options?: { align? }): boolean }>`                                    | —                 |
+| `classNames`                           | `{ item?, row?, group?, label?, icon?, toggle?, checkbox?, status?, retry?, empty? }` string slots | —                 |
 
-Nodes have `key`, `label`, optional `icon`, optional `children`, and optional `disabled`. Root DOM props/ref and className are forwarded. The root package exports `Tree`, `TreeProps`, and `TreeNode`; the `Tree` subpath exports the default component and `Props`/`Node` types. Checkbox also accepts an `indeterminate` boolean and optional `icons.indeterminate` for mixed states.
+Nodes have `key`, `label`, optional `icon`, optional `children`, optional `disabled`, and optional `leaf`. Root DOM props/ref and className are forwarded. Loading, failure, and retry labels come from the Config `locale` keys `loading`, `loadFailed`, and `retry`. The root package exports `Tree`, `TreeProps`, `TreeNode`, `TreeActions`, `TreeExpandInfo`, `TreeLoadOptions`, and `TreeScrollOptions`; the `Tree` subpath exports the default component and `Props`/`Node`/`Actions`/`ExpandInfo`/`LoadOptions`/`ScrollOptions` types. Checkbox also accepts an `indeterminate` boolean and optional `icons.indeterminate` for mixed states.

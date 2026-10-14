@@ -19,7 +19,14 @@ export type { ToastOptions } from './toast';
 export { default as Tour } from './tour';
 export type { Props as TourProps, Step as TourStep } from './tour';
 export { default as Tree } from './tree';
-export type { Props as TreeProps, Node as TreeNode } from './tree';
+export type {
+  Props as TreeProps,
+  Node as TreeNode,
+  Actions as TreeActions,
+  ExpandInfo as TreeExpandInfo,
+  LoadOptions as TreeLoadOptions,
+  ScrollOptions as TreeScrollOptions,
+} from './tree';
 export { default as Form } from './form';
 export type {
   Props as FormProps,
