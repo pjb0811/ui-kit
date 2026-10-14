@@ -1,7 +1,14 @@
 import { useRef, useState } from 'react';
 
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { expect, fireEvent, fn, userEvent, within } from 'storybook/test';
+import {
+  expect,
+  fireEvent,
+  fn,
+  userEvent,
+  waitFor,
+  within,
+} from 'storybook/test';
 
 import { Button, Config, ContextMenu, Drawer, Modal } from '@repo/ui';
 
@@ -91,7 +98,9 @@ export const ImperativeClose: Story = {
     fireEvent.click(
       canvas.getByRole('button', { name: 'Close programmatically' }),
     );
-    await expect(page.queryByRole('menu')).not.toBeInTheDocument();
+    await waitFor(() =>
+      expect(page.queryByRole('menu')).not.toBeInTheDocument(),
+    );
     await expect(args.onOpenChange).toHaveBeenLastCalledWith(
       false,
       expect.objectContaining({ reason: 'imperative-action' }),
@@ -151,7 +160,9 @@ export const ActionButton: Story = {
       page.getByRole('menu').id,
     );
     await userEvent.click(action);
-    await expect(page.queryByRole('menu')).not.toBeInTheDocument();
+    await waitFor(() =>
+      expect(page.queryByRole('menu')).not.toBeInTheDocument(),
+    );
     await expect(action).toHaveAttribute('aria-expanded', 'false');
     await userEvent.click(action);
     await expect(

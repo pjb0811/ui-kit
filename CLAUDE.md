@@ -32,6 +32,7 @@ pnpm build                # tsdown 빌드
 
 # apps/docs 내부
 pnpm storybook            # Storybook dev (port 6006)
+pnpm test-storybook       # 모든 스토리·play 함수를 headless Chromium에서 실행 (CI와 동일)
 ```
 
 ## packages/ui 컴포넌트 구조

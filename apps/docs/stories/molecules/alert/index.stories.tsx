@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { expect, fn, userEvent, within } from 'storybook/test';
 
 import { Alert, Button, Config } from '@repo/ui';
+import { DEFAULT_LOCALE } from '@repo/ui/providers';
 
 const meta: Meta<typeof Alert> = {
   title: 'Feedback/Alert',
@@ -91,7 +92,9 @@ export const Dismissible: Story = {
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement);
 
-    await userEvent.click(canvas.getByRole('button', { name: 'Close' }));
+    await userEvent.click(
+      canvas.getByRole('button', { name: DEFAULT_LOCALE.close }),
+    );
     await expect(args.onClose).toHaveBeenCalledOnce();
     await expect(canvas.queryByRole('status')).not.toBeInTheDocument();
   },
@@ -101,7 +104,7 @@ export const KeyboardDismiss: Story = {
   args: { closable: true },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const close = canvas.getByRole('button', { name: 'Close' });
+    const close = canvas.getByRole('button', { name: DEFAULT_LOCALE.close });
 
     close.focus();
     await userEvent.keyboard(' ');

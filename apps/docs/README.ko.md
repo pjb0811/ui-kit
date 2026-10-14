@@ -97,6 +97,18 @@ pnpm run build
 pnpm run build-storybook
 ```
 
+### 스토리 테스트
+
+```bash
+# Playwright용 Chromium 다운로드 (머신마다 한 번)
+pnpm exec playwright install chromium
+
+# 모든 스토리를 렌더하고 play 함수를 headless Chromium에서 실행
+pnpm run test-storybook
+```
+
+CI도 같은 명령을 실행합니다. play 함수가 실패하거나 스토리가 오류를 던지면 빌드가 실패합니다.
+
 ### 코드 품질
 
 ```bash
