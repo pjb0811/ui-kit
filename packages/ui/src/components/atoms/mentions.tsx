@@ -9,7 +9,11 @@ import {
   useState,
 } from 'react';
 
-import { useControllableState, useMergedRef } from '@jbpark/use-hooks';
+import {
+  useControllableState,
+  useLatest,
+  useMergedRef,
+} from '@jbpark/use-hooks';
 
 import { useConfig } from '@repo/ui/providers';
 import { cn } from '@repo/ui/utils';
@@ -119,17 +123,13 @@ const Mentions = ({
   const open = token !== null && !dismissed.includes(signature);
   const query = token?.query;
   const prefix = token?.prefix;
-  const searchRef = useRef(onSearch);
-
-  useEffect(() => {
-    searchRef.current = onSearch;
-  }, [onSearch]);
+  const searchRef = useLatest(onSearch);
 
   useEffect(() => {
     if (query !== undefined && prefix !== undefined) {
       searchRef.current?.(query, prefix);
     }
-  }, [query, prefix]);
+  }, [query, prefix, searchRef]);
 
   useEffect(() => {
     const pending = pendingCaret.current;
