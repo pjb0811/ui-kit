@@ -2,7 +2,11 @@
 
 import { useEffect, useId, useRef } from 'react';
 
-import { useControllableState, useResponsiveSize } from '@jbpark/use-hooks';
+import {
+  useControllableState,
+  useLatest,
+  useResponsiveSize,
+} from '@jbpark/use-hooks';
 import { PanelLeftClose, PanelLeftOpen } from 'lucide-react';
 
 import { DEFAULT_LOCALE, useConfig } from '@repo/ui/providers';
@@ -80,11 +84,7 @@ const Sider = ({
   const latestBrokenRef = useRef(broken);
   const previousBrokenRef = useRef<boolean | null>(null);
   const microtaskScheduledRef = useRef(false);
-  const onBreakpointRef = useRef(onBreakpoint);
-
-  useEffect(() => {
-    onBreakpointRef.current = onBreakpoint;
-  });
+  const onBreakpointRef = useLatest(onBreakpoint);
 
   // `useResponsiveSize`'s own initial measurement resolves through its own
   // layout effect, which (since it's called earlier in this component)
@@ -132,7 +132,7 @@ const Sider = ({
       setCollapsed(settledBroken);
       onBreakpointRef.current?.(settledBroken);
     });
-  }, [broken, breakpoint, setCollapsed]);
+  }, [broken, breakpoint, setCollapsed, onBreakpointRef]);
 
   const onTriggerClick = () => {
     setCollapsed(!collapsed);

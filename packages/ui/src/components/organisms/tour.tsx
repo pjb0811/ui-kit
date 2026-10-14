@@ -8,7 +8,7 @@ import {
   useState,
 } from 'react';
 
-import { useControllableState } from '@jbpark/use-hooks';
+import { useControllableState, useElementPosition } from '@jbpark/use-hooks';
 
 import { useConfig } from '@repo/ui/providers';
 import { cn } from '@repo/ui/utils';
@@ -53,6 +53,60 @@ export interface Props extends Omit<
   };
 }
 
+interface Measurement {
+  index: number;
+  target: HTMLElement | null;
+  rect: DOMRect | null;
+}
+
+const TARGET_MUTATION = {
+  attributes: true,
+  attributeFilter: ['hidden', 'style', 'class'],
+};
+
+const measureVisible = (element: HTMLElement) =>
+  element.isConnected &&
+  element.getClientRects().length > 0 &&
+  getComputedStyle(element).visibility !== 'hidden'
+    ? element.getBoundingClientRect()
+    : null;
+
+// Tracks one open step's target. Tour mounts it only while open and keys it by
+// step, so no listener stays attached while closed and a new step never
+// reports the previous step's element.
+const StepTarget = ({
+  index,
+  step,
+  scrollIntoView,
+  onMeasure,
+}: {
+  index: number;
+  step: Step;
+  scrollIntoView: boolean;
+  onMeasure: (measurement: Measurement) => void;
+}) => {
+  const { rect, element } = useElementPosition<HTMLElement>(
+    () => step.target?.() ?? null,
+    { withElement: true, measure: measureVisible, mutation: TARGET_MUTATION },
+  );
+
+  useEffect(() => {
+    if (element && scrollIntoView) {
+      element.scrollIntoView({
+        block: 'center',
+        inline: 'nearest',
+        behavior: 'instant',
+      });
+    }
+  }, [element, scrollIntoView]);
+
+  useEffect(() => {
+    onMeasure({ index, target: element, rect });
+  }, [onMeasure, index, element, rect]);
+
+  return null;
+};
+
 const defaultFormatProgress = (current: number, total: number) =>
   `Step ${current} of ${total}`;
 
@@ -91,17 +145,15 @@ const Tour = ({
     ? Math.max(0, Math.min(steps.length - 1, Math.floor(current)))
     : 0;
   const step = steps[index];
-  const [measurement, setMeasurement] = useState<{
-    step: Step;
-    target: HTMLElement | null;
-    rect: { top: number; left: number; width: number; height: number } | null;
-  } | null>(null);
+  const [measurement, setMeasurement] = useState<Measurement | null>(null);
   const target =
-    open && measurement && measurement.step === step
+    open && measurement && measurement.index === index
       ? measurement.target
       : null;
   const rect =
-    open && measurement && measurement.step === step ? measurement.rect : null;
+    open && measurement && measurement.index === index
+      ? measurement.rect
+      : null;
   const fallback = useMemo(
     () => ({
       getBoundingClientRect: () =>
@@ -109,79 +161,6 @@ const Tour = ({
     }),
     [],
   );
-
-  useEffect(() => {
-    if (!open || !step) return;
-
-    let previous: HTMLElement | null = null;
-    const update = () => {
-      const element = step.target?.() ?? null;
-      const isVisible =
-        !!element?.isConnected &&
-        element.getClientRects().length > 0 &&
-        getComputedStyle(element).visibility !== 'hidden';
-      const resolved = isVisible ? element : null;
-
-      if (resolved !== previous) {
-        if (previous) resizeObserver.unobserve(previous);
-
-        if (resolved) {
-          resizeObserver.observe(resolved);
-
-          if (scrollIntoView) {
-            resolved.scrollIntoView({
-              block: 'center',
-              inline: 'nearest',
-              behavior: 'instant',
-            });
-          }
-        }
-      }
-
-      previous = resolved;
-      const bounds = resolved?.getBoundingClientRect();
-      const next = bounds
-        ? {
-            top: bounds.top,
-            left: bounds.left,
-            width: bounds.width,
-            height: bounds.height,
-          }
-        : null;
-
-      setMeasurement(existing =>
-        existing?.step === step &&
-        existing.target === resolved &&
-        existing.rect?.top === next?.top &&
-        existing.rect?.left === next?.left &&
-        existing.rect?.width === next?.width &&
-        existing.rect?.height === next?.height
-          ? existing
-          : { step, target: resolved, rect: next },
-      );
-    };
-
-    const frame = requestAnimationFrame(update);
-    const observer = new MutationObserver(update);
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true,
-      attributes: true,
-      attributeFilter: ['hidden', 'style', 'class'],
-    });
-    const resizeObserver = new ResizeObserver(update);
-
-    window.addEventListener('resize', update);
-    window.addEventListener('scroll', update, true);
-
-    return () => {
-      cancelAnimationFrame(frame);
-      observer.disconnect();
-      resizeObserver.disconnect();
-      window.removeEventListener('resize', update);
-      window.removeEventListener('scroll', update, true);
-    };
-  }, [open, step, scrollIntoView]);
 
   const close = () => {
     onClose?.();
@@ -197,6 +176,15 @@ const Tour = ({
         className, //
       )}
     >
+      {open && step && (
+        <StepTarget
+          key={index}
+          index={index}
+          step={step}
+          scrollIntoView={scrollIntoView}
+          onMeasure={setMeasurement}
+        />
+      )}
       <popover.Popover
         open={open && !!step}
         modal
