@@ -28,7 +28,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
+      # Version PRs consume every changeset, so status always reports missing ones there.
       - name: Validate changesets
+        if: ${{ !startsWith(github.head_ref, 'changeset-release/') }}
         run: pnpm exec changeset status --since=origin/main
 
       - name: Lint
