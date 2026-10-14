@@ -537,6 +537,74 @@ if (
   );
 }
 
+const virtualTreeMarkup = renderToStaticMarkup(
+  h(
+    Config,
+    null,
+    h(ui.Tree, {
+      nodes: Array.from({ length: 1000 }, (_, index) => ({
+        key: `node-${index}`,
+        label: `Node ${index}`,
+      })),
+      virtual: true,
+      height: 320,
+      itemHeight: 32,
+      overscan: 2,
+    }),
+  ),
+);
+const virtualTreeItems = (virtualTreeMarkup.match(/role="treeitem"/g) ?? [])
+  .length;
+
+if (
+  !virtualTreeMarkup.includes('data-virtual="true"') ||
+  virtualTreeItems < 10 ||
+  virtualTreeItems > 20 ||
+  !virtualTreeMarkup.includes('aria-setsize="1000"') ||
+  virtualTreeMarkup.includes('role="group"') ||
+  (virtualTreeMarkup.match(/role="treeitem"[^>]*tabindex="0"/g) ?? [])
+    .length !== 1
+) {
+  errors.push(
+    `Virtual Tree SSR must render a bounded flat window with full set sizes and one tab stop (rendered ${virtualTreeItems} items).`,
+  );
+}
+
+const lazyTreeMarkup = renderToStaticMarkup(
+  h(
+    Config,
+    null,
+    h(ui.Tree, {
+      nodes: [
+        { key: 'unloaded', label: 'Unloaded', leaf: false },
+        { key: 'empty', label: 'Empty', leaf: false, children: [] },
+        {
+          key: 'forced',
+          label: 'Forced leaf',
+          leaf: true,
+          children: [{ key: 'hidden', label: 'Hidden' }],
+        },
+        { key: 'plain', label: 'Plain', children: [] },
+      ],
+      defaultExpandedKeys: ['unloaded', 'forced'],
+      loadData: () => {
+        throw new Error('Tree must not load data during SSR');
+      },
+    }),
+  ),
+);
+
+if (
+  (lazyTreeMarkup.match(/aria-expanded=/g) ?? []).length !== 2 ||
+  !lazyTreeMarkup.includes('aria-expanded="true"') ||
+  lazyTreeMarkup.includes('Hidden') ||
+  /role="treeitem"[^>]*aria-busy/.test(lazyTreeMarkup)
+) {
+  errors.push(
+    'Lazy Tree SSR must expose leaf: false branches, honour leaf: true, and defer loading until hydration.',
+  );
+}
+
 const emptyTourMarkup = renderToStaticMarkup(
   h(Config, null, h(ui.Tour, { steps: [], defaultOpen: true })),
 );
@@ -1271,34 +1339,42 @@ if (
   decorativeDividerMarkup.includes('aria-orientation=') ||
   !decorativeDividerMarkup.includes('data-slot="divider"')
 ) {
-  errors.push('Divider must be decorative by default and retain its root slot.');
+  errors.push(
+    'Divider must be decorative by default and retain its root slot.',
+  );
 }
 
 for (const state of [{}, { disabled: true }, { readOnly: true }]) {
-  const markup = renderToStaticMarkup(h(ui.Mentions, {
-    options: [{ value: 'alice' }],
-    defaultValue: 'Hello @alice\nNext line',
-    id: 'mention-text',
-    name: 'message',
-    form: 'message-form',
-    'aria-label': 'Message',
-    className: 'custom-textarea',
-    style: { minHeight: 120 },
-    ...state,
-  }));
+  const markup = renderToStaticMarkup(
+    h(ui.Mentions, {
+      options: [{ value: 'alice' }],
+      defaultValue: 'Hello @alice\nNext line',
+      id: 'mention-text',
+      name: 'message',
+      form: 'message-form',
+      'aria-label': 'Message',
+      className: 'custom-textarea',
+      style: { minHeight: 120 },
+      ...state,
+    }),
+  );
   const textarea = markup.match(/<textarea[^>]*>/)?.[0] ?? '';
 
-  if (!textarea.includes('id="mention-text"') ||
-      !textarea.includes('name="message"') ||
-      !textarea.includes('form="message-form"') ||
-      !textarea.includes('aria-label="Message"') ||
-      !textarea.includes('custom-textarea') ||
-      !textarea.includes('min-height:120px') ||
-      !markup.includes('Hello @alice\nNext line') ||
-      markup.includes('role="listbox"') ||
-      (state.disabled && !textarea.includes('disabled=""')) ||
-      (state.readOnly && !textarea.includes('readOnly=""'))) {
-    errors.push('Mentions SSR must preserve textarea text, native root props and inactive suggestion state.');
+  if (
+    !textarea.includes('id="mention-text"') ||
+    !textarea.includes('name="message"') ||
+    !textarea.includes('form="message-form"') ||
+    !textarea.includes('aria-label="Message"') ||
+    !textarea.includes('custom-textarea') ||
+    !textarea.includes('min-height:120px') ||
+    !markup.includes('Hello @alice\nNext line') ||
+    markup.includes('role="listbox"') ||
+    (state.disabled && !textarea.includes('disabled=""')) ||
+    (state.readOnly && !textarea.includes('readOnly=""'))
+  ) {
+    errors.push(
+      'Mentions SSR must preserve textarea text, native root props and inactive suggestion state.',
+    );
   }
 }
 
