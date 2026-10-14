@@ -39,14 +39,14 @@ export const Default: Story = {};
 export const MidSentence: Story = {
   args: { defaultValue: 'Hello @ali there' },
   play: async ({ canvasElement, args }) => {
-    const field = within(canvasElement).getByRole('combobox', {
+    const field = within(canvasElement).getByRole('textbox', {
       name: 'Message',
     }) as HTMLTextAreaElement;
     const page = within(canvasElement.ownerDocument.body);
 
     await userEvent.click(field);
     field.setSelectionRange(10, 10);
-    fireEvent.select(field);
+    fireEvent(field.ownerDocument, new Event('selectionchange'));
     await userEvent.click(
       await page.findByRole('option', { name: 'Alice Park' }),
     );
@@ -59,7 +59,7 @@ export const MidSentence: Story = {
 };
 export const Keyboard: Story = {
   play: async ({ canvasElement, args }) => {
-    const field = within(canvasElement).getByRole('combobox', {
+    const field = within(canvasElement).getByRole('textbox', {
       name: 'Message',
     });
 
@@ -76,7 +76,7 @@ export const Keyboard: Story = {
 };
 export const EscapePreservesText: Story = {
   play: async ({ canvasElement }) => {
-    const field = within(canvasElement).getByRole('combobox', {
+    const field = within(canvasElement).getByRole('textbox', {
       name: 'Message',
     });
 
@@ -86,7 +86,7 @@ export const EscapePreservesText: Story = {
     });
     await userEvent.keyboard('{Escape}');
     await waitFor(() =>
-      expect(field).toHaveAttribute('aria-expanded', 'false'),
+      expect(field).not.toHaveAttribute('aria-expanded', 'true'),
     );
     await userEvent.keyboard('{Escape}');
     await expect(field).toHaveValue('@a');
@@ -100,12 +100,12 @@ export const SelectionReplacement: Story = {
   args: { defaultValue: 'Hello @alice there' },
   play: async ({ canvasElement }) => {
     const field = within(canvasElement).getByRole(
-      'combobox',
+      'textbox',
     ) as HTMLTextAreaElement;
 
     await userEvent.click(field);
     field.setSelectionRange(8, 11);
-    fireEvent.select(field);
+    fireEvent(field.ownerDocument, new Event('selectionchange'));
     await userEvent.click(
       await within(canvasElement.ownerDocument.body).findByRole('option', {
         name: 'Alice Park',
@@ -119,7 +119,7 @@ export const IME: Story = {
   args: { options: [{ value: '지민', label: '지민' }] },
   play: async ({ canvasElement, args }) => {
     const field = within(canvasElement).getByRole(
-      'combobox',
+      'textbox',
     ) as HTMLTextAreaElement;
 
     await userEvent.type(field, '@');
@@ -129,7 +129,7 @@ export const IME: Story = {
     await expect(args.onSelect).not.toHaveBeenCalled();
     fireEvent.compositionEnd(field, { data: '지' });
     field.setSelectionRange(2, 2);
-    fireEvent.select(field);
+    fireEvent(field.ownerDocument, new Event('selectionchange'));
     await userEvent.click(
       await within(canvasElement.ownerDocument.body).findByRole('option', {
         name: '지민',
@@ -149,12 +149,12 @@ export const ControlledUnchanged: Story = {
   args: { value: 'Hello @ali there' },
   play: async ({ canvasElement, args }) => {
     const field = within(canvasElement).getByRole(
-      'combobox',
+      'textbox',
     ) as HTMLTextAreaElement;
 
     await userEvent.click(field);
     field.setSelectionRange(10, 10);
-    fireEvent.select(field);
+    fireEvent(field.ownerDocument, new Event('selectionchange'));
     await userEvent.click(
       await within(canvasElement.ownerDocument.body).findByRole('option', {
         name: 'Alice Park',
@@ -163,7 +163,7 @@ export const ControlledUnchanged: Story = {
     await expect(field).toHaveValue('Hello @ali there');
     await expect(args.onChange).toHaveBeenLastCalledWith('Hello @alice there');
     await waitFor(() =>
-      expect(field).toHaveAttribute('aria-expanded', 'false'),
+      expect(field).not.toHaveAttribute('aria-expanded', 'true'),
     );
   },
 };
@@ -252,8 +252,8 @@ export const FormAndRef: Story = {
     await userEvent.click(
       canvas.getByRole('button', { name: 'Focus message' }),
     );
-    await expect(canvas.getByRole('combobox')).toHaveFocus();
-    await userEvent.keyboard('Hello @alice');
+    await expect(canvas.getByRole('textbox')).toHaveFocus();
+    await userEvent.keyboard('Hello @alice{Escape}');
     await userEvent.click(canvas.getByRole('button', { name: 'Send' }));
     await expect(canvas.getByRole('status')).toHaveTextContent('Hello @alice');
   },
