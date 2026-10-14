@@ -1,5 +1,42 @@
 # @repo/ui
 
+## 10.3.0
+
+### Minor Changes
+
+- a22ee53: Add Anchor with fragment links, nested items, current-section tracking, custom scroll containers, offsets, and reduced-motion-aware navigation.
+- d85f8f9: Add AutoComplete for free-form text with optional suggestions, controlled and uncontrolled values, keyboard navigation, clearing, custom filtering, and native form support.
+- a22ee53: Add an inline Calendar with independent date selection and month navigation, date bounds, locale options, and additive date markers.
+- 49d0074: Add Cascader for single leaf-path selection through nested options, with controlled values, clearing, disabled branches, and progressive keyboard-accessible levels.
+- 4fb2f9f: Add Descriptions for semantic label/value pairs with responsive columns, horizontal and vertical label placement, optional titles, and typed styling slots.
+- a22ee53: Add Divider with horizontal and vertical orientation, labeled separators, line variants, and accessible decorative or semantic behavior.
+- 7d2d08a: Add Form with accessible Field composition, styled input Control, constraint validation, external errors, native submission, and responsive layouts.
+- 304a023: Add Mentions for completing prefixed plain-text tokens in multiline messages, with controlled values, local or caller filtering, accessible suggestions, and native textarea form/ref support.
+- a3f7551: Add Popconfirm for trigger-bound confirmation with asynchronous pending and error handling.
+- 04beb35: Add Rate for whole-step ratings with controlled and uncontrolled values, optional clearing, disabled and read-only modes, accessible score labels, and custom icons.
+- 607ca78: Add ScrollArea with themed scrollbars, vertical, horizontal, and both-axis modes, viewport props and refs, and styling slots. Preserve native scrolling with Base UI primitives.
+- a22ee53: Add Statistic for formatted metrics with titles, affixes, explicit locale, custom formatting, and loading placeholders.
+- fe40567: Add a time-only picker with native keyboard and popup input, controlled and uncontrolled HH:mm values, minute steps, and clear support. DatePicker can now combine calendar and time selection with a confirmable `showTime` mode.
+- deed5e7: Add Timeline for ordered events with semantic timestamps, descriptions, decorative markers, and typed styling slots.
+- ded9523: Add Tour with ordered target steps, controlled or uncontrolled progression, modal focus management, target scrolling/highlighting, centered missing-target fallback, and localized navigation.
+- 8ecae5f: Add Transfer with controlled target keys, two-panel item selection, visible-only search and bulk actions, disabled items, accessible counts, and responsive layouts.
+- 9f5c26e: Add TreeSelect for single hierarchy selection with controlled values and expansion, clearing, native form values, and accessible popup navigation.
+- 7be0a75: Add Tree with hierarchical expansion, single or multiple selection, checkbox propagation with disabled boundaries, roving keyboard focus, and RTL support. Expose indeterminate Checkbox state.
+- 019993e: Add ContextMenu with pointer and keyboard activation, flat actions and separators, controlled open state, disabled items, accessible explicit triggers, and Base UI popup positioning and dismissal.
+- 019993e: Add Input.OTP with configurable segmented string entry, paste and editing support, accessible labels, native form values, masking, and completion callbacks without automatic submission.
+- d129987: Add opt-in virtual rendering, lazy branch loading, and click-to-expand to Tree. Nodes accept `leaf` to mark unloaded or forced-leaf branches; `loadData` loads children with per-node pending, failure, and retry states and an abort signal; `virtual` with `height`, `itemHeight`, and `overscan` renders a bounded window; `actionRef.scrollTo` scrolls to a visible key; and `onExpand` also receives the requested node and state. Config `locale` gains `loadFailed` and `retry`.
+
+### Patch Changes
+
+- 858c5fd: Refresh supported runtime dependencies, including Base UI 1.9 and Motion 14, while retaining React 19 peer compatibility.
+- 3fce945: Remove browser and documentation-site list markers from Breadcrumb trails so numbered list styles cannot overlap breadcrumb labels.
+- 9188de5: Keep imperative modals mounted until their closing animations finish, prevent repeated dismissal callbacks, and expose `onOpenChangeComplete`. Document that `destroy` and `destroyAll` remove modals immediately.
+- f1b4df4: Animate the dialog popup's scale alongside opacity so modals resize smoothly when opening and closing instead of jumping to the ending size.
+- 0356f72: Remove the extra default `x` text from searchable Select clear buttons in single and multiple selection modes, leaving only the configured icon.
+- 1ac0bc0: Remove the blank space above searchable Select options when results are available, while keeping the empty-state live region mounted and preserving the no-results message spacing.
+- 40fe6ac: Keep Marquees and its rows paused while either the pointer or keyboard focus remains inside, including focus movement between interactive children.
+- cf80167: Place Cancel before OK in the default Modal and Modal.confirm footers, matching their visual and keyboard navigation order.
+
 ## 10.2.0
 
 ### Minor Changes
