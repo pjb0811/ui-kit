@@ -97,6 +97,18 @@ pnpm run build
 pnpm run build-storybook
 ```
 
+### Story Tests
+
+```bash
+# Download Chromium for Playwright (once per machine)
+pnpm exec playwright install chromium
+
+# Render every story and run its play function in headless Chromium
+pnpm run test-storybook
+```
+
+CI runs the same command. A failing play function or a story that throws fails the build.
+
 ### Code Quality
 
 ```bash

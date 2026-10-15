@@ -50,3 +50,9 @@ jobs:
 
       - name: Regression net (API surface / preflight reset / SSR smoke)
         run: pnpm exec turbo run check-regression-net
+
+      - name: Install Playwright Chromium
+        run: pnpm --filter docs exec playwright install --with-deps chromium
+
+      - name: Story tests (render and play functions)
+        run: pnpm --filter docs test-storybook

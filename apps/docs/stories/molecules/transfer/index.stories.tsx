@@ -61,8 +61,14 @@ export const Default: Story = {
       canvas.getByRole('button', { name: 'Move to available' }),
     );
     expect(args.onChange).toHaveBeenLastCalledWith(['e']);
-    expect(target.getByRole('checkbox', { name: 'Epsilon' })).toBeDisabled();
-    expect(source.getByRole('checkbox', { name: 'Gamma' })).toBeDisabled();
+    expect(target.getByRole('checkbox', { name: 'Epsilon' })).toHaveAttribute(
+      'aria-disabled',
+      'true',
+    );
+    expect(source.getByRole('checkbox', { name: 'Gamma' })).toHaveAttribute(
+      'aria-disabled',
+      'true',
+    );
   },
 };
 export const Search: Story = {
