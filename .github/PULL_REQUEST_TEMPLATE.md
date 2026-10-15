@@ -35,7 +35,7 @@
 
 ## Checklist
 
-- [ ] Commit messages follow the commit rules in AGENTS.md
+- [ ] Commit messages follow the shared commit rules (`global/CLAUDE.md` in pjb0811/skills)
 - [ ] Storybook stories are added for new components / features
-- [ ] No type or lint errors (`pnpm lint`, `pnpm typecheck`)
+- [ ] No type or lint errors (`pnpm lint`, `pnpm check-types`)
 - [ ] Build completes successfully (`pnpm build`)
