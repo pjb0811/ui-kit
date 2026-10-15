@@ -1,0 +1,59 @@
+---
+title: ToggleGroup
+---
+
+import ToggleGroupDemo from '../../../src/demo/toggle-group-demo';
+
+# ToggleGroup
+
+Use ToggleGroup for compact action buttons that are pressed independently, such as text formatting or filter chips. Any number of options can be pressed, including none.
+
+Choose by what the selection means:
+
+- **Segmented** keeps exactly one option selected to switch a view or filter.
+- **Checkbox.Group** and **Radio.Group** are ordinary form fields that submit values.
+- **ToggleGroup** presses actions. It renders buttons, not form fields, so pressed values are not submitted with a form. Read them from `onChange` and submit them yourself if needed.
+
+```tsx
+import { ToggleGroup } from '@jbpark/ui-kit';
+
+<ToggleGroup
+  aria-label="Filters"
+  options={[
+    { value: 'open', label: 'Open' },
+    { value: 'mine', label: 'Assigned to me' },
+  ]}
+  defaultValue={['open']}
+  onChange={values => console.log(values)}
+/>;
+```
+
+<ToggleGroupDemo />
+
+## Behavior
+
+- Clicking, Space, or Enter toggles one option without changing the others. Clicking a pressed option clears it, so every option can be cleared.
+- `onChange` receives the pressed values in option order, without duplicates, followed by supplied values that match no option. Unknown values are kept so a value restored before its option exists is not lost.
+- Controlled `value` only changes when you update it. Uncontrolled groups start from `defaultValue` (default `[]`).
+- Arrow keys move focus between enabled options: Left/Right when horizontal, Up/Down when vertical. In a right-to-left layout from `Config` or `dir`, Left and Right swap. Disabled options are skipped. Base UI owns focus and pressed state.
+- `disabled` on the group or on an option prevents pointer and keyboard changes and keeps the supplied pressed state.
+- Each option renders as a `Button` with `aria-pressed`. With `iconOnly`, only the icon is shown and `label` becomes the button's accessible name, so always give icon-only options a meaningful label.
+
+Provide `aria-label` or `aria-labelledby` so assistive technology can identify the group.
+
+## Props
+
+| Prop           | Type                                      | Default                 | Description                                             |
+| -------------- | ----------------------------------------- | ----------------------- | ------------------------------------------------------- |
+| `options`      | `readonly Option[]`                       | required                | Options in display order. Values must be unique.        |
+| `value`        | `readonly string[]`                       | -                       | Controlled pressed values.                              |
+| `defaultValue` | `readonly string[]`                       | `[]`                    | Initially pressed values when uncontrolled.             |
+| `onChange`     | `(values: string[]) => void`              | -                       | Called with the next pressed values.                    |
+| `size`         | `'small' \| 'middle' \| 'large'`          | Config size or `middle` | Button size.                                            |
+| `orientation`  | `'horizontal' \| 'vertical'`              | `'horizontal'`          | Layout and arrow-key direction.                         |
+| `disabled`     | `boolean`                                 | `false`                 | Disable the entire group.                               |
+| `dir`          | `'ltr' \| 'rtl'`                          | Config direction        | Text and arrow-key direction.                           |
+| `className`    | `string`                                  | -                       | Root class.                                             |
+| `classNames`   | `{ item?: string; pressedItem?: string }` | -                       | Item classes; `pressedItem` applies to pressed options. |
+
+`Option` is `{ value: string; label: string; icon?: ReactNode; disabled?: boolean; iconOnly?: boolean }`. ToggleGroup also accepts Base UI Toggle Group root props such as `loopFocus` and `ref`. The root package exports `ToggleGroup`, `ToggleGroupProps`, and `ToggleGroupOption`; the `ToggleGroup` subpath exports the default component and `Props`/`Option` types.
