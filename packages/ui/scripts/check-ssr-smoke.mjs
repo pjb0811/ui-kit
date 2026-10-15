@@ -537,6 +537,30 @@ if (
   );
 }
 
+const spaceMarkup = renderToStaticMarkup(
+  h(
+    Config,
+    null,
+    h(
+      ui.Space,
+      { justify: 'space-between', align: 'stretch', id: 'toolbar' },
+      'a',
+      'b',
+    ),
+  ),
+);
+
+if (
+  !spaceMarkup.includes('justify-between') ||
+  !spaceMarkup.includes('items-stretch') ||
+  !spaceMarkup.includes('id="toolbar"') ||
+  /\sjustify=/.test(spaceMarkup)
+) {
+  errors.push(
+    'Space SSR must map justify and stretch to classes, forward root attributes, and not leak justify to the DOM.',
+  );
+}
+
 const virtualTreeMarkup = renderToStaticMarkup(
   h(
     Config,

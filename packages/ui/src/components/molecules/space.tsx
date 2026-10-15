@@ -12,7 +12,14 @@ export interface Props extends React.ComponentPropsWithRef<'div'> {
   loader?: React.ReactNode;
   orientation?: 'horizontal' | 'vertical';
   size?: 'small' | 'middle' | 'large' | number | number[];
-  align?: 'start' | 'end' | 'center' | 'baseline';
+  align?: 'start' | 'end' | 'center' | 'baseline' | 'stretch';
+  justify?:
+    | 'start'
+    | 'end'
+    | 'center'
+    | 'space-between'
+    | 'space-around'
+    | 'space-evenly';
   wrap?: boolean;
   split?: React.ReactNode;
   grid?: {
@@ -32,6 +39,16 @@ const aligns: Record<string, string> = {
   end: 'items-end text-end',
   center: 'items-center text-center',
   baseline: 'items-baseline text-baseline',
+  stretch: 'items-stretch',
+};
+
+const justifies: Record<NonNullable<Props['justify']>, string> = {
+  start: 'justify-start',
+  end: 'justify-end',
+  center: 'justify-center',
+  'space-between': 'justify-between',
+  'space-around': 'justify-around',
+  'space-evenly': 'justify-evenly',
 };
 
 const Space = ({
@@ -41,6 +58,7 @@ const Space = ({
   size,
   orientation = 'horizontal',
   align = 'center',
+  justify,
   wrap = false,
   split,
   className,
@@ -82,6 +100,7 @@ const Space = ({
         orientation === 'horizontal' ? 'flex-row' : 'flex-col',
         wrap && 'flex-wrap',
         aligns[align],
+        justify && justifies[justify],
         grid && 'grid',
         hidden && 'hidden',
         className,

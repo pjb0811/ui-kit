@@ -20,19 +20,42 @@ import { Space, Tag } from '@jbpark/ui-kit';
 
 <SpaceDemo />
 
+## Alignment
+
+`justify` places children along the main axis: the row in a horizontal Space, the column in a vertical one. `start` and `end` are logical, so in a right-to-left layout `start` is the right edge. Without `justify`, children start at the main-axis start, as before. A vertical Space needs a height (for example from `className`) for `justify` to have room to act.
+
+`align` places children on the cross axis and defaults to `center`. `stretch` makes every child fill the cross axis, such as equal-width buttons in a vertical stack.
+
+```tsx
+<Space justify="space-between" className="w-full">
+  <Space size="small">
+    <Button>Bold</Button>
+    <Button>Italic</Button>
+  </Space>
+  <Button type="primary">Save</Button>
+</Space>
+```
+
+With `wrap`, `justify` also applies to each wrapped line. Separators from `split` are children like any other, so `space-between` spaces them too.
+
+With `grid`, the root is a CSS grid: `justify` sets `justify-content` and `align` sets `align-items` on it. Grid tracks from `rows`/`cols` already fill the row, so `justify` has no visible effect there.
+
+`justify` and `align` become utility classes on the root, and a conflicting utility in `className` wins, as do inline `style` values. Neither prop is forwarded to the DOM.
+
 ## Props
 
-| Prop          | Type                                                | Default        |
-| ------------- | --------------------------------------------------- | -------------- |
-| `orientation` | `'horizontal' \| 'vertical'`                        | `'horizontal'` |
-| `size`        | `'small' \| 'middle' \| 'large' \| number \| number[]` | `'middle'`  |
-| `align`       | `'start' \| 'end' \| 'center' \| 'baseline'`        | `'center'`     |
-| `wrap`        | `boolean`                                           | `false`        |
-| `split`       | `ReactNode`                                         | -              |
-| `grid`        | `{ rows?: number; cols?: number }`                  | -              |
-| `loading`     | `boolean`                                           | `false`        |
-| `loader`      | `ReactNode`                                         | `<Skeleton />` |
-| `className`   | `string`                                            | -              |
-| `children`    | `ReactNode`                                         | -              |
+| Prop          | Type                                                                                  | Default        |
+| ------------- | ------------------------------------------------------------------------------------- | -------------- |
+| `orientation` | `'horizontal' \| 'vertical'`                                                          | `'horizontal'` |
+| `size`        | `'small' \| 'middle' \| 'large' \| number \| number[]`                                | `'middle'`     |
+| `align`       | `'start' \| 'end' \| 'center' \| 'baseline' \| 'stretch'`                             | `'center'`     |
+| `justify`     | `'start' \| 'end' \| 'center' \| 'space-between' \| 'space-around' \| 'space-evenly'` | -              |
+| `wrap`        | `boolean`                                                                             | `false`        |
+| `split`       | `ReactNode`                                                                           | -              |
+| `grid`        | `{ rows?: number; cols?: number }`                                                    | -              |
+| `loading`     | `boolean`                                                                             | `false`        |
+| `loader`      | `ReactNode`                                                                           | `<Skeleton />` |
+| `className`   | `string`                                                                              | -              |
+| `children`    | `ReactNode`                                                                           | -              |
 
 `Space` also accepts the rest of `React.ComponentProps<'div'>` (e.g. `style`, `hidden`).
