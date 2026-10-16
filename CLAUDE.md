@@ -89,7 +89,7 @@ Base UI가 이미 담당하는 영역(focus trap/management, 포털 마운트, `
 
 오늘 기준으로 적용하면:
 
-- **속함 (Base UI 조합형)** — `select`, `dialog`, `drawer`, `accordion`, `popover`, `radio-group`, `checkbox`, `switch`, `progress`, `separator`, `slider`. 실제 파트 트리·포털·상태 배선을 담당한다.
+- **속함 (Base UI 조합형)** — `select`, `combobox`, `autocomplete`, `dialog`, `drawer`, `accordion`, `popover`, `tooltip`, `tabs`, `scroll-area`, `form`, `radio-group`, `checkbox`, `switch`, `progress`, `separator`, `slider`. 실제 파트 트리·포털·상태 배선을 담당한다.
 - **속함 (서드파티 래퍼)** — `calendar`, `resizable`.
 - **속함 (repo-owned 기반)** — `badge`, `button`, `field`, `label`, `input`, `textarea`, `skeleton`. Base UI에 직접 대응하는 프리미티브가 없거나, 공개 컴포넌트가 공유하는 스타일·합성 계약을 한곳에서 제공한다. `badge`와 `button`의 polymorphic 합성은 Radix Slot이 아니라 Base UI의 `render`/`useRender` 계약을 따른다.
 
@@ -125,8 +125,9 @@ grep -rn 'variant="' packages/ui/src/components/ | grep -v 'resolvedVariant\|{va
 'use client';
 
 // 상호작용이 있는 컴포넌트만 추가
-import { someCore } from '@repo/ui/core';
 import { cn } from '@repo/ui/utils';
+
+import { someCore } from '../../core';
 
 // Props 인터페이스 이름은 항상 'Props'
 export interface Props extends Omit<

@@ -2,7 +2,9 @@ import { input } from '../../../core';
 
 const { Input: Core } = input;
 
-const Input = ({ ref, ...props }: React.ComponentPropsWithRef<'input'>) => {
+export type Props = React.ComponentPropsWithRef<'input'>;
+
+const Input = ({ ref, ...props }: Props) => {
   return <Core ref={ref} {...props} />;
 };
 
