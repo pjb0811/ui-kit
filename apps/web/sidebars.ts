@@ -70,7 +70,7 @@ const sidebars: SidebarsConfig = {
         'components/organisms/tree',
         'components/organisms/table',
         'components/organisms/swiper',
-        'components/templates/empty',
+        'components/molecules/empty',
       ],
     },
     {

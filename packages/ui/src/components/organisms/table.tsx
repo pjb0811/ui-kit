@@ -6,10 +6,10 @@ import { useConfig } from '@repo/ui/providers';
 import { cn } from '@repo/ui/utils';
 
 import Skeleton from '../atoms/skeleton';
+import Empty from '../molecules/empty';
 import Pagination, {
   type Props as PaginationProps,
 } from '../molecules/pagination';
-import Empty from '../templates/empty';
 
 export type PaginationOptions = Omit<PaginationProps, 'total'> &
   ({ mode?: 'client'; total?: never } | { mode: 'server'; total: number });
