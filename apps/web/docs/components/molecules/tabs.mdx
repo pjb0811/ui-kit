@@ -1,0 +1,45 @@
+---
+title: Tabs
+---
+
+import TabsDemo from '../../../src/demo/tabs-demo';
+
+# Tabs
+
+Switch between panels of related content in the same place, built on Base UI's Tabs primitive. Click a tab or use the arrow keys to move between tabs.
+
+```tsx
+import { Tabs } from '@jbpark/ui-kit';
+
+<Tabs
+  items={[
+    { key: 'overview', label: 'Overview', children: <p>Overview</p> },
+    { key: 'activity', label: 'Activity', children: <p>Activity</p> },
+    { key: 'settings', label: 'Settings', children: null, disabled: true },
+  ]}
+/>;
+```
+
+<TabsDemo />
+
+## Props
+
+| Prop              | Type                                        | Default            | Description                                                          |
+| ----------------- | ------------------------------------------- | ------------------ | -------------------------------------------------------------------- |
+| `items`           | `Item[]`                                    | required           | Tabs and their panels.                                               |
+| `value`           | `string \| number \| null`                  | -                  | Controlled selected key.                                             |
+| `defaultValue`    | `string \| number \| null`                  | first enabled item | Initial selected key when uncontrolled.                              |
+| `onChange`        | `(value: string \| number \| null) => void` | -                  | Called when the selected tab changes.                                |
+| `orientation`     | `'horizontal' \| 'vertical'`                | `'horizontal'`     | Layout direction of the tab list.                                    |
+| `activateOnFocus` | `boolean`                                   | `false`            | Select a tab as soon as arrow-key focus moves to it.                 |
+| `keepMounted`     | `boolean`                                   | `false`            | Keep inactive panels in the DOM, preserving their local state.       |
+| `scrollable`      | `boolean`                                   | `false`            | Scroll the tab list when the tabs do not fit.                        |
+| `fitted`          | `boolean`                                   | `false`            | Give tabs equal width in horizontal mode. Ignored when `scrollable`. |
+| `extra`           | `ReactNode`                                 | -                  | Content shown after the tab list, outside the `tablist` role.        |
+| `listLabel`       | `string`                                    | `'Tabs'`           | Accessible name of the tab list.                                     |
+| `className`       | `string`                                    | -                  | Root class.                                                          |
+| `classNames`      | `{ list?, tab?, panel?, extra? }`           | -                  | Classes for internal parts.                                          |
+
+Each `Item` has a required `key`, `label`, and `children` (the panel content), and optional `disabled` and `icon`. The icon is decorative and is rendered before the label.
+
+`onValueChange` (Base UI's signature, with event details) still works but is deprecated. Use `onChange`.

@@ -89,7 +89,7 @@ Base UI가 이미 담당하는 영역(focus trap/management, 포털 마운트, `
 
 오늘 기준으로 적용하면:
 
-- **속함 (Base UI 조합형)** — `select`, `dialog`, `drawer`, `accordion`, `popover`, `radio-group`, `checkbox`, `switch`, `progress`, `separator`, `slider`. 실제 파트 트리·포털·상태 배선을 담당한다.
+- **속함 (Base UI 조합형)** — `select`, `combobox`, `autocomplete`, `dialog`, `drawer`, `accordion`, `popover`, `tooltip`, `tabs`, `scroll-area`, `form`, `radio-group`, `checkbox`, `switch`, `progress`, `separator`, `slider`. 실제 파트 트리·포털·상태 배선을 담당한다.
 - **속함 (서드파티 래퍼)** — `calendar`, `resizable`.
 - **속함 (repo-owned 기반)** — `badge`, `button`, `field`, `label`, `input`, `textarea`, `skeleton`. Base UI에 직접 대응하는 프리미티브가 없거나, 공개 컴포넌트가 공유하는 스타일·합성 계약을 한곳에서 제공한다. `badge`와 `button`의 polymorphic 합성은 Radix Slot이 아니라 Base UI의 `render`/`useRender` 계약을 따른다.
 
@@ -125,8 +125,9 @@ grep -rn 'variant="' packages/ui/src/components/ | grep -v 'resolvedVariant\|{va
 'use client';
 
 // 상호작용이 있는 컴포넌트만 추가
-import { someCore } from '@repo/ui/core';
 import { cn } from '@repo/ui/utils';
+
+import { someCore } from '../../core';
 
 // Props 인터페이스 이름은 항상 'Props'
 export interface Props extends Omit<
@@ -209,6 +210,7 @@ Tailwind CSS v4 기반. `Config` 프로바이더로 CSS 변수 오버라이드 �
    - 서브컴포넌트 있음(조합 컴포넌트): `{tier}/my-component/my-component.tsx`가 구현을 담당하고, `{tier}/my-component/index.ts` 배럴이 `export default MyComponent` + `export type { Props }`(및 서브컴포넌트 부착)를 담당
 2. 계층 index: `src/components/{계층}/index.ts`에 `export { default as MyComponent } from './my-component'` 추가 (export 별칭은 PascalCase, import 경로는 kebab-case — 조합 컴포넌트든 아니든 동일하게 `./my-component`로 참조하면 되고, 폴더/파일 어느 쪽이든 자동으로 resolve된다)
 3. 루트 `src/index.ts`는 계층 index를 re-export하므로 별도 수정 불필요
+4. deep-import subpath: `packages/ui/package.json`의 `exports`(`"./MyComponent": "./src/components/{tier}/my-component.tsx"`, 조합 컴포넌트는 `…/my-component/index.ts`), `package.publish.json`의 `exports`(`./dist/MyComponent.{mjs,d.mts}`), `tsdown.config.ts`의 `entry`에 같은 이름으로 추가한다. 계층 index에 `default as X`로 등록된 컴포넌트는 모두 subpath가 있어야 하고, `check-api-surface`가 세 곳의 누락·경로 불일치를 검사한다 (#545). named export만 있는 `grid`(`Row`/`Col`)는 제외된다.
 
 ## apps/docs — Storybook 스토리 작성
 
