@@ -585,6 +585,20 @@ if (
   );
 }
 
+const loadingToastMarkup = renderToStaticMarkup(
+  h(Config, null, h(ui.Toast, { status: 'loading', title: 'Saving' })),
+);
+
+if (
+  !loadingToastMarkup.includes('role="status"') ||
+  !loadingToastMarkup.includes('animate-spin') ||
+  !loadingToastMarkup.includes('max-w-[calc(100vw-2rem)]')
+) {
+  errors.push(
+    'Toast SSR must render the loading status as a polite status with a spinner and a viewport-bounded width.',
+  );
+}
+
 const virtualTreeMarkup = renderToStaticMarkup(
   h(
     Config,

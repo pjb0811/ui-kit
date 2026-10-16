@@ -31,6 +31,9 @@ export interface ImperativeStack<
   TProps extends { id?: string; container?: HTMLElement },
 > {
   render: (props: TProps) => string | undefined;
+  // Replaces an existing entry's props in place, keeping its position in the
+  // stack; returns false when no container holds `id`.
+  update: (id: string, next: (current: TProps) => TProps) => boolean;
   destroy: (id?: string) => void;
   getRootElement: (container?: HTMLElement) => HTMLElement | null;
 }
@@ -43,8 +46,9 @@ export interface ImperativeStackOptions<
    * container itself. Called once per distinct container. */
   createRootElement: () => HTMLElement;
   /** Renders one stack entry — typically each caller's "Static<Thing>"
-   * component, which owns its own createPortal(..., getRootElement()). */
-  StackItem: React.ComponentType<TProps & { id: string }>;
+   * component, which owns its own createPortal(..., getRootElement()).
+   * `index` is the entry's position in its container's stack, oldest first. */
+  StackItem: React.ComponentType<TProps & { id: string; index: number }>;
 }
 
 export function createImperativeStack<
@@ -120,8 +124,8 @@ export function createImperativeStack<
 
     return (
       <ConfigSnapshotProvider>
-        {stack.map(({ id, ...props }) => (
-          <StackItem key={id} id={id} {...(props as TProps)} />
+        {stack.map(({ id, ...props }, index) => (
+          <StackItem key={id} id={id} index={index} {...(props as TProps)} />
         ))}
       </ConfigSnapshotProvider>
     );
@@ -153,6 +157,25 @@ export function createImperativeStack<
     state.update?.();
 
     return id;
+  };
+
+  const update = (id: string, next: (current: TProps) => TProps): boolean => {
+    for (const state of containerStates.values()) {
+      const index = state.stack.findIndex(item => item.id === id);
+
+      if (index === -1) {
+        continue;
+      }
+
+      state.stack = state.stack.map((item, position) =>
+        position === index ? { ...next(item), id } : item,
+      );
+      state.update?.();
+
+      return true;
+    }
+
+    return false;
   };
 
   const destroy = (id?: string) => {
@@ -189,5 +212,5 @@ export function createImperativeStack<
     });
   };
 
-  return { render, destroy, getRootElement };
+  return { render, update, destroy, getRootElement };
 }

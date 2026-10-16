@@ -25,6 +25,23 @@ export default function ToastDemo() {
       >
         Error
       </Button>
+      <Button
+        onClick={() => {
+          Toast.loading('Saving…', { id: 'demo-save' });
+          setTimeout(() => {
+            Toast.success('Saved', { id: 'demo-save' });
+          }, 1500);
+        }}
+      >
+        Loading → success
+      </Button>
+      <Button
+        onClick={() =>
+          Toast.info('Shown at the top center.', { placement: 'top' })
+        }
+      >
+        Top
+      </Button>
     </Space>
   );
 }
