@@ -69,7 +69,7 @@ export default defineConfig({
     Swiper: 'src/components/organisms/swiper/index.ts',
     Toast: 'src/components/organisms/toast.tsx',
     Container: 'src/components/templates/container.tsx',
-    Empty: 'src/components/templates/empty.tsx',
+    Empty: 'src/components/molecules/empty.tsx',
     Result: 'src/components/templates/result.tsx',
     PageHeader: 'src/components/templates/page-header.tsx',
     utils: 'src/lib/utils/index.ts',
