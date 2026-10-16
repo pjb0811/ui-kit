@@ -85,6 +85,7 @@ Composite components combining multiple atoms
 | **ContextMenu**  | A menu opened by right-clicking an area                    | -              |
 | **Descriptions** | Labeled record details in a responsive grid                | -              |
 | **Dropdown**     | Reveals a floating `Menu` from a trigger                   | -              |
+| **Empty**        | An inline placeholder for the "loaded, but empty" state    | -              |
 | **Marquees**     | Rows of content scrolling in a continuous loop             | `Item`         |
 | **Menu**         | Navigation menu with nested submenus                       | -              |
 | **Pagination**   | Page navigation for long lists                             | -              |
@@ -122,14 +123,13 @@ Complex UI sections
 
 Page layout templates
 
-| Component      | Description                                             | Sub-components                         |
-| -------------- | ------------------------------------------------------- | -------------------------------------- |
-| **Container**  | Centres page content at a capped width with gutters     | -                                      |
-| **Empty**      | An inline placeholder for the "loaded, but empty" state | -                                      |
-| **Grid**       | A 24-column responsive grid (`Row` and `Col` exports)   | -                                      |
-| **Layout**     | The page scaffold: header, sider, content and footer    | `Header`, `Sider`, `Content`, `Footer` |
-| **PageHeader** | A page title block with back button and actions         | -                                      |
-| **Result**     | A full-page screen for an operation's outcome           | -                                      |
+| Component      | Description                                           | Sub-components                         |
+| -------------- | ----------------------------------------------------- | -------------------------------------- |
+| **Container**  | Centres page content at a capped width with gutters   | -                                      |
+| **Grid**       | A 24-column responsive grid (`Row` and `Col` exports) | -                                      |
+| **Layout**     | The page scaffold: header, sider, content and footer  | `Header`, `Sider`, `Content`, `Footer` |
+| **PageHeader** | A page title block with back button and actions       | -                                      |
+| **Result**     | A full-page screen for an operation's outcome         | -                                      |
 
 ## 🛠 Core Features
 
