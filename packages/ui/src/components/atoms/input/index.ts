@@ -1,4 +1,4 @@
-import InputImpl from './input';
+import InputImpl, { type Props } from './input';
 import Number from './number';
 import OTP from './otp';
 import Search from './search';
@@ -22,3 +22,4 @@ export { Number, OTP, Search, TextArea };
 export type { Props as OTPProps } from './otp';
 export type { Props as NumberProps } from './number';
 export default Input;
+export type { Props };
