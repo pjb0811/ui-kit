@@ -25,7 +25,7 @@ src/
 │   ├── molecules/    # 🔬 분자 - 원자들의 조합
 │   ├── organisms/    # 🦠 유기체 - 복잡한 UI 블록
 │   └── templates/    # 📄 템플릿 - 페이지 레이아웃
-├── core/             # ⚙️ 핵심 UI 로직 (Base UI 기반)
+├── core/             # ⚙️ 내부 Base UI 프리미티브 (export 안 됨)
 ├── lib/
 │   ├── utils/        # 🛠 유틸리티 함수
 │   ├── colors.ts     # 🎨 색상 토큰 해석
@@ -37,70 +37,105 @@ src/
 
 ## 🧬 Atoms (원자)
 
-기본적인 UI 구성 요소들
+기본 UI 구성 요소
 
-| 컴포넌트        | 설명                      | 하위 컴포넌트                        |
-| --------------- | ------------------------- | ------------------------------------ |
-| **Button**      | 다양한 스타일의 버튼      | -                                    |
-| **Checkbox**    | 체크박스 및 그룹 체크박스 | `Group`                              |
-| **ColorPicker** | 색상 선택 컴포넌트        | -                                    |
-| **FloatButton** | 플로팅 버튼               | `BackTop`                            |
-| **Input**       | 입력 필드 컴포넌트        | `Search`, `TextArea`                 |
-| **Popover**     | 팝오버 툴팁 컴포넌트      | -                                    |
-| **Progress**    | 진행률 표시 컴포넌트      | -                                    |
-| **Radio**       | 라디오 버튼 컴포넌트      | -                                    |
-| **Select**      | 드롭다운 선택 컴포넌트    | -                                    |
-| **Skeleton**    | 로딩 스켈레톤             | `Button`, `Node`                     |
-| **Spin**        | 로딩 스피너               | -                                    |
-| **Switch**      | 토글 스위치               | -                                    |
-| **Tag**         | 알약 모양의 라벨/태그     | -                                    |
-| **Typography**  | 텍스트 컴포넌트           | `Link`, `Paragraph`, `Text`, `Title` |
+| 컴포넌트           | 설명                                               | 하위 컴포넌트                         |
+| ------------------ | -------------------------------------------------- | ------------------------------------- |
+| **AutoComplete**   | 입력하는 동안 일치하는 옵션을 제안하는 텍스트 입력 | -                                     |
+| **Avatar**         | 이니셜·아이콘 대체 표시를 지원하는 프로필 이미지   | -                                     |
+| **Badge**          | 다른 요소에 붙는 개수 또는 상태 점                 | -                                     |
+| **Button**         | type, variant, size, 로딩 상태를 지원하는 버튼     | -                                     |
+| **Cascader**       | 여러 단계로 중첩된 옵션에서 하나를 선택            | -                                     |
+| **Checkbox**       | 단일 체크박스 또는 값 하나를 공유하는 그룹         | `Group`                               |
+| **CodeEditor**     | CodeMirror 6 편집기 (개별 경로 전용, 아래 참고)    | -                                     |
+| **ColorPicker**    | 팝오버에서 hex 색상을 고르는 스와치                | -                                     |
+| **DatePicker**     | 단일 날짜를 고르는 캘린더 팝오버 버튼              | -                                     |
+| **Divider**        | 가로·세로 구분선, 라벨 선택 가능                   | -                                     |
+| **FloatButton**    | 뷰포트 모서리에 고정된 원형 버튼                   | `BackTop`                             |
+| **Input**          | 텍스트 입력과 검색·숫자·OTP·여러 줄 변형           | `Search`, `Number`, `OTP`, `TextArea` |
+| **Mentions**       | `@` 접두 토큰을 자동 완성하는 텍스트 영역          | -                                     |
+| **Popover**        | 트리거에 붙어 뜨는 플로팅 패널                     | -                                     |
+| **Progress**       | 퍼센트만큼 채워지는 가로·세로 막대                 | -                                     |
+| **Radio**          | 단일 라디오 또는 상호 배타적 옵션 그룹             | `Group`                               |
+| **Rate**           | 별점 입력                                          | -                                     |
+| **RichTextEditor** | HTML 문자열을 다루는 TipTap 기반 편집기            | -                                     |
+| **Segmented**      | 보기 전환용 단일 선택 컨트롤                       | -                                     |
+| **Select**         | 하나 이상의 값을 고르는 드롭다운, 검색 지원        | -                                     |
+| **Skeleton**       | 로딩 중 콘텐츠 모양을 흉내 내는 자리 표시          | `Button`, `Node`                      |
+| **Slider**         | 드래그로 숫자 값이나 범위를 조절                   | -                                     |
+| **Spin**           | 단독 또는 오버레이로 쓰는 로딩 표시                | -                                     |
+| **Switch**         | 켜기/끄기 토글                                     | -                                     |
+| **Tag**            | 콘텐츠 분류용 작은 라벨                            | -                                     |
+| **TimePicker**     | 시간을 고르는 팝오버 버튼                          | -                                     |
+| **ToggleGroup**    | 각각 독립적으로 눌리는 액션 버튼 그룹              | -                                     |
+| **Tooltip**        | 호버·포커스 시 보이는 짧은 텍스트 힌트             | -                                     |
+| **Typography**     | 제목, 본문, 문단, 링크                             | `Link`, `Paragraph`, `Text`, `Title`  |
 
 ## 🔬 Molecules (분자)
 
-여러 원자들이 결합된 복합 컴포넌트들
+여러 원자를 조합한 컴포넌트
 
-| 컴포넌트     | 설명                     | 하위 컴포넌트 |
-| ------------ | ------------------------ | ------------- |
-| **Collapse** | 접을 수 있는 컨텐츠 영역 | -             |
-| **Dropdown** | 드롭다운 메뉴            | -             |
-| **Marquees** | 무한 스크롤 마키         | `Item`        |
-| **Menu**     | 네비게이션 메뉴          | -             |
-| **Reveals**  | 애니메이션 리빌          | `Item`        |
-| **Space**    | 간격 조정 컴포넌트       | -             |
+| 컴포넌트         | 설명                                            | 하위 컴포넌트 |
+| ---------------- | ----------------------------------------------- | ------------- |
+| **Alert**        | 상태 색상과 선택적 액션이 있는 인라인 메시지    | -             |
+| **Anchor**       | 현재 섹션을 강조하는 페이지 내 내비게이션       | -             |
+| **Breadcrumb**   | 현재 페이지까지의 경로                          | -             |
+| **Card**         | 제목을 선택할 수 있는 콘텐츠 컨테이너           | -             |
+| **Collapse**     | 펼칠 수 있는 패널, 아코디언 모드 지원           | -             |
+| **ContextMenu**  | 영역을 우클릭해 여는 메뉴                       | -             |
+| **Descriptions** | 반응형 그리드로 표시하는 라벨-값 상세 정보      | -             |
+| **Dropdown**     | 트리거에서 플로팅 `Menu`를 표시                 | -             |
+| **Empty**        | "로드됐지만 비어 있음" 상태의 인라인 자리 표시  | -             |
+| **Marquees**     | 계속 반복해 흐르는 콘텐츠 행                    | `Item`        |
+| **Menu**         | 중첩 서브메뉴를 지원하는 내비게이션 메뉴        | -             |
+| **Pagination**   | 긴 목록의 페이지 이동                           | -             |
+| **Popconfirm**   | 동작 전에 확인을 묻는 팝오버                    | -             |
+| **Reveals**      | 자식을 순차적으로 나타나게 하는 애니메이션      | `Item`        |
+| **ScrollArea**   | 스타일된 스크롤바가 있는 스크롤 컨테이너        | -             |
+| **Space**        | 자식을 가로·세로로 간격을 두고 배치             | -             |
+| **Splitter**     | 드래그 핸들로 크기를 조절하는 패널              | `Panel`       |
+| **Statistic**    | 제목과 단위가 있는 형식화된 지표                | -             |
+| **Steps**        | 순서가 있는 작업 흐름의 단계                    | -             |
+| **Tabs**         | 관련 콘텐츠 패널 사이를 전환                    | -             |
+| **Timeline**     | 타임스탬프가 있는 순서형 이벤트                 | -             |
+| **Transfer**     | 두 목록 사이로 항목 이동                        | -             |
+| **Upload**       | 클릭·드래그 업로드 영역과 삭제 가능한 파일 목록 | -             |
 
 ## 🦠 Organisms (유기체)
 
-복잡한 UI 섹션들
+복잡한 UI 섹션
 
-| 컴포넌트   | 설명                     | 하위 컴포넌트 |
-| ---------- | ------------------------ | ------------- |
-| **Drawer** | 사이드 드로어            | -             |
-| **List**   | 리스트 및 리스트 아이템  | `Item`        |
-| **Modal**  | 모달 다이얼로그          | -             |
-| **Swiper** | 슬라이더/캐러셀 컴포넌트 | `Slide`       |
+| 컴포넌트       | 설명                                                                  | 하위 컴포넌트                                                                               |
+| -------------- | --------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| **Calendar**   | 날짜 선택이나 날짜별 콘텐츠 표시용 월간 보기                          | -                                                                                           |
+| **Drawer**     | 화면 가장자리에서 밀려 나오는 제어형 패널                             | -                                                                                           |
+| **Form**       | 라벨, 설명, 오류 메시지가 있는 필드로 구성된 폼 레이아웃              | `Field`, `Control`                                                                          |
+| **List**       | 로딩·빈 상태·무한 스크롤을 지원하는 목록                              | `Item`                                                                                      |
+| **Modal**      | 제어형 또는 명령형으로 여는 다이얼로그                                | `confirm`, `info`, `success`, `warning`, `error`, `destroy`, `destroyAll`                   |
+| **Swiper**     | Swiper.js 기반의 터치 캐러셀                                          | `Slide`                                                                                     |
+| **Table**      | 셀 렌더링, 로딩·빈 상태, 선택적 페이지네이션을 지원하는 데이터 테이블 | -                                                                                           |
+| **Toast**      | 자동으로 사라지는 명령형 알림                                         | `open`, `info`, `success`, `warning`, `error`, `loading`, `config`, `destroy`, `destroyAll` |
+| **Tour**       | 요소에 붙어 단계별로 안내하는 가이드                                  | -                                                                                           |
+| **Tree**       | 펼치기, 선택, 지연 로딩을 지원하는 계층 목록                          | -                                                                                           |
+| **TreeSelect** | 옵션이 트리인 셀렉트                                                  | -                                                                                           |
 
 ## 📄 Templates (템플릿)
 
 페이지 레이아웃 템플릿
 
-| 컴포넌트   | 설명                 | 하위 컴포넌트                          |
-| ---------- | -------------------- | -------------------------------------- |
-| **Layout** | 전체 페이지 레이아웃 | `Header`, `Sider`, `Content`, `Footer` |
+| 컴포넌트       | 설명                                           | 하위 컴포넌트                          |
+| -------------- | ---------------------------------------------- | -------------------------------------- |
+| **Container**  | 최대 폭과 여백으로 페이지 콘텐츠를 가운데 정렬 | -                                      |
+| **Grid**       | 24열 반응형 그리드 (`Row`, `Col` export)       | -                                      |
+| **Layout**     | 헤더, 사이더, 콘텐츠, 푸터로 된 페이지 골격    | `Header`, `Sider`, `Content`, `Footer` |
+| **PageHeader** | 뒤로 가기 버튼과 액션이 있는 페이지 제목 블록  | -                                      |
+| **Result**     | 작업 결과를 보여주는 전체 화면                 | -                                      |
 
 ## 🛠 핵심 기능
 
-### Core 모듈
+### Base UI 기반
 
-Base UI 기반의 접근성 우선 핵심 컴포넌트들:
-
-- `accordion.tsx` - 아코디언 컴포넌트 (Base UI 기반)
-- `button.tsx` - 버튼 컴포넌트 (class-variance-authority로 variants 관리)
-- `dialog.tsx` - 다이얼로그 컴포넌트 (Base UI 기반)
-- `drawer.tsx` - 드로어 컴포넌트 (Base UI dialog 기반)
-- `progress.tsx` - 진행률 컴포넌트 (Base UI 기반)
-- `skeleton.tsx` - 스켈레톤 컴포넌트
-- `switch.tsx` - 스위치 컴포넌트 (Base UI 기반)
+컴포넌트는 [Base UI](https://base-ui.com) 프리미티브 위에 만들어져 포커스 관리, 포털, `aria-*` 배선, 팝업 위치 계산을 Base UI에 맡깁니다. 내부 프리미티브 계층(`src/core`)은 공개 API가 아니며 import할 수 없습니다.
 
 ### 유틸리티
 
@@ -154,22 +189,12 @@ Dropdown 메뉴)는 모두 `z-index: 1000`을 씁니다. 루트를 격리하지 
 
 ### 개별 컴포넌트 import
 
+모든 컴포넌트는 export 이름과 같은 개별 경로로도 import할 수 있습니다(`Row`/`Col`과 `CodeEditor`는 아래 참고).
+
 ```tsx
-// Typography 컴포넌트
-// Button 컴포넌트
 import Button from '@jbpark/ui-kit/Button';
-// Card 컴포넌트
-import Card from '@jbpark/ui-kit/Card';
-// Layout 컴포넌트
-import Layout from '@jbpark/ui-kit/Layout';
-// Menu 컴포넌트
-import Menu from '@jbpark/ui-kit/Menu';
-// Reveals 컴포넌트
-import Reveals from '@jbpark/ui-kit/Reveals';
-// Space 컴포넌트
-import Space from '@jbpark/ui-kit/Space';
-// Tag 컴포넌트
-import Tag from '@jbpark/ui-kit/Tag';
+import Input from '@jbpark/ui-kit/Input';
+import Modal from '@jbpark/ui-kit/Modal';
 import Typography from '@jbpark/ui-kit/Typography';
 ```
 
@@ -179,6 +204,10 @@ import Typography from '@jbpark/ui-kit/Typography';
 > 전체(Swiper 포함)를 다시 export하는데, `Swiper`가 `swiper`의 CSS를 사이드
 > 이펙트로 불러오기 때문에 Node/SSR 빌드(예: Astro static build)에서 순수
 > `.css` import를 처리 못 해 빌드가 깨질 수 있습니다.
+
+- `Row`/`Col`은 named export라 개별 경로가 없습니다. 루트에서 `import { Row, Col } from '@jbpark/ui-kit'`로 가져옵니다.
+- `CodeEditor`는 반대로 **개별 경로 전용**입니다(`@jbpark/ui-kit/CodeEditor`). CodeMirror가 선택적 peer 의존성이라 루트 진입점에는 포함되지 않습니다.
+- 타입은 루트 진입점에서 가져옵니다: `import type { ButtonProps } from '@jbpark/ui-kit'`.
 
 ### 유틸리티 및 프로바이더 import
 
@@ -272,21 +301,13 @@ pnpm run generate:component
 
 ## 📦 패키지 Exports
 
-이 패키지는 다음과 같은 모듈들을 export합니다:
-
-- `@jbpark/ui-kit` - 메인 패키지 (모든 컴포넌트)
-- `@jbpark/ui-kit/Typography` - Typography 컴포넌트
-- `@jbpark/ui-kit/Button` - Button 컴포넌트
-- `@jbpark/ui-kit/Tag` - Tag 컴포넌트
-- `@jbpark/ui-kit/Card` - Card 컴포넌트
-- `@jbpark/ui-kit/Space` - Space 컴포넌트
-- `@jbpark/ui-kit/Menu` - Menu 컴포넌트
-- `@jbpark/ui-kit/Reveals` - Reveals 컴포넌트
-- `@jbpark/ui-kit/CodeEditor` - CodeEditor 컴포넌트
-- `@jbpark/ui-kit/Layout` - Layout 템플릿
+- `@jbpark/ui-kit` - 메인 진입점 (`CodeEditor`를 제외한 모든 컴포넌트와 타입, `Config` 등 `providers` export)
+- `@jbpark/ui-kit/<ComponentName>` - 컴포넌트별 개별 경로 (default export만, 위 표의 컴포넌트 이름과 같음)
 - `@jbpark/ui-kit/utils` - 유틸리티 함수 (`cn`, `renderConditional`)
 - `@jbpark/ui-kit/providers` - Config 프로바이더 및 테마
 - `@jbpark/ui-kit/style.css` - 전역 스타일 (필수)
+
+전체 목록은 패키지 `package.json`의 `exports` 필드가 기준입니다.
 
 ## 🤝 기여하기
 
