@@ -59,6 +59,7 @@ const sidebars: SidebarsConfig = {
         'components/organisms/calendar',
         'components/atoms/badge',
         'components/atoms/popover',
+        'components/atoms/tooltip',
         'components/molecules/card',
         'components/molecules/descriptions',
         'components/molecules/statistic',
@@ -103,6 +104,7 @@ const sidebars: SidebarsConfig = {
         'components/molecules/breadcrumb',
         'components/molecules/pagination',
         'components/molecules/steps',
+        'components/molecules/tabs',
       ],
     },
     {
