@@ -1,0 +1,43 @@
+---
+title: Tooltip
+---
+
+import TooltipDemo from '../../../src/demo/tooltip-demo';
+
+# Tooltip
+
+A short text hint that appears when the user hovers over or focuses a trigger, built on Base UI's Tooltip primitive. Hover over or tab to each button below.
+
+```tsx
+import { Button, Tooltip } from '@jbpark/ui-kit';
+
+<Tooltip content="Copy to clipboard">
+  <Button>Copy</Button>
+</Tooltip>;
+```
+
+<TooltipDemo />
+
+## Props
+
+| Prop           | Type                               | Default  | Description                                                                |
+| -------------- | ---------------------------------- | -------- | -------------------------------------------------------------------------- |
+| `children`     | `ReactElement`                     | required | The trigger. A single element that can receive focus and pointer events.   |
+| `content`      | `ReactNode`                        | required | Tooltip text.                                                              |
+| `placement`    | placement name (see below)         | `'top'`  | Side and alignment relative to the trigger.                                |
+| `offset`       | `number`                           | `8`      | Distance between the trigger and the popup in pixels.                      |
+| `delay`        | `number`                           | `600`    | Hover delay before opening, in milliseconds. Keyboard focus opens at once. |
+| `closeDelay`   | `number`                           | `0`      | Delay before closing, in milliseconds.                                     |
+| `open`         | `boolean`                          | -        | Controlled open state.                                                     |
+| `defaultOpen`  | `boolean`                          | `false`  | Initial open state when uncontrolled.                                      |
+| `onOpenChange` | `(open: boolean, details) => void` | -        | Called when the open state changes.                                        |
+| `disabled`     | `boolean`                          | `false`  | Prevents the tooltip from opening.                                         |
+| `className`    | `string`                           | -        | Popup class. The trigger keeps its own `className`.                        |
+
+`placement`: `'top' | 'left' | 'right' | 'bottom' | 'topLeft' | 'topRight' |
+'bottomLeft' | 'bottomRight' | 'leftTop' | 'leftBottom' | 'rightTop' |
+'rightBottom'`.
+
+A tooltip is a supplementary hint. It does not appear on touch devices without a hover, so keep essential information visible elsewhere. For interactive content (links, buttons) or a title, use [Popover](./popover.mdx) instead.
+
+`Tooltip` also accepts the other props of Base UI's `Tooltip.Root` (for example `trackCursorAxis` and `onOpenChangeComplete`). The popup renders into the container from `Config`'s `getContainer`.
