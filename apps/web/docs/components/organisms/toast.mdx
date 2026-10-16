@@ -7,7 +7,7 @@ import ToastDemo from '../../../src/demo/toast-demo';
 
 # Toast
 
-Imperative, non-blocking notifications. Call `Toast.info` / `success` / `warning` / `error` from anywhere — each stacks in a fixed portal at the bottom-right and auto-dismisses after `duration` (default 4s). Hovering or focusing a toast pauses its timer so it can't disappear mid-read.
+Imperative, non-blocking notifications. Call `Toast.info` / `success` / `warning` / `error` / `loading` from anywhere — each stacks in a fixed portal, at the bottom end of the screen by default, and auto-dismisses after `duration` (default 4s). Hovering or focusing a toast pauses its timer so it can't disappear mid-read.
 
 ```tsx
 import { Toast } from '@jbpark/ui-kit';
@@ -28,6 +28,43 @@ const id = Toast.info('Uploading…', { duration: 0 }); // 0 = stays until dismi
 Toast.destroy(id);
 ```
 
+## Placement
+
+Pass `placement` to show a toast in another corner or edge: `top-start`, `top`, `top-end`, `bottom-start`, `bottom` or `bottom-end` (the default). `start` and `end` follow the writing direction of the container the stack mounts into, so in a right-to-left `Config` the default `bottom-end` stack is at the bottom left. In a left-to-right page it stays at the bottom right, as before.
+
+Each placement in each container is a separate stack with its own region: toasts in one never move, queue or close toasts in another, and an empty stack is removed. The oldest toast in a stack sits nearest the screen edge. Toasts are at most `100vw - 2rem` wide so they fit narrow screens.
+
+```tsx
+Toast.info('Copied link', { placement: 'top' });
+```
+
+## Updating a toast
+
+Calling a trigger with the `id` of a toast that is still shown replaces that toast's content in place instead of adding another. Its position in the stack, `placement`, and `container` stay the same; those options on the update are ignored. The update restarts the toast's duration with the new `duration`, and the new `onClose` replaces the previous one, which does not run. With an `id` that is not shown, the trigger adds a new toast with that id.
+
+`Toast.loading` shows a spinner and stays until it is updated or closed (its `duration` defaults to `0`), which suits a save or upload that finishes later:
+
+```tsx
+const id = Toast.loading('Saving…', { id: 'save' });
+
+await save();
+Toast.success('Saved', { id });
+```
+
+## Limiting visible toasts
+
+`Toast.config({ maxCount })` limits how many toasts each stack shows at once. Further toasts wait in order and appear, with their duration starting then, as shown ones close. Nothing is dropped, so a toast with an action button is never removed before it is seen. `maxCount` is unset (unlimited) by default and applies the next time a stack changes.
+
+`Toast.config` also sets the default `placement` and `duration` for toasts shown afterwards. An explicit option on a trigger wins.
+
+```tsx
+Toast.config({ maxCount: 3, placement: 'top-end' });
+```
+
+## Closing
+
+`onClose` runs exactly once when a toast closes, by its close button or when its duration ends. `Toast.destroy(id)` and `Toast.destroyAll()` remove toasts without calling `onClose`, and a queued toast that is destroyed never appears.
+
 ## API
 
 | Method                    | Signature                                          |
@@ -36,6 +73,9 @@ Toast.destroy(id);
 | `Toast.success`           | `(title, options?) => id`                           |
 | `Toast.warning`           | `(title, options?) => id`                           |
 | `Toast.error`             | `(title, options?) => id`                           |
+| `Toast.loading`           | `(title, options?) => id`                           |
+| `Toast.open`              | `(options) => id` (`status` and `title` in options) |
+| `Toast.config`            | `({ placement?, duration?, maxCount? }) => void`    |
 | `Toast.destroy`           | `(id) => void`                                      |
 | `Toast.destroyAll`        | `() => void`                                        |
 
@@ -48,8 +88,10 @@ Toast.destroy(id);
 | `icon`        | `ReactNode` (overrides the status icon) | - |
 | `closable`    | `boolean`               | `true`      |
 | `action`      | `ReactNode`             | -           |
+| `id`          | `string` (reuse to update a shown toast) | generated |
+| `placement`   | `'top-start' \| 'top' \| 'top-end' \| 'bottom-start' \| 'bottom' \| 'bottom-end'` | `'bottom-end'` |
 | `container`   | `HTMLElement` (custom mount target) | -     |
 | `className`   | `string`                | -           |
 | `onClose`     | `() => void`            | -           |
 
-Each status sets an accessible role automatically (`alert` for `error`, `status` otherwise) and a matching icon. The `Toast.*` methods set `status` for you; on the `<Toast>` component the `status` prop drives this (the old `type` prop still works as a deprecated alias).
+Each status sets an accessible role automatically (`alert` for `error`, `status` otherwise, including `loading`) and a matching icon. The `Toast.*` methods set `status` for you; on the `<Toast>` component the `status` prop drives this (the old `type` prop still works as a deprecated alias).

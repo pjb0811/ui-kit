@@ -15,7 +15,11 @@ export type {
   Props as TableProps,
 } from './table';
 export { default as Toast } from './toast';
-export type { ToastOptions } from './toast';
+export type {
+  ToastOptions,
+  Placement as ToastPlacement,
+  GlobalConfig as ToastConfig,
+} from './toast';
 export { default as Tour } from './tour';
 export type { Props as TourProps, Step as TourStep } from './tour';
 export { default as Tree } from './tree';
