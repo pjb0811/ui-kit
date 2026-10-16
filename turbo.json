@@ -17,7 +17,12 @@
       "dependsOn": ["^check-dynamic-classes"]
     },
     "check-orphaned-docs": {
-      "inputs": ["docs/**", "sidebars.ts", "scripts/check-orphaned-docs.mjs"]
+      "inputs": [
+        "docs/**",
+        "sidebars.ts",
+        "scripts/check-orphaned-docs.mjs",
+        "$TURBO_ROOT$/packages/ui/src/components/*/index.ts"
+      ]
     },
     "check-regression-net": {
       "dependsOn": ["build"],
