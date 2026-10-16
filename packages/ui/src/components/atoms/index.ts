@@ -26,6 +26,11 @@ export { default as RichTextEditor } from './rich-text-editor';
 export { default as Select } from './select';
 export { default as Segmented } from './segmented';
 export type { Props as SegmentedProps } from './segmented';
+export { default as ToggleGroup } from './toggle-group';
+export type {
+  Props as ToggleGroupProps,
+  Option as ToggleGroupOption,
+} from './toggle-group';
 export { default as Skeleton } from './skeleton';
 export { default as Slider } from './slider';
 export { default as Spin } from './spin';

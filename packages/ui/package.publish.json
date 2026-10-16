@@ -46,6 +46,11 @@
       "import": "./dist/Segmented.mjs",
       "default": "./dist/Segmented.mjs"
     },
+    "./ToggleGroup": {
+      "types": "./dist/ToggleGroup.d.mts",
+      "import": "./dist/ToggleGroup.mjs",
+      "default": "./dist/ToggleGroup.mjs"
+    },
     "./TimePicker": {
       "types": "./dist/TimePicker.d.mts",
       "import": "./dist/TimePicker.mjs",

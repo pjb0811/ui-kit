@@ -33,6 +33,7 @@ const sidebars: SidebarsConfig = {
         'components/organisms/form',
         'components/organisms/tree-select',
         'components/atoms/segmented',
+        'components/atoms/toggle-group',
         'components/atoms/rate',
         'components/atoms/cascader',
         'components/atoms/date-picker',

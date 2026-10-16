@@ -142,6 +142,15 @@ const fixtures = {
   Avatar: { alt: 'Ada Lovelace', fallback: 'AL' },
   Badge: { count: 3, children: h(ui.Button, null, 'Inbox') },
   Segmented: { 'aria-label': 'View', options: ['Grid', 'List'] },
+  ToggleGroup: {
+    'aria-label': 'Filters',
+    options: [
+      { value: 'open', label: 'Open' },
+      { value: 'bold', label: 'Bold', icon: 'B', iconOnly: true },
+      { value: 'off', label: 'Off', disabled: true },
+    ],
+    defaultValue: ['open'],
+  },
   TimePicker: { label: 'Start time', defaultValue: '09:30' },
   AutoComplete: {
     options: [{ value: 'alpha' }],
@@ -534,6 +543,21 @@ if (
 ) {
   errors.push(
     'Tree SSR must retain nested semantics, mixed checks, selection, and one tree-item tab stop.',
+  );
+}
+
+const toggleGroupMarkup = markupByName.ToggleGroup;
+
+if (
+  !toggleGroupMarkup?.includes('data-slot="toggle-group"') ||
+  !/aria-pressed="true"[^>]*>Open</.test(toggleGroupMarkup) ||
+  (toggleGroupMarkup.match(/aria-pressed="false"/g) ?? []).length !== 2 ||
+  !toggleGroupMarkup.includes('aria-label="Bold"') ||
+  toggleGroupMarkup.includes('>Bold<') ||
+  !/disabled=""[^>]*>Off</.test(toggleGroupMarkup)
+) {
+  errors.push(
+    'ToggleGroup SSR must render pressed state, icon-only accessible names, and disabled options before hydration.',
   );
 }
 

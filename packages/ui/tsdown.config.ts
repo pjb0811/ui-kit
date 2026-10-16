@@ -17,6 +17,7 @@ export default defineConfig({
     Avatar: 'src/components/atoms/avatar.tsx',
     Badge: 'src/components/atoms/badge.tsx',
     Segmented: 'src/components/atoms/segmented.tsx',
+    ToggleGroup: 'src/components/atoms/toggle-group.tsx',
     TimePicker: 'src/components/atoms/time-picker.tsx',
     Typography: 'src/components/atoms/typography/index.ts',
     Button: 'src/components/atoms/button.tsx',
