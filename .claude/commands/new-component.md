@@ -45,6 +45,8 @@
 
    알파벳 순서를 유지한다.
 
+   같은 이름으로 deep-import subpath도 등록한다. `packages/ui/package.json`의 `exports`에 `"./ComponentName": "./src/components/{tier}/kebab-case-name.tsx"`(조합 컴포넌트는 `…/kebab-case-name/index.ts`), `package.publish.json`의 `exports`에 `./dist/ComponentName.{mjs,d.mts}`, `tsdown.config.ts`의 `entry`에 `ComponentName`을 추가한다. 빌드 후 `pnpm check-api-surface`가 누락이나 경로 불일치를 잡고, 의도한 변경이면 `--update`로 스냅샷을 갱신한다.
+
 4. **Storybook 스토리 생성** — `apps/docs/stories/{tier}/{kebab-case-name}/index.stories.tsx`
 
    아래 패턴을 따른다:
@@ -57,18 +59,14 @@
    const meta: Meta<typeof ComponentName> = {
      title: 'UI/ComponentName',
      component: ComponentName,
-     argTypes: {
-       /* Props 기반으로 채움 */
-     },
+     argTypes: {/* Props 기반으로 채움 */},
    };
    
    export default meta;
    type Story = StoryObj<typeof meta>;
    
    export const Default: Story = {
-     args: {
-       /* 기본값 */
-     },
+     args: {/* 기본값 */},
    };
    ```
 
