@@ -54,3 +54,5 @@ export type {
   Props as ContextMenuProps,
   Item as ContextMenuItem,
 } from './context-menu';
+export { default as Empty } from './empty';
+export type { Props as EmptyProps } from './empty';
