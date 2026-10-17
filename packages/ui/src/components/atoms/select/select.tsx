@@ -2,11 +2,9 @@ import React from 'react';
 
 import { cn } from '@repo/ui/utils';
 
-import { select } from '../../core';
-import MultipleSelect, { type Props as MultipleProps } from './select-multiple';
-import SearchableSelect, {
-  type Props as SearchableProps,
-} from './select-searchable';
+import { select } from '../../../core';
+import MultipleSelect, { type Props as MultipleProps } from './multiple';
+import SearchableSelect, { type Props as SearchableProps } from './searchable';
 
 const {
   Select: Core,

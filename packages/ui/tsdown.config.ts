@@ -4,7 +4,7 @@ import tailwindcss from '@tailwindcss/postcss';
 
 export default defineConfig({
   entry: {
-    Mentions: 'src/components/atoms/mentions.tsx',
+    Mentions: 'src/components/atoms/mentions/index.ts',
     Anchor: 'src/components/molecules/anchor.tsx',
     Calendar: 'src/components/organisms/calendar.tsx',
     Statistic: 'src/components/molecules/statistic.tsx',
@@ -51,7 +51,7 @@ export default defineConfig({
     Progress: 'src/components/atoms/progress.tsx',
     Radio: 'src/components/atoms/radio/index.ts',
     RichTextEditor: 'src/components/atoms/rich-text-editor/index.ts',
-    Select: 'src/components/atoms/select.tsx',
+    Select: 'src/components/atoms/select/index.ts',
     Skeleton: 'src/components/atoms/skeleton/index.ts',
     Slider: 'src/components/atoms/slider/index.ts',
     Spin: 'src/components/atoms/spin.tsx',

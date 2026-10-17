@@ -2,7 +2,7 @@
 
 import { type ReactNode, useMemo } from 'react';
 
-import { combobox } from '../../core';
+import { combobox } from '../../../core';
 
 const {
   ComboboxCollection,
