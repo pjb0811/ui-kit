@@ -72,7 +72,7 @@ export default defineConfig({
     Empty: 'src/components/molecules/empty.tsx',
     Result: 'src/components/templates/result.tsx',
     PageHeader: 'src/components/templates/page-header.tsx',
-    utils: 'src/lib/utils/index.ts',
+    utils: 'src/lib/utils.ts',
     providers: 'src/providers/index.ts',
   },
   outDir: 'dist',
