@@ -43,17 +43,18 @@ Every [`@uiw/react-codemirror`](https://uiwjs.github.io/react-codemirror/) prop
 is accepted (`editable`, `readOnly`, `basicSetup`, …). The additions and
 overrides:
 
-| Prop            | Type                                                   | Default      |
-| --------------- | ------------------------------------------------------ | ------------ |
-| `value`         | `string`                                               | — (required) |
-| `height`        | `string`                                               | `'100%'`     |
-| `theme`         | `'light' \| 'dark' \| 'auto' \| 'none' \| Extension`   | `'auto'`     |
-| `extensions`    | `Extension[]`                                          | -            |
-| `diff`          | `{ original: string; mergeControls?: boolean }`         | -            |
-| `formatCode`    | `(code: string) => Promise<string>`                    | -            |
-| `onChange`      | `(value: string) => void`                              | -            |
-| `onSave`        | `(value: string) => void`                              | -            |
-| `onFormatError` | `(error: string \| null) => void`                       | -            |
+| Prop            | Type                                                 | Default      |
+| --------------- | ---------------------------------------------------- | ------------ |
+| `value`         | `string`                                             | — (required) |
+| `height`        | `string`                                             | `'100%'`     |
+| `theme`         | `'light' \| 'dark' \| 'auto' \| 'none' \| Extension` | `'auto'`     |
+| `language`      | `Extension \| null`                                  | JS/TS/JSX    |
+| `extensions`    | `Extension[]`                                        | -            |
+| `diff`          | `{ original: string; mergeControls?: boolean }`      | -            |
+| `formatCode`    | `(code: string) => Promise<string>`                  | -            |
+| `onChange`      | `(value: string) => void`                            | -            |
+| `onSave`        | `(value: string) => void`                            | -            |
+| `onFormatError` | `(error: string \| null) => void`                    | -            |
 
 `CodeEditor` is always controlled via `value`/`onChange` — there is no
 `defaultValue`.
@@ -142,7 +143,22 @@ per-chunk accept/reject gutters.
 
 ### Extensions and language support
 
-The built-in extension set is
-`javascript({ jsx: true, typescript: true })` plus `EditorView.lineWrapping`.
-Anything passed in `extensions` is appended after it, so another language mode,
-a keymap, or a linter can be layered on without forking the component.
+The built-in extension set is a language mode plus `EditorView.lineWrapping`.
+The language mode defaults to `javascript({ jsx: true, typescript: true })`;
+`language` replaces it, and `null` turns highlighting off for plain text:
+
+```tsx
+import { json } from '@codemirror/lang-json';
+
+<CodeEditor value={code} language={json()} />  // JSON instead of JS/TS
+<CodeEditor value={notes} language={null} />   // plain text
+```
+
+Other language packages are not peers of this library — install the ones you
+pass. `@codemirror/lang-javascript` stays required either way, because the
+default is imported statically.
+
+Anything passed in `extensions` is appended after the language mode, so a
+keymap or a linter can be layered on without forking the component. Like
+`extensions`, a new `language` value reconfigures the editor, so create it
+once (at module scope or with `useMemo`) rather than on every render.

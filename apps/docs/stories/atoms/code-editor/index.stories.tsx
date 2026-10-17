@@ -3,6 +3,7 @@
 import { useState } from 'react';
 
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { expect, waitFor } from 'storybook/test';
 
 import { Config } from '@repo/ui';
 import CodeEditor from '@repo/ui/CodeEditor';
@@ -138,6 +139,34 @@ export const FormatOnSave: Story = {
         </p>
       </div>
     );
+  },
+};
+
+// `language={null}` drops the built-in JS/TS mode, so the same source renders
+// without syntax highlighting.
+export const PlainText: Story = {
+  args: {
+    value: SAMPLE,
+    height: '200px',
+  },
+  render: props => (
+    <div className={cn('w-[36rem] space-y-2')}>
+      <div data-testid="default">
+        <CodeEditor {...props} />
+      </div>
+      <div data-testid="plain">
+        <CodeEditor {...props} language={null} />
+      </div>
+    </div>
+  ),
+  // Highlighted tokens are the only spans CodeMirror puts inside an unfocused
+  // line, so their absence means no language mode is active.
+  play: async ({ canvasElement }) => {
+    const tokens = (testId: string) =>
+      canvasElement.querySelectorAll(`[data-testid="${testId}"] .cm-line span`);
+
+    await waitFor(() => expect(tokens('default').length).toBeGreaterThan(0));
+    await expect(tokens('plain')).toHaveLength(0);
   },
 };
 

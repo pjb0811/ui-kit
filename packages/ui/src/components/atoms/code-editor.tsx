@@ -43,7 +43,13 @@ export interface Props extends Omit<
    * still means what it does upstream: no theme extension, style it yourself.
    */
   theme?: 'light' | 'dark' | 'auto' | 'none' | Extension;
-  /** Appended after the built-in JS/TS + line-wrapping extensions. */
+  /**
+   * The language extension. Omitted, it is the built-in JS/TS/JSX mode; an
+   * `Extension` replaces it (e.g. `json()` from `@codemirror/lang-json`, which
+   * the caller installs), and `null` leaves the document as plain text.
+   */
+  language?: Extension | null;
+  /** Appended after the language and line-wrapping extensions. */
   extensions?: Extension[];
   /**
    * Renders a read-through unified diff against `original` instead of a plain
@@ -79,6 +85,7 @@ const CodeEditor = ({
   theme = 'auto',
   height,
   className,
+  language,
   extensions: extraExtensions,
   diff,
   formatCode,
@@ -107,10 +114,13 @@ const CodeEditor = ({
   }, [theme, isDarkActive]);
 
   const extensions = useMemo(() => {
-    const base: Extension[] = [
-      javascript({ jsx: true, typescript: true }),
-      EditorView.lineWrapping,
-    ];
+    const languageExtension =
+      language === undefined
+        ? javascript({ jsx: true, typescript: true })
+        : language;
+    const base: Extension[] = languageExtension
+      ? [languageExtension, EditorView.lineWrapping]
+      : [EditorView.lineWrapping];
 
     if (diff) {
       base.push(
@@ -122,7 +132,7 @@ const CodeEditor = ({
     }
 
     return [...base, ...(extraExtensions ?? [])];
-  }, [diff, extraExtensions]);
+  }, [language, diff, extraExtensions]);
 
   const save = useCallback(
     async (val: string) => {
