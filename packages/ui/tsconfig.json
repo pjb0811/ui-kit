@@ -2,7 +2,7 @@
   "extends": "@repo/typescript-config/react-library.json",
   "compilerOptions": {
     "paths": {
-      "@repo/ui/utils": ["./src/lib/utils/index.ts"],
+      "@repo/ui/utils": ["./src/lib/utils.ts"],
       "@repo/ui/*": ["./src/*"]
     },
     "target": "ES2022",
