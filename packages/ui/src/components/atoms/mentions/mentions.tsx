@@ -18,9 +18,9 @@ import {
 import { useConfig } from '@repo/ui/providers';
 import { cn } from '@repo/ui/utils';
 
-import { autocomplete } from '../../core';
-import Input from './input';
-import { findToken, insertToken } from './mentions-token';
+import { autocomplete } from '../../../core';
+import Input from '../input';
+import { findToken, insertToken } from './token';
 
 export interface Option {
   /** Unique, non-empty token text without whitespace or the prefix. */

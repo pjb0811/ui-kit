@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import ts from 'typescript';
 
 const source = fs.readFileSync(
-  new URL('../src/components/atoms/mentions-token.ts', import.meta.url),
+  new URL('../src/components/atoms/mentions/token.ts', import.meta.url),
   'utf8',
 );
 const { outputText } = ts.transpileModule(source, {

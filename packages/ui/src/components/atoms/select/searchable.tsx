@@ -7,15 +7,15 @@ import { ChevronDownIcon, XIcon } from 'lucide-react';
 import { DEFAULT_LOCALE, useConfig } from '@repo/ui/providers';
 import { cn } from '@repo/ui/utils';
 
-import { combobox, select } from '../../core';
-import Button from './button';
-import Input from './input';
+import { combobox, select } from '../../../core';
+import Button from '../button';
+import Input from '../input';
 import SearchableOptions, {
   type ClassNames,
   type Option,
   type OptionGroup,
   useSelectItems,
-} from './select-searchable-options';
+} from './searchable-options';
 
 const {
   Combobox: Core,
