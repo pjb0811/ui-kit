@@ -1,5 +1,20 @@
 # @repo/ui
 
+## 10.4.0
+
+### Minor Changes
+
+- b508943: Add ToggleGroup for independently pressed action buttons, such as text formatting or filter chips. Any number of options can be pressed, including none; `onChange` reports pressed values in option order. Options support icons, icon-only display with the label as the accessible name, and disabled states, and the group supports sizes, vertical orientation, and right-to-left keyboard navigation.
+- 1dacd91: Export the props types of 18 atoms from the root entry: `ButtonProps`, `CheckboxProps`, `ColorPickerProps`, `DatePickerProps`, `FloatButtonProps`, `InputProps`, `PopoverProps`, `ProgressProps`, `RadioProps`, `RichTextEditorProps`, `SelectProps`, `SkeletonProps`, `SliderProps`, `SpinProps`, `SwitchProps`, `TagProps`, `TooltipProps` and `TypographyProps`. Type-only; no runtime change.
+- 06dc9c7: Add `language` to CodeEditor. An `Extension` replaces the built-in JS/TS/JSX mode, and `null` renders plain text. Omitted, the editor behaves as before.
+- 38849d6: Add deep-import subpaths for the 30 components that did not have one, so every component can be imported without the root entry: `Checkbox`, `ColorPicker`, `DatePicker`, `FloatButton`, `Input`, `Popover`, `Progress`, `Radio`, `RichTextEditor`, `Select`, `Skeleton`, `Slider`, `Spin`, `Switch`, `Tooltip`, `Collapse`, `Dropdown`, `Marquees`, `Splitter`, `Tabs`, `Upload`, `Drawer`, `List`, `Modal`, `Swiper`, `Toast`, `Container`, `Empty`, `Result` and `PageHeader` (for example `import Modal from '@jbpark/ui-kit/Modal'`). Each subpath has only a default export, like the existing ones.
+- 2a5d580: Add `justify` to Space for main-axis placement (`start`, `end`, `center`, `space-between`, `space-around`, `space-evenly`) in horizontal and vertical layouts, and `stretch` to `align`. Defaults are unchanged.
+- 72c857c: Add placement, update by ID, a loading status, and a visible-toast limit to Toast. Pass `placement` (`top-start`, `top`, `top-end`, `bottom-start`, `bottom`, `bottom-end`) to show toasts in separate stacks; the default stays `bottom-end`. Calling a trigger with the `id` of a shown toast updates it in place and restarts its duration, and `Toast.loading` stays until it is updated or closed. `Toast.config({ maxCount, placement, duration })` sets defaults, with toasts beyond `maxCount` queued rather than dropped. `onClose` now runs at most once per toast, and toasts fit narrow screens.
+
+### Patch Changes
+
+- a342993: Update `@jbpark/use-hooks` to 4.6.0. Tour now tracks its step target with `useElementPosition`, attaching no listeners or observers while closed, and Mentions and Layout.Sider read their latest callbacks through `useLatest`. Behavior is unchanged.
+
 ## 10.3.0
 
 ### Minor Changes
