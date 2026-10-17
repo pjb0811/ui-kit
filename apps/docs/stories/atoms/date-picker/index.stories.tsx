@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { expect, within } from 'storybook/test';
 
 import { DatePicker } from '@repo/ui';
 import { cn } from '@repo/ui/utils';
@@ -83,5 +84,33 @@ export const WithTime: Story = {
         </p>
       </div>
     );
+  },
+};
+
+export const ExternalLabel: Story = {
+  render: props => (
+    <div className={cn('flex w-80 flex-col gap-2')}>
+      <label htmlFor="due-date">Due date</label>
+      <DatePicker
+        {...props}
+        id="due-date"
+        aria-describedby="due-date-error"
+        aria-invalid
+      />
+      <p id="due-date-error" className="text-destructive text-sm">
+        Pick a date before Friday.
+      </p>
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const trigger = within(canvasElement).getByRole('button', {
+      name: 'Due date',
+    });
+
+    await expect(trigger).toHaveAttribute('id', 'due-date');
+    await expect(trigger).toHaveAccessibleDescription(
+      'Pick a date before Friday.',
+    );
+    await expect(trigger).toHaveAttribute('aria-invalid', 'true');
   },
 };

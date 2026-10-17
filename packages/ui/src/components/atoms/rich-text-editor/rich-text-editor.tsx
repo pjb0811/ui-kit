@@ -14,7 +14,10 @@ import Toolbar from './toolbar';
 import { DEFAULT_TOOLBAR_PRESETS } from './toolbar-presets';
 import type { ToolbarItem, ToolbarPreset } from './types';
 
-export interface Props {
+export interface Props extends Pick<
+  React.AriaAttributes,
+  'aria-label' | 'aria-labelledby' | 'aria-describedby' | 'aria-invalid'
+> {
   value?: string;
   placeholder?: string;
   className?: string;
@@ -48,9 +51,18 @@ const RichTextEditor = ({
   onUpdate,
   onCommit,
   onChange,
+  ...ariaProps
 }: Props) => {
   const presets = toolbar === true ? DEFAULT_TOOLBAR_PRESETS : toolbar || [];
   const showToolbar = presets.length > 0 || (toolbarItems?.length ?? 0) > 0;
+
+  // ProseMirror writes every attribute value as a string, so unset ones are
+  // dropped rather than rendered as "undefined".
+  const attributes = Object.fromEntries(
+    Object.entries(ariaProps)
+      .filter(([, attributeValue]) => attributeValue !== undefined)
+      .map(([name, attributeValue]) => [name, String(attributeValue)]),
+  );
 
   const editor = useEditor({
     // SSR renders every exported component without effects running, so the
@@ -67,6 +79,9 @@ const RichTextEditor = ({
       }),
     ],
     content: value,
+    // The editable element is the focus target; Tiptap keeps its own
+    // `role="textbox"` and re-applies these attributes when they change.
+    editorProps: { attributes },
     onUpdate: ({ editor: e }) => {
       onUpdate?.(e.getHTML());
     },

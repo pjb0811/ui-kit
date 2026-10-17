@@ -11,6 +11,7 @@ import { combobox, select } from '../../../core';
 import Button from '../button';
 import Input from '../input';
 import SearchableOptions, {
+  type AriaProps,
   type ClassNames,
   type Option,
   type OptionGroup,
@@ -30,16 +31,19 @@ const {
   ComboboxValue,
 } = combobox;
 
-export interface Props extends Omit<
-  combobox.RootProps<string, Option, true>,
-  | 'children'
-  | 'items'
-  | 'filteredItems'
-  | 'onValueChange'
-  | 'itemToStringLabel'
-  | 'itemToStringValue'
-  | 'isItemEqualToValue'
-> {
+export interface Props
+  extends
+    Omit<
+      combobox.RootProps<string, Option, true>,
+      | 'children'
+      | 'items'
+      | 'filteredItems'
+      | 'onValueChange'
+      | 'itemToStringLabel'
+      | 'itemToStringValue'
+      | 'isItemEqualToValue'
+    >,
+    AriaProps {
   searchable: true;
   multiple: true;
   /** Accessible name for the multi-select input. */
@@ -78,6 +82,9 @@ const MultipleSelect = ({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars -- Do not forward the public mode switch to Base UI.
   searchable: _searchable,
   multiple,
+  'aria-labelledby': ariaLabelledBy,
+  'aria-describedby': ariaDescribedBy,
+  'aria-invalid': ariaInvalid,
   ...props
 }: Props) => {
   const { locale } = useConfig();
@@ -162,6 +169,9 @@ const MultipleSelect = ({
                 render={
                   <Input
                     aria-label={label}
+                    aria-labelledby={ariaLabelledBy}
+                    aria-describedby={ariaDescribedBy}
+                    aria-invalid={ariaInvalid}
                     aria-description={
                       values.length > 0
                         ? inputDescription(values.length)

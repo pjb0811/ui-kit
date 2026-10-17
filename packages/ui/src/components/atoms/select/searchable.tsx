@@ -11,6 +11,7 @@ import { combobox, select } from '../../../core';
 import Button from '../button';
 import Input from '../input';
 import SearchableOptions, {
+  type AriaProps,
   type ClassNames,
   type Option,
   type OptionGroup,
@@ -27,17 +28,20 @@ const {
   ComboboxValue,
 } = combobox;
 
-export interface Props extends Omit<
-  combobox.RootProps<string, Option>,
-  | 'children'
-  | 'items'
-  | 'multiple'
-  | 'filteredItems'
-  | 'onValueChange'
-  | 'itemToStringLabel'
-  | 'itemToStringValue'
-  | 'isItemEqualToValue'
-> {
+export interface Props
+  extends
+    Omit<
+      combobox.RootProps<string, Option>,
+      | 'children'
+      | 'items'
+      | 'multiple'
+      | 'filteredItems'
+      | 'onValueChange'
+      | 'itemToStringLabel'
+      | 'itemToStringValue'
+      | 'isItemEqualToValue'
+    >,
+    AriaProps {
   searchable: true;
   multiple?: false;
   /** Accessible name for the trigger and search popup. */
@@ -66,6 +70,9 @@ const SearchableSelect = ({
   searchable: _searchable,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars -- The single-select primitive fixes this mode internally.
   multiple: _multiple,
+  'aria-labelledby': ariaLabelledBy,
+  'aria-describedby': ariaDescribedBy,
+  'aria-invalid': ariaInvalid,
   ...props
 }: Props) => {
   const { locale } = useConfig();
@@ -77,6 +84,9 @@ const SearchableSelect = ({
         data-slot="select-trigger"
         data-size="default"
         aria-label={label}
+        aria-labelledby={ariaLabelledBy}
+        aria-describedby={ariaDescribedBy}
+        aria-invalid={ariaInvalid}
         className={cn(select.selectTriggerStyles, 'w-full max-w-48', className)}
       >
         <span

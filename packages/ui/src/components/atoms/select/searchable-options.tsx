@@ -25,6 +25,12 @@ export interface OptionGroup {
   options: Option[];
 }
 
+/** Attributes every Select mode forwards to the element that receives focus. */
+export type AriaProps = Pick<
+  React.AriaAttributes,
+  'aria-labelledby' | 'aria-describedby' | 'aria-invalid'
+>;
+
 export interface ClassNames {
   input?: string;
   content?: string;

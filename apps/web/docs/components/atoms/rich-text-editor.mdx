@@ -33,6 +33,11 @@ import { RichTextEditor } from '@jbpark/ui-kit';
 `defaultValue`. `onChange` fires with the editor's HTML (`editor.getHTML()`)
 on blur, not on every keystroke.
 
+`aria-label`, `aria-labelledby`, `aria-describedby` and `aria-invalid` go to
+the editable region (`role="textbox"`). A `<label htmlFor>` can't name a
+content-editable element, so use `aria-labelledby` to name it from a visible
+label.
+
 ### Toolbar
 
 `toolbar` is opt-in (defaults to no toolbar, matching the original,
