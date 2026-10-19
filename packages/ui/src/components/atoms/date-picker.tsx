@@ -15,7 +15,10 @@ import TimePicker from './time-picker';
 
 const { Calendar } = calendar;
 
-interface Props {
+interface Props extends Pick<
+  React.ComponentProps<'button'>,
+  'id' | 'aria-label' | 'aria-labelledby' | 'aria-describedby' | 'aria-invalid'
+> {
   defaultValue?: Date;
   value?: Date;
   placeholder?: string;
@@ -39,6 +42,7 @@ const DatePicker = ({
   disabled,
   showTime = false,
   onChange: _onChange = () => {},
+  ...triggerProps
 }: Props) => {
   const [value, onChange] = useControllableState<Date | undefined>({
     value: _value,
@@ -125,6 +129,7 @@ const DatePicker = ({
       }
     >
       <Button
+        {...triggerProps}
         icon={<CalendarIcon />}
         data-empty={!value}
         disabled={disabled}

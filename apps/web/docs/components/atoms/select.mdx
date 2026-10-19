@@ -108,3 +108,12 @@ props (e.g. `value`, `defaultValue`, `disabled`, `name`, `required`) except
 It accepts the corresponding Base UI Combobox root props instead of Select root
 props. In multiple mode, `onChange` receives `string[]`; chips can be removed
 with their buttons or by focusing a chip and pressing Backspace or Delete.
+
+### Labelling
+
+`id` reaches the element that receives focus in every mode: the trigger, or
+the search input in multiple mode. `aria-labelledby`, `aria-describedby` and
+`aria-invalid` go to the same element. In the default mode, pair `id` with an
+external `<label htmlFor>` (or pass `aria-label`). In searchable modes, `label`
+sets `aria-label`, so name the control from a visible label with
+`aria-labelledby`, which takes precedence.

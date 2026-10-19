@@ -44,6 +44,12 @@ Works both controlled (pass `checked` + `onChange`) and uncontrolled (pass
 for custom ones. Also accepts the rest of
 `React.ComponentPropsWithoutRef<'div'>` except `onChange`.
 
+`id`, `aria-label`, `aria-labelledby`, `aria-describedby` and `aria-invalid` go
+to the checkbox control, not the wrapper `div`, so an external
+`<label htmlFor>` names it and `aria-describedby` can point at an error
+message. With `icons`, a `<label htmlFor>` can't name the focusable icon; use
+`aria-labelledby` instead. Without these props, `children` is the label.
+
 ## Checkbox.Group {/* #checkbox-group */}
 
 | Prop           | Type                                        | Default      |

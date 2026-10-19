@@ -31,6 +31,13 @@ export interface Props extends Omit<
     indeterminate: React.ReactNode;
   }>;
   children?: React.ReactNode;
+  /**
+   * Id of the checkbox input, so an external `<label htmlFor>` names the
+   * control. `id` and `aria-*` go to the control, not the wrapper. With
+   * `icons`, a `<label htmlFor>` doesn't name the focusable icon; use
+   * `aria-labelledby` instead.
+   */
+  id?: string;
   onChange?: (checked: boolean) => void;
 }
 
@@ -46,6 +53,11 @@ const Checkbox = ({
   checked: _checked,
   name,
   onChange: _onChange = () => {},
+  id: idProp,
+  'aria-label': ariaLabel,
+  'aria-labelledby': ariaLabelledBy,
+  'aria-describedby': ariaDescribedBy,
+  'aria-invalid': ariaInvalid,
   ...props
 }: Props) => {
   const [checked, setChecked] = useControllableState<boolean>({
@@ -54,7 +66,9 @@ const Checkbox = ({
     onChange: _onChange,
   });
 
-  const id = useId();
+  const generatedId = useId();
+  const id = idProp || generatedId;
+  const labelId = `${id}-label`;
   const itemValue = String(_value);
 
   const cursorClassName = disabled ? 'cursor-not-allowed' : 'cursor-pointer';
@@ -100,6 +114,12 @@ const Checkbox = ({
         role="checkbox"
         aria-checked={indeterminate ? 'mixed' : checked}
         aria-disabled={disabled}
+        aria-label={ariaLabel}
+        aria-labelledby={
+          ariaLabelledBy ?? (children && !ariaLabel ? labelId : undefined)
+        }
+        aria-describedby={ariaDescribedBy}
+        aria-invalid={ariaInvalid}
         tabIndex={disabled ? -1 : 0}
         className={cn(cursorClassName, disabled && 'opacity-50')}
         onClick={() => {
@@ -114,6 +134,7 @@ const Checkbox = ({
       </span>
       {children && (
         <label
+          id={labelId}
           className={cn(cursorClassName, disabled && 'opacity-50')}
           htmlFor={id}
         >
@@ -130,6 +151,10 @@ const Checkbox = ({
         checked={checked}
         indeterminate={indeterminate}
         disabled={disabled}
+        aria-label={ariaLabel}
+        aria-labelledby={ariaLabelledBy}
+        aria-describedby={ariaDescribedBy}
+        aria-invalid={ariaInvalid}
         // Keep the atom's established 4px radius after the Base UI migration;
         // tailwind-merge lets this override the core primitive's radius (#361).
         className={cn('rounded-sm', cursorClassName)}

@@ -4,6 +4,7 @@ import { useState } from 'react';
 
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { Eraser } from 'lucide-react';
+import { expect, within } from 'storybook/test';
 
 import { RichTextEditor } from '@repo/ui';
 import { cn } from '@repo/ui/utils';
@@ -88,5 +89,32 @@ export const Controlled: Story = {
         <output className="mt-3 block text-xs">Committed: {value}</output>
       </div>
     );
+  },
+};
+
+export const ExternalLabel: Story = {
+  render: props => (
+    <div className={cn('flex w-96 flex-col gap-2')}>
+      <span id="bio-label">Bio</span>
+      <RichTextEditor
+        {...props}
+        aria-labelledby="bio-label"
+        aria-describedby="bio-error"
+        aria-invalid
+      />
+      <p id="bio-error">Write at least one sentence.</p>
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const editor = await within(canvasElement).findByRole('textbox', {
+      name: 'Bio',
+    });
+
+    await expect(editor).toHaveAttribute('contenteditable', 'true');
+    await expect(editor).toHaveAccessibleDescription(
+      'Write at least one sentence.',
+    );
+    await expect(editor).toHaveAttribute('aria-invalid', 'true');
+    await expect(editor).not.toHaveAttribute('aria-label');
   },
 };

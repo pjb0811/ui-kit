@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { expect, within } from 'storybook/test';
 
 import { Config, Select } from '@repo/ui';
 
@@ -305,4 +306,77 @@ export const SearchableMultipleThemedRtl: Story = {
       />
     </Config>
   ),
+};
+
+const fruitOptions = [
+  { label: 'Apple', value: 'apple' },
+  { label: 'Banana', value: 'banana' },
+];
+
+export const ExternalLabel: Story = {
+  render: () => (
+    <div className="flex w-64 flex-col gap-4">
+      <div className="flex flex-col gap-1">
+        <label htmlFor="fruit">Fruit</label>
+        <Select
+          id="fruit"
+          options={fruitOptions}
+          aria-describedby="fruit-error"
+          aria-invalid
+        />
+        <p id="fruit-error">Choose a fruit.</p>
+      </div>
+      <div className="flex flex-col gap-1">
+        <span id="search-fruit-label">Searchable fruit</span>
+        <Select
+          searchable
+          label="Fruit"
+          id="search-fruit"
+          options={fruitOptions}
+          aria-labelledby="search-fruit-label"
+          aria-describedby="search-fruit-hint"
+        />
+        <p id="search-fruit-hint">Type to filter.</p>
+      </div>
+      <div className="flex flex-col gap-1">
+        <span id="fruits-label">Fruits</span>
+        <Select
+          searchable
+          multiple
+          label="Fruits"
+          id="fruits"
+          options={fruitOptions}
+          aria-labelledby="fruits-label"
+          aria-describedby="fruits-hint"
+          aria-invalid
+        />
+        <p id="fruits-hint">Choose one or more.</p>
+      </div>
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const staticTrigger = canvas.getByRole('combobox', { name: 'Fruit' });
+
+    await expect(staticTrigger).toHaveAttribute('id', 'fruit');
+    await expect(staticTrigger).toHaveAccessibleDescription('Choose a fruit.');
+    await expect(staticTrigger).toHaveAttribute('aria-invalid', 'true');
+
+    const searchableTrigger = canvas.getByRole('combobox', {
+      name: 'Searchable fruit',
+    });
+
+    await expect(searchableTrigger).toHaveAttribute('id', 'search-fruit');
+    await expect(searchableTrigger).toHaveAccessibleDescription(
+      'Type to filter.',
+    );
+
+    const multipleInput = canvas.getByRole('combobox', { name: 'Fruits' });
+
+    await expect(multipleInput).toHaveAttribute('id', 'fruits');
+    await expect(multipleInput).toHaveAccessibleDescription(
+      'Choose one or more.',
+    );
+    await expect(multipleInput).toHaveAttribute('aria-invalid', 'true');
+  },
 };

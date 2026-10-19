@@ -43,3 +43,16 @@ draft. **OK** commits one local `Date` and calls `onChange`; **Cancel**, Escape,
 and clicking outside discard the draft. The time starts at `00:00` when no
 value is set, and the trigger displays the committed time in 24-hour format.
 `minuteStep` sets the native time input's minute interval.
+
+### Labelling
+
+`id`, `aria-label`, `aria-labelledby`, `aria-describedby` and `aria-invalid` go
+to the trigger button, which is the element that receives focus. Pair `id`
+with an external `<label htmlFor>` to name it, and point `aria-describedby` at
+an error or hint message:
+
+```tsx
+<label htmlFor="due-date">Due date</label>
+<DatePicker id="due-date" aria-describedby="due-date-error" aria-invalid />
+<p id="due-date-error">Pick a date before Friday.</p>
+```

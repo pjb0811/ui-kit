@@ -5,6 +5,7 @@ import { cn } from '@repo/ui/utils';
 import { select } from '../../../core';
 import MultipleSelect, { type Props as MultipleProps } from './multiple';
 import SearchableSelect, { type Props as SearchableProps } from './searchable';
+import { type AriaProps } from './searchable-options';
 
 const {
   Select: Core,
@@ -31,10 +32,10 @@ const isGroup = (option: Option | OptionGroup): option is OptionGroup => {
   return 'options' in option && Array.isArray(option.options);
 };
 
-interface StaticProps extends Omit<
-  React.ComponentProps<typeof Core>,
-  'onValueChange' | 'items'
-> {
+interface StaticProps
+  extends
+    Omit<React.ComponentProps<typeof Core>, 'onValueChange' | 'items'>,
+    AriaProps {
   searchable?: false;
   placeholder?: string;
   className?: string;
@@ -53,6 +54,9 @@ const StaticSelect = ({
   options,
   onChange,
   'aria-label': ariaLabel,
+  'aria-labelledby': ariaLabelledBy,
+  'aria-describedby': ariaDescribedBy,
+  'aria-invalid': ariaInvalid,
   ...props
 }: StaticProps) => {
   const items = options?.flatMap(option =>
@@ -71,6 +75,9 @@ const StaticSelect = ({
     >
       <SelectTrigger
         aria-label={ariaLabel}
+        aria-labelledby={ariaLabelledBy}
+        aria-describedby={ariaDescribedBy}
+        aria-invalid={ariaInvalid}
         className={cn('w-full max-w-48', className)}
       >
         <SelectValue placeholder={placeholder} />
