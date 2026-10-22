@@ -195,11 +195,75 @@ export const CallerFiltered: Story = {
 };
 export const Loading: Story = { args: { loading: true } };
 export const Empty: Story = { args: { options: [] } };
+// Waits long enough for a popup to open if it was going to.
+const expectNoSuggestions = async (canvasElement: HTMLElement) => {
+  await new Promise(resolve => setTimeout(resolve, 200));
+  await expect(
+    within(canvasElement.ownerDocument.body).queryByRole('listbox'),
+  ).not.toBeInTheDocument();
+};
+
+// Opens suggestions in the visible Message field and checks that the list sits
+// inside the viewport and is the topmost element where it is drawn.
+const expectSuggestionsOnTop = async (canvasElement: HTMLElement) => {
+  const document = canvasElement.ownerDocument;
+  const page = within(document.body);
+  const field = await page.findByRole('textbox', { name: 'Message' });
+
+  await userEvent.type(field, '@');
+
+  const listbox = await page.findByRole('listbox');
+  const option = await page.findByRole('option', { name: 'Alice Park' });
+
+  await waitFor(() => {
+    const box = listbox.getBoundingClientRect();
+    const view = document.defaultView!;
+
+    expect(box.top).toBeGreaterThanOrEqual(0);
+    expect(box.left).toBeGreaterThanOrEqual(0);
+    expect(box.bottom).toBeLessThanOrEqual(view.innerHeight);
+    expect(box.right).toBeLessThanOrEqual(view.innerWidth);
+  });
+
+  const optionBox = option.getBoundingClientRect();
+  const hit = document.elementFromPoint(
+    optionBox.left + optionBox.width / 2,
+    optionBox.top + optionBox.height / 2,
+  );
+
+  await expect(option.contains(hit)).toBe(true);
+};
+
 export const Disabled: Story = {
   args: { disabled: true, defaultValue: '@alice' },
+  play: async ({ canvasElement, args }) => {
+    const field = within(canvasElement).getByRole('textbox', {
+      name: 'Message',
+    });
+
+    await expect(field).toBeDisabled();
+    await userEvent.type(field, ' @b');
+    await expect(field).toHaveValue('@alice');
+    await expectNoSuggestions(canvasElement);
+    await expect(args.onSearch).not.toHaveBeenCalled();
+  },
 };
 export const ReadOnly: Story = {
   args: { readOnly: true, defaultValue: '@alice' },
+  play: async ({ canvasElement, args }) => {
+    const field = within(canvasElement).getByRole('textbox', {
+      name: 'Message',
+    }) as HTMLTextAreaElement;
+
+    // A caret inside an existing token opens suggestions in an editable field.
+    await userEvent.click(field);
+    field.setSelectionRange(3, 3);
+    fireEvent(field.ownerDocument, new Event('selectionchange'));
+    await userEvent.keyboard('@b');
+    await expect(field).toHaveValue('@alice');
+    await expectNoSuggestions(canvasElement);
+    await expect(args.onSearch).not.toHaveBeenCalled();
+  },
 };
 export const Multiline: Story = {
   args: { defaultValue: '@alice\nPlease ask @bo about the release.' },
@@ -271,6 +335,12 @@ export const InModal: Story = {
       </>
     );
   },
+  play: async ({ canvasElement }) => {
+    await userEvent.click(
+      within(canvasElement).getByRole('button', { name: 'Open modal' }),
+    );
+    await expectSuggestionsOnTop(canvasElement);
+  },
 };
 export const InDrawer: Story = {
   render: function Render(props) {
@@ -284,5 +354,22 @@ export const InDrawer: Story = {
         </Drawer>
       </>
     );
+  },
+  play: async ({ canvasElement }) => {
+    await userEvent.click(
+      within(canvasElement).getByRole('button', { name: 'Open drawer' }),
+    );
+    await expectSuggestionsOnTop(canvasElement);
+  },
+};
+
+export const ViewportEdge: Story = {
+  render: props => (
+    <div className="fixed end-0 bottom-0 w-64">
+      <Mentions {...props} rows={2} />
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    await expectSuggestionsOnTop(canvasElement);
   },
 };

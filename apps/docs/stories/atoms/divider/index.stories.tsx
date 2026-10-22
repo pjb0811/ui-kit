@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { expect, within } from 'storybook/test';
 
@@ -82,4 +84,53 @@ export const Dark: Story = {
       <Divider {...props} />
     </Config>
   ),
+};
+
+export const RootProps: Story = {
+  render: function Render() {
+    const [roots, setRoots] = useState<Record<string, HTMLElement | null>>({});
+    const refFor = (name: string) => (element: HTMLElement | null) => {
+      if (element && roots[name] !== element) {
+        setRoots(current => ({ ...current, [name]: element }));
+      }
+    };
+
+    return (
+      <div className="flex h-24 flex-col gap-2">
+        <Divider
+          ref={refFor('plain')}
+          className="plain"
+          style={{ opacity: 0.5 }}
+        />
+        <Divider
+          ref={refFor('labeled')}
+          className="labeled"
+          style={{ opacity: 0.5 }}
+        >
+          Labeled
+        </Divider>
+        <Divider
+          ref={refFor('vertical')}
+          orientation="vertical"
+          className="vertical"
+          style={{ opacity: 0.5 }}
+        />
+        <output>{Object.keys(roots).sort().join(',')}</output>
+      </div>
+    );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    await expect(await canvas.findByRole('status')).toHaveTextContent(
+      'labeled,plain,vertical',
+    );
+
+    for (const name of ['plain', 'labeled', 'vertical']) {
+      const root = canvasElement.querySelector(`.${name}`) as HTMLElement;
+
+      await expect(root).toHaveAttribute('data-slot', 'divider');
+      await expect(root.style.opacity).toBe('0.5');
+    }
+  },
 };
