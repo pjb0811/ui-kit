@@ -494,7 +494,7 @@ importers:
         version: 4.3.3
       '@tsdown/css':
         specifier: ^0.23.0
-        version: 0.23.1(jiti@2.7.0)(postcss-import@17.0.0(postcss@8.5.31))(postcss@8.5.31)(tsdown@0.23.0)(yaml@2.9.0)
+        version: 0.23.1(jiti@2.7.0)(postcss-import@17.0.1(postcss@8.5.31))(postcss@8.5.31)(tsdown@0.23.0)(yaml@2.9.0)
       '@types/node':
         specifier: ^26.6.5
         version: 26.6.5
@@ -521,7 +521,7 @@ importers:
         version: 8.5.31
       postcss-import:
         specifier: ^17.0.0
-        version: 17.0.0(postcss@8.5.31)
+        version: 17.0.1(postcss@8.5.31)
       tailwindcss:
         specifier: ^4.3.3
         version: 4.3.3
@@ -7628,8 +7628,8 @@ packages:
     peerDependencies:
       postcss: ^8.4
 
-  postcss-import@17.0.0:
-    resolution: {integrity: sha512-qzVMJhcq39KweT7Fp0HcjE5YxL5yI854Q3CtufxDuZKO9HLQUp2rptB9+U0MIj3pT1ZEVXoqnpeC1mSkfYuz4Q==}
+  postcss-import@17.0.1:
+    resolution: {integrity: sha512-lthLZRa+sMc/xo+lG7TMUvOviwP9ngR0VULnvfXTyOE3JIc0mFrbjcubI6Jx52X+B3IKt9yfp6wwVWE768JezA==}
     engines: {node: '>=22.0.0'}
     peerDependencies:
       postcss: ^8.0.0
@@ -13698,7 +13698,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@tsdown/css@0.23.1(jiti@2.7.0)(postcss-import@17.0.0(postcss@8.5.31))(postcss@8.5.31)(tsdown@0.23.0)(yaml@2.9.0)':
+  '@tsdown/css@0.23.1(jiti@2.7.0)(postcss-import@17.0.1(postcss@8.5.31))(postcss@8.5.31)(tsdown@0.23.0)(yaml@2.9.0)':
     dependencies:
       lightningcss: 1.33.0
       postcss-load-config: 6.0.1(jiti@2.7.0)(postcss@8.5.31)(yaml@2.9.0)
@@ -13706,7 +13706,7 @@ snapshots:
       tsdown: 0.23.0(@tsdown/css@0.23.1)(oxc-resolver@11.21.2)(typescript@6.0.3)(unrun@0.2.27(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.3))
     optionalDependencies:
       postcss: 8.5.31
-      postcss-import: 17.0.0(postcss@8.5.31)
+      postcss-import: 17.0.1(postcss@8.5.31)
     transitivePeerDependencies:
       - jiti
       - tsx
@@ -17922,7 +17922,7 @@ snapshots:
       postcss: 8.5.31
       postcss-value-parser: 4.2.0
 
-  postcss-import@17.0.0(postcss@8.5.31):
+  postcss-import@17.0.1(postcss@8.5.31):
     dependencies:
       postcss: 8.5.31
       postcss-value-parser: 4.2.0
@@ -19497,7 +19497,7 @@ snapshots:
       unconfig-core: 7.5.0
       verkit: 0.4.1
     optionalDependencies:
-      '@tsdown/css': 0.23.1(jiti@2.7.0)(postcss-import@17.0.0(postcss@8.5.31))(postcss@8.5.31)(tsdown@0.23.0)(yaml@2.9.0)
+      '@tsdown/css': 0.23.1(jiti@2.7.0)(postcss-import@17.0.1(postcss@8.5.31))(postcss@8.5.31)(tsdown@0.23.0)(yaml@2.9.0)
       typescript: 6.0.3
       unrun: 0.2.27(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.3)
     transitivePeerDependencies:
