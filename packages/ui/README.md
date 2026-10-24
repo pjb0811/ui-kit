@@ -4,7 +4,7 @@
 
 A modern and reusable React UI component library built with TypeScript and Tailwind CSS, following the Atomic Design pattern for systematic organization and scalability.
 
-## 📦 Package Information
+## Package Information
 
 - **Package Name**: `@jbpark/ui-kit`
 - **License**: MIT
@@ -12,7 +12,7 @@ A modern and reusable React UI component library built with TypeScript and Tailw
 - **Node.js Requirement**: >= 20
 - **React Requirement**: ^19.0.0
 
-## 🏗 Architecture
+## Architecture
 
 ### Atomic Design Pattern
 
@@ -35,7 +35,7 @@ src/
 └── index.ts          # 📥 Package entry point
 ```
 
-## 🧬 Atoms
+## Atoms
 
 Basic UI building blocks
 
@@ -71,7 +71,7 @@ Basic UI building blocks
 | **Tooltip**        | A short text hint shown on hover or focus                     | -                                     |
 | **Typography**     | Headings, body text, paragraphs and links                     | `Link`, `Paragraph`, `Text`, `Title`  |
 
-## 🔬 Molecules
+## Molecules
 
 Composite components combining multiple atoms
 
@@ -101,7 +101,7 @@ Composite components combining multiple atoms
 | **Transfer**     | Moves items between two lists                              | -              |
 | **Upload**       | A click-or-drag dropzone with a removable file list        | -              |
 
-## 🦠 Organisms
+## Organisms
 
 Complex UI sections
 
@@ -119,7 +119,7 @@ Complex UI sections
 | **Tree**       | A hierarchical list with expand, select and lazy loading                          | -                                                                                           |
 | **TreeSelect** | A select whose options are a tree                                                 | -                                                                                           |
 
-## 📄 Templates
+## Templates
 
 Page layout templates
 
@@ -131,7 +131,7 @@ Page layout templates
 | **PageHeader** | A page title block with back button and actions       | -                                      |
 | **Result**     | A full-page screen for an operation's outcome         | -                                      |
 
-## 🛠 Core Features
+## Core Features
 
 ### Built on Base UI
 
@@ -142,7 +142,7 @@ Components are built on [Base UI](https://base-ui.com) primitives, which handle 
 - **`cn()`** - Class name merging utility (clsx + tailwind-merge)
 - **`renderConditional()`** - Conditional render helper
 
-## 🚀 Installation & Usage
+## Installation & Usage
 
 ### Installation
 
@@ -224,7 +224,7 @@ import { cn, renderConditional } from '@jbpark/ui-kit/utils';
 import '@jbpark/ui-kit/style.css';
 ```
 
-## 🎨 Styling
+## Styling
 
 ### Tailwind CSS
 
@@ -243,7 +243,7 @@ import '@jbpark/ui-kit/style.css';
 // PostCSS configuration needed for Tailwind CSS 4
 ```
 
-## 📚 Key Dependencies
+## Key Dependencies
 
 ### Core Libraries
 
@@ -271,7 +271,7 @@ import '@jbpark/ui-kit/style.css';
 - **react-colorful 5.8** - ColorPicker input
 - **GSAP 3.15 / @gsap/react 2.1** - GSAP animation
 
-## 🔧 Development
+## Development
 
 This package is developed in a monorepo environment (pnpm workspaces).
 
@@ -299,7 +299,7 @@ pnpm run build
 pnpm run generate:component
 ```
 
-## 📦 Package Exports
+## Package Exports
 
 - `@jbpark/ui-kit` - Main entry (every component except `CodeEditor`, their types, and the `providers` exports such as `Config`)
 - `@jbpark/ui-kit/<ComponentName>` - One subpath per component (default export only), named as in the tables above
@@ -309,7 +309,7 @@ pnpm run generate:component
 
 The `exports` field of the package's `package.json` is the full, authoritative list.
 
-## 🤝 Contributing
+## Contributing
 
 1. Fork this repository
 2. Create a feature branch (`git checkout -b feature/amazing-component`)
@@ -320,7 +320,7 @@ The `exports` field of the package's `package.json` is the full, authoritative l
 7. Push to the branch (`git push origin feature/amazing-component`)
 8. Create a Pull Request
 
-## 📄 License
+## License
 
 Licensed under the MIT License.
 

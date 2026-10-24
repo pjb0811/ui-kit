@@ -4,7 +4,7 @@
 
 A modern monorepo containing a comprehensive React UI component library and web/documentation apps built with Turborepo. Systematically organized following the Atomic Design pattern and featuring React 19, TypeScript, Next.js 16, and Tailwind CSS 4.
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 ui-kit/
@@ -18,7 +18,7 @@ ui-kit/
 └── README.md
 ```
 
-## 🎨 UI Component Library
+## UI Component Library
 
 A React component library organized following the Atomic Design pattern.
 
@@ -78,7 +78,7 @@ Theme and configuration providers
 
 - **Config**: Theme token overrides and dark mode configuration via CSS variables
 
-## 🛠 Tech Stack
+## Tech Stack
 
 ### Core Technologies
 
@@ -103,7 +103,7 @@ Theme and configuration providers
 - **[Storybook](https://storybook.js.org/)** - Component documentation
 - **[Husky](https://typicode.github.io/husky/)** - Git hooks
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Requirements
 
@@ -160,7 +160,7 @@ and consolidates the changelog. Merging that PR triggers the `publish.yml`
 workflow, which builds, publishes to npm via OIDC Trusted Publishing, and
 tags the release. No manual version bump or publish command is needed.
 
-## 📚 Documentation
+## Documentation
 
 ### Storybook
 
@@ -174,7 +174,7 @@ pnpm storybook --filter=docs
 pnpm run build-storybook --filter=docs
 ```
 
-## 📦 Package Information
+## Package Information
 
 ### Apps
 
@@ -189,7 +189,7 @@ pnpm run build-storybook --filter=docs
 - **`@repo/eslint-config`**: ESLint configuration (base, next-js, react-internal)
 - **`@repo/typescript-config`**: TypeScript configuration (base, nextjs, react-library)
 
-## 🔧 Usage
+## Usage
 
 ### Within Monorepo (Local Development)
 
@@ -234,7 +234,7 @@ function App() {
 
 See [`packages/ui/README.md`](./packages/ui/README.md) for detailed usage.
 
-## 🤝 Contributing
+## Contributing
 
 1. Fork this repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
@@ -242,11 +242,11 @@ See [`packages/ui/README.md`](./packages/ui/README.md) for detailed usage.
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Create a Pull Request
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License.
 
-## 🔗 Resources
+## Resources
 
 - [Turborepo Documentation](https://turborepo.com/docs)
 - [Next.js Documentation](https://nextjs.org/docs)
