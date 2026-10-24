@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { expect, fn, userEvent, within } from 'storybook/test';
 
 import { Splitter, Typography } from '@repo/ui';
 import { cn } from '@repo/ui/utils';
@@ -189,4 +190,62 @@ export const Collapsible: Story = {
       </Splitter>
     </div>
   ),
+};
+
+export const HandleProps: Story = {
+  args: {
+    orientation: 'horizontal',
+    withHandle: true,
+    handleClassName: 'handle-from-class-name',
+    handleProps: {
+      'aria-label': 'Resize panels',
+      'data-demo-resize-handle': '',
+      className: 'handle-from-props',
+      onKeyDown: fn(),
+    },
+  },
+  play: async ({ args, canvasElement }) => {
+    const separators = within(canvasElement).getAllByRole('separator', {
+      name: 'Resize panels',
+    });
+
+    await expect(separators).toHaveLength(2);
+
+    for (const separator of separators) {
+      await expect(separator).toHaveAttribute('data-demo-resize-handle', '');
+      await expect(separator).toHaveAttribute('data-slot', 'resizable-handle');
+      await expect(separator).toHaveClass(
+        'handle-from-class-name',
+        'handle-from-props',
+      );
+    }
+
+    separators[0]?.focus();
+    await userEvent.keyboard('{ArrowRight}');
+
+    const handleProps = args.handleProps as { onKeyDown: () => void };
+
+    await expect(handleProps.onKeyDown).toHaveBeenCalled();
+  },
+};
+
+export const HandlePropsPerSeparator: Story = {
+  args: {
+    orientation: 'horizontal',
+    withHandle: true,
+    handleProps: index => ({
+      id: `splitter-handle-${index}`,
+      'aria-label': index === 0 ? 'Resize navigator' : 'Resize inspector',
+    }),
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    await expect(
+      canvas.getByRole('separator', { name: 'Resize navigator' }),
+    ).toHaveAttribute('id', 'splitter-handle-0');
+    await expect(
+      canvas.getByRole('separator', { name: 'Resize inspector' }),
+    ).toHaveAttribute('id', 'splitter-handle-1');
+  },
 };
