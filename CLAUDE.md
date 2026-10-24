@@ -69,7 +69,7 @@ const Core = button.Button;
 
 `src/core`는 **내부 전용**이다 — 패키지의 public export(`exports` 맵)에서 제거됐으므로(#278 ④) 외부 소비자는 `@jbpark/ui-kit/core`로 import할 수 없다.
 
-⚠️ **`@repo/ui/core` 스페시파이어는 쓰지 않는다.** tsconfig 별칭(`@repo/ui/*` → `./src/*`) 때문에 `check-types`·`lint`·`@repo/ui` 빌드까지는 전부 통과하지만, `@repo/ui`를 **소스에서 번들하는 앱**(Docusaurus 기반 `docs`/`web`)은 이 스페시파이어를 패키지 `exports` 맵으로 해석하기 때문에 앱 빌드 단계에서 터진다:
+**`@repo/ui/core` 스페시파이어는 쓰지 않는다.** tsconfig 별칭(`@repo/ui/*` → `./src/*`) 때문에 `check-types`·`lint`·`@repo/ui` 빌드까지는 전부 통과하지만, `@repo/ui`를 **소스에서 번들하는 앱**(Docusaurus 기반 `docs`/`web`)은 이 스페시파이어를 패키지 `exports` 맵으로 해석하기 때문에 앱 빌드 단계에서 터진다:
 
 ```
 × Package subpath './core' is not defined by "exports" in packages/ui/package.json

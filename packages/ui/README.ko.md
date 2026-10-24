@@ -21,18 +21,18 @@ TypeScript와 Tailwind CSS를 기반으로 구축된 현대적이고 재사용 �
 ```
 src/
 ├── components/
-│   ├── atoms/        # 🧬 원자 - 기본 UI 구성 요소
-│   ├── molecules/    # 🔬 분자 - 원자들의 조합
-│   ├── organisms/    # 🦠 유기체 - 복잡한 UI 블록
-│   └── templates/    # 📄 템플릿 - 페이지 레이아웃
-├── core/             # ⚙️ 내부 Base UI 프리미티브 (export 안 됨)
+│   ├── atoms/        # 원자 - 기본 UI 구성 요소
+│   ├── molecules/    # 분자 - 원자들의 조합
+│   ├── organisms/    # 유기체 - 복잡한 UI 블록
+│   └── templates/    # 템플릿 - 페이지 레이아웃
+├── core/             # 내부 Base UI 프리미티브 (export 안 됨)
 ├── lib/
-│   ├── utils/        # 🛠 유틸리티 함수
-│   ├── colors.ts     # 🎨 색상 토큰 해석
-│   └── z-layers.ts   # 🪟 포털 공용 z-index 스케일
-├── providers/        # 🧩 Config 프로바이더 및 테마
-├── globals.css       # 🎨 전역 스타일
-└── index.ts          # 📥 패키지 진입점
+│   ├── utils/        # 유틸리티 함수
+│   ├── colors.ts     # 색상 토큰 해석
+│   └── z-layers.ts   # 포털 공용 z-index 스케일
+├── providers/        # Config 프로바이더 및 테마
+├── globals.css       # 전역 스타일
+└── index.ts          # 패키지 진입점
 ```
 
 ## Atoms (원자)

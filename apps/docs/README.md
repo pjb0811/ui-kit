@@ -4,7 +4,7 @@
 
 This is the documentation site for the UI-Kit component library. Built with Next.js and Storybook, it provides interactive documentation and examples for React components organized following the Atomic Design pattern.
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 apps/docs/
@@ -24,7 +24,7 @@ apps/docs/
 └── package.json
 ```
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Requirements
 
@@ -72,7 +72,7 @@ pnpm run storybook
 - **Port**: 6006
 - **URL**: http://localhost:6006
 
-## 🛠 Available Scripts
+## Available Scripts
 
 ### Development
 
@@ -119,11 +119,11 @@ pnpm run lint
 pnpm run check-types
 ```
 
-## 📚 Component Documentation
+## Component Documentation
 
 This documentation site systematically documents React components organized using the Atomic Design pattern. Each component is documented through Storybook with interactive examples and usage guidelines.
 
-### 🧬 Atoms
+### Atoms
 
 Basic UI building blocks
 
@@ -151,7 +151,7 @@ Basic UI building blocks
 > `CodeEditor` is reached through its own subpath — `import CodeEditor from '@jbpark/ui-kit/CodeEditor'`.
 > It is deliberately kept out of the main barrel so CodeMirror stays an opt-in peer dependency.
 
-### 🔬 Molecules
+### Molecules
 
 Composite components combining multiple atoms
 
@@ -167,7 +167,7 @@ Composite components combining multiple atoms
 | **Splitter** | Resizable panels with a draggable handle between them | `Panel`        |
 | **Upload**   | A click-or-drag dropzone with a removable file list   | -              |
 
-### 🦠 Organisms
+### Organisms
 
 Complex UI sections
 
@@ -179,7 +179,7 @@ Complex UI sections
 | **Swiper** | A touch-friendly carousel over Swiper.js                    | `Slide`                                          |
 | **Toast**  | Imperative, auto-dismissing notifications                   | `info`, `success`, `warning`, `error`            |
 
-### 📄 Templates
+### Templates
 
 Page layout templates
 
@@ -192,13 +192,13 @@ Page layout templates
 | **PageHeader** | A page title block with back button and actions         | -                                      |
 | **Result**     | A full-page screen for an operation's outcome           | -                                      |
 
-## 🎨 Styling
+## Styling
 
 This project uses the latest Tailwind CSS 4 for styling:
 
 - **Tailwind CSS 4.3.3** - Utility-first CSS framework
 
-## 🛠 Tech Stack
+## Tech Stack
 
 ### Core Technologies
 
@@ -216,7 +216,7 @@ This project uses the latest Tailwind CSS 4 for styling:
 - **ESLint 9.39.5** - Code linting
 - **eslint-plugin-storybook 10.5.8** - Storybook ESLint plugin
 
-## 📦 Dependencies
+## Dependencies
 
 ### Internal Packages
 
@@ -231,7 +231,7 @@ This project uses the latest Tailwind CSS 4 for styling:
 - **react-dom** - React DOM renderer
 - **tailwindcss** - CSS framework
 
-## 📖 Storybook Configuration
+## Storybook Configuration
 
 ### Story File Structure
 
@@ -250,11 +250,11 @@ stories/
 3. **Accessibility**: Include ARIA attributes and keyboard navigation testing
 4. **Interaction**: Provide interactive examples using Controls and Actions
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License.
 
-## 🔗 Related Links
+## Related Links
 
 - [Root Project README](../../README.md)
 - [UI Component Library](../../packages/ui/README.md)

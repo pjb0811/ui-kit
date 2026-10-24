@@ -21,18 +21,18 @@ This library organizes components hierarchically following the Atomic Design met
 ```
 src/
 ├── components/
-│   ├── atoms/        # 🧬 Atoms - Basic UI elements
-│   ├── molecules/    # 🔬 Molecules - Combinations of atoms
-│   ├── organisms/    # 🦠 Organisms - Complex UI blocks
-│   └── templates/    # 📄 Templates - Page layouts
-├── core/             # ⚙️ Internal Base UI primitives (not exported)
+│   ├── atoms/        # Atoms - Basic UI elements
+│   ├── molecules/    # Molecules - Combinations of atoms
+│   ├── organisms/    # Organisms - Complex UI blocks
+│   └── templates/    # Templates - Page layouts
+├── core/             # Internal Base UI primitives (not exported)
 ├── lib/
-│   ├── utils/        # 🛠 Utility functions
-│   ├── colors.ts     # 🎨 Colour token resolution
-│   └── z-layers.ts   # 🪟 Shared portal z-index scale
-├── providers/        # 🧩 Config provider and theming
-├── globals.css       # 🎨 Global styles
-└── index.ts          # 📥 Package entry point
+│   ├── utils/        # Utility functions
+│   ├── colors.ts     # Colour token resolution
+│   └── z-layers.ts   # Shared portal z-index scale
+├── providers/        # Config provider and theming
+├── globals.css       # Global styles
+└── index.ts          # Package entry point
 ```
 
 ## Atoms
