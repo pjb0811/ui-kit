@@ -4,7 +4,7 @@
 
 Turborepo 기반의 현대적인 UI 컴포넌트 라이브러리와 웹/문서 앱을 포함한 모노레포입니다. React 19, TypeScript, Next.js 16, Tailwind CSS 4를 활용하여 Atomic Design 패턴을 따라 체계적으로 구성했습니다.
 
-## 📁 프로젝트 구조
+## 프로젝트 구조
 
 ```
 ui-kit/
@@ -18,7 +18,7 @@ ui-kit/
 └── README.md
 ```
 
-## 🎨 UI 컴포넌트 라이브러리
+## UI 컴포넌트 라이브러리
 
 Atomic Design 패턴을 따라 구성된 React 컴포넌트 라이브러리입니다.
 
@@ -78,7 +78,7 @@ Atomic Design 패턴을 따라 구성된 React 컴포넌트 라이브러리입�
 
 - **Config**: CSS 변수 기반 테마 토큰 오버라이드 및 다크 모드 설정
 
-## 🛠 기술 스택
+## 기술 스택
 
 ### 핵심 기술
 
@@ -103,7 +103,7 @@ Atomic Design 패턴을 따라 구성된 React 컴포넌트 라이브러리입�
 - **[Storybook](https://storybook.js.org/)** - 컴포넌트 문서화
 - **[Husky](https://typicode.github.io/husky/)** - Git 훅 관리
 
-## 🚀 시작하기
+## 시작하기
 
 ### 필수 요구사항
 
@@ -160,7 +160,7 @@ changeset들이 쌓이면 "Version Packages" PR이 `packages/ui/package.json`의
 워크플로우가 빌드 → npm OIDC Trusted Publishing으로 퍼블리시 → 릴리스
 태그까지 자동으로 처리한다. 수동 버전 범프나 퍼블리시 명령은 필요 없다.
 
-## 📚 문서화
+## 문서화
 
 ### Storybook
 
@@ -174,7 +174,7 @@ pnpm storybook --filter=docs
 pnpm run build-storybook --filter=docs
 ```
 
-## 📦 패키지 정보
+## 패키지 정보
 
 ### Apps
 
@@ -189,7 +189,7 @@ pnpm run build-storybook --filter=docs
 - **`@repo/eslint-config`**: ESLint 설정 (base, next-js, react-internal)
 - **`@repo/typescript-config`**: TypeScript 설정 (base, nextjs, react-library)
 
-## 🔧 사용법
+## 사용법
 
 ### 모노레포 내부에서 사용 (로컬 개발)
 
@@ -234,7 +234,7 @@ function App() {
 
 자세한 사용법은 [`packages/ui/README.md`](./packages/ui/README.md)를 참조하세요.
 
-## 🤝 기여하기
+## 기여하기
 
 1. 이 저장소를 포크합니다
 2. 새로운 기능 브랜치를 생성합니다 (`git checkout -b feature/amazing-feature`)
@@ -242,11 +242,11 @@ function App() {
 4. 브랜치에 푸시합니다 (`git push origin feature/amazing-feature`)
 5. Pull Request를 생성합니다
 
-## 📄 라이선스
+## 라이선스
 
 이 프로젝트는 MIT 라이선스 하에 있습니다.
 
-## 🔗 참고 링크
+## 참고 링크
 
 - [Turborepo 공식 문서](https://turborepo.com/docs)
 - [Next.js 공식 문서](https://nextjs.org/docs)

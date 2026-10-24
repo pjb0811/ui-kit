@@ -4,7 +4,7 @@
 
 TypeScript와 Tailwind CSS를 기반으로 구축된 현대적이고 재사용 가능한 React UI 컴포넌트 라이브러리입니다. Atomic Design 패턴을 따라 체계적으로 조직되어 있으며 확장성을 고려하여 설계되었습니다.
 
-## 📦 패키지 정보
+## 패키지 정보
 
 - **패키지명**: `@jbpark/ui-kit`
 - **라이선스**: MIT
@@ -12,7 +12,7 @@ TypeScript와 Tailwind CSS를 기반으로 구축된 현대적이고 재사용 �
 - **Node.js 요구사항**: >= 20
 - **React 요구사항**: ^19.0.0
 
-## 🏗 아키텍처
+## 아키텍처
 
 ### Atomic Design 패턴
 
@@ -21,21 +21,21 @@ TypeScript와 Tailwind CSS를 기반으로 구축된 현대적이고 재사용 �
 ```
 src/
 ├── components/
-│   ├── atoms/        # 🧬 원자 - 기본 UI 구성 요소
-│   ├── molecules/    # 🔬 분자 - 원자들의 조합
-│   ├── organisms/    # 🦠 유기체 - 복잡한 UI 블록
-│   └── templates/    # 📄 템플릿 - 페이지 레이아웃
-├── core/             # ⚙️ 내부 Base UI 프리미티브 (export 안 됨)
+│   ├── atoms/        # 원자 - 기본 UI 구성 요소
+│   ├── molecules/    # 분자 - 원자들의 조합
+│   ├── organisms/    # 유기체 - 복잡한 UI 블록
+│   └── templates/    # 템플릿 - 페이지 레이아웃
+├── core/             # 내부 Base UI 프리미티브 (export 안 됨)
 ├── lib/
-│   ├── utils/        # 🛠 유틸리티 함수
-│   ├── colors.ts     # 🎨 색상 토큰 해석
-│   └── z-layers.ts   # 🪟 포털 공용 z-index 스케일
-├── providers/        # 🧩 Config 프로바이더 및 테마
-├── globals.css       # 🎨 전역 스타일
-└── index.ts          # 📥 패키지 진입점
+│   ├── utils/        # 유틸리티 함수
+│   ├── colors.ts     # 색상 토큰 해석
+│   └── z-layers.ts   # 포털 공용 z-index 스케일
+├── providers/        # Config 프로바이더 및 테마
+├── globals.css       # 전역 스타일
+└── index.ts          # 패키지 진입점
 ```
 
-## 🧬 Atoms (원자)
+## Atoms (원자)
 
 기본 UI 구성 요소
 
@@ -71,7 +71,7 @@ src/
 | **Tooltip**        | 호버·포커스 시 보이는 짧은 텍스트 힌트             | -                                     |
 | **Typography**     | 제목, 본문, 문단, 링크                             | `Link`, `Paragraph`, `Text`, `Title`  |
 
-## 🔬 Molecules (분자)
+## Molecules (분자)
 
 여러 원자를 조합한 컴포넌트
 
@@ -101,7 +101,7 @@ src/
 | **Transfer**     | 두 목록 사이로 항목 이동                        | -             |
 | **Upload**       | 클릭·드래그 업로드 영역과 삭제 가능한 파일 목록 | -             |
 
-## 🦠 Organisms (유기체)
+## Organisms (유기체)
 
 복잡한 UI 섹션
 
@@ -119,7 +119,7 @@ src/
 | **Tree**       | 펼치기, 선택, 지연 로딩을 지원하는 계층 목록                          | -                                                                                           |
 | **TreeSelect** | 옵션이 트리인 셀렉트                                                  | -                                                                                           |
 
-## 📄 Templates (템플릿)
+## Templates (템플릿)
 
 페이지 레이아웃 템플릿
 
@@ -131,7 +131,7 @@ src/
 | **PageHeader** | 뒤로 가기 버튼과 액션이 있는 페이지 제목 블록  | -                                      |
 | **Result**     | 작업 결과를 보여주는 전체 화면                 | -                                      |
 
-## 🛠 핵심 기능
+## 핵심 기능
 
 ### Base UI 기반
 
@@ -142,7 +142,7 @@ src/
 - **`cn()`** - 클래스명 병합 유틸리티 (clsx + tailwind-merge)
 - **`renderConditional()`** - 조건부 렌더 헬퍼
 
-## 🚀 설치 및 사용법
+## 설치 및 사용법
 
 ### 설치
 
@@ -224,7 +224,7 @@ import { cn, renderConditional } from '@jbpark/ui-kit/utils';
 import '@jbpark/ui-kit/style.css';
 ```
 
-## 🎨 스타일링
+## 스타일링
 
 ### Tailwind CSS
 
@@ -243,7 +243,7 @@ import '@jbpark/ui-kit/style.css';
 // Tailwind CSS 4를 사용하는 경우 PostCSS 설정 필요
 ```
 
-## 📚 주요 의존성
+## 주요 의존성
 
 ### 핵심 라이브러리
 
@@ -271,7 +271,7 @@ import '@jbpark/ui-kit/style.css';
 - **react-colorful 5.8** - ColorPicker 입력
 - **GSAP 3.15 / @gsap/react 2.1** - GSAP 애니메이션
 
-## 🔧 개발
+## 개발
 
 이 패키지는 모노레포(pnpm 워크스페이스) 환경에서 개발됩니다.
 
@@ -299,7 +299,7 @@ pnpm run build
 pnpm run generate:component
 ```
 
-## 📦 패키지 Exports
+## 패키지 Exports
 
 - `@jbpark/ui-kit` - 메인 진입점 (`CodeEditor`를 제외한 모든 컴포넌트와 타입, `Config` 등 `providers` export)
 - `@jbpark/ui-kit/<ComponentName>` - 컴포넌트별 개별 경로 (default export만, 위 표의 컴포넌트 이름과 같음)
@@ -309,7 +309,7 @@ pnpm run generate:component
 
 전체 목록은 패키지 `package.json`의 `exports` 필드가 기준입니다.
 
-## 🤝 기여하기
+## 기여하기
 
 1. 이 저장소를 포크합니다
 2. 새로운 기능 브랜치를 생성합니다 (`git checkout -b feature/amazing-component`)
@@ -320,6 +320,6 @@ pnpm run generate:component
 7. 브랜치에 푸시합니다 (`git push origin feature/amazing-component`)
 8. Pull Request를 생성합니다
 
-## 📄 라이선스
+## 라이선스
 
 MIT 라이선스 하에 있습니다.

@@ -69,7 +69,7 @@ const Core = button.Button;
 
 `src/core`는 **내부 전용**이다 — 패키지의 public export(`exports` 맵)에서 제거됐으므로(#278 ④) 외부 소비자는 `@jbpark/ui-kit/core`로 import할 수 없다.
 
-⚠️ **`@repo/ui/core` 스페시파이어는 쓰지 않는다.** tsconfig 별칭(`@repo/ui/*` → `./src/*`) 때문에 `check-types`·`lint`·`@repo/ui` 빌드까지는 전부 통과하지만, `@repo/ui`를 **소스에서 번들하는 앱**(Docusaurus 기반 `docs`/`web`)은 이 스페시파이어를 패키지 `exports` 맵으로 해석하기 때문에 앱 빌드 단계에서 터진다:
+**`@repo/ui/core` 스페시파이어는 쓰지 않는다.** tsconfig 별칭(`@repo/ui/*` → `./src/*`) 때문에 `check-types`·`lint`·`@repo/ui` 빌드까지는 전부 통과하지만, `@repo/ui`를 **소스에서 번들하는 앱**(Docusaurus 기반 `docs`/`web`)은 이 스페시파이어를 패키지 `exports` 맵으로 해석하기 때문에 앱 빌드 단계에서 터진다:
 
 ```
 × Package subpath './core' is not defined by "exports" in packages/ui/package.json
@@ -286,13 +286,13 @@ import './local';
 
 모든 pjb0811 저장소가 함께 쓰는 결정과 절차는 비공개 저장소 `pjb0811/skills`에 있습니다. 결정(커밋 메시지와 이슈·PR의 언어·형식, 커밋 작성자, 트레일러와 생성 도구 문구 금지, 코드 스타일 기본값)은 전역 지침 `global/CLAUDE.md`(`~/.claude/CLAUDE.md`로 링크)에, 절차는 아래 전역 Claude Code 스킬에 있습니다. 이 파일은 그 내용을 되풀이하지 않습니다.
 
-| 스킬                                  | 용도                                                                                                            |
-| ------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
-| `commit`, `pr`, `issue`               | 커밋 메시지, PR·이슈 본문                                                                                       |
-| `coding-style`                        | 컨벤션, 일괄 리네임, 주석(C), boolean 이름(D), 중괄호(E), 서브컴포넌트 구조(F), 빈 줄(G), 컴포넌트 코드 순서(H) |
-| `changesets-release`, `publish-check` | 릴리스 흐름과 배포 전 점검                                                                                      |
-| `shared-library-first`                | 재사용 UI는 ui-kit, 훅은 use-hooks에 먼저 구현                                                                  |
-| `ref-verification`                    | 저장소 상태를 작업 트리가 아니라 git ref 기준으로 확인                                                          |
+| 스킬                                  | 용도                                                                                                                                    |
+| ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `commit`, `pr`, `issue`               | 커밋 메시지, PR·이슈 본문                                                                                                               |
+| `coding-style`                        | 컨벤션, 일괄 리네임, 주석(C), boolean 이름(D), 중괄호(E), 서브컴포넌트 구조(F), 빈 줄(G), 컴포넌트 내부 순서(H), 기능 단위 하위 폴더(I) |
+| `changesets-release`, `publish-check` | 릴리스 흐름과 배포 전 점검                                                                                                              |
+| `shared-library-first`                | 재사용 UI는 ui-kit, 훅은 use-hooks에 먼저 구현                                                                                          |
+| `ref-verification`                    | 저장소 상태를 작업 트리가 아니라 git ref 기준으로 확인                                                                                  |
 
 ### 저장소 스킬
 
