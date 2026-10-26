@@ -26,29 +26,50 @@ import { Splitter } from '@jbpark/ui-kit';
 
 <SplitterDemo />
 
+## Separator attributes
+
+`handleProps` puts your own attributes and handlers on the separators, for example a label for assistive technology or a selector for your CSS. An object applies to every separator. A function receives the separator's index (`0` sits between the first and second panel) and returns props for that one. `handleProps.className` is merged with `handleClassName`.
+
+```tsx
+<Splitter
+  handleProps={index => ({
+    id: `editor-handle-${index}`,
+    'aria-label': index === 0 ? 'Resize file tree' : 'Resize preview',
+    'data-editor-resize-handle': '',
+  })}
+>
+  <Splitter.Panel defaultSize="20%">Files</Splitter.Panel>
+  <Splitter.Panel defaultSize="50%">Editor</Splitter.Panel>
+  <Splitter.Panel defaultSize="30%">Preview</Splitter.Panel>
+</Splitter>
+```
+
+The separator also uses `id` to identify itself within the group, so give each separator its own `id` through the function form.
+
 ## Props
 
 ### `Splitter`
 
-| Prop              | Type                                | Default        |
-| ----------------- | ----------------------------------- | -------------- |
-| `orientation`     | `'horizontal' \| 'vertical'`        | `'horizontal'` |
-| `withHandle`      | `boolean` (show the grip on handles) | `true`        |
-| `handle`          | `ReactNode` (custom handle content) | -              |
-| `handleClassName` | `string`                            | -              |
-| `onResize`        | `(layout) => void` (during drag)    | -              |
-| `onResizeEnd`     | `(layout) => void` (drag finished)  | -              |
-| `className`       | `string`                            | -              |
-| `children`        | `ReactNode` (`Splitter.Panel`s)     | -              |
+| Prop              | Type                                                    | Default        |
+| ----------------- | ------------------------------------------------------- | -------------- |
+| `orientation`     | `'horizontal' \| 'vertical'`                            | `'horizontal'` |
+| `withHandle`      | `boolean` (show the grip on handles)                    | `true`         |
+| `handle`          | `ReactNode` (custom handle content)                     | -              |
+| `handleClassName` | `string`                                                | -              |
+| `handleProps`     | `SplitterHandleProps \| (index) => SplitterHandleProps` | -              |
+| `onResize`        | `(layout) => void` (during drag)                        | -              |
+| `onResizeEnd`     | `(layout) => void` (drag finished)                      | -              |
+| `className`       | `string`                                                | -              |
+| `children`        | `ReactNode` (`Splitter.Panel`s)                         | -              |
 
 ### `Splitter.Panel`
 
-| Prop          | Type                | Default |
-| ------------- | ------------------- | ------- |
-| `defaultSize` | `string \| number`  | -       |
-| `minSize`     | `string \| number`  | -       |
-| `maxSize`     | `string \| number`  | -       |
-| `className`   | `string`            | -       |
-| `children`    | `ReactNode`         | -       |
+| Prop          | Type               | Default |
+| ------------- | ------------------ | ------- |
+| `defaultSize` | `string \| number` | -       |
+| `minSize`     | `string \| number` | -       |
+| `maxSize`     | `string \| number` | -       |
+| `className`   | `string`           | -       |
+| `children`    | `ReactNode`        | -       |
 
 `Splitter.Panel` forwards the rest of the underlying resizable panel props. The handle between adjacent panels is added automatically — you only render the panels.

@@ -14,6 +14,14 @@ type SplitterLayout = Parameters<
   >
 >[0];
 
+/** Props for a separator. `data-*` keys are allowed alongside the separator's own props. */
+export type HandleProps = Omit<
+  React.ComponentProps<typeof ResizableHandle>,
+  'children' | 'withHandle'
+> & {
+  [key: `data-${string}`]: string | number | boolean | undefined;
+};
+
 export interface Props extends Omit<
   React.ComponentProps<typeof ResizablePanelGroup>,
   'children' | 'orientation' | 'onLayoutChange' | 'onLayoutChanged' | 'onResize'
@@ -23,6 +31,13 @@ export interface Props extends Omit<
   withHandle?: boolean;
   handle?: React.ReactNode;
   handleClassName?: string;
+  /**
+   * Props for every separator, or a function that returns them per separator
+   * (`index` 0 sits between the first and second panel). The separator uses `id`
+   * to identify itself within the group, so give each separator its own `id`
+   * through the function form.
+   */
+  handleProps?: HandleProps | ((index: number) => HandleProps);
   onResize?: (layout: SplitterLayout) => void;
   onResizeEnd?: (layout: SplitterLayout) => void;
 }
@@ -34,11 +49,33 @@ const Splitter = ({
   withHandle = true,
   handle,
   handleClassName,
+  handleProps,
   onResize,
   onResizeEnd,
   ...props
 }: Props) => {
   const panels = Children.toArray(children);
+
+  const renderHandle = (index: number) => {
+    const { className: handlePropsClassName, ...separatorProps } =
+      typeof handleProps === 'function'
+        ? handleProps(index)
+        : (handleProps ?? {});
+
+    return (
+      <ResizableHandle
+        {...separatorProps}
+        className={cn(
+          'hover:bg-border/80 data-separator-active:bg-border transition-colors',
+          handleClassName,
+          handlePropsClassName,
+        )}
+        withHandle={withHandle && handle === undefined}
+      >
+        {handle}
+      </ResizableHandle>
+    );
+  };
 
   return (
     <ResizablePanelGroup
@@ -56,18 +93,7 @@ const Splitter = ({
           key={isValidElement(panel) && panel.key != null ? panel.key : index}
         >
           {panel}
-          {index < panels.length - 1 && (
-            <ResizableHandle
-              className={cn(
-                `hover:bg-border/80 data-separator-active:bg-border
-                transition-colors`,
-                handleClassName,
-              )}
-              withHandle={withHandle && handle === undefined}
-            >
-              {handle}
-            </ResizableHandle>
-          )}
+          {index < panels.length - 1 && renderHandle(index)}
         </Fragment>
       ))}
     </ResizablePanelGroup>
