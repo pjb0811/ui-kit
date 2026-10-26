@@ -1,5 +1,6 @@
 import type * as Preset from '@docusaurus/preset-classic';
 import type { Config, Plugin } from '@docusaurus/types';
+import { themes as prismThemes } from 'prism-react-renderer';
 
 import tailwindcss from '@tailwindcss/postcss';
 
@@ -109,7 +110,11 @@ const config: Config = {
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} jbpark · ui-kit · MIT License`,
+      copyright: `Copyright © ${new Date().getFullYear()} jbpark · ui-kit`,
+    },
+    prism: {
+      theme: prismThemes.github,
+      darkTheme: prismThemes.dracula,
     },
   } satisfies Preset.ThemeConfig,
 };
