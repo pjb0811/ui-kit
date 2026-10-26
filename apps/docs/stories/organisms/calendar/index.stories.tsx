@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { expect, fn, userEvent, within } from 'storybook/test';
 
-import { Calendar } from '@repo/ui';
+import { Calendar, Config } from '@repo/ui';
 
 const meta: Meta<typeof Calendar> = {
   title: 'UI/Calendar',
@@ -165,5 +165,48 @@ export const Markers: Story = {
     await expect(
       canvas.getByRole('button', { name: /October 12th, 2026/ }),
     ).not.toHaveTextContent('Meeting');
+  },
+};
+
+export const RTL: Story = {
+  args: {
+    defaultValue: new Date(2026, 9, 11),
+    expanded: true,
+    renderDate: date => (date.getDate() === 11 ? 'Meeting' : null),
+  },
+  render: props => (
+    <Config direction="rtl">
+      <Calendar {...props} />
+    </Config>
+  ),
+};
+// Calendar paints its own surface, so its dates must stay readable under a
+// dark Config even when the page sets no text color.
+export const Dark: Story = {
+  args: {
+    defaultValue: new Date(2026, 9, 11),
+    disabledDate: date => date.getDay() === 0,
+  },
+  render: props => (
+    <Config theme={{ dark: 'dark' }}>
+      <Calendar {...props} />
+    </Config>
+  ),
+  play: async ({ canvasElement }) => {
+    const calendar = canvasElement.querySelector<HTMLElement>(
+      '[data-slot="calendar"]',
+    )!;
+    const probe = canvasElement.ownerDocument.createElement('span');
+
+    probe.className = 'text-foreground';
+    calendar.append(probe);
+
+    const foreground = getComputedStyle(probe).color;
+
+    probe.remove();
+
+    await expect(
+      getComputedStyle(dayButton(canvasElement, /October 12th, 2026/)).color,
+    ).toBe(foreground);
   },
 };

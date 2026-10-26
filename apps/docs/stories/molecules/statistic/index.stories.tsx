@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { expect, fn, within } from 'storybook/test';
 
-import { Statistic } from '@repo/ui';
+import { Config, Statistic } from '@repo/ui';
 
 const meta: Meta<typeof Statistic> = {
   title: 'UI/Statistic',
@@ -102,4 +102,23 @@ export const FormattingCases: Story = {
       );
     }
   },
+};
+
+export const RTL: Story = {
+  args: { prefix: '$', suffix: 'USD' },
+  render: props => (
+    <Config direction="rtl">
+      <Statistic {...props} />
+    </Config>
+  ),
+};
+export const Dark: Story = {
+  args: { prefix: '$', suffix: 'USD' },
+  render: props => (
+    <Config theme={{ dark: 'dark' }}>
+      <div className="bg-background text-foreground p-4">
+        <Statistic {...props} />
+      </div>
+    </Config>
+  ),
 };
