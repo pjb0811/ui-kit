@@ -3,7 +3,7 @@ import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { expect, fn, spyOn, userEvent, waitFor, within } from 'storybook/test';
 
-import { Anchor } from '@repo/ui';
+import { Anchor, type AnchorItem, Config } from '@repo/ui';
 
 const meta: Meta<typeof Anchor> = {
   title: 'UI/Anchor',
@@ -321,4 +321,33 @@ export const ListenerCleanup: Story = {
       remove.mockRestore();
     }
   },
+};
+
+const nestedItems: AnchorItem[] = [
+  {
+    key: 'intro',
+    href: '#intro',
+    title: 'Introduction',
+    children: [{ key: 'details', href: '#details', title: 'Details' }],
+  },
+  { key: 'api', href: '#api', title: 'API' },
+];
+
+export const RTL: Story = {
+  args: { items: nestedItems },
+  render: props => (
+    <Config direction="rtl">
+      <Anchor {...props} />
+    </Config>
+  ),
+};
+export const Dark: Story = {
+  args: { items: nestedItems },
+  render: props => (
+    <Config theme={{ dark: 'dark' }}>
+      <div className="bg-background text-foreground p-4">
+        <Anchor {...props} />
+      </div>
+    </Config>
+  ),
 };
