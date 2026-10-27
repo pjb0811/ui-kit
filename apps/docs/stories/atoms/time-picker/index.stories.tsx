@@ -37,7 +37,7 @@ export const Controlled: Story = {
     return (
       <div className="w-64 space-y-2">
         <TimePicker {...args} value={time} onChange={setTime} />
-        <p className="text-muted-foreground text-sm">
+        <p className="text-sm text-muted-foreground">
           Selected: {time ?? 'none'}
         </p>
       </div>

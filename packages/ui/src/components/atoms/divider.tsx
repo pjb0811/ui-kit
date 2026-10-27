@@ -48,7 +48,7 @@ const Divider = ({
       ? String(children)
       : undefined;
   const lineClassName = cn(
-    'border-border min-w-0 flex-1',
+    'min-w-0 flex-1 border-border',
     isVertical ? 'min-h-0 border-s' : 'border-t',
     variants[variant],
     classNames?.line,
@@ -64,7 +64,7 @@ const Divider = ({
       decorative={decorative}
       aria-label={decorative ? ariaLabel : (ariaLabel ?? label)}
       className={cn(
-        `text-foreground flex bg-transparent
+        `flex bg-transparent text-foreground
         data-[orientation=horizontal]:h-auto data-[orientation=vertical]:h-auto
         data-[orientation=vertical]:w-auto`,
         isVertical

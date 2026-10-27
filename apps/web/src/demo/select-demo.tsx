@@ -51,7 +51,7 @@ export default function SelectDemo() {
           options={FRAMEWORKS}
           onChange={setValue}
         />
-        <Typography.Text className="text-muted-foreground text-sm">
+        <Typography.Text className="text-sm text-muted-foreground">
           Selected: {value ?? 'none'}
         </Typography.Text>
       </Space>

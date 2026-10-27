@@ -9,7 +9,7 @@ export default function SwitchDemo() {
     <Space orientation="vertical" align="start" size="middle">
       <Space align="center" size="middle">
         <Switch checked={checked} onChange={setChecked} />
-        <Typography.Text className="text-muted-foreground text-sm">
+        <Typography.Text className="text-sm text-muted-foreground">
           {checked ? 'checked' : 'unchecked'}
         </Typography.Text>
       </Space>

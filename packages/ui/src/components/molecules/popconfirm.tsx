@@ -154,7 +154,7 @@ const Popconfirm = ({
             <div
               id={descriptionId}
               className={cn(
-                'text-muted-foreground text-sm',
+                'text-sm text-muted-foreground',
                 classNames?.description, //
               )}
             >
@@ -165,7 +165,7 @@ const Popconfirm = ({
             <div
               role="alert"
               className={cn(
-                'text-destructive text-sm',
+                'text-sm text-destructive',
                 classNames?.error, //
               )}
             >

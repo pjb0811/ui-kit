@@ -100,12 +100,12 @@ function DialogContent({
   const closeIcon = (
     <DialogPrimitive.Close
       data-slot="dialog-close"
-      className="ring-offset-background focus:ring-ring data-open:bg-accent
-        data-open:text-muted-foreground absolute top-4 right-4 rounded-xs
-        opacity-70 transition-opacity hover:opacity-100 focus:ring-2
-        focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none
-        [&_svg]:pointer-events-none [&_svg]:shrink-0
-        [&_svg:not([class*='size-'])]:size-4"
+      className="absolute top-4 right-4 rounded-xs opacity-70
+        ring-offset-background transition-opacity hover:opacity-100 focus:ring-2
+        focus:ring-ring focus:ring-offset-2 focus:outline-hidden
+        disabled:pointer-events-none data-open:bg-accent
+        data-open:text-muted-foreground [&_svg]:pointer-events-none
+        [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4"
       disabled={typeof closable === 'object' && closable.disabled}
     >
       {_closeIcon || <XIcon />}
@@ -119,9 +119,9 @@ function DialogContent({
       <DialogPrimitive.Popup
         data-slot="dialog-content"
         className={cn(
-          `bg-background fixed top-[50%] left-[50%] grid w-full
-          max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4
-          rounded-lg border p-6 shadow-lg transition-[opacity,transform,scale]
+          `fixed top-[50%] left-[50%] grid w-full max-w-[calc(100%-2rem)]
+          translate-x-[-50%] translate-y-[-50%] gap-4 rounded-lg border
+          bg-background p-6 shadow-lg transition-[opacity,transform,scale]
           duration-200 outline-none data-ending-style:scale-95
           data-ending-style:opacity-0 data-starting-style:scale-95
           data-starting-style:opacity-0 sm:max-w-lg`,
@@ -194,7 +194,7 @@ function DialogDescription({
   return (
     <DialogPrimitive.Description
       data-slot="dialog-description"
-      className={cn('text-muted-foreground text-sm', className)}
+      className={cn('text-sm text-muted-foreground', className)}
       {...props}
     />
   );

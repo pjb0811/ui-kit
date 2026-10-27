@@ -114,8 +114,8 @@ const ToggleGroup = ({
               />
             }
             className={cn(
-              `data-pressed:bg-accent data-pressed:text-accent-foreground
-              aria-disabled:cursor-not-allowed`,
+              `aria-disabled:cursor-not-allowed data-pressed:bg-accent
+              data-pressed:text-accent-foreground`,
               classNames?.item,
               pressedSet.has(option.value) && classNames?.pressedItem,
               //

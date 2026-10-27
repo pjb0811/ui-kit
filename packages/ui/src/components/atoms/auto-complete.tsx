@@ -160,7 +160,7 @@ const AutoComplete = ({
         >
           <AutocompleteEmpty
             className={cn(
-              'text-muted-foreground px-3 py-2 text-sm',
+              'px-3 py-2 text-sm text-muted-foreground',
               classNames?.empty, //
             )}
           >
@@ -181,10 +181,10 @@ const AutoComplete = ({
                   if (!disabled && !readOnly) onSelect?.(option.value, option);
                 }}
                 className={cn(
-                  `data-highlighted:bg-accent
-                  data-highlighted:text-accent-foreground cursor-default
-                  rounded-sm px-2 py-1.5 text-sm [overflow-wrap:anywhere]
-                  outline-none data-disabled:opacity-50`,
+                  `cursor-default rounded-sm px-2 py-1.5 text-sm
+                  [overflow-wrap:anywhere] outline-none data-disabled:opacity-50
+                  data-highlighted:bg-accent
+                  data-highlighted:text-accent-foreground`,
                   classNames?.option, //
                 )}
               >

@@ -61,7 +61,7 @@ export const Sizes: Story = {
 export const DarkTheme: Story = {
   render: args => (
     <Config theme={{ dark: 'dark' }}>
-      <div className="bg-background w-64 rounded-lg p-6">
+      <div className="w-64 rounded-lg bg-background p-6">
         <Input.Number {...args} />
       </div>
     </Config>

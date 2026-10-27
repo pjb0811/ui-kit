@@ -12,8 +12,8 @@ export default function SpinDemo() {
       </Button>
       <Space size="large" align="start" wrap>
         <div
-          className="border-border flex h-32 w-32 items-center justify-center
-            rounded-md border border-dashed"
+          className="flex h-32 w-32 items-center justify-center rounded-md
+            border border-dashed border-border"
         >
           <Spin spinning={spinning} />
         </div>

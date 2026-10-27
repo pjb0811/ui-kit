@@ -56,8 +56,8 @@ function ScrollArea({
           ...viewportProps?.style,
         }}
         className={cn(
-          `focus-visible:ring-ring/50 h-full w-full rounded-[inherit]
-          outline-none focus-visible:ring-2 focus-visible:ring-inset`,
+          `h-full w-full rounded-[inherit] outline-none focus-visible:ring-2
+          focus-visible:ring-ring/50 focus-visible:ring-inset`,
           classNames?.viewport,
           //
         )}
@@ -98,8 +98,8 @@ function ScrollArea({
             <ScrollAreaPrimitive.Thumb
               data-slot="scroll-area-thumb"
               className={cn(
-                `bg-border hover:bg-muted-foreground/50 relative flex-1
-                rounded-full`,
+                `relative flex-1 rounded-full bg-border
+                hover:bg-muted-foreground/50`,
                 classNames?.thumb,
                 //
               )}

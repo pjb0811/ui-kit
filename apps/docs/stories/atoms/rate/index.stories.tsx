@@ -70,7 +70,7 @@ export const RTL: Story = {
 export const Dark: Story = {
   render: props => (
     <Config theme={{ dark: 'dark' }}>
-      <div className="bg-background rounded-lg p-4">
+      <div className="rounded-lg bg-background p-4">
         <Rate {...props} defaultValue={3} />
       </div>
     </Config>

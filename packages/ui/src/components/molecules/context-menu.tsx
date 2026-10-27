@@ -97,9 +97,9 @@ const ContextMenu = ({
           dir={resolvedDirection}
           finalFocus={source === 'context' ? triggerRef : actionRef}
           className={cn(
-            `bg-popover text-popover-foreground border-border
-            max-h-[var(--available-height)] max-w-[var(--available-width)]
-            min-w-40 overflow-auto rounded-md border p-1 shadow-md outline-none`,
+            `max-h-[var(--available-height)] max-w-[var(--available-width)]
+            min-w-40 overflow-auto rounded-md border border-border bg-popover
+            p-1 text-popover-foreground shadow-md outline-none`,
             classNames?.popup,
             //
           )}
@@ -109,7 +109,7 @@ const ContextMenu = ({
               <BaseMenu.Separator
                 key={item.key}
                 className={cn(
-                  'bg-border my-1 h-px',
+                  'my-1 h-px bg-border',
                   classNames?.separator,
                   //
                 )}
@@ -119,10 +119,10 @@ const ContextMenu = ({
                 key={item.key}
                 disabled={item.disabled}
                 className={cn(
-                  `data-highlighted:bg-accent
-                    data-highlighted:text-accent-foreground cursor-default
-                    rounded-sm px-3 py-2 text-sm break-words outline-none
-                    data-disabled:opacity-50`,
+                  `cursor-default rounded-sm px-3 py-2 text-sm break-words
+                    outline-none data-disabled:opacity-50
+                    data-highlighted:bg-accent
+                    data-highlighted:text-accent-foreground`,
                   classNames?.item,
                   //
                 )}
@@ -158,7 +158,7 @@ const ContextMenu = ({
           dir={triggerProps?.dir ?? resolvedDirection}
           tabIndex={actionLabel ? -1 : (triggerProps?.tabIndex ?? 0)}
           className={cn(
-            'focus-visible:ring-ring outline-none focus-visible:ring-2',
+            'outline-none focus-visible:ring-2 focus-visible:ring-ring',
             classNames?.trigger,
             triggerProps?.className,
             //

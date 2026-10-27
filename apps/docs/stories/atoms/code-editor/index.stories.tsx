@@ -83,7 +83,7 @@ export const AutoFollowsConfig: Story = {
   },
   render: props => (
     <Config theme={{ dark: 'dark' }}>
-      <div className={cn('bg-background w-[36rem] p-4')}>
+      <div className={cn('w-[36rem] bg-background p-4')}>
         <CodeEditor {...props} />
       </div>
     </Config>
@@ -101,7 +101,7 @@ export const Controlled: Story = {
     return (
       <div className={cn('w-[36rem] space-y-2')}>
         <CodeEditor {...props} value={value} onChange={setValue} />
-        <p className={cn('text-muted-foreground text-sm')}>
+        <p className={cn('text-sm text-muted-foreground')}>
           {value.split('\n').length} lines / {value.length} chars
         </p>
       </div>
@@ -132,7 +132,7 @@ export const FormatOnSave: Story = {
           onSave={() => setSaved(new Date().toLocaleTimeString())}
           onFormatError={setError}
         />
-        <p className={cn('text-muted-foreground text-sm')}>
+        <p className={cn('text-sm text-muted-foreground')}>
           Press ⌘S / Ctrl+S to format and save.
           {saved && ` Last saved ${saved}.`}
           {error && ` Error: ${error}`}

@@ -101,15 +101,15 @@ const Steps = ({
                   data-slot="steps-indicator"
                   aria-hidden="true"
                   className={cn(
-                    `border-border text-muted-foreground flex size-7 shrink-0
-                    items-center justify-center rounded-full border text-sm
-                    font-medium`,
+                    `flex size-7 shrink-0 items-center justify-center
+                    rounded-full border border-border text-sm font-medium
+                    text-muted-foreground`,
                     status === 'complete' &&
                       'border-primary bg-primary text-primary-foreground',
                     status === 'current' && 'border-primary text-primary',
                     status === 'error' &&
-                      `border-destructive bg-destructive
-                      text-destructive-foreground`,
+                      `text-destructive-foreground border-destructive
+                      bg-destructive`,
                     classNames?.indicator,
                     //
                   )}
@@ -143,7 +143,7 @@ const Steps = ({
                     <span
                       data-slot="steps-description"
                       className={cn(
-                        'text-muted-foreground block text-xs',
+                        'block text-xs text-muted-foreground',
                         classNames?.description,
                       )}
                     >
@@ -166,7 +166,7 @@ const Steps = ({
                   data-slot="steps-connector"
                   aria-hidden="true"
                   className={cn(
-                    'bg-border shrink-0',
+                    'shrink-0 bg-border',
                     orientation === 'horizontal'
                       ? 'mx-3 mt-3.5 h-px min-w-3 flex-1'
                       : 'my-2 ms-3.5 h-7 w-px',

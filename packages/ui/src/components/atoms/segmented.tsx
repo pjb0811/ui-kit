@@ -92,7 +92,7 @@ const Segmented = ({
       value={selectedValue === undefined ? [] : [selectedValue]}
       onValueChange={handleValueChange}
       className={cn(
-        `bg-muted inline-flex w-fit gap-0.5 rounded-lg p-1
+        `inline-flex w-fit gap-0.5 rounded-lg bg-muted p-1
         data-[orientation=vertical]:flex-col`,
         className,
         //
@@ -104,12 +104,12 @@ const Segmented = ({
           value={option.value}
           disabled={option.disabled}
           className={cn(
-            `text-muted-foreground hover:text-foreground
-            focus-visible:ring-ring/50 data-pressed:bg-background
-            data-pressed:text-foreground inline-flex items-center justify-center
-            gap-1.5 rounded-md font-medium whitespace-nowrap outline-none
-            focus-visible:ring-[3px] disabled:cursor-not-allowed
-            disabled:opacity-50 data-pressed:shadow-xs`,
+            `inline-flex items-center justify-center gap-1.5 rounded-md
+            font-medium whitespace-nowrap text-muted-foreground outline-none
+            hover:text-foreground focus-visible:ring-[3px]
+            focus-visible:ring-ring/50 disabled:cursor-not-allowed
+            disabled:opacity-50 data-pressed:bg-background
+            data-pressed:text-foreground data-pressed:shadow-xs`,
             sizeClasses[resolvedSize],
             classNames?.item,
             selectedValue === option.value && classNames?.activeItem,

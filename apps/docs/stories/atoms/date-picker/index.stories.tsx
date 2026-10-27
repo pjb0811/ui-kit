@@ -97,7 +97,7 @@ export const ExternalLabel: Story = {
         aria-describedby="due-date-error"
         aria-invalid
       />
-      <p id="due-date-error" className="text-destructive text-sm">
+      <p id="due-date-error" className="text-sm text-destructive">
         Pick a date before Friday.
       </p>
     </div>

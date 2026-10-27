@@ -65,7 +65,7 @@ const PageHeader = ({
             {subTitle && (
               <p
                 className={cn(
-                  'text-muted-foreground text-sm',
+                  'text-sm text-muted-foreground',
                   classNames?.subTitle,
                 )}
               >

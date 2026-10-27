@@ -101,7 +101,7 @@ const DatePicker = ({
             }}
           />
           {showTime && (
-            <div className="border-border flex flex-col gap-3 border-t p-3">
+            <div className="flex flex-col gap-3 border-t border-border p-3">
               <TimePicker
                 label="Time"
                 value={draftTime}

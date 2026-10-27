@@ -12,7 +12,7 @@ export default function PopoverDemo() {
           title="Title"
           content={
             <Typography.Paragraph
-              className="text-muted-foreground m-0 max-w-48 text-sm"
+              className="m-0 max-w-48 text-sm text-muted-foreground"
             >
               Some content inside the popover.
             </Typography.Paragraph>

@@ -71,7 +71,7 @@ const Descriptions = ({
       data-slot="descriptions"
       data-orientation={orientation}
       className={cn(
-        'text-foreground w-full min-w-0',
+        'w-full min-w-0 text-foreground',
         className, //
       )}
       style={{ ...columnStyles, ...style } as CSSProperties}
@@ -118,8 +118,8 @@ const Descriptions = ({
             <dt
               data-slot="descriptions-label"
               className={cn(
-                `text-muted-foreground min-w-0 font-medium
-                [overflow-wrap:anywhere]`,
+                `min-w-0 font-medium [overflow-wrap:anywhere]
+                text-muted-foreground`,
                 classNames?.label, //
               )}
             >

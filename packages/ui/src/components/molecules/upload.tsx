@@ -142,7 +142,7 @@ const Upload = ({
         className={cn(
           'flex cursor-pointer flex-col items-center justify-center gap-2',
           'rounded-md border border-dashed p-6 text-center',
-          'text-muted-foreground text-sm',
+          'text-sm text-muted-foreground',
           'transition-colors',
           isDragging && 'border-primary bg-accent',
           disabled && 'pointer-events-none cursor-not-allowed opacity-50',
@@ -201,7 +201,7 @@ const Upload = ({
                 size="small"
                 icon={<X className="size-4" />}
                 onClick={() => removeFile(file.uid)}
-                className="text-muted-foreground hover:text-foreground shrink-0"
+                className="shrink-0 text-muted-foreground hover:text-foreground"
                 aria-label={`Remove ${file.name}`}
               />
             </li>

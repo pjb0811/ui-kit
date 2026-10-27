@@ -48,7 +48,7 @@ function TabsList({ className, ...props }: ListProps) {
     <TabsPrimitive.List
       data-slot="tabs-list"
       className={cn(
-        `border-border flex shrink-0 border-b
+        `flex shrink-0 border-b border-border
         data-[orientation=vertical]:flex-col
         data-[orientation=vertical]:border-r
         data-[orientation=vertical]:border-b-0`,
@@ -65,12 +65,12 @@ function TabsTab({ className, ...props }: TabProps) {
     <TabsPrimitive.Tab
       data-slot="tabs-tab"
       className={cn(
-        `text-muted-foreground hover:text-foreground focus-visible:ring-ring/50
-        data-active:border-primary data-active:text-foreground relative -mb-px
-        inline-flex items-center justify-center gap-2 border-b-2
-        border-transparent px-4 py-2 text-sm font-medium whitespace-nowrap
-        transition-colors outline-none focus-visible:rounded-sm
-        focus-visible:ring-[3px] data-disabled:pointer-events-none
+        `relative -mb-px inline-flex items-center justify-center gap-2
+        border-b-2 border-transparent px-4 py-2 text-sm font-medium
+        whitespace-nowrap text-muted-foreground transition-colors outline-none
+        hover:text-foreground focus-visible:rounded-sm focus-visible:ring-[3px]
+        focus-visible:ring-ring/50 data-active:border-primary
+        data-active:text-foreground data-disabled:pointer-events-none
         data-disabled:opacity-50 data-[orientation=vertical]:-mr-px
         data-[orientation=vertical]:mb-0
         data-[orientation=vertical]:justify-start
@@ -90,8 +90,8 @@ function TabsPanel({ className, ...props }: PanelProps) {
     <TabsPrimitive.Panel
       data-slot="tabs-panel"
       className={cn(
-        `focus-visible:ring-ring/50 min-w-0 flex-1 p-4 outline-none
-        focus-visible:ring-[3px]`,
+        `min-w-0 flex-1 p-4 outline-none focus-visible:ring-[3px]
+        focus-visible:ring-ring/50`,
         className,
         //
       )}

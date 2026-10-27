@@ -66,7 +66,7 @@ const Splitter = ({
       <ResizableHandle
         {...separatorProps}
         className={cn(
-          'hover:bg-border/80 data-separator-active:bg-border transition-colors',
+          'transition-colors hover:bg-border/80 data-separator-active:bg-border',
           handleClassName,
           handlePropsClassName,
         )}
@@ -80,7 +80,7 @@ const Splitter = ({
   return (
     <ResizablePanelGroup
       className={cn(
-        'border-border/60 h-full w-full rounded-lg border',
+        'h-full w-full rounded-lg border border-border/60',
         className,
       )}
       orientation={orientation}

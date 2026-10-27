@@ -49,7 +49,7 @@ export const RightToLeft: Story = { args: { dir: 'rtl' } };
 
 export const Dark: Story = {
   render: args => (
-    <div className="dark bg-background text-foreground p-6">
+    <div className="dark bg-background p-6 text-foreground">
       <Steps {...args} />
     </div>
   ),

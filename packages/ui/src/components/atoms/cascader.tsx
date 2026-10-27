@@ -170,7 +170,7 @@ const Cascader = ({
                 data-slot="cascader-breadcrumb"
                 aria-live="polite"
                 className={cn(
-                  'text-muted-foreground text-sm [overflow-wrap:anywhere]',
+                  'text-sm [overflow-wrap:anywhere] text-muted-foreground',
                   classNames?.breadcrumb, //
                 )}
               >
@@ -221,7 +221,7 @@ const Cascader = ({
                   }}
                 />
               ) : (
-                <p className="text-muted-foreground m-0 text-sm">{emptyText}</p>
+                <p className="m-0 text-sm text-muted-foreground">{emptyText}</p>
               )}
             </div>
           }

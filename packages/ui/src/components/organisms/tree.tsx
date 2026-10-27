@@ -634,8 +634,8 @@ const Tree = ({
             : undefined
         }
         className={cn(
-          `focus-visible:ring-ring m-0 min-w-0 list-none rounded-sm outline-none
-          focus-visible:ring-2`,
+          `m-0 min-w-0 list-none rounded-sm outline-none focus-visible:ring-2
+          focus-visible:ring-ring`,
           virtual && 'absolute inset-x-0 focus-visible:ring-inset',
           classNames?.item, //
         )}
@@ -745,7 +745,7 @@ const Tree = ({
             virtual && 'h-full py-0',
             selectedSet.has(node.key) && 'bg-accent text-accent-foreground',
             entry.isDisabled && 'cursor-not-allowed opacity-50',
-            !entry.isDisabled && 'hover:bg-accent/50 cursor-pointer',
+            !entry.isDisabled && 'cursor-pointer hover:bg-accent/50',
             classNames?.row, //
           )}
           onClick={() => {
@@ -842,7 +842,7 @@ const Tree = ({
                 id={statusId}
                 data-slot="tree-status"
                 className={cn(
-                  'text-destructive flex shrink-0 items-center gap-1 text-xs',
+                  'flex shrink-0 items-center gap-1 text-xs text-destructive',
                   classNames?.status, //
                 )}
               >
@@ -874,7 +874,7 @@ const Tree = ({
           <ul
             role="group"
             className={cn(
-              'border-border m-0 ms-4 list-none border-s ps-2',
+              'm-0 ms-4 list-none border-s border-border ps-2',
               classNames?.group, //
             )}
           >
@@ -936,7 +936,7 @@ const Tree = ({
       aria-multiselectable={multiple || undefined}
       style={virtual ? { height, ...style } : style}
       className={cn(
-        'text-foreground m-0 min-w-0 list-none p-0',
+        'm-0 min-w-0 list-none p-0 text-foreground',
         virtual && 'relative overflow-auto',
         className, //
       )}
@@ -959,7 +959,7 @@ const Tree = ({
         <li
           role="none"
           className={cn(
-            'text-muted-foreground p-3 text-sm',
+            'p-3 text-sm text-muted-foreground',
             classNames?.empty, //
           )}
         >

@@ -21,7 +21,7 @@ export default function CheckboxDemo() {
       </Checkbox>
       <Space orientation="vertical" align="start" size="small">
         <Checkbox.Group options={OPTIONS} value={values} onChange={setValues} />
-        <Typography.Text className="text-muted-foreground text-sm">
+        <Typography.Text className="text-sm text-muted-foreground">
           Selected: {values.length ? values.join(', ') : 'none'}
         </Typography.Text>
       </Space>
