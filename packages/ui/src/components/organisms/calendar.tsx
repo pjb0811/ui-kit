@@ -22,7 +22,12 @@ type CellRenderer = (date: Date) => ReactNode;
 // date no visible month shows, which marks no day as today (#577).
 const NO_TODAY = new Date(1, 0, 1);
 const subscribeToNothing = () => () => {};
-const getBrowserDay = () => new Date().toDateString();
+// Midnight as a number, so the snapshot stays equal for the whole day.
+const getBrowserDay = () => {
+  const now = new Date();
+
+  return new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+};
 const getServerDay = () => undefined;
 
 const CellContext = createContext<CellRenderer | undefined>(undefined);
