@@ -23,7 +23,12 @@ const sizeClasses: Record<ComponentSize, string> = {
 
 export interface Props extends Omit<
   ToggleGroup.Props,
-  'children' | 'value' | 'defaultValue' | 'onValueChange' | 'onChange' | 'multiple'
+  | 'children'
+  | 'value'
+  | 'defaultValue'
+  | 'onValueChange'
+  | 'onChange'
+  | 'multiple'
 > {
   options: readonly (string | Option)[];
   value?: string;

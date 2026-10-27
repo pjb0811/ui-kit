@@ -111,7 +111,7 @@ const Switch = ({
       )}
       handleClassName={cn(
         config.handle,
-        '!absolute top-1/2 !-translate-y-1/2 !translate-x-0',
+        '!absolute top-1/2 !translate-x-0 !-translate-y-1/2',
         'transition-[left] duration-200 will-change-[left]',
         config.handleChecked,
         classNames?.handle,
