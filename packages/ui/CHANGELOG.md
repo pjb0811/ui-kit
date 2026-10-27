@@ -1,5 +1,16 @@
 # @repo/ui
 
+## 10.5.0
+
+### Minor Changes
+
+- bb13e3b: Let DatePicker, Checkbox, Select and RichTextEditor take `aria-label`, `aria-labelledby`, `aria-describedby` and `aria-invalid` on the element that receives focus, so an external label or error message can be linked to them. DatePicker also accepts `id` for its trigger. Checkbox now puts `id` and these `aria-*` props on the checkbox control instead of the wrapper `div`. With `icons`, the focusable icon is named by its visible label.
+- ffd8fec: Add `handleProps` to `Splitter` so you can set your own attributes and handlers (`aria-label`, `id`, `data-*`, `onKeyDown` and so on) on the separators between panels. Pass an object for every separator, or a function that receives the separator's index. `handleProps.className` is merged with `handleClassName`. The `SplitterHandleProps` type is exported.
+
+### Patch Changes
+
+- 654aada: Keep Calendar's dates readable under a dark `Config` when the surrounding page sets no text color. Calendar paints its own background, so it now sets the matching text color as well. Inside a popover or card, where its background is transparent, it keeps inheriting the surrounding text color.
+
 ## 10.4.0
 
 ### Minor Changes
