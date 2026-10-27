@@ -5,6 +5,7 @@
   "htmlWhitespaceSensitivity": "ignore",
   "arrowParens": "avoid",
   "printWidth": 80,
+  "tailwindStylesheet": "./packages/ui/src/globals.css",
   "tailwindFunctions": ["cn", "cva"],
   "customFunctions": ["cn", "cva"],
   "importOrder": [
