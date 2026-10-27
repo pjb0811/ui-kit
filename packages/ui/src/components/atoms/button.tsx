@@ -123,7 +123,7 @@ export interface Props extends Omit<
 // `shapesClasses` and the `text-*` from `sizesClasses` come later in the class
 // list and override them, exactly as they did when this was absorbed.
 const BUTTON_BASE = cn(
-  'gap-2 whitespace-nowrap font-medium transition-all',
+  'gap-2 font-medium whitespace-nowrap transition-all',
   'has-[>svg]:px-3',
 );
 
@@ -138,14 +138,15 @@ const variantClasses: Record<string, string> = {
     'hover:bg-accent',
   ),
   dashed: cn(
-    'border border-dashed border-[color-mix(in_oklch,var(--btn-border),transparent_50%)]',
+    `border border-dashed
+    border-[color-mix(in_oklch,var(--btn-border),transparent_50%)]`,
     'bg-background text-foreground',
     'hover:bg-accent',
   ),
   filled: cn('bg-muted text-foreground', 'hover:bg-muted/80'),
-  text: cn('bg-transparent text-foreground', 'hover:bg-accent'),
+  text: cn('text-foreground bg-transparent', 'hover:bg-accent'),
   link: cn(
-    'bg-transparent text-primary',
+    'text-primary bg-transparent',
     'underline-offset-4 hover:underline',
     'hover:bg-primary/10',
   ),

@@ -175,9 +175,9 @@ const Item = ({
   const childrenContainerClassNames = cn(
     isInline ? 'relative overflow-hidden' : 'absolute min-w-[200px]',
     !isInline && root && isHorizontal
-      ? 'left-0 top-full pt-2 pl-0'
+      ? 'top-full left-0 pt-2 pl-0'
       : !isInline
-        ? 'left-full top-0 pl-2 pt-0'
+        ? 'top-0 left-full pt-0 pl-2'
         : 'pl-4',
   );
 

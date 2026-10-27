@@ -55,31 +55,35 @@ function Calendar({
         ),
         month: cn('flex w-full flex-col gap-4', defaultClassNames.month),
         nav: cn(
-          'absolute inset-x-0 top-0 flex w-full items-center justify-between gap-1',
+          `absolute inset-x-0 top-0 flex w-full items-center justify-between
+          gap-1`,
           defaultClassNames.nav,
         ),
         button_previous: cn(
           buttonVariants({ variant: buttonVariant }),
-          'h-(--cell-size) w-(--cell-size) select-none p-0 aria-disabled:opacity-50',
+          `h-(--cell-size) w-(--cell-size) p-0 select-none
+          aria-disabled:opacity-50`,
           defaultClassNames.button_previous,
         ),
         button_next: cn(
           buttonVariants({ variant: buttonVariant }),
-          'h-(--cell-size) w-(--cell-size) select-none p-0 aria-disabled:opacity-50',
+          `h-(--cell-size) w-(--cell-size) p-0 select-none
+          aria-disabled:opacity-50`,
           defaultClassNames.button_next,
         ),
         month_caption: cn(
-          'flex h-(--cell-size) w-full items-center justify-center px-(--cell-size)',
+          `flex h-(--cell-size) w-full items-center justify-center
+          px-(--cell-size)`,
           defaultClassNames.month_caption,
         ),
         dropdowns: cn(
-          'flex h-(--cell-size) w-full items-center justify-center gap-1.5 text-sm font-medium',
+          `flex h-(--cell-size) w-full items-center justify-center gap-1.5
+          text-sm font-medium`,
           defaultClassNames.dropdowns,
         ),
         dropdown_root: cn(
-          `has-focus:border-ring border-input shadow-xs
-          has-focus:ring-ring/50 has-focus:ring-[3px] relative rounded-md
-          border`,
+          `has-focus:border-ring border-input has-focus:ring-ring/50 relative
+          rounded-md border shadow-xs has-focus:ring-[3px]`,
           defaultClassNames.dropdown_root,
         ),
         dropdown: cn(
@@ -87,17 +91,18 @@ function Calendar({
           defaultClassNames.dropdown,
         ),
         caption_label: cn(
-          'select-none font-medium',
+          'font-medium select-none',
           captionLayout === 'label'
             ? 'text-sm'
             : `[&>svg]:text-muted-foreground flex h-8 items-center gap-1
-              rounded-md pl-2 pr-1 text-sm [&>svg]:size-3.5`,
+              rounded-md pr-1 pl-2 text-sm [&>svg]:size-3.5`,
           defaultClassNames.caption_label,
         ),
         month_grid: cn('w-full border-collapse', defaultClassNames.month_grid),
         weekdays: cn('flex', defaultClassNames.weekdays),
         weekday: cn(
-          'text-muted-foreground flex-1 select-none rounded-md text-[0.8rem] font-normal',
+          `text-muted-foreground flex-1 rounded-md text-[0.8rem] font-normal
+          select-none`,
           defaultClassNames.weekday,
         ),
         week: cn('mt-2 flex w-full', defaultClassNames.week),
@@ -106,12 +111,12 @@ function Calendar({
           defaultClassNames.week_number_header,
         ),
         week_number: cn(
-          'text-muted-foreground select-none text-[0.8rem]',
+          'text-muted-foreground text-[0.8rem] select-none',
           defaultClassNames.week_number,
         ),
         day: cn(
-          `group/day relative aspect-square h-full w-full select-none p-0
-          text-center [&:first-child[data-selected=true]_button]:rounded-l-md
+          `group/day relative aspect-square h-full w-full p-0 text-center
+          select-none [&:first-child[data-selected=true]_button]:rounded-l-md
           [&:last-child[data-selected=true]_button]:rounded-r-md`,
           defaultClassNames.day,
         ),
@@ -122,7 +127,8 @@ function Calendar({
         range_middle: cn('rounded-none', defaultClassNames.range_middle),
         range_end: cn('bg-accent rounded-r-md', defaultClassNames.range_end),
         today: cn(
-          'bg-accent text-accent-foreground rounded-md data-[selected=true]:rounded-none',
+          `bg-accent text-accent-foreground rounded-md
+          data-[selected=true]:rounded-none`,
           defaultClassNames.today,
         ),
         outside: cn(

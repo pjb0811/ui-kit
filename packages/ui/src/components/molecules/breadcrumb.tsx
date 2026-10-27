@@ -114,7 +114,8 @@ const Breadcrumb = ({
     const itemClassName = cn(
       'inline-flex items-center gap-1.5 rounded-sm',
       (item.href !== undefined || item.onClick) &&
-        'hover:text-foreground focus-visible:outline-ring focus-visible:outline-2',
+        `hover:text-foreground focus-visible:outline-ring
+        focus-visible:outline-2`,
       isCurrent ? 'text-foreground font-medium' : 'text-muted-foreground',
       (item.href !== undefined || item.onClick) && classNames?.link,
       isCurrent && classNames?.current,
