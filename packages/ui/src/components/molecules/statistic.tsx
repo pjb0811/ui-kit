@@ -85,7 +85,7 @@ const Statistic = ({
       {title !== undefined && title !== null && (
         <div
           className={cn(
-            'text-muted-foreground mb-1 text-sm',
+            'mb-1 text-sm text-muted-foreground',
             classNames?.title,
             //
           )}
@@ -98,8 +98,8 @@ const Statistic = ({
       ) : (
         <div
           className={cn(
-            `text-foreground flex flex-wrap items-baseline gap-1 text-2xl
-              font-semibold [overflow-wrap:anywhere] tabular-nums`,
+            `flex flex-wrap items-baseline gap-1 text-2xl font-semibold
+              [overflow-wrap:anywhere] text-foreground tabular-nums`,
             classNames?.value,
             //
           )}

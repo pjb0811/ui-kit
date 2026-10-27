@@ -14,7 +14,7 @@ export default function ProgressDemo() {
         <Space key={value} align="center" size="small" className="w-full">
           <Progress value={value} />
           <Typography.Text
-            className="text-muted-foreground w-10 text-right text-sm"
+            className="w-10 text-right text-sm text-muted-foreground"
           >
             {value}%
           </Typography.Text>

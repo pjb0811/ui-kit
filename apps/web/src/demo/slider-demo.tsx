@@ -19,7 +19,7 @@ export default function SliderDemo() {
         size="small"
         className="w-full"
       >
-        <Typography.Text className="text-muted-foreground text-sm">
+        <Typography.Text className="text-sm text-muted-foreground">
           value: {value}
         </Typography.Text>
         <Slider value={value} onChange={next => setValue(next as number)} />
@@ -30,7 +30,7 @@ export default function SliderDemo() {
         size="small"
         className="w-full"
       >
-        <Typography.Text className="text-muted-foreground text-sm">
+        <Typography.Text className="text-sm text-muted-foreground">
           range: {range.join(' – ')}
         </Typography.Text>
         <Slider value={range} onChange={next => setRange(next as number[])} />
@@ -41,7 +41,7 @@ export default function SliderDemo() {
         size="small"
         className="w-full"
       >
-        <Typography.Text className="text-muted-foreground text-sm">
+        <Typography.Text className="text-sm text-muted-foreground">
           stepped (10) &amp; disabled
         </Typography.Text>
         <Slider defaultValue={50} step={10} />

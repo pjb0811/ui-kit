@@ -114,9 +114,9 @@ const Breadcrumb = ({
     const itemClassName = cn(
       'inline-flex items-center gap-1.5 rounded-sm',
       (item.href !== undefined || item.onClick) &&
-        `hover:text-foreground focus-visible:outline-ring
-        focus-visible:outline-2`,
-      isCurrent ? 'text-foreground font-medium' : 'text-muted-foreground',
+        `hover:text-foreground focus-visible:outline-2
+        focus-visible:outline-ring`,
+      isCurrent ? 'font-medium text-foreground' : 'text-muted-foreground',
       (item.href !== undefined || item.onClick) && classNames?.link,
       isCurrent && classNames?.current,
       item.className,
@@ -170,7 +170,7 @@ const Breadcrumb = ({
       data-slot="breadcrumb-separator"
       aria-hidden="true"
       className={cn(
-        'text-muted-foreground mx-2 shrink-0',
+        'mx-2 shrink-0 text-muted-foreground',
         classNames?.separator,
         //
       )}

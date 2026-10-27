@@ -129,7 +129,7 @@ const Tabs = ({
           <div
             data-slot="tabs-extra"
             className={cn(
-              `border-border flex shrink-0 items-center border-b px-3
+              `flex shrink-0 items-center border-b border-border px-3
               data-[orientation=vertical]:border-r
               data-[orientation=vertical]:border-b-0`,
               classNames?.extra,

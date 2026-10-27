@@ -100,7 +100,7 @@ const Alert = ({
         {description && (
           <div
             className={cn(
-              'text-muted-foreground mt-1 text-sm',
+              'mt-1 text-sm text-muted-foreground',
               classNames?.description,
               //
             )}

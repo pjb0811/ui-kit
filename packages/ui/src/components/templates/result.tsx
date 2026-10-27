@@ -58,7 +58,7 @@ const Result = ({
     >
       <div className="mb-2 [&_svg]:size-16">{icon ?? STATUS_ICONS[status]}</div>
       {title && <p className="text-xl font-medium">{title}</p>}
-      {subTitle && <p className="text-muted-foreground text-sm">{subTitle}</p>}
+      {subTitle && <p className="text-sm text-muted-foreground">{subTitle}</p>}
       {extra && (
         <div className="mt-4 flex items-center justify-center gap-2">
           {extra}

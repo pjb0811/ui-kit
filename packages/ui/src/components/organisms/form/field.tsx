@@ -94,7 +94,7 @@ const Field = ({
             <form.Field.Description
               data-slot="form-description"
               className={cn(
-                'text-muted-foreground text-sm [overflow-wrap:anywhere]',
+                'text-sm [overflow-wrap:anywhere] text-muted-foreground',
                 classNames?.description, //
               )}
             >
@@ -107,7 +107,7 @@ const Field = ({
             role="alert"
             match={hasError ? true : undefined}
             className={cn(
-              'text-destructive text-sm [overflow-wrap:anywhere]',
+              'text-sm [overflow-wrap:anywhere] text-destructive',
               classNames?.error, //
             )}
           />

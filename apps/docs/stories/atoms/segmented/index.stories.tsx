@@ -69,7 +69,7 @@ export const Sizes: Story = {
 
 export const Dark: Story = {
   render: args => (
-    <div className="dark bg-background text-foreground p-6">
+    <div className="dark bg-background p-6 text-foreground">
       <Segmented {...args} />
     </div>
   ),

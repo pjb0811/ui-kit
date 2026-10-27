@@ -307,7 +307,7 @@ const Pagination = ({
         <span
           data-slot="pagination-total"
           className={cn(
-            'text-muted-foreground me-2 text-sm',
+            'me-2 text-sm text-muted-foreground',
             classNames?.total,
             //
           )}
@@ -374,8 +374,8 @@ const Pagination = ({
             key={`${item}-${index}`}
             aria-hidden="true"
             className={cn(
-              `text-muted-foreground inline-flex min-w-6 items-center
-                justify-center`,
+              `inline-flex min-w-6 items-center justify-center
+                text-muted-foreground`,
               classNames?.ellipsis,
               //
             )}

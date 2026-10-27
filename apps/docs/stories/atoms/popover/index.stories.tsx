@@ -58,10 +58,10 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     title: (
-      <div className="text-foreground mb-2 text-sm font-medium">Title</div>
+      <div className="mb-2 text-sm font-medium text-foreground">Title</div>
     ),
     content: (
-      <p className="text-muted-foreground text-sm">
+      <p className="text-sm text-muted-foreground">
         간단한 컨텐츠 영역입니다. 원하는 내용을 넣어보세요.
       </p>
     ),

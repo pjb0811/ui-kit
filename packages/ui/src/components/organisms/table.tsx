@@ -172,7 +172,7 @@ const Table = <T,>({
           <thead
             data-slot="table-header"
             className={cn(
-              'bg-muted/50 border-b',
+              'border-b bg-muted/50',
               classNames?.header,
               //
             )}
@@ -184,7 +184,7 @@ const Table = <T,>({
                   scope="col"
                   style={{ width: column.width }}
                   className={cn(
-                    'text-foreground font-medium',
+                    'font-medium text-foreground',
                     cellPadding,
                     column.align === 'center' && 'text-center',
                     column.align === 'right' && 'text-right',

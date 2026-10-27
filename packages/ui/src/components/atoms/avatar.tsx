@@ -49,8 +49,8 @@ const Avatar = ({
       aria-label={alt || undefined}
       aria-hidden={alt ? undefined : true}
       className={cn(
-        `bg-muted text-muted-foreground relative inline-flex shrink-0
-        overflow-hidden rounded-full`,
+        `relative inline-flex shrink-0 overflow-hidden rounded-full bg-muted
+        text-muted-foreground`,
         sizes[resolvedSize],
         className,
         //

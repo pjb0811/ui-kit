@@ -146,10 +146,9 @@ const MultipleSelect = ({
                     aria-label={name}
                     aria-description={chipDescription}
                     className={cn(
-                      `bg-accent text-accent-foreground flex min-w-0
-                      items-center gap-1 rounded-sm ps-2 pe-1 text-xs
-                      outline-none`,
-                      'focus-visible:ring-ring/50 focus-visible:ring-[3px]',
+                      `flex min-w-0 items-center gap-1 rounded-sm bg-accent ps-2
+                      pe-1 text-xs text-accent-foreground outline-none`,
+                      'focus-visible:ring-[3px] focus-visible:ring-ring/50',
                       classNames?.chip,
                     )}
                   >
@@ -157,8 +156,8 @@ const MultipleSelect = ({
                     <ComboboxChipRemove
                       data-slot="select-chip-remove"
                       aria-label={`${locale.clear ?? DEFAULT_LOCALE.clear} ${name}`}
-                      className="hover:bg-background/70 flex size-5 shrink-0
-                        items-center justify-center rounded-sm"
+                      className="flex size-5 shrink-0 items-center
+                        justify-center rounded-sm hover:bg-background/70"
                     >
                       <XIcon className="size-3" />
                     </ComboboxChipRemove>

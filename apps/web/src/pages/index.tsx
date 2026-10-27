@@ -89,15 +89,15 @@ const InstallCommand = () => {
       type="button"
       onClick={onCopy}
       aria-label="Copy install command"
-      className="border-border bg-muted text-foreground hover:bg-accent flex
-        w-full max-w-md items-center justify-between gap-4 rounded-lg border
-        px-4 py-3 text-left font-mono text-sm transition-colors sm:w-auto"
+      className="flex w-full max-w-md items-center justify-between gap-4
+        rounded-lg border border-border bg-muted px-4 py-3 text-left font-mono
+        text-sm text-foreground transition-colors hover:bg-accent sm:w-auto"
     >
       <span>{INSTALL_COMMAND}</span>
       {copied ? (
         <Check size={16} className="shrink-0 text-green-500" />
       ) : (
-        <Copy size={16} className="text-muted-foreground shrink-0" />
+        <Copy size={16} className="shrink-0 text-muted-foreground" />
       )}
     </button>
   );
@@ -119,7 +119,7 @@ export default function Home() {
           <Typography.Title level={1} className="max-w-2xl">
             A React UI kit built on TypeScript, Tailwind, and Base UI
           </Typography.Title>
-          <Typography.Paragraph className="text-muted-foreground max-w-xl">
+          <Typography.Paragraph className="max-w-xl text-muted-foreground">
             Atoms, molecules, organisms, and page templates for building
             accessible, themeable interfaces — install one package and go.
           </Typography.Paragraph>
@@ -173,11 +173,11 @@ export default function Home() {
                 target="_blank"
                 rel="noreferrer"
               >
-                <Card className="hover:border-primary/40 transition-colors">
+                <Card className="transition-colors hover:border-primary/40">
                   <div className="mb-2 flex items-center gap-2">
                     <Tag color="primary">{category.name}</Tag>
                   </div>
-                  <Typography.Text className="text-muted-foreground text-sm">
+                  <Typography.Text className="text-sm text-muted-foreground">
                     {category.components}
                   </Typography.Text>
                 </Card>

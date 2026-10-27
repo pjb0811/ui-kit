@@ -58,7 +58,7 @@ export const DarkTheme: Story = {
   args: { alt: 'Ada Lovelace', fallback: 'AL' },
   render: args => (
     <Config theme={{ dark: 'dark' }}>
-      <div className="bg-background rounded-lg p-6">
+      <div className="rounded-lg bg-background p-6">
         <Avatar {...args} />
       </div>
     </Config>

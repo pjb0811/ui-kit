@@ -102,7 +102,7 @@ function DrawerContent({
         data-slot="drawer-content"
         data-direction={direction}
         className={cn(
-          `group/drawer-content bg-background fixed flex h-auto flex-col
+          `group/drawer-content fixed flex h-auto flex-col bg-background
           transition-transform duration-300 ease-in-out`,
           OVERLAY_LAYER,
           `data-[direction=top]:inset-x-0 data-[direction=top]:top-0
@@ -136,7 +136,7 @@ function DrawerContent({
         {handlebar && (
           <div
             className={cn(
-              `bg-muted mx-auto mt-4 hidden h-2 w-25 shrink-0 rounded-full
+              `mx-auto mt-4 hidden h-2 w-25 shrink-0 rounded-full bg-muted
               group-data-[direction=bottom]/drawer-content:block`,
               classNames?.handlebar,
             )}
@@ -181,7 +181,7 @@ function DrawerTitle({
   return (
     <DialogPrimitive.Title
       data-slot="drawer-title"
-      className={cn('text-foreground font-semibold', className)}
+      className={cn('font-semibold text-foreground', className)}
       {...props}
     />
   );
@@ -194,7 +194,7 @@ function DrawerDescription({
   return (
     <DialogPrimitive.Description
       data-slot="drawer-description"
-      className={cn('text-muted-foreground text-sm', className)}
+      className={cn('text-sm text-muted-foreground', className)}
       {...props}
     />
   );

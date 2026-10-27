@@ -9,11 +9,11 @@ import { FloatButton, Typography } from '@repo/ui';
 export default function FloatButtonDemo() {
   return (
     <div
-      className="border-border bg-muted/30 relative h-56 w-full overflow-hidden
-        rounded-md border"
+      className="relative h-56 w-full overflow-hidden rounded-md border
+        border-border bg-muted/30"
     >
       <Typography.Text
-        className="text-muted-foreground absolute top-3 left-3 text-sm"
+        className="absolute top-3 left-3 text-sm text-muted-foreground"
       >
         Scoped preview — normally fixed to the viewport corner
       </Typography.Text>

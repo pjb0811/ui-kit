@@ -9,7 +9,7 @@ export default function ScrollAreaDemo() {
       >
         <ul className="space-y-2 p-3">
           {Array.from({ length: 20 }, (_, index) => (
-            <li key={index} className="bg-muted rounded-sm p-2">
+            <li key={index} className="rounded-sm bg-muted p-2">
               Activity {index + 1}
             </li>
           ))}
@@ -22,7 +22,7 @@ export default function ScrollAreaDemo() {
       >
         <div className="grid w-[40rem] grid-cols-5 gap-2 p-3">
           {Array.from({ length: 40 }, (_, index) => (
-            <div key={index} className="bg-muted rounded-sm p-3">
+            <div key={index} className="rounded-sm bg-muted p-3">
               Cell {index + 1}
             </div>
           ))}

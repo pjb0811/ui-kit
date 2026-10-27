@@ -11,7 +11,7 @@ export default function DatePickerDemo() {
   return (
     <Space orientation="vertical" align="start" size="middle">
       <DatePicker onChange={setDate} />
-      <Typography.Text className="text-muted-foreground text-sm">
+      <Typography.Text className="text-sm text-muted-foreground">
         Selected: {date ? format(date, 'PPP') : 'none'}
       </Typography.Text>
       <DatePicker
@@ -19,7 +19,7 @@ export default function DatePickerDemo() {
         onChange={setDateTime}
         placeholder="Pick a date and time"
       />
-      <Typography.Text className="text-muted-foreground text-sm">
+      <Typography.Text className="text-sm text-muted-foreground">
         Date and time: {dateTime ? format(dateTime, 'PPP HH:mm') : 'none'}
       </Typography.Text>
     </Space>

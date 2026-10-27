@@ -37,8 +37,8 @@ export function AutocompleteContent({
         <Primitive.Popup
           data-slot="autocomplete-content"
           className={cn(
-            `bg-popover text-popover-foreground max-h-(--available-height)
-            origin-(--transform-origin) overflow-hidden rounded-md border
+            `max-h-(--available-height) origin-(--transform-origin)
+            overflow-hidden rounded-md border bg-popover text-popover-foreground
             shadow-md transition-[opacity,transform] duration-150
             data-ending-style:scale-95 data-ending-style:opacity-0
             data-starting-style:scale-95 data-starting-style:opacity-0`,

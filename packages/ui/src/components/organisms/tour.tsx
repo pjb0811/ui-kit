@@ -219,7 +219,7 @@ const Tour = ({
                 height: rect.height + 8,
               }}
               className={cn(
-                'border-primary pointer-events-none rounded-md border-2',
+                'pointer-events-none rounded-md border-2 border-primary',
                 OVERLAY_LAYER,
                 classNames?.highlight, //
               )}
@@ -259,7 +259,7 @@ const Tour = ({
             role="status"
             aria-live="polite"
             aria-atomic="true"
-            className="text-muted-foreground mt-3 text-xs"
+            className="mt-3 text-xs text-muted-foreground"
           >
             {formatProgress(index + 1, steps.length)}
           </p>

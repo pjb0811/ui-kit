@@ -77,9 +77,9 @@ const Number = ({
       )}
       <NumberField.Group
         className={cn(
-          `border-input focus-within:border-ring focus-within:ring-ring/50 flex
-          w-full items-stretch overflow-hidden rounded-md border shadow-xs
-          focus-within:ring-[3px]`,
+          `flex w-full items-stretch overflow-hidden rounded-md border
+          border-input shadow-xs focus-within:border-ring
+          focus-within:ring-[3px] focus-within:ring-ring/50`,
           sizes[resolvedSize],
           classNames?.group,
           //

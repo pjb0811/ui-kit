@@ -155,7 +155,7 @@ const Anchor = ({
             aria-current={active === item.href ? 'location' : undefined}
             className={cn(
               'block border-s-2 border-transparent px-3 py-1 text-sm',
-              active === item.href && 'border-primary text-primary font-medium',
+              active === item.href && 'border-primary font-medium text-primary',
               classNames?.link,
               active === item.href && classNames?.activeLink,
               //

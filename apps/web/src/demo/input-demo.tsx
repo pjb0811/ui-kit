@@ -19,7 +19,7 @@ export default function InputDemo() {
           className="max-w-64"
           onSearch={setSearched}
         />
-        <Typography.Text className="text-muted-foreground text-sm">
+        <Typography.Text className="text-sm text-muted-foreground">
           Last search: {searched || 'none'}
         </Typography.Text>
       </Space>

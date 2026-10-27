@@ -89,7 +89,7 @@ export const Offset: Story = {
 export const DarkTheme: Story = {
   render: () => (
     <Config theme={{ dark: 'dark' }}>
-      <div className="bg-background rounded-lg p-6">
+      <div className="rounded-lg bg-background p-6">
         <Badge count={7}>
           <Avatar alt="Ada Lovelace" fallback="AL" />
         </Badge>

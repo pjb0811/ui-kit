@@ -113,7 +113,7 @@ export const RTL: Story = {
 export const Dark: Story = {
   render: props => (
     <Config theme={{ dark: 'dark' }}>
-      <Timeline {...props} className="bg-background rounded-lg p-4" />
+      <Timeline {...props} className="rounded-lg bg-background p-4" />
     </Config>
   ),
 };

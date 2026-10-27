@@ -10,7 +10,7 @@ const rows = Array.from({ length: 30 }, (_, index) => `Item ${index + 1}`);
 const VerticalContent = () => (
   <ul className="space-y-2 p-3">
     {rows.map(row => (
-      <li key={row} className="bg-muted rounded-sm p-2">
+      <li key={row} className="rounded-sm bg-muted p-2">
         {row}
       </li>
     ))}
@@ -20,7 +20,7 @@ const VerticalContent = () => (
 const WideContent = () => (
   <div className="grid w-[48rem] grid-cols-6 gap-2 p-3">
     {rows.map(row => (
-      <div key={row} className="bg-muted rounded-sm p-3">
+      <div key={row} className="rounded-sm bg-muted p-3">
         {row}
       </div>
     ))}
@@ -100,7 +100,7 @@ export const Dark: Story = {
     <Config theme={{ dark: 'dark' }}>
       <ScrollArea
         {...props}
-        className="bg-background text-foreground h-56 w-72 rounded-lg border"
+        className="h-56 w-72 rounded-lg border bg-background text-foreground"
       />
     </Config>
   ),

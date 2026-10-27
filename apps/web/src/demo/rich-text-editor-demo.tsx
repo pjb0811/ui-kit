@@ -13,7 +13,7 @@ export default function RichTextEditorDemo() {
       className="w-full max-w-96"
     >
       <RichTextEditor value={value} onChange={setValue} toolbar />
-      <Typography.Text className="text-muted-foreground text-sm">
+      <Typography.Text className="text-sm text-muted-foreground">
         committed HTML: <code>{value}</code>
       </Typography.Text>
     </Space>

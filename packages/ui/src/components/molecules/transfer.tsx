@@ -131,7 +131,7 @@ const Transfer = ({
       {...props}
       data-slot="transfer"
       className={cn(
-        `text-foreground grid min-w-0 grid-cols-1 items-center gap-3
+        `grid min-w-0 grid-cols-1 items-center gap-3 text-foreground
         sm:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)]`,
         className, //
       )}
@@ -142,14 +142,14 @@ const Transfer = ({
           data-slot="transfer-panel"
           aria-labelledby={`${id}-title-${index}`}
           className={cn(
-            'border-border bg-background min-w-0 rounded-md border',
+            'min-w-0 rounded-md border border-border bg-background',
             index === 1 && 'sm:col-start-3 sm:row-start-1',
             classNames?.panel, //
           )}
         >
           <div
             className={cn(
-              'border-border border-b p-3',
+              'border-b border-border p-3',
               classNames?.header, //
             )}
           >
@@ -158,7 +158,7 @@ const Transfer = ({
             </h3>
             <p
               id={`${id}-count-${index}`}
-              className="text-muted-foreground m-0 mt-1 text-xs"
+              className="m-0 mt-1 text-xs text-muted-foreground"
             >
               {formatCount(
                 panel.visible.length,
@@ -237,7 +237,7 @@ const Transfer = ({
                   {item.label}
                 </Checkbox>
                 {item.description != null && (
-                  <div className="text-muted-foreground ms-6 mt-1 text-xs">
+                  <div className="ms-6 mt-1 text-xs text-muted-foreground">
                     {item.description}
                   </div>
                 )}
@@ -246,7 +246,7 @@ const Transfer = ({
             {!panel.visible.length && (
               <li
                 className={cn(
-                  'text-muted-foreground py-6 text-center text-sm',
+                  'py-6 text-center text-sm text-muted-foreground',
                   classNames?.empty, //
                 )}
               >

@@ -38,7 +38,7 @@ const Empty = ({
       </div>
       {title && <p className="text-sm font-medium">{title}</p>}
       {description && (
-        <p className="text-muted-foreground text-sm">{description}</p>
+        <p className="text-sm text-muted-foreground">{description}</p>
       )}
       {action && <div className="mt-1">{action}</div>}
     </div>

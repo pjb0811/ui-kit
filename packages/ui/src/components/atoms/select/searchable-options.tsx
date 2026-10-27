@@ -107,7 +107,7 @@ const SearchableOptions = ({ emptyText, classNames }: Props) => {
             {group.grouped && (
               <ComboboxGroupLabel
                 data-slot="combobox-group-label"
-                className="text-muted-foreground px-2 py-1.5 text-xs"
+                className="px-2 py-1.5 text-xs text-muted-foreground"
               >
                 {group.value}
               </ComboboxGroupLabel>

@@ -32,7 +32,7 @@ export default function CodeEditorDemo() {
       size="small"
       className="w-full max-w-2xl"
     >
-      <div className="border-border w-full rounded border">
+      <div className="w-full rounded border border-border">
         <CodeEditor
           value={value}
           theme={colorMode}
@@ -42,7 +42,7 @@ export default function CodeEditorDemo() {
           onSave={() => setSaved(new Date().toLocaleTimeString())}
         />
       </div>
-      <Typography.Text className="text-muted-foreground text-sm">
+      <Typography.Text className="text-sm text-muted-foreground">
         Press ⌘S / Ctrl+S to format and save.
         {saved ? ` Last saved ${saved}.` : ''}
       </Typography.Text>

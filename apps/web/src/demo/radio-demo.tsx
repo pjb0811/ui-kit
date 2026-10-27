@@ -18,7 +18,7 @@ export default function RadioDemo() {
     <Space orientation="vertical" align="start" size="middle">
       <Space orientation="vertical" align="start" size="small">
         <Radio.Group options={OPTIONS} value={value} onChange={setValue} />
-        <Typography.Text className="text-muted-foreground text-sm">
+        <Typography.Text className="text-sm text-muted-foreground">
           Selected: {String(value)}
         </Typography.Text>
       </Space>

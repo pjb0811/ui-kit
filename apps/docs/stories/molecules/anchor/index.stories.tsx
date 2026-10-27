@@ -84,7 +84,7 @@ function ScrollingPage(args: React.ComponentProps<typeof Anchor>) {
         className="relative h-52 w-72 overflow-y-auto border"
       >
         <div
-          className="bg-background sticky top-0 z-10 border-b"
+          className="sticky top-0 z-10 border-b bg-background"
           style={{ height: HEADER_HEIGHT }}
         >
           Header
@@ -345,7 +345,7 @@ export const Dark: Story = {
   args: { items: nestedItems },
   render: props => (
     <Config theme={{ dark: 'dark' }}>
-      <div className="bg-background text-foreground p-4">
+      <div className="bg-background p-4 text-foreground">
         <Anchor {...props} />
       </div>
     </Config>

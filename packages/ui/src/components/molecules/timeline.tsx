@@ -44,7 +44,7 @@ const Timeline = ({ items, className, classNames, ...props }: Props) => {
       data-slot="timeline"
       role="list"
       className={cn(
-        'text-foreground m-0 w-full min-w-0 list-none p-0',
+        'm-0 w-full min-w-0 list-none p-0 text-foreground',
         className, //
       )}
     >
@@ -66,9 +66,9 @@ const Timeline = ({ items, className, classNames, ...props }: Props) => {
               <span
                 data-slot="timeline-marker"
                 className={cn(
-                  `border-border bg-background text-muted-foreground relative
-                  z-10 flex size-5 items-center justify-center rounded-full
-                  border-2 [&>svg]:size-3`,
+                  `relative z-10 flex size-5 items-center justify-center
+                  rounded-full border-2 border-border bg-background
+                  text-muted-foreground [&>svg]:size-3`,
                   item.status === 'primary' && 'border-primary text-primary',
                   item.status === 'error' &&
                     'border-destructive text-destructive',
@@ -81,8 +81,8 @@ const Timeline = ({ items, className, classNames, ...props }: Props) => {
                 <span
                   data-slot="timeline-connector"
                   className={cn(
-                    `bg-border absolute start-[calc(50%-0.5px)] top-5 -bottom-6
-                    w-px`,
+                    `absolute start-[calc(50%-0.5px)] top-5 -bottom-6 w-px
+                    bg-border`,
                     classNames?.connector, //
                   )}
                 />
@@ -113,7 +113,7 @@ const Timeline = ({ items, className, classNames, ...props }: Props) => {
                       : undefined
                   }
                   className={cn(
-                    'text-muted-foreground mt-1 block text-xs',
+                    'mt-1 block text-xs text-muted-foreground',
                     classNames?.timestamp, //
                   )}
                 >
@@ -124,7 +124,7 @@ const Timeline = ({ items, className, classNames, ...props }: Props) => {
                 <div
                   data-slot="timeline-description"
                   className={cn(
-                    'text-muted-foreground mt-2',
+                    'mt-2 text-muted-foreground',
                     classNames?.description, //
                   )}
                 >

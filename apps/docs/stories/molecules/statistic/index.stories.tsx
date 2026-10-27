@@ -116,7 +116,7 @@ export const Dark: Story = {
   args: { prefix: '$', suffix: 'USD' },
   render: props => (
     <Config theme={{ dark: 'dark' }}>
-      <div className="bg-background text-foreground p-4">
+      <div className="bg-background p-4 text-foreground">
         <Statistic {...props} />
       </div>
     </Config>

@@ -144,9 +144,9 @@ const variantClasses: Record<string, string> = {
     'hover:bg-accent',
   ),
   filled: cn('bg-muted text-foreground', 'hover:bg-muted/80'),
-  text: cn('text-foreground bg-transparent', 'hover:bg-accent'),
+  text: cn('bg-transparent text-foreground', 'hover:bg-accent'),
   link: cn(
-    'text-primary bg-transparent',
+    'bg-transparent text-primary',
     'underline-offset-4 hover:underline',
     'hover:bg-primary/10',
   ),

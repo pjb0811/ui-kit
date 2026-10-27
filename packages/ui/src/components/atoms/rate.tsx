@@ -129,7 +129,7 @@ const Rate = ({
                   size="small"
                   disabled={disabled}
                   className={cn(
-                    'text-muted-foreground size-8 shrink-0 p-1',
+                    'size-8 shrink-0 p-1 text-muted-foreground',
                     readOnly && 'cursor-default',
                     isFilled && 'text-primary',
                     classNames?.item,

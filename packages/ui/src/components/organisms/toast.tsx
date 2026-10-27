@@ -64,7 +64,7 @@ const STATUS_ICONS: Record<ToastStatus, React.ReactNode> = {
   success: <Check className="text-green-400" />,
   error: <OctagonX className="text-red-400" />,
   warning: <OctagonAlert className="text-yellow-400" />,
-  loading: <LoaderCircle className="text-muted-foreground animate-spin" />,
+  loading: <LoaderCircle className="animate-spin text-muted-foreground" />,
 };
 
 const Toast = ({
@@ -86,7 +86,7 @@ const Toast = ({
       className={cn(
         `pointer-events-auto flex w-80 max-w-[calc(100vw-2rem)] items-start
         gap-3 rounded-lg`,
-        'bg-background text-foreground border p-4 shadow-lg',
+        'border bg-background p-4 text-foreground shadow-lg',
         className,
         //
       )}
@@ -99,7 +99,7 @@ const Toast = ({
       <div className="flex-1 space-y-1">
         <p className="text-sm font-medium">{title}</p>
         {description && (
-          <p className="text-muted-foreground text-sm">{description}</p>
+          <p className="text-sm text-muted-foreground">{description}</p>
         )}
         {action && <div className="pt-1">{action}</div>}
       </div>

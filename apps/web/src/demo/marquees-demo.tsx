@@ -5,8 +5,8 @@ const row = (
     {['React', 'TypeScript', 'Vite', 'Tailwind', 'Docusaurus'].map(label => (
       <span
         key={label}
-        className="bg-accent text-accent-foreground rounded-full px-5 py-2
-          text-sm font-medium"
+        className="rounded-full bg-accent px-5 py-2 text-sm font-medium
+          text-accent-foreground"
       >
         {label}
       </span>

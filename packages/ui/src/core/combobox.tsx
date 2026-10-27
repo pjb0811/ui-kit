@@ -52,8 +52,8 @@ function ComboboxContent({
         <ComboboxPrimitive.Popup
           data-slot="combobox-content"
           className={cn(
-            `bg-popover text-popover-foreground max-h-(--available-height)
-            origin-(--transform-origin) overflow-hidden rounded-md border
+            `max-h-(--available-height) origin-(--transform-origin)
+            overflow-hidden rounded-md border bg-popover text-popover-foreground
             shadow-md transition-[opacity,transform] duration-150
             data-ending-style:scale-95 data-ending-style:opacity-0
             data-starting-style:scale-95 data-starting-style:opacity-0`,
@@ -91,10 +91,10 @@ function ComboboxItem({
     <ComboboxPrimitive.Item
       data-slot="combobox-item"
       className={cn(
-        `data-highlighted:bg-accent data-highlighted:text-accent-foreground
-        relative flex w-full cursor-default items-center rounded-sm py-1.5 ps-2
+        `relative flex w-full cursor-default items-center rounded-sm py-1.5 ps-2
         pe-8 text-sm outline-hidden select-none
-        data-disabled:pointer-events-none data-disabled:opacity-50`,
+        data-disabled:pointer-events-none data-disabled:opacity-50
+        data-highlighted:bg-accent data-highlighted:text-accent-foreground`,
         className,
         //
       )}
@@ -119,7 +119,7 @@ function ComboboxEmpty({
     <ComboboxPrimitive.Empty
       data-slot="combobox-empty"
       className={cn(
-        'text-muted-foreground px-2 py-3 text-center text-sm empty:p-0',
+        'px-2 py-3 text-center text-sm text-muted-foreground empty:p-0',
         className,
       )}
       {...props}
