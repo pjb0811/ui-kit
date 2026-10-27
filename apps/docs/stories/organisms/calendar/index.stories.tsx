@@ -146,6 +146,22 @@ export const YearTransition: Story = {
   },
 };
 
+export const Today: Story = {
+  args: { today: new Date(2026, 9, 20) },
+  play: async ({ canvasElement }) => {
+    const today = dayButton(
+      canvasElement,
+      /^Today, Tuesday, October 20th, 2026$/,
+    );
+
+    await expect(today.closest('td')).toHaveAttribute('data-today', 'true');
+    await expect(today).toHaveAttribute('tabindex', '0');
+    await expect(
+      canvasElement.querySelectorAll('[data-today="true"]'),
+    ).toHaveLength(1);
+  },
+};
+
 export const Markers: Story = {
   args: {
     expanded: true,

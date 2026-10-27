@@ -18,9 +18,13 @@ import { Calendar } from '@jbpark/ui-kit';
 
 ## Selection and navigation
 
-`value` / `defaultValue` control the selected date; `month` / `defaultMonth` independently control the displayed month. Selecting a date calls `onChange`, while navigating calls `onMonthChange`. A selected date can be cleared by choosing it again; the callback receives undefined. Pass `value={null}` to keep a controlled calendar explicitly empty, including after clearing. Use valid local Date objects. With neither month prop, the initial month follows value, defaultValue, or the current local date. Supply defaultMonth explicitly when server and browser time zones may disagree.
+`value` / `defaultValue` control the selected date; `month` / `defaultMonth` independently control the displayed month. Selecting a date calls `onChange`, while navigating calls `onMonthChange`. A selected date can be cleared by choosing it again; the callback receives undefined. Pass `value={null}` to keep a controlled calendar explicitly empty, including after clearing. Use valid local Date objects. With neither month prop, the initial month follows value, defaultValue, `today`, or the current local date. Supply defaultMonth explicitly when server and browser time zones may disagree.
 
 `minDate` and `maxDate` disable dates outside inclusive day boundaries. `disabledDate` adds a predicate; bounds restrict selection, not month navigation. Keyboard and date-grid behavior come from react-day-picker through the existing calendar foundation.
+
+## Today
+
+By default Calendar marks today from the browser's clock once it has hydrated, so a server in a different time zone can't mark a different day. A server-rendered calendar shows no today marker until then. To mark today from the first render, pass the same `today` on the server and in the browser, for example a date computed from the user's time zone on the server and sent with the page.
 
 ## Date markers
 
@@ -33,7 +37,8 @@ import { Calendar } from '@jbpark/ui-kit';
 | `value` | `Date \| null` | — |
 | `defaultValue` | `Date` | — |
 | `onChange` | `(date: Date \| undefined) => void` | — |
-| `month` / `defaultMonth` | `Date` | Selected date or current month |
+| `month` / `defaultMonth` | `Date` | Selected date, `today` or current month |
+| `today` | `Date` | Browser date after hydration |
 | `onMonthChange` | `(month: Date) => void` | — |
 | `minDate` / `maxDate` | `Date` | — |
 | `disabledDate` | `(date: Date) => boolean` | — |
