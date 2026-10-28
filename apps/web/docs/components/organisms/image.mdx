@@ -1,0 +1,41 @@
+---
+title: Image
+---
+
+import ImageDemo from '../../../src/demo/image-demo';
+
+# Image
+
+Display a content image, such as a screenshot or an attachment, with a placeholder while it loads, a fallback if it fails, and an optional enlarged preview. Use Avatar for profile pictures.
+
+```tsx
+import { Image } from '@jbpark/ui-kit';
+
+<Image src="/dashboard.png" alt="Dashboard screenshot" width={640} height={360} preview />;
+```
+
+<ImageDemo />
+
+## Loading and failure
+
+The `<img>` receives the native image props you pass, including `srcSet`, `sizes`, `loading`, `decoding`, `width`, `height`, `onLoad` and `onError`. `placeholder` is shown over the image area while it loads, so give the image a size. When the image fails, Image shows `fallback` (an icon by default) instead and does not retry. The root element has `data-status="loading" | "loaded" | "error"`.
+
+## Preview
+
+`preview` adds a control over the whole image that opens it in a dialog, fitted to the viewport without distortion. Escape, the close button or a click outside closes it, and focus returns to the image. Pass an object to set a larger `src`, a `title` for the dialog, a `label` for the control, or to control `open` with `onOpenChange`. A failed image offers no preview.
+
+The control is named by `label`, or by the Config `locale.preview` string followed by `alt`. A decorative image (`alt=""`) stays hidden from assistive technology and gets a preview control only when you pass `label`. The dialog uses Modal, so it follows Config's portal container, direction and theme.
+
+## Props
+
+| Prop | Type | Default |
+| --- | --- | --- |
+| `src` | `string` | Required |
+| `alt` | `string` | Required; `""` for a decorative image |
+| `placeholder` | `ReactNode` | — |
+| `fallback` | `ReactNode` | Image-off icon |
+| `preview` | `boolean \| { src?: string; title?: ReactNode; label?: string; open?: boolean; defaultOpen?: boolean; onOpenChange?: (open: boolean) => void }` | `false` |
+| `className` / `style` / `ref` | Root element | — |
+| `classNames` | `{ image?: string; placeholder?: string; fallback?: string; trigger?: string; preview?: string }` | — |
+
+Other props go to the `<img>`. The root package exports `Image`, `ImageProps` and `ImagePreviewOptions`; the `Image` subpath exports the default component and `Props`/`PreviewOptions` types.

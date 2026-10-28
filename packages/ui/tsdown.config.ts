@@ -64,6 +64,7 @@ export default defineConfig({
     Tabs: 'src/components/molecules/tabs.tsx',
     Upload: 'src/components/molecules/upload.tsx',
     Drawer: 'src/components/organisms/drawer.tsx',
+    Image: 'src/components/organisms/image.tsx',
     List: 'src/components/organisms/list/index.ts',
     Modal: 'src/components/organisms/modal.tsx',
     Swiper: 'src/components/organisms/swiper/index.ts',

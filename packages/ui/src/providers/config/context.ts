@@ -16,6 +16,7 @@ export const DEFAULT_LOCALE: Required<Locale> = {
   cancel: 'Cancel',
   retry: '다시 시도',
   loadFailed: '불러오지 못함',
+  preview: '미리보기',
 };
 
 export const Context = createContext<ContextValue>({

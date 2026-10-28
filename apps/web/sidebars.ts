@@ -56,6 +56,7 @@ const sidebars: SidebarsConfig = {
       collapsed: false,
       items: [
         'components/atoms/avatar',
+        'components/organisms/image',
         'components/organisms/calendar',
         'components/atoms/badge',
         'components/atoms/popover',
