@@ -261,6 +261,11 @@
       "import": "./dist/Drawer.mjs",
       "default": "./dist/Drawer.mjs"
     },
+    "./Image": {
+      "types": "./dist/Image.d.mts",
+      "import": "./dist/Image.mjs",
+      "default": "./dist/Image.mjs"
+    },
     "./List": {
       "types": "./dist/List.d.mts",
       "import": "./dist/List.mjs",

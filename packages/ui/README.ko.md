@@ -110,6 +110,7 @@ src/
 | **Calendar**   | 날짜 선택이나 날짜별 콘텐츠 표시용 월간 보기                          | -                                                                                           |
 | **Drawer**     | 화면 가장자리에서 밀려 나오는 제어형 패널                             | -                                                                                           |
 | **Form**       | 라벨, 설명, 오류 메시지가 있는 필드로 구성된 폼 레이아웃              | `Field`, `Control`                                                                          |
+| **Image**      | 로딩·오류 상태와 선택적 확대 미리보기를 지원하는 콘텐츠 이미지        | -                                                                                           |
 | **List**       | 로딩·빈 상태·무한 스크롤을 지원하는 목록                              | `Item`                                                                                      |
 | **Modal**      | 제어형 또는 명령형으로 여는 다이얼로그                                | `confirm`, `info`, `success`, `warning`, `error`, `destroy`, `destroyAll`                   |
 | **Swiper**     | Swiper.js 기반의 터치 캐러셀                                          | `Slide`                                                                                     |

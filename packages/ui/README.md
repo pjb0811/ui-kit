@@ -110,6 +110,7 @@ Complex UI sections
 | **Calendar**   | A month view for picking dates or showing date content                            | -                                                                                           |
 | **Drawer**     | A controlled panel that slides in from any edge                                   | -                                                                                           |
 | **Form**       | Form layout with labeled fields, descriptions and error messages                  | `Field`, `Control`                                                                          |
+| **Image**      | A content image with load and error states and an optional enlarged preview       | -                                                                                           |
 | **List**       | A collection with loading, empty and infinite-scroll states                       | `Item`                                                                                      |
 | **Modal**      | A dialog, controlled or fired imperatively                                        | `confirm`, `info`, `success`, `warning`, `error`, `destroy`, `destroyAll`                   |
 | **Swiper**     | A touch-friendly carousel over Swiper.js                                          | `Slide`                                                                                     |

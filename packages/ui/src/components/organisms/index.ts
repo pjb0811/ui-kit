@@ -2,6 +2,11 @@ export { default as Calendar } from './calendar';
 export type { Props as CalendarProps } from './calendar';
 export { default as Drawer } from './drawer';
 export type { Props as DrawerProps } from './drawer';
+export { default as Image } from './image';
+export type {
+  Props as ImageProps,
+  PreviewOptions as ImagePreviewOptions,
+} from './image';
 export { default as List } from './list';
 export type { ListProps } from './list';
 export { default as Modal } from './modal';

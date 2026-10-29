@@ -96,6 +96,7 @@ export interface Locale {
   cancel?: string;
   retry?: string;
   loadFailed?: string;
+  preview?: string;
 }
 
 // antd's componentSize equivalent — components with a `size` prop (e.g.
