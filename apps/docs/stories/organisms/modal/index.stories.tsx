@@ -297,3 +297,76 @@ export const ClosingLifecycle: Story = {
     }
   },
 };
+
+// The title must stay clear of the close button on both sides (#586).
+export const LongTitle: Story = {
+  args: {
+    closable: true,
+    title:
+      'Quarterly revenue report for the platform team and the finance group',
+  },
+  render: function Render(props) {
+    const [open, setOpen] = useState(false);
+    const [dir, setDir] = useState<'ltr' | 'rtl'>('ltr');
+    const [container, setContainer] = useState<HTMLDivElement | null>(null);
+
+    return (
+      <div className="flex gap-2">
+        <Button
+          onClick={() => {
+            setDir('ltr');
+            setOpen(true);
+          }}
+        >
+          Open LTR
+        </Button>
+        <Button
+          onClick={() => {
+            setDir('rtl');
+            setOpen(true);
+          }}
+        >
+          Open RTL
+        </Button>
+        <div ref={setContainer} dir={dir} />
+        {container && (
+          <Modal
+            {...props}
+            open={open}
+            container={container}
+            footer={null}
+            onCancel={() => setOpen(false)}
+          >
+            <p>Revenue grew in every region this quarter.</p>
+          </Modal>
+        )}
+      </div>
+    );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const body = within(canvasElement.ownerDocument.body);
+
+    for (const label of ['Open LTR', 'Open RTL']) {
+      await userEvent.click(canvas.getByRole('button', { name: label }));
+
+      const dialog = await body.findByRole('dialog');
+      const title = dialog
+        .querySelector('[data-slot="dialog-title"]')!
+        .getBoundingClientRect();
+      const close = within(dialog)
+        .getByRole('button', { name: 'Close' })
+        .getBoundingClientRect();
+      const overlaps =
+        title.left < close.right &&
+        close.left < title.right &&
+        title.top < close.bottom &&
+        close.top < title.bottom;
+
+      await expect(overlaps).toBe(false);
+
+      await userEvent.keyboard('{Escape}');
+      await waitFor(() => expect(body.queryByRole('dialog')).toBeNull());
+    }
+  },
+};
