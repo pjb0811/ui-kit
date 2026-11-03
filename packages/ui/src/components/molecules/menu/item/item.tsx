@@ -2,6 +2,7 @@
 
 import { useRef, useState } from 'react';
 
+import { useRovingFocus } from '@jbpark/use-hooks';
 import { ChevronDown } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 
@@ -10,11 +11,14 @@ import { cn } from '@repo/ui/utils';
 import { MENU_CLASSNAMES, MenuItem, Props } from '../menu';
 import Label from './label';
 
+type FocusProps = ReturnType<ReturnType<typeof useRovingFocus>['getItemProps']>;
+
 interface ItemProps extends Props, MenuItem {
   itemKey: React.Key;
   keyPath: React.Key[];
   root?: boolean;
-  index: number;
+  /** Roving focus props from the level this item belongs to. */
+  focusProps: FocusProps;
 }
 const OFFSET: [number, number] = [8, 8];
 const INLINE_OFFSET = 16;
@@ -56,7 +60,7 @@ const Item = ({
   itemKey,
   keyPath,
   root = false,
-  index,
+  focusProps: { ref: focusRef, tabIndex, onFocus, onKeyDown: onRovingKeyDown },
   mode,
   label,
   children,
@@ -69,6 +73,9 @@ const Item = ({
   onSelect,
   ...props
 }: ItemProps) => {
+  // Submenu items are stacked vertically in every mode.
+  const { getItemProps } = useRovingFocus({ count: children?.length ?? 0 });
+
   const [open, setOpen] = useState<boolean>(false);
 
   const itemRef = useRef<HTMLLIElement | null>(null);
@@ -121,28 +128,15 @@ const Item = ({
     }
   };
 
-  // Roving tabindex (WAI-ARIA menu pattern): only the first item in each
-  // menu/submenu level is a Tab stop (below); arrow keys move real DOM
-  // focus between sibling <li>s within that same level, which is what
-  // ends up mattering for actual keyboard use even though — unlike a
-  // fully state-tracked implementation — focus resets to the first item
-  // if the user Tabs out and back in rather than resuming where they left
-  // off.
-  //
-  // Deliberately not `useKeyPress` (unlike dropdown.tsx's trigger and
-  // radio.tsx/checkbox.tsx's icon mode, #229's action item 5): that hook
-  // is a static combo -> handler binding, one listener per combo. This
-  // handler is a single stateful branch — Enter/Space select, Escape
-  // conditionally closes a submenu and stops the event from also closing
-  // an ancestor Dropdown, and the arrow-key branch reads `itemRef` at
-  // fire time to focus a *sibling* `<li>`. Splitting that into 3-4
-  // separate useKeyPress calls (each its own listener) per menu item
-  // wouldn't fix a bug — the existing logic is already correct — it would
-  // just multiply listeners across every item in a menu for no benefit.
-  const handleKeyDown = (domEvent: React.KeyboardEvent) => {
+  // Enter/Space select and Escape closes this item's submenu without also
+  // closing an ancestor Dropdown. Other keys go to the level's roving focus:
+  // arrow keys for the level's orientation (mirrored in RTL), wrapping at
+  // the ends, and Home/End.
+  const handleKeyDown = (domEvent: React.KeyboardEvent<HTMLElement>) => {
     if (domEvent.key === 'Enter' || domEvent.key === ' ') {
       domEvent.preventDefault();
       handleSelect(domEvent);
+
       return;
     }
 
@@ -151,25 +145,11 @@ const Item = ({
         domEvent.stopPropagation();
         setOpen(false);
       }
+
       return;
     }
 
-    const isNext = isHorizontal
-      ? domEvent.key === 'ArrowRight'
-      : domEvent.key === 'ArrowDown';
-    const isPrev = isHorizontal
-      ? domEvent.key === 'ArrowLeft'
-      : domEvent.key === 'ArrowUp';
-
-    if (!isNext && !isPrev) {
-      return;
-    }
-
-    domEvent.preventDefault();
-    const sibling = isNext
-      ? itemRef.current?.nextElementSibling
-      : itemRef.current?.previousElementSibling;
-    sibling?.querySelector<HTMLElement>('[role="menuitem"]')?.focus();
+    onRovingKeyDown(domEvent);
   };
 
   const childrenContainerClassNames = cn(
@@ -233,8 +213,9 @@ const Item = ({
       }}
     >
       <div
+        ref={focusRef}
         role="menuitem"
-        tabIndex={index === 0 ? 0 : -1}
+        tabIndex={tabIndex}
         aria-expanded={children?.length ? open : undefined}
         aria-haspopup={children?.length ? 'menu' : undefined}
         aria-current={selected ? true : undefined}
@@ -251,6 +232,7 @@ const Item = ({
         )}
         style={root ? styles?.rootItem : styles?.item}
         onClick={handleSelect}
+        onFocus={onFocus}
         onKeyDown={handleKeyDown}
       >
         <div
@@ -305,7 +287,7 @@ const Item = ({
                   key={child.key}
                   itemKey={child.key}
                   keyPath={[...keyPath, child.key]}
-                  index={childIndex}
+                  focusProps={getItemProps(childIndex)}
                   selectionMap={selectionMap}
                   mode={mode}
                   classNames={classNames}
