@@ -1,5 +1,16 @@
 # @repo/ui
 
+## 10.6.0
+
+### Minor Changes
+
+- e00af69: Fix a hydration mismatch in Calendar when the server and the browser are in different time zones. Calendar now marks today from the browser's clock after hydration, so the server-rendered HTML carries no today marker. A new `today` prop sets the date to mark from the first render; pass the same value on the server and in the browser. When no month, value or default is given, Calendar also opens on `today`'s month.
+- 3f64b92: Add `Image`, a content image with a placeholder while it loads, a fallback when it fails, and an optional preview that opens the image in a dialog fitted to the viewport. Native image props such as `srcSet`, `sizes` and `loading` reach the `<img>`. The preview can use a larger source, a title and an accessible label, and can be controlled with `open` and `onOpenChange`. A decorative image (`alt=""`) gets a preview control only with an explicit label. Config's `locale` gains a `preview` string for the default control name.
+
+### Patch Changes
+
+- 95e5925: Keep a long Modal title clear of the close button. When `closable` is set, the header reserves space on its end side for the button, and the button now sits on the end side in right-to-left layouts too. The header text aligns to the start side on wider screens.
+
 ## 10.5.0
 
 ### Minor Changes
