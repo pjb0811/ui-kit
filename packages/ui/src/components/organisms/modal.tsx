@@ -148,6 +148,9 @@ const Modal = ({
          **/}
         <DialogHeader
           className={cn(
+            // Keeps the title clear of the close button, which sits over the
+            // header's end corner.
+            closable && 'pe-8',
             classNames?.header,
             !title && 'hidden',
             //

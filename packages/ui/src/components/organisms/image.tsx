@@ -221,8 +221,6 @@ const Image = ({
             maskClosable
             footer={null}
             onCancel={() => setIsOpen(false)}
-            // Keeps a long title clear of the close button.
-            classNames={{ header: 'pe-8' }}
             className={cn(
               'sm:max-w-[min(90vw,64rem)]',
               classNames?.preview,
