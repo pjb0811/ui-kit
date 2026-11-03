@@ -1,5 +1,14 @@
 # web
 
+## 1.5.14
+
+### Patch Changes
+
+- Updated dependencies [e00af69]
+- Updated dependencies [3f64b92]
+- Updated dependencies [95e5925]
+  - @repo/ui@10.6.0
+
 ## 1.5.13
 
 ### Patch Changes
