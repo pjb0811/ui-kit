@@ -2,7 +2,7 @@
 
 import { useMemo } from 'react';
 
-import { useControllableState } from '@jbpark/use-hooks';
+import { useControllableState, useRovingFocus } from '@jbpark/use-hooks';
 
 import { cn } from '@repo/ui/utils';
 
@@ -121,6 +121,10 @@ const Menu = ({
     value: _selectedKeys,
     defaultValue: defaultSelectedKeys ?? [],
   });
+  const { getItemProps } = useRovingFocus({
+    count: items?.length ?? 0,
+    orientation: mode === 'horizontal' ? 'horizontal' : 'vertical',
+  });
 
   const selectedKeysSet = useMemo(
     () => new Set<React.Key>(selectedKeys ?? []),
@@ -164,7 +168,7 @@ const Menu = ({
           key={item.key}
           itemKey={item.key}
           keyPath={[item.key]}
-          index={index}
+          focusProps={getItemProps(index)}
           selectionMap={selectionMap}
           mode={mode}
           classNames={classNames}

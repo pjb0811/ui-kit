@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { expect, userEvent, waitFor, within } from 'storybook/test';
 
 import { Menu } from '@repo/ui';
 
@@ -160,4 +161,88 @@ export const Controlled: Story = {
     inlineOffset: 0,
   },
   render: args => <DemoControlledMenu {...args} />,
+};
+
+const KeyboardMenu = ({
+  direction,
+  ...args
+}: React.ComponentProps<typeof Menu> & { direction?: 'ltr' | 'rtl' }) => (
+  <div className="flex flex-col items-start gap-4 p-4" dir={direction}>
+    <button type="button">Before</button>
+    <Menu {...args} />
+  </div>
+);
+
+// One Tab stop per level that follows the last focused item; arrow keys
+// wrap, and Home/End jump to the ends (#592).
+export const KeyboardNavigation: Story = {
+  args: { mode: 'horizontal', items: defaultItems },
+  render: args => <KeyboardMenu {...args} />,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const item = (name: string) => canvas.getByRole('menuitem', { name });
+
+    await userEvent.click(canvas.getByRole('button', { name: 'Before' }));
+    await userEvent.tab();
+    await expect(item('홈')).toHaveFocus();
+
+    await userEvent.keyboard('{ArrowLeft}');
+    await expect(item('연락처')).toHaveFocus();
+    await userEvent.keyboard('{ArrowRight}');
+    await expect(item('홈')).toHaveFocus();
+    await userEvent.keyboard('{End}');
+    await expect(item('연락처')).toHaveFocus();
+    await userEvent.keyboard('{Home}');
+    await expect(item('홈')).toHaveFocus();
+
+    await userEvent.keyboard('{ArrowRight}{ArrowRight}');
+    await expect(item('서비스')).toHaveFocus();
+    await expect(
+      canvasElement.querySelectorAll(
+        '[data-slot="menu"] > li > [role="menuitem"][tabindex="0"]',
+      ),
+    ).toHaveLength(1);
+
+    // Leaving and coming back lands on the item the user left. Wait for the
+    // submenu of 제품 to finish its exit animation first.
+    await waitFor(() =>
+      expect(canvas.queryByRole('menuitem', { name: '웹사이트' })).toBeNull(),
+    );
+    await userEvent.tab({ shift: true });
+    await expect(canvas.getByRole('button', { name: 'Before' })).toHaveFocus();
+    await userEvent.tab();
+    await expect(item('서비스')).toHaveFocus();
+
+    // A submenu stacks its items vertically, so it moves with Up/Down.
+    await userEvent.keyboard('{ArrowLeft}');
+    await expect(item('제품')).toHaveFocus();
+    await userEvent.tab();
+    await expect(item('웹사이트')).toHaveFocus();
+    await userEvent.keyboard('{ArrowDown}');
+    await expect(item('모바일 앱')).toHaveFocus();
+    await userEvent.keyboard('{ArrowDown}');
+    await expect(item('웹사이트')).toHaveFocus();
+
+    await userEvent.keyboard('{Enter}');
+    await expect(item('웹사이트')).toHaveAttribute('aria-current', 'true');
+  },
+};
+
+export const KeyboardRightToLeft: Story = {
+  args: { mode: 'horizontal', items: defaultItems },
+  render: args => <KeyboardMenu {...args} direction="rtl" />,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const item = (name: string) => canvas.getByRole('menuitem', { name });
+
+    await userEvent.click(canvas.getByRole('button', { name: 'Before' }));
+    await userEvent.tab();
+    await expect(item('홈')).toHaveFocus();
+
+    // In RTL the next item sits to the left.
+    await userEvent.keyboard('{ArrowLeft}');
+    await expect(item('제품')).toHaveFocus();
+    await userEvent.keyboard('{ArrowRight}');
+    await expect(item('홈')).toHaveFocus();
+  },
 };
