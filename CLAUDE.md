@@ -153,8 +153,7 @@ const MyComponent = ({
       className={cn(
         'base-classes',
         variant === 'outlined' && 'border border-gray-200',
-        className,
-        // 마지막에 빈 주석으로 trailing comma 유지
+        className, //
       )}
       {...props}
     />
@@ -168,7 +167,7 @@ export default MyComponent;
 
 - Props 인터페이스 이름은 반드시 `Props` (컴포넌트명+Props 형태 금지)
 - className은 `cn()`으로 병합, 사용자 className이 마지막에 오도록
-- `cn()` 마지막 인자 뒤 `//` 빈 주석 (prettier trailing comma 방지용 관용 패턴)
+- `cn()` 마지막 인자 뒤에 `//` 빈 주석을 붙인다. 인자가 `printWidth` 안에 들어가도 Prettier가 한 줄로 합치지 않고 인자마다 한 줄을 유지한다 (공유 `coding-style` 스킬 J절)
 - 하위 요소 커스터마이징은 `classNames` prop 패턴 사용
 - 서브컴포넌트는 `Component.Sub = SubComponent` 패턴으로 연결하되, 이 연결은 조합 컴포넌트의 `index.ts` 배럴에서 수행한다 (예: `splitter/index.ts`가 `Splitter.Panel = Panel`을 부착; 메인 구현 파일 `splitter.tsx`는 부착 로직을 갖지 않는다)
 - 컴포넌트 폴더/파일명은 kebab-case (예: `atoms/float-button/float-button.tsx`), 컴포넌트 파일 내부의 export 이름은 PascalCase 그대로 유지
@@ -286,14 +285,14 @@ import './local';
 
 모든 pjb0811 저장소가 함께 쓰는 결정과 절차는 공개 저장소 [`pjb0811/skills`](https://github.com/pjb0811/skills)에 있습니다. 결정(커밋 메시지와 이슈·PR의 언어·형식, 커밋 작성자, 트레일러와 생성 도구 문구 금지, 코드 스타일 기본값)은 전역 지침 [`global/CLAUDE.md`](https://github.com/pjb0811/skills/blob/main/global/CLAUDE.md)(`~/.claude/CLAUDE.md`로 링크)에, 절차는 아래 전역 Claude Code 스킬에 있습니다. 이 파일은 그 내용을 되풀이하지 않습니다.
 
-| 스킬                                  | 용도                                                                                                                                    |
-| ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| `commit`, `pr`, `issue`               | 커밋 메시지, PR·이슈 본문                                                                                                               |
-| `coding-style`                        | 컨벤션, 일괄 리네임, 주석(C), boolean 이름(D), 중괄호(E), 서브컴포넌트 구조(F), 빈 줄(G), 컴포넌트 내부 순서(H), 기능 단위 하위 폴더(I) |
-| `changesets-release`, `publish-check` | 릴리스 흐름과 배포 전 점검                                                                                                              |
-| `shared-library-first`                | 재사용 UI는 ui-kit, 훅은 use-hooks에 먼저 구현                                                                                          |
-| `ref-verification`                    | 저장소 상태를 작업 트리가 아니라 git ref 기준으로 확인                                                                                  |
-| `repo-settings`                       | 저장소 GitHub 설정(머지 방식, auto-merge, 기본 브랜치 ruleset)을 표준에 맞춤                                                            |
+| 스킬                                  | 용도                                                                                                                                                    |
+| ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `commit`, `pr`, `issue`               | 커밋 메시지, PR·이슈 본문                                                                                                                               |
+| `coding-style`                        | 컨벤션, 일괄 리네임, 주석(C), boolean 이름(D), 중괄호(E), 서브컴포넌트 구조(F), 빈 줄(G), 컴포넌트 내부 순서(H), 기능 단위 하위 폴더(I), 긴 클래스명(J) |
+| `changesets-release`, `publish-check` | 릴리스 흐름과 배포 전 점검                                                                                                                              |
+| `shared-library-first`                | 재사용 UI는 ui-kit, 훅은 use-hooks에 먼저 구현                                                                                                          |
+| `ref-verification`                    | 저장소 상태를 작업 트리가 아니라 git ref 기준으로 확인                                                                                                  |
+| `repo-settings`                       | 저장소 GitHub 설정(머지 방식, auto-merge, 기본 브랜치 ruleset)을 표준에 맞춤                                                                            |
 
 ### 저장소 스킬
 
