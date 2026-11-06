@@ -1,5 +1,12 @@
 # web
 
+## 1.5.15
+
+### Patch Changes
+
+- Updated dependencies [2d41090]
+  - @repo/ui@10.6.1
+
 ## 1.5.14
 
 ### Patch Changes
