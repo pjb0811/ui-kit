@@ -125,6 +125,10 @@ export interface Props extends Omit<
 const BUTTON_BASE = cn(
   'gap-2 font-medium whitespace-nowrap transition-all',
   'has-[>svg]:px-3',
+  // A loading button is aria-disabled rather than disabled (see
+  // `focusableWhenDisabled` below), so it needs the core base's `disabled:`
+  // look under this selector too.
+  'aria-disabled:pointer-events-none aria-disabled:opacity-50',
 );
 
 const variantClasses: Record<string, string> = {
@@ -235,11 +239,11 @@ const Button = ({
   shape,
   block = false,
   disabled,
+  focusableWhenDisabled,
   loading,
   danger,
   nativeButton = true,
   children,
-  onMouseDown,
   ...props
 }: Props) => {
   const { componentSize, defaultProps } = useConfig();
@@ -342,11 +346,12 @@ const Button = ({
       )}
       type={nativeButton ? htmlType : undefined}
       disabled={disabled || isLoading}
+      // A button that turns loading usually has focus (it was just pressed),
+      // and a natively disabled button drops focus to the body. Loading keeps
+      // it focusable; Base UI still blocks activation via aria-disabled.
+      focusableWhenDisabled={isLoading || focusableWhenDisabled}
       aria-busy={isLoading}
       data-color={computedColor}
-      onMouseDown={e => {
-        onMouseDown?.(e);
-      }}
       {...props}
     >
       {displayIcon}
