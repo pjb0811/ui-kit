@@ -106,9 +106,19 @@ const Search = ({
           }}
           onKeyDown={e => {
             _onKeyDown?.(e);
-            if (e.key === 'Enter') {
-              onSearch();
+
+            // Enter that confirms an IME composition (keyCode 229 in browsers
+            // that do not set isComposing) is not a search.
+            if (
+              e.key !== 'Enter' ||
+              e.defaultPrevented ||
+              e.nativeEvent.isComposing ||
+              e.keyCode === 229
+            ) {
+              return;
             }
+
+            onSearch();
           }}
         />
         <button

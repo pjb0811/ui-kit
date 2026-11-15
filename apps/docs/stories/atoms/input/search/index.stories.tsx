@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { expect, fireEvent, fn, userEvent, within } from 'storybook/test';
 
 import { Input } from '@repo/ui';
 import { cn } from '@repo/ui/utils';
@@ -129,4 +130,43 @@ export const WithoutClearButton: Story = {
       <Input.Search {...props} />
     </div>
   ),
+};
+
+export const ImeComposition: Story = {
+  name: 'Enter during IME composition does not search',
+  args: { defaultValue: '한', onSearch: fn() },
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    const input = canvas.getByRole('searchbox');
+
+    fireEvent.keyDown(input, { key: 'Enter', isComposing: true });
+    fireEvent.keyDown(input, { key: 'Enter', keyCode: 229 });
+    await expect(args.onSearch).not.toHaveBeenCalled();
+
+    fireEvent.keyDown(input, { key: 'Enter' });
+    await expect(args.onSearch).toHaveBeenCalledTimes(1);
+    await expect(args.onSearch).toHaveBeenLastCalledWith('한');
+
+    await userEvent.click(
+      canvasElement.querySelector(
+        '[data-slot="input-search"] > [data-slot="button"]',
+      )!,
+    );
+    await expect(args.onSearch).toHaveBeenCalledTimes(2);
+  },
+};
+
+export const CancelledKeyDown: Story = {
+  name: 'onKeyDown can cancel the search',
+  args: {
+    defaultValue: 'query',
+    onSearch: fn(),
+    onKeyDown: event => event.preventDefault(),
+  },
+  play: async ({ args, canvasElement }) => {
+    fireEvent.keyDown(within(canvasElement).getByRole('searchbox'), {
+      key: 'Enter',
+    });
+    await expect(args.onSearch).not.toHaveBeenCalled();
+  },
 };
