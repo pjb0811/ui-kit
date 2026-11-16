@@ -121,7 +121,8 @@ const List = <T,>({
           level={titleLevel}
           className={cn(
             'px-1.5 py-4',
-            'text-black-90 text-lg leading-5.75 font-bold',
+            'text-lg leading-5.75 font-bold',
+            classNames?.title,
             //
           )}
         >

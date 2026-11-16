@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { expect, within } from 'storybook/test';
 
 import { List } from '@repo/ui';
 
@@ -67,5 +68,23 @@ export const Empty: Story = {
         No items to display.
       </div>
     ),
+  },
+};
+
+export const TitleClassName: Story = {
+  args: {
+    title: 'Members',
+    data: [],
+    classNames: { title: 'text-sm font-normal' },
+  },
+  play: async ({ canvasElement }) => {
+    const title = within(canvasElement).getByRole('heading', {
+      name: 'Members',
+    });
+
+    // classNames.title is applied last, so it overrides the default size and weight.
+    await expect(title).toHaveClass('text-sm', 'font-normal');
+    await expect(title).not.toHaveClass('text-lg');
+    await expect(title).not.toHaveClass('font-bold');
   },
 };
