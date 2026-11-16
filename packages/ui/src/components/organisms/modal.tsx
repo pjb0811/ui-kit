@@ -159,7 +159,7 @@ const Modal = ({
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription className="hidden" />
         </DialogHeader>
-        <div className={cn('break-all', classNames?.body)}>
+        <div className={cn('wrap-anywhere', classNames?.body)}>
           {children ?? content}
         </div>
         {footer !== null && (

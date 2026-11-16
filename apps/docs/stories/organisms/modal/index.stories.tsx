@@ -370,3 +370,59 @@ export const LongTitle: Story = {
     }
   },
 };
+
+// Splits a text node into its rendered lines and reports breaks that fall
+// between two non-space characters.
+const midWordBreaks = (element: Element) => {
+  const node = Array.from(element.childNodes).find(
+    child => child.nodeType === Node.TEXT_NODE,
+  )!;
+  const text = node.textContent ?? '';
+  const range = document.createRange();
+  const breaks: string[] = [];
+  let lastTop: number | null = null;
+
+  for (let index = 0; index < text.length; index += 1) {
+    range.setStart(node, index);
+    range.setEnd(node, index + 1);
+
+    const top = Math.round(range.getBoundingClientRect().top);
+
+    if (
+      lastTop !== null &&
+      top !== lastTop &&
+      /\S/.test(text[index - 1] ?? '') &&
+      /\S/.test(text[index] ?? '')
+    ) {
+      breaks.push(
+        `${text.slice(index - 6, index)}|${text.slice(index, index + 6)}`,
+      );
+    }
+
+    lastTop = top;
+  }
+
+  return breaks;
+};
+
+export const BodyWrapping: Story = {
+  args: { title: 'Wrapping', footer: null, open: true, style: { width: 240 } },
+  render: props => (
+    <Modal {...props}>
+      A controlled modal driven by open / onOk / onCancel, with ordinary words
+      that should wrap between words.
+      <span data-testid="token">
+        https://example.com/a-very-long-path-without-any-spaces-that-cannot-fit
+      </span>
+    </Modal>
+  ),
+  play: async ({ canvasElement }) => {
+    const page = within(canvasElement.ownerDocument.body);
+    const dialog = await page.findByRole('dialog');
+    const body = page.getByTestId('token').parentElement!;
+
+    await expect(midWordBreaks(body)).toEqual([]);
+    // A token wider than the body still breaks instead of overflowing.
+    await expect(dialog.scrollWidth).toBeLessThanOrEqual(dialog.clientWidth);
+  },
+};
