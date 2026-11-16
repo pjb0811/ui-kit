@@ -1,7 +1,15 @@
 import { useState } from 'react';
 
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { expect, fn, spyOn, userEvent, waitFor, within } from 'storybook/test';
+import {
+  expect,
+  fireEvent,
+  fn,
+  spyOn,
+  userEvent,
+  waitFor,
+  within,
+} from 'storybook/test';
 
 import { Anchor, type AnchorItem, Config } from '@repo/ui';
 
@@ -350,4 +358,104 @@ export const Dark: Story = {
       </div>
     </Config>
   ),
+};
+
+const shortItems: AnchorItem[] = [
+  { key: 'one', href: '#short-one', title: 'One' },
+  { key: 'two', href: '#short-two', title: 'Two' },
+  { key: 'three', href: '#short-three', title: 'Three' },
+];
+
+// The last section is shorter than the scroller, so its top can never reach
+// the scroller's top edge.
+const ShortLastSection = (args: React.ComponentProps<typeof Anchor>) => {
+  const [container, setContainer] = useState<HTMLDivElement | null>(null);
+
+  return (
+    <div className="flex gap-4">
+      <Anchor {...args} items={shortItems} container={container} />
+      <div
+        ref={setContainer}
+        data-testid="short-scroller"
+        className="h-64 flex-1 overflow-auto border"
+      >
+        {shortItems.map((item, index) => (
+          <section
+            key={item.key}
+            id={item.href.slice(1)}
+            style={{ height: index === 2 ? 80 : 400 }}
+          >
+            {item.title}
+          </section>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const expectThreeStaysCurrent = async (canvasElement: HTMLElement) => {
+  const three = linkFor(canvasElement, 'Three');
+
+  await userEvent.click(three);
+
+  // Sample through the scroll and after it settles.
+  for (const delay of [0, 50, 250, 1250]) {
+    await new Promise(resolve => setTimeout(resolve, delay));
+    await expect(three).toHaveAttribute('aria-current', 'location');
+  }
+};
+
+export const ShortLastSectionClick: Story = {
+  args: { current: undefined, updateHash: false },
+  render: args => <ShortLastSection {...args} />,
+  play: async ({ args, canvasElement }) => {
+    await expectThreeStaysCurrent(canvasElement);
+    await expect(args.onChange).toHaveBeenLastCalledWith('#short-three');
+    await expect(args.onChange).not.toHaveBeenCalledWith('#short-two');
+    // The click reports its link once.
+    await expect(
+      (args.onChange as ReturnType<typeof fn>).mock.calls.filter(
+        ([href]) => href === '#short-three',
+      ),
+    ).toHaveLength(1);
+
+    // Scrolling back up by hand tracks the scroll position again.
+    within(canvasElement).getByTestId('short-scroller').scrollTop = 0;
+    await expectCurrent(canvasElement, 'One');
+  },
+};
+
+export const ShortLastSectionSmoothClick: Story = {
+  args: { current: undefined, updateHash: false, smooth: true },
+  render: args => <ShortLastSection {...args} />,
+  play: async ({ args, canvasElement }) => {
+    await expectThreeStaysCurrent(canvasElement);
+    await expect(args.onChange).toHaveBeenLastCalledWith('#short-three');
+    await expect(args.onChange).not.toHaveBeenCalledWith('#short-two');
+  },
+};
+
+export const ShortLastSectionManualScroll: Story = {
+  args: { current: undefined, updateHash: false },
+  render: args => <ShortLastSection {...args} />,
+  play: async ({ canvasElement }) => {
+    const scroller = within(canvasElement).getByTestId('short-scroller');
+
+    scroller.scrollTop = scroller.scrollHeight;
+    await expectCurrent(canvasElement, 'Three');
+  },
+};
+
+export const SmoothClickThenWheel: Story = {
+  args: { current: undefined, updateHash: false, smooth: true },
+  render: args => <ShortLastSection {...args} />,
+  play: async ({ canvasElement }) => {
+    const scroller = within(canvasElement).getByTestId('short-scroller');
+
+    await userEvent.click(linkFor(canvasElement, 'Three'));
+    // The wheel hands scrolling back to the user before the smooth scroll ends.
+    fireEvent.wheel(scroller, { deltaY: -100 });
+    scroller.scrollTo({ top: 0, behavior: 'instant' });
+    await expectCurrent(canvasElement, 'One');
+  },
 };

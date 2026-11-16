@@ -5,6 +5,7 @@ import {
   useCallback,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from 'react';
 
@@ -90,9 +91,28 @@ const Anchor = ({
     defaultValue: defaultCurrent,
     onChange,
   });
+  // Compared against instead of `active`, so `update` does not change (and
+  // re-run) whenever the active link does.
+  const activeRef = useRef(active);
+  // The link a click scrolled to. Scroll-driven updates wait until that
+  // scroll ends, so a smooth scroll does not highlight the sections it passes.
+  const pendingHref = useRef<string | null>(null);
+  const releaseTimer = useRef<number | undefined>(undefined);
+
+  const commitActive = useCallback(
+    (next: string) => {
+      if (next === activeRef.current) {
+        return;
+      }
+
+      activeRef.current = next;
+      setActive(next);
+    },
+    [setActive],
+  );
 
   const update = useCallback(() => {
-    if (!node) {
+    if (!node || pendingHref.current !== null) {
       return;
     }
 
@@ -119,10 +139,42 @@ const Anchor = ({
       }
     }
 
-    if (next !== active) {
-      setActive(next);
+    // At the end of the scroll range, sections below the last one that
+    // reached the boundary can never reach it, so the last visible one wins.
+    const scroller = container ?? node.ownerDocument.documentElement;
+    const maxScroll = scroller.scrollHeight - scroller.clientHeight;
+
+    if (maxScroll > 0 && scroller.scrollTop >= maxScroll - 1) {
+      const bottom = container
+        ? container.getBoundingClientRect().bottom
+        : (ownerWindow?.innerHeight ?? 0);
+
+      for (const item of flatItems) {
+        const target = targetFor(node.ownerDocument, item.href);
+
+        if (
+          target &&
+          (!container || container.contains(target)) &&
+          target.getBoundingClientRect().top < bottom
+        ) {
+          next = item.href;
+        }
+      }
     }
-  }, [node, container, resolvedOffset, flatItems, active, setActive]);
+
+    commitActive(next);
+  }, [node, container, resolvedOffset, flatItems, ownerWindow, commitActive]);
+
+  const releasePending = useCallback(() => {
+    window.clearTimeout(releaseTimer.current);
+
+    if (pendingHref.current === null) {
+      return;
+    }
+
+    pendingHref.current = null;
+    update();
+  }, [update]);
 
   useEventListener('scroll', update, {
     target: containerRef,
@@ -138,7 +190,35 @@ const Anchor = ({
     target: ownerWindow,
     enabled: !!ownerWindow,
   });
+  // A clicked link's scroll is over when the scroller reports it, or when the
+  // user takes over with the wheel, touch or keyboard.
+  useEventListener('scrollend', releasePending, {
+    target: containerRef,
+    enabled: !!container,
+  });
+  useEventListener('scrollend', releasePending, {
+    target: ownerWindow,
+    enabled: !container && !!ownerWindow,
+  });
+  useEventListener('wheel', releasePending, {
+    target: ownerWindow,
+    passive: true,
+    enabled: !!ownerWindow,
+  });
+  useEventListener('touchmove', releasePending, {
+    target: ownerWindow,
+    passive: true,
+    enabled: !!ownerWindow,
+  });
+  useEventListener('keydown', releasePending, {
+    target: ownerWindow,
+    enabled: !!ownerWindow,
+  });
+  useEffect(() => {
+    activeRef.current = active;
+  });
   useEffect(update, [update]);
+  useEffect(() => () => window.clearTimeout(releaseTimer.current), []);
 
   const renderItems = (links: readonly Item[]) => (
     <ul
@@ -191,6 +271,15 @@ const Anchor = ({
                   ? 'smooth'
                   : 'auto';
 
+              // `scrollend` does not fire when nothing scrolls, and not in
+              // every browser, so the wait also ends on a timer.
+              pendingHref.current = item.href;
+              window.clearTimeout(releaseTimer.current);
+              releaseTimer.current = window.setTimeout(
+                releasePending,
+                behavior === 'smooth' ? 1000 : 100,
+              );
+
               if (container) {
                 container.scrollTo({
                   top:
@@ -215,9 +304,7 @@ const Anchor = ({
                 ownerWindow.history.pushState(null, '', item.href);
               }
 
-              if (active !== item.href) {
-                setActive(item.href);
-              }
+              commitActive(item.href);
 
               onSelect?.(item);
             }}
