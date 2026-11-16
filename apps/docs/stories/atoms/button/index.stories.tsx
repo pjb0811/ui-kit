@@ -1,5 +1,8 @@
+import { useState } from 'react';
+
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { Search } from 'lucide-react';
+import { expect, fn, userEvent, waitFor, within } from 'storybook/test';
 
 import { Button } from '@repo/ui';
 import { cn } from '@repo/ui/utils';
@@ -96,5 +99,55 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     children: '버튼',
+  },
+};
+
+export const LoadingKeepsFocus: Story = {
+  name: 'Loading keeps focus',
+  args: { onClick: fn() },
+  render: function Render({ onClick }) {
+    const [loading, setLoading] = useState(false);
+
+    return (
+      <Button
+        loading={loading}
+        onClick={event => {
+          onClick?.(event);
+          setLoading(true);
+          setTimeout(() => setLoading(false), 300);
+        }}
+      >
+        Save
+      </Button>
+    );
+  },
+  play: async ({ args, canvasElement }) => {
+    const button = within(canvasElement).getByRole('button', { name: 'Save' });
+
+    button.focus();
+    await userEvent.keyboard('{Enter}');
+    await waitFor(() => expect(button).toHaveAttribute('aria-busy', 'true'));
+    await expect(button).toHaveFocus();
+    await expect(button).toHaveAttribute('aria-disabled', 'true');
+    // `transition-all` animates the dimming.
+    await waitFor(() => expect(getComputedStyle(button).opacity).toBe('0.5'));
+
+    // Activation stays blocked while loading.
+    await userEvent.keyboard('{Enter}');
+    await userEvent.click(button, { pointerEventsCheck: 0 });
+    await expect(args.onClick).toHaveBeenCalledTimes(1);
+
+    await waitFor(() => expect(button).toHaveAttribute('aria-busy', 'false'));
+    await expect(button).toHaveFocus();
+  },
+};
+
+export const DisabledStaysNative: Story = {
+  name: 'Disabled stays natively disabled',
+  args: { disabled: true, children: 'Save' },
+  play: async ({ canvasElement }) => {
+    await expect(
+      within(canvasElement).getByRole('button', { name: 'Save' }),
+    ).toBeDisabled();
   },
 };

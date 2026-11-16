@@ -279,8 +279,6 @@ const Tour = ({
               size="small"
               disabled={index === 0}
               focusableWhenDisabled
-              className="aria-disabled:pointer-events-none
-                aria-disabled:opacity-50"
               onClick={() => setCurrent(index - 1)}
             >
               {previousLabel}
