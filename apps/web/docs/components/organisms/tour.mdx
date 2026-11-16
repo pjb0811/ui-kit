@@ -43,7 +43,7 @@ function Guide() {
 
 `current`/`defaultCurrent` are zero-based. Next and Previous request a step through `onChange`. Controlled steps change only when the caller supplies a new index. Rendering clamps out-of-range values and rounds down finite values; nonfinite values display the first step without emitting a change. An empty steps array displays no overlay.
 
-`open`/`defaultOpen` control visibility through `onOpenChange`. Close and Escape call `onClose` and request `open=false`. Finish calls `onFinish` and requests `open=false`, without calling `onClose` or advancing past the final step. Closing preserves the current step; set controlled `current` to zero to restart. Keep the Tour mounted while closing so Base UI can complete its transition and return focus.
+`open`/`defaultOpen` control visibility through `onOpenChange`. Close and Escape call `onClose` and request `open=false`. Finish calls `onFinish` and requests `open=false`, without calling `onClose` or advancing past the final step. With an uncontrolled `current`, each time the tour opens it starts again at `defaultCurrent` and reports that step through `onChange`; the step is reset as the tour opens, so the closing popup keeps its last step. A controlled `current` is never changed on open or close, so control it to resume where the user left off. Keep the Tour mounted while closing so Base UI can complete its transition and return focus.
 
 ## Targets, scrolling and focus
 
