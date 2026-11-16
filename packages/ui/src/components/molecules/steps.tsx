@@ -108,8 +108,8 @@ const Steps = ({
                       'border-primary bg-primary text-primary-foreground',
                     status === 'current' && 'border-primary text-primary',
                     status === 'error' &&
-                      `text-destructive-foreground border-destructive
-                      bg-destructive`,
+                      // White on the destructive fill, as the danger Button.
+                      'border-destructive bg-destructive text-white',
                     classNames?.indicator,
                     //
                   )}

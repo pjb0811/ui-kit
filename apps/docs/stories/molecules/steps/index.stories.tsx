@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { UserRound } from 'lucide-react';
+import { expect } from 'storybook/test';
 
 import { Steps } from '@repo/ui';
 
@@ -53,4 +54,18 @@ export const Dark: Story = {
       <Steps {...args} />
     </div>
   ),
+};
+
+export const ErrorIndicatorColor: Story = {
+  args: {
+    items: [items[0]!, { ...items[1]!, status: 'error' }, items[2]!],
+  },
+  play: async ({ canvasElement }) => {
+    const indicator = canvasElement.querySelectorAll(
+      '[data-slot="steps-indicator"]',
+    )[1]!;
+
+    // The icon is drawn in the indicator's text colour on the destructive fill.
+    await expect(getComputedStyle(indicator).color).toBe('rgb(255, 255, 255)');
+  },
 };

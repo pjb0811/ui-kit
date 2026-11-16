@@ -272,10 +272,7 @@ const StaticModal = ({
       )}
       classNames={{
         mask: 'z-10000 bg-black/[.6]',
-        body: cn(
-          'text-black-70 text-center whitespace-pre-wrap',
-          content && 'mt-3',
-        ),
+        body: cn('text-center whitespace-pre-wrap', content && 'mt-3'),
         footer: 'mt-9',
       }}
       title={
