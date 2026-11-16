@@ -166,13 +166,15 @@ const Pagination = ({
   const pageCount = Math.ceil(safeTotal / safePageSize);
   const [jumpValue, setJumpValue] = useState('');
   const [internal, setInternal] = useState({
-    page: clampPage(defaultPage, pageCount),
+    page: clampPage(defaultPage, pageCount > 0 ? pageCount : Infinity),
     pageCount,
   });
 
   // React retries this render with the adjusted state when the available
-  // range changes. Controlled callers still own their page prop.
-  if (page === undefined && internal.pageCount !== pageCount) {
+  // range changes. Controlled callers still own their page prop. An empty
+  // range (a total that is 0 while data loads) keeps the stored page, so it
+  // is back once the total returns; the displayed page is still clamped.
+  if (page === undefined && pageCount > 0 && internal.pageCount !== pageCount) {
     setInternal({ page: clampPage(internal.page, pageCount), pageCount });
   }
 
