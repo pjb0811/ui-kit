@@ -55,8 +55,14 @@ const ColorPicker = ({
   return (
     <Popover
       placement="bottomLeft"
-      open={open}
-      onOpenChange={setOpen}
+      // Disabled keeps the popover closed on every path (pointer, keyboard,
+      // a controlled `open`), and closes one that is open.
+      open={disabled ? false : open}
+      onOpenChange={next => {
+        if (!disabled) {
+          setOpen(next);
+        }
+      }}
       content={<HexColorPicker color={value} onChange={onChange} />}
     >
       <div
@@ -70,11 +76,6 @@ const ColorPicker = ({
           className,
         )}
         {...props}
-        onClick={e => {
-          if (disabled) {
-            e.preventDefault();
-          }
-        }}
         onKeyDown={e => {
           if (disabled) {
             return;
