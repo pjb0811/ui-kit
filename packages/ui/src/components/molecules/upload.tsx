@@ -1,6 +1,6 @@
 'use client';
 
-import { useId } from 'react';
+import { useEffect, useId, useRef } from 'react';
 
 import {
   useControllableState,
@@ -71,11 +71,26 @@ const Upload = ({
     defaultValue,
     onChange: _onChange,
   });
+  // Reads finish after the render that started them, so the list and the
+  // `maxCount` budget come from refs, not from this render's `files`.
+  const filesRef = useRef(files);
+  // Files accepted by reads still in flight; they count against `maxCount`.
+  const pendingCount = useRef(0);
+  // Each batch commits after the batches added before it, so the list keeps
+  // the order files were added in even when a later read finishes first.
+  const commitQueue = useRef<Promise<void>>(Promise.resolve());
+
+  const commitFiles = (next: UploadFile[]) => {
+    // The effect below refreshes the ref only after the next commit, and
+    // another batch can settle before that.
+    filesRef.current = next;
+    setFiles(next);
+  };
 
   const addFiles = async (incoming: File[]) => {
     const remaining =
       typeof maxCount === 'number'
-        ? Math.max(0, maxCount - files.length)
+        ? Math.max(0, maxCount - filesRef.current.length - pendingCount.current)
         : incoming.length;
 
     const accepted = incoming.slice(0, remaining);
@@ -87,38 +102,52 @@ const Upload = ({
       return;
     }
 
-    const uploaded = (
-      await Promise.all(
-        accepted.map(async file => {
-          try {
-            return {
-              // `nextUid()` guarantees uniqueness even for the same file
-              // added twice (identical name/lastModified/size), which
-              // name+lastModified+size alone can't — a collision there
-              // corrupted React's item keys and made removeFile's
-              // uid-based filter delete both copies at once.
-              uid: `${file.name}-${file.lastModified}-${file.size}-${nextUid()}`,
-              name: file.name,
-              url: await readAsDataUrl(file),
-            };
-          } catch {
-            onReject?.({ file, reason: 'read-error' });
-            return null;
-          }
-        }),
-      )
-    ).filter((file): file is UploadFile => file !== null);
+    pendingCount.current += accepted.length;
 
-    if (uploaded.length === 0) {
-      return;
-    }
+    const reads = Promise.all(
+      accepted.map(async file => {
+        try {
+          return {
+            // `nextUid()` guarantees uniqueness even for the same file
+            // added twice (identical name/lastModified/size), which
+            // name+lastModified+size alone can't — a collision there
+            // corrupted React's item keys and made removeFile's
+            // uid-based filter delete both copies at once.
+            uid: `${file.name}-${file.lastModified}-${file.size}-${nextUid()}`,
+            name: file.name,
+            url: await readAsDataUrl(file),
+          };
+        } catch {
+          onReject?.({ file, reason: 'read-error' });
+          return null;
+        }
+      }),
+    );
+    const commit = commitQueue.current.then(async () => {
+      const uploaded = (await reads).filter(
+        (file): file is UploadFile => file !== null,
+      );
 
-    setFiles([...files, ...uploaded]);
+      pendingCount.current -= accepted.length;
+
+      if (uploaded.length > 0) {
+        commitFiles([...filesRef.current, ...uploaded]);
+      }
+    });
+
+    commitQueue.current = commit;
+    await commit;
   };
 
   const removeFile = (uid: string) => {
-    setFiles(files.filter(file => file.uid !== uid));
+    commitFiles(filesRef.current.filter(file => file.uid !== uid));
   };
+
+  // Runs after every commit, so a controlled `value` the caller kept
+  // unchanged also resets the ref.
+  useEffect(() => {
+    filesRef.current = files;
+  });
 
   const { dropRef, isDragging } = useFileDrop<HTMLLabelElement>({
     accept,
@@ -144,6 +173,8 @@ const Upload = ({
           'rounded-md border border-dashed p-6 text-center',
           'text-sm text-muted-foreground',
           'transition-colors',
+          `has-focus-visible:border-ring has-focus-visible:ring-[3px]
+          has-focus-visible:ring-ring/50`,
           isDragging && 'border-primary bg-accent',
           disabled && 'pointer-events-none cursor-not-allowed opacity-50',
           classNames?.dropzone,
@@ -158,7 +189,9 @@ const Upload = ({
           accept={accept}
           multiple={multiple}
           disabled={disabled}
-          className="hidden"
+          // `sr-only` keeps the input in the tab order, where it opens the
+          // file dialog on Enter and Space; `display: none` would remove it.
+          className="sr-only"
           onChange={e => {
             if (e.target.files?.length) {
               addFiles(Array.from(e.target.files));
@@ -200,6 +233,7 @@ const Upload = ({
                 shape="circle"
                 size="small"
                 icon={<X className="size-4" />}
+                disabled={disabled}
                 onClick={() => removeFile(file.uid)}
                 className="shrink-0 text-muted-foreground hover:text-foreground"
                 aria-label={`Remove ${file.name}`}
