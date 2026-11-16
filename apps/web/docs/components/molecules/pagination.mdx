@@ -30,7 +30,7 @@ const [page, setPage] = useState(1);
 />;
 ```
 
-Pages are 1-based. When `total` or `pageSize` shrinks the range, the displayed page is clamped. Uncontrolled state is clamped as well, without calling `onChange`; a controlled parent still owns its `page` prop and should update it if that state matters outside the component. With `total={0}`, only disabled previous/next controls render.
+Pages are 1-based. When `total` or `pageSize` shrinks the range, the displayed page is clamped. Uncontrolled state is clamped as well, without calling `onChange`. A range of zero pages (`total={0}`, for example while data is refetched) does not change the stored page, so the page the user chose is back when the total returns. A controlled parent still owns its `page` prop and should update it if that state matters outside the component. With `total={0}`, only disabled previous/next controls render.
 
 ## More navigation options
 

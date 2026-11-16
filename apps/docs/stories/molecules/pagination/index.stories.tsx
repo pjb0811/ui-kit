@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { expect, fn, userEvent, waitFor, within } from 'storybook/test';
 
 import { Button, Config, Pagination } from '@repo/ui';
 
@@ -165,4 +166,66 @@ export const Rtl: Story = {
       />
     </Config>
   ),
+};
+
+export const RefetchKeepsPage: Story = {
+  name: 'Empty total while refetching keeps the page',
+  args: { onChange: fn() },
+  render: function Render({ onChange }) {
+    const [total, setTotal] = useState(50);
+
+    return (
+      <div className="flex flex-col items-start gap-2">
+        <Button
+          onClick={() => {
+            setTotal(0);
+            setTimeout(() => setTotal(50), 100);
+          }}
+        >
+          Refetch
+        </Button>
+        <span>total: {total}</span>
+        <Pagination total={total} onChange={onChange} />
+      </div>
+    );
+  },
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    await userEvent.click(canvas.getByRole('button', { name: 'Page 5' }));
+    await userEvent.click(canvas.getByRole('button', { name: 'Refetch' }));
+    await canvas.findByText('total: 0');
+    await canvas.findByText('total: 50');
+    await expect(
+      canvas.getByRole('button', { name: 'Page 5' }),
+    ).toHaveAttribute('aria-current', 'page');
+    await expect(args.onChange).toHaveBeenCalledTimes(1);
+  },
+};
+
+export const ShrinkClampsPage: Story = {
+  name: 'Shrinking total clamps the page',
+  render: function Render() {
+    const [total, setTotal] = useState(50);
+
+    return (
+      <div className="flex flex-col items-start gap-2">
+        <Button onClick={() => setTotal(20)}>Shrink</Button>
+        <Button onClick={() => setTotal(50)}>Grow</Button>
+        <Pagination total={total} />
+      </div>
+    );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const current = () =>
+      canvasElement.querySelector('[aria-current="page"]')?.textContent;
+
+    await userEvent.click(canvas.getByRole('button', { name: 'Page 5' }));
+    await userEvent.click(canvas.getByRole('button', { name: 'Shrink' }));
+    await waitFor(() => expect(current()).toBe('2'));
+    // A real shrink is kept: growing again stays on the clamped page.
+    await userEvent.click(canvas.getByRole('button', { name: 'Grow' }));
+    await waitFor(() => expect(current()).toBe('2'));
+  },
 };

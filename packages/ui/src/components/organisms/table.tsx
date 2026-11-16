@@ -102,9 +102,12 @@ const Table = <T,>({
   const total = mode === 'server' ? (serverTotal ?? 0) : data.length;
   const pageCount = Math.ceil(total / pageSize);
 
+  // An empty range (no rows or no total while data loads) keeps the stored
+  // page, so it is back once the rows return; `page` below is still clamped.
   if (
     pagination &&
     controlledPage === undefined &&
+    pageCount > 0 &&
     internal.pageCount !== pageCount
   ) {
     setInternal(current => ({
