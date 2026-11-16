@@ -4,7 +4,9 @@ import {
   type ComponentPropsWithRef,
   type ReactNode,
   useEffect,
+  useLayoutEffect,
   useMemo,
+  useRef,
   useState,
 } from 'react';
 
@@ -162,10 +164,28 @@ const Tour = ({
     [],
   );
 
+  const wasOpen = useRef(open);
+
   const close = () => {
     onClose?.();
     setOpen(false);
   };
+
+  // Each run of an uncontrolled tour starts at `defaultCurrent`. The reset
+  // happens as the tour opens, before paint, so the closing popup keeps its
+  // last step and the opening one never shows it.
+  useLayoutEffect(() => {
+    if (
+      open &&
+      !wasOpen.current &&
+      currentProp === undefined &&
+      current !== defaultCurrent
+    ) {
+      setCurrent(defaultCurrent);
+    }
+
+    wasOpen.current = open;
+  }, [open, currentProp, current, defaultCurrent, setCurrent]);
 
   return (
     <div

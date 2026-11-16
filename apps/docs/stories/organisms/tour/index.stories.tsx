@@ -220,3 +220,70 @@ export const Localized: Story = {
     formatProgress: (current, total) => `${total}단계 중 ${current}단계`,
   },
 };
+
+const reopen = async (canvasElement: HTMLElement) => {
+  const page = within(canvasElement.ownerDocument.body);
+
+  await waitFor(() =>
+    expect(page.queryByRole('dialog')).not.toBeInTheDocument(),
+  );
+  await userEvent.click(
+    within(canvasElement).getByRole('button', { name: 'Start tour' }),
+  );
+};
+
+export const RestartsAfterFinish: Story = {
+  play: async ({ canvasElement, args }) => {
+    const page = within(canvasElement.ownerDocument.body);
+
+    await userEvent.click(
+      within(canvasElement).getByRole('button', { name: 'Start tour' }),
+    );
+    await userEvent.click(await page.findByRole('button', { name: 'Next' }));
+    await userEvent.click(page.getByRole('button', { name: 'Next' }));
+    await userEvent.click(await page.findByRole('button', { name: 'Finish' }));
+
+    // Finishing and opening again starts from the first step.
+    await reopen(canvasElement);
+    await page.findByRole('dialog', { name: 'Create a document' });
+    await expect(page.getByText('Step 1 of 3')).toBeInTheDocument();
+    await expect(args.onChange).toHaveBeenLastCalledWith(0);
+
+    // So does closing in the middle of the tour.
+    await userEvent.click(page.getByRole('button', { name: 'Next' }));
+    await page.findByRole('dialog', { name: 'Share your work' });
+    await userEvent.click(page.getByRole('button', { name: 'Close tour' }));
+    await reopen(canvasElement);
+    await page.findByRole('dialog', { name: 'Create a document' });
+  },
+};
+
+export const RestartsAtDefaultCurrent: Story = {
+  args: { defaultCurrent: 1 },
+  play: async ({ canvasElement }) => {
+    const page = within(canvasElement.ownerDocument.body);
+
+    await userEvent.click(
+      within(canvasElement).getByRole('button', { name: 'Start tour' }),
+    );
+    await userEvent.click(await page.findByRole('button', { name: 'Next' }));
+    await userEvent.click(await page.findByRole('button', { name: 'Finish' }));
+    await reopen(canvasElement);
+    await page.findByRole('dialog', { name: 'Share your work' });
+  },
+};
+
+export const ControlledKeepsStep: Story = {
+  args: { current: 2 },
+  play: async ({ canvasElement, args }) => {
+    const page = within(canvasElement.ownerDocument.body);
+
+    await userEvent.click(
+      within(canvasElement).getByRole('button', { name: 'Start tour' }),
+    );
+    await userEvent.click(await page.findByRole('button', { name: 'Finish' }));
+    await reopen(canvasElement);
+    await page.findByRole('dialog', { name: 'Ready to go' });
+    await expect(args.onChange).not.toHaveBeenCalled();
+  },
+};
