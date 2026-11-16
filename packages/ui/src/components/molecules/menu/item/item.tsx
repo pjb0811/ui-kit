@@ -123,7 +123,8 @@ const Item = ({
 
     onClick?.(params);
 
-    if (!selected) {
+    // A parent item opens or toggles its submenu; only a leaf is a selection.
+    if (!selected && !children?.length) {
       onSelect?.(params);
     }
   };
