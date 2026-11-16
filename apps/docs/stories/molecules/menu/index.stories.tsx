@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { expect, userEvent, waitFor, within } from 'storybook/test';
+import { expect, fn, userEvent, waitFor, within } from 'storybook/test';
 
 import { Menu } from '@repo/ui';
 
@@ -244,5 +244,42 @@ export const KeyboardRightToLeft: Story = {
     await expect(item('제품')).toHaveFocus();
     await userEvent.keyboard('{ArrowRight}');
     await expect(item('홈')).toHaveFocus();
+  },
+};
+
+export const InlineGroupKeepsSelection: Story = {
+  name: 'Inline group toggle keeps the selection',
+  args: {
+    mode: 'inline',
+    items: defaultItems,
+    defaultSelectedKeys: ['1'],
+    onClick: fn(),
+    onSelect: fn(),
+  },
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    const item = (name: string) => canvas.getByRole('menuitem', { name });
+
+    // Expanding a group calls onClick but does not select it.
+    await userEvent.click(item('제품'));
+    await expect(args.onClick).toHaveBeenCalledTimes(1);
+    await expect(args.onSelect).not.toHaveBeenCalled();
+    await expect(item('홈')).toHaveAttribute('aria-current', 'true');
+    await expect(item('서비스')).not.toHaveAttribute('aria-current');
+
+    // Enter on a group behaves like a click.
+    item('서비스').focus();
+    await userEvent.keyboard('{Enter}');
+    await expect(args.onSelect).not.toHaveBeenCalled();
+    await expect(item('홈')).toHaveAttribute('aria-current', 'true');
+
+    // Selecting a leaf marks it and its ancestor.
+    await userEvent.click(
+      await canvas.findByRole('menuitem', { name: '웹사이트' }),
+    );
+    await expect(args.onSelect).toHaveBeenCalledTimes(1);
+    await expect(item('웹사이트')).toHaveAttribute('aria-current', 'true');
+    await expect(item('제품')).toHaveAttribute('aria-current', 'true');
+    await expect(item('홈')).not.toHaveAttribute('aria-current');
   },
 };

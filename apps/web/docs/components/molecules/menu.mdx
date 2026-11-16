@@ -44,4 +44,4 @@ import { Menu } from '@jbpark/ui-kit';
 | `styles`              | `{ rootItem?; subMenu?; item?; label? }`    | -              |
 | `className`           | `string`                                    | -              |
 
-`MenuItem` is `{ key: Key; label: ReactNode; children?: MenuItem[] }`. The `onClick` / `onSelect` handlers receive `{ domEvent, key, keyPath, item }`. `Menu` also accepts the rest of `React.ComponentProps<'ul'>`.
+`MenuItem` is `{ key: Key; label: ReactNode; children?: MenuItem[] }`. The `onClick` / `onSelect` handlers receive `{ domEvent, key, keyPath, item }`. `onClick` fires for every item; `onSelect` fires only for an item without `children` that is not already selected, so opening or toggling a submenu does not change the selection. `Menu` also accepts the rest of `React.ComponentProps<'ul'>`.
