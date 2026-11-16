@@ -41,13 +41,15 @@ const Dropdown = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLDivElement>(null);
 
-  useKeyPress(
-    'esc',
-    () => {
-      onOpenChange(false);
-    },
-    { target: triggerRef },
-  );
+  const closeToTrigger = () => {
+    onOpenChange(false);
+    // The focused item unmounts with the menu, so focus returns to the trigger.
+    triggerRef.current?.focus();
+  };
+
+  // Registered on the container, so Escape also closes from inside the menu.
+  // An item with an open submenu stops the event to close only that submenu.
+  useKeyPress('esc', closeToTrigger, { target: containerRef, enabled: open });
 
   useKeyPress(
     ['Enter', 'space'],
@@ -132,6 +134,15 @@ const Dropdown = ({
             <Menu
               {...menu}
               id={menuId}
+              onClick={params => {
+                menu?.onClick?.(params);
+
+                // A leaf item is a choice; an item with children opens its
+                // submenu. A hover dropdown closes when the pointer leaves.
+                if (isClickTrigger && !params.item.children?.length) {
+                  closeToTrigger();
+                }
+              }}
               onMouseDown={e => {
                 e.preventDefault();
               }}
