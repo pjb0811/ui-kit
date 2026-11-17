@@ -2,6 +2,7 @@ import type { Editor } from '@tiptap/core';
 
 import { cn } from '@repo/ui/utils';
 
+import { useLocale } from '../../../providers/config';
 import ToolbarButton from './toolbar-button';
 import { TOOLBAR_PRESET_RENDERERS } from './toolbar-presets';
 import type { ToolbarItem, ToolbarPreset } from './types';
@@ -14,6 +15,8 @@ export interface ToolbarProps {
 }
 
 const Toolbar = ({ editor, presets, items, className }: ToolbarProps) => {
+  const text = useLocale().RichTextEditor;
+
   return (
     <div
       data-slot="rich-text-editor-toolbar"
@@ -23,7 +26,7 @@ const Toolbar = ({ editor, presets, items, className }: ToolbarProps) => {
         //
       )}
     >
-      {presets.map(preset => TOOLBAR_PRESET_RENDERERS[preset](editor))}
+      {presets.map(preset => TOOLBAR_PRESET_RENDERERS[preset](editor, text))}
       {items?.map(item => (
         <ToolbarButton
           key={item.key}

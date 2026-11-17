@@ -2,6 +2,8 @@ import { Inbox } from 'lucide-react';
 
 import { cn } from '@repo/ui/utils';
 
+import { useLocale } from '../../providers/config';
+
 export interface Props extends Omit<React.ComponentProps<'div'>, 'title'> {
   icon?: React.ReactNode;
   title?: React.ReactNode;
@@ -17,11 +19,13 @@ export interface Props extends Omit<React.ComponentProps<'div'>, 'title'> {
 const Empty = ({
   icon,
   title,
-  description = 'No data',
+  description: descriptionProp,
   action,
   className,
   ...props
 }: Props) => {
+  const localeText = useLocale();
+  const description = descriptionProp ?? localeText.noData;
   return (
     <div
       data-slot="empty"

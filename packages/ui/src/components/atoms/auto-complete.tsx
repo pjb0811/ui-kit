@@ -8,6 +8,7 @@ import { DEFAULT_LOCALE, useConfig } from '@repo/ui/providers';
 import { cn } from '@repo/ui/utils';
 
 import { autocomplete } from '../../core';
+import { useLocale } from '../../providers/config';
 import Button from './button';
 import Input from './input';
 
@@ -59,7 +60,7 @@ const AutoComplete = ({
   filterOption,
   allowClear = true,
   clearLabel,
-  emptyText = 'No suggestions',
+  emptyText: emptyTextProp,
   open,
   defaultOpen,
   onOpenChange,
@@ -75,6 +76,8 @@ const AutoComplete = ({
   onKeyDown,
   ...props
 }: Props) => {
+  const localeText = useLocale();
+  const emptyText = emptyTextProp ?? localeText.AutoComplete.empty;
   const { direction, locale } = useConfig();
   const {
     Autocomplete: Root,

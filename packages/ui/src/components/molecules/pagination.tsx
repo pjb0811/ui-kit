@@ -12,6 +12,7 @@ import {
 import { useConfig } from '@repo/ui/providers';
 import { cn } from '@repo/ui/utils';
 
+import { formatLocale, useLocale } from '../../providers/config';
 import Button from '../atoms/button';
 import Input from '../atoms/input';
 import Select from '../atoms/select';
@@ -158,6 +159,7 @@ const Pagination = ({
   ...props
 }: Props) => {
   const { componentSize, direction } = useConfig();
+  const localeText = useLocale();
   const safeTotal = Number.isFinite(total) ? Math.max(0, Math.floor(total)) : 0;
   const [internalPageSize, setInternalPageSize] = useState(() =>
     normalizePageSize(defaultPageSize),
@@ -298,7 +300,9 @@ const Pagination = ({
     <nav
       {...props}
       data-slot="pagination"
-      aria-label={ariaLabel ?? labels?.navigation ?? 'Pagination'}
+      aria-label={
+        ariaLabel ?? labels?.navigation ?? localeText.Pagination.navigation
+      }
       className={cn(
         'flex flex-wrap items-center gap-1',
         className,
@@ -323,7 +327,7 @@ const Pagination = ({
           icon={direction === 'rtl' ? <ChevronsRight /> : <ChevronsLeft />}
           size={resolvedSize}
           variant="outlined"
-          aria-label={labels?.first ?? 'First page'}
+          aria-label={labels?.first ?? localeText.Pagination.first}
           disabled={disabled || pageCount === 0 || currentPage === 1}
           className={cn(
             classNames?.item,
@@ -341,7 +345,7 @@ const Pagination = ({
         icon={direction === 'rtl' ? <ChevronRight /> : <ChevronLeft />}
         size={resolvedSize}
         variant="outlined"
-        aria-label={labels?.previous ?? 'Previous page'}
+        aria-label={labels?.previous ?? localeText.Pagination.previous}
         disabled={disabled || pageCount === 0 || currentPage === 1}
         className={cn(
           classNames?.item,
@@ -359,7 +363,10 @@ const Pagination = ({
             variant={item === currentPage ? 'solid' : 'outlined'}
             color={item === currentPage ? 'primary' : 'default'}
             aria-current={item === currentPage ? 'page' : undefined}
-            aria-label={labels?.page?.(item) ?? `Page ${item}`}
+            aria-label={
+              labels?.page?.(item) ??
+              formatLocale(localeText.Pagination.page, { page: item })
+            }
             disabled={disabled}
             className={cn(
               'min-w-8',
@@ -394,7 +401,7 @@ const Pagination = ({
         icon={direction === 'rtl' ? <ChevronLeft /> : <ChevronRight />}
         size={resolvedSize}
         variant="outlined"
-        aria-label={labels?.next ?? 'Next page'}
+        aria-label={labels?.next ?? localeText.Pagination.next}
         disabled={disabled || pageCount === 0 || currentPage === pageCount}
         className={cn(
           classNames?.item,
@@ -412,7 +419,7 @@ const Pagination = ({
           icon={direction === 'rtl' ? <ChevronsLeft /> : <ChevronsRight />}
           size={resolvedSize}
           variant="outlined"
-          aria-label={labels?.last ?? 'Last page'}
+          aria-label={labels?.last ?? localeText.Pagination.last}
           disabled={disabled || pageCount === 0 || currentPage === pageCount}
           className={cn(
             classNames?.item,
@@ -435,11 +442,13 @@ const Pagination = ({
             value={String(safePageSize)}
             options={sizeOptions.map(value => ({
               value: String(value),
-              label: `${value} / page`,
+              label: formatLocale(localeText.Pagination.pageSizeOption, {
+                size: value,
+              }),
             }))}
             onChange={value => changePageSize(Number(value))}
             disabled={disabled}
-            aria-label={labels?.pageSize ?? 'Items per page'}
+            aria-label={labels?.pageSize ?? localeText.Pagination.pageSize}
           />
         </div>
       )}
@@ -458,7 +467,7 @@ const Pagination = ({
             type="text"
             inputMode="numeric"
             autoComplete="off"
-            aria-label={labels?.jump ?? 'Jump to page'}
+            aria-label={labels?.jump ?? localeText.Pagination.jump}
             value={jumpValue}
             onChange={event => setJumpValue(event.target.value)}
             disabled={disabled || pageCount === 0}
@@ -470,7 +479,7 @@ const Pagination = ({
             variant="outlined"
             disabled={disabled || pageCount === 0}
           >
-            {labels?.go ?? 'Go'}
+            {labels?.go ?? localeText.Pagination.go}
           </Button>
         </form>
       )}

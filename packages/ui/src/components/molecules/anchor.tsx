@@ -18,6 +18,7 @@ import {
 import { useConfig } from '@repo/ui/providers';
 import { cn } from '@repo/ui/utils';
 
+import { useLocale } from '../../providers/config';
 import Typography from '../atoms/typography';
 
 export interface Item {
@@ -73,9 +74,11 @@ const Anchor = ({
   classNames,
   dir,
   ref,
-  'aria-label': ariaLabel = 'On this page',
+  'aria-label': ariaLabelProp,
   ...props
 }: Props) => {
+  const localeText = useLocale();
+  const ariaLabel = ariaLabelProp ?? localeText.Anchor.label;
   const { direction } = useConfig();
   const [node, setNode] = useState<HTMLElement | null>(null);
   const mergedRef = useMergedRef(ref, setNode);

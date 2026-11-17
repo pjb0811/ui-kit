@@ -6,6 +6,7 @@ import { useControllableState } from '@jbpark/use-hooks';
 
 import { cn } from '@repo/ui/utils';
 
+import { useLocale } from '../../providers/config';
 import Button, { type Props as ButtonProps } from '../atoms/button';
 import Popover, { type Props as PopoverProps } from '../atoms/popover';
 import Typography from '../atoms/typography';
@@ -50,9 +51,9 @@ const Popconfirm = ({
   onConfirm,
   onCancel,
   onConfirmError,
-  errorMessage = 'Unable to complete the action. Please try again.',
-  confirmText = 'Confirm',
-  cancelText = 'Cancel',
+  errorMessage: errorMessageProp,
+  confirmText: confirmTextProp,
+  cancelText: cancelTextProp,
   disabled = false,
   confirmButtonProps,
   cancelButtonProps,
@@ -63,6 +64,10 @@ const Popconfirm = ({
   onOpenChange,
   ...props
 }: Props) => {
+  const localeText = useLocale();
+  const errorMessage = errorMessageProp ?? localeText.Popconfirm.error;
+  const confirmText = confirmTextProp ?? localeText.Popconfirm.confirm;
+  const cancelText = cancelTextProp ?? localeText.cancel;
   const [open, setOpen] = useControllableState<boolean>({
     value: controlledOpen,
     defaultValue: defaultOpen ?? false,

@@ -9,6 +9,7 @@ import {
 
 import { cn } from '@repo/ui/utils';
 
+import { formatLocale, useLocale } from '../../providers/config';
 import Button from '../atoms/button';
 import Checkbox from '../atoms/checkbox';
 import Input from '../atoms/input';
@@ -48,9 +49,6 @@ export interface Props extends Omit<
   };
 }
 
-const defaultFormatCount = (visible: number, total: number, selected: number) =>
-  `${visible} of ${total} items, ${selected} selected`;
-
 const Transfer = ({
   items,
   targetKeys,
@@ -58,15 +56,29 @@ const Transfer = ({
   disabled = false,
   searchable = false,
   titles = ['Available', 'Chosen'],
-  moveLabels = ['Move to chosen', 'Move to available'],
-  selectAllLabel = 'Select all visible items',
-  searchLabel = 'Search',
-  emptyText = 'No items',
-  formatCount = defaultFormatCount,
+  moveLabels: moveLabelsProp,
+  selectAllLabel: selectAllLabelProp,
+  searchLabel: searchLabelProp,
+  emptyText: emptyTextProp,
+  formatCount: formatCountProp,
   className,
   classNames,
   ...props
 }: Props) => {
+  const localeText = useLocale();
+  const moveLabels =
+    moveLabelsProp ??
+    ([
+      localeText.Transfer.moveToChosen,
+      localeText.Transfer.moveToAvailable,
+    ] as const);
+  const selectAllLabel = selectAllLabelProp ?? localeText.Transfer.selectAll;
+  const searchLabel = searchLabelProp ?? localeText.search;
+  const emptyText = emptyTextProp ?? localeText.Transfer.empty;
+  const formatCount =
+    formatCountProp ??
+    ((visible: number, total: number, selected: number) =>
+      formatLocale(localeText.Transfer.count, { visible, total, selected }));
   const id = useId();
   const [queries, setQueries] = useState(['', '']);
   const [selections, setSelections] = useState<Set<string>[]>([

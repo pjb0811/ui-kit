@@ -218,6 +218,24 @@ import { Config } from '@jbpark/ui-kit/providers';
 import { cn, renderConditional } from '@jbpark/ui-kit/utils';
 ```
 
+### 다국어
+
+컴포넌트에 내장된 문구(버튼 라벨, `aria-label`, placeholder, 빈 상태 문구)는 기본이 영어입니다. 다른 언어로 바꾸려면 앱을 `Config`로 감싸고 `locale`을 넘깁니다. 패키지에 `koKR`이 포함돼 있고, DatePicker가 날짜를 표시할 때 쓰는 date-fns 로케일도 들어 있습니다.
+
+```tsx
+import { Config, koKR } from '@jbpark/ui-kit';
+
+<Config locale={koKR}>{app}</Config>;
+```
+
+`locale`은 일부만 넘겨도 됩니다. 여러 컴포넌트가 함께 쓰는 단어는 최상위에, 컴포넌트별 문구는 컴포넌트 이름 아래에 묶여 있습니다. 중첩된 `Config`는 그룹 안의 키를 하나씩 병합하고, 빠진 키는 부모 `Config`, 그다음 `enUS` 값을 씁니다.
+
+```tsx
+<Config locale={{ cancel: '닫기', Tour: { next: '계속' } }}>{app}</Config>
+```
+
+컴포넌트 prop(`nextLabel`, `labels`, `placeholder` 등)으로 넘긴 값이 locale보다 우선합니다. `Tour.progress`(`'Step {current} of {total}'`)나 `Upload.remove`(`'Remove {name}'`)처럼 `{name}` 형식의 자리 표시자가 있는 문구는 컴포넌트가 값을 채웁니다. 전체 키는 `Locale` 타입에, 기본 문구는 `enUS`에 있습니다.
+
 ### 스타일 import
 
 ```tsx

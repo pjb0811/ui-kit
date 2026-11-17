@@ -56,7 +56,7 @@ export const Preview: Story = {
     const canvas = within(canvasElement);
     const body = within(canvasElement.ownerDocument.body);
     const trigger = canvas.getByRole('button', {
-      name: '미리보기: Dashboard screenshot',
+      name: 'Preview: Dashboard screenshot',
     });
 
     await userEvent.click(trigger);

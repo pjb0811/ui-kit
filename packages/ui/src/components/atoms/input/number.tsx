@@ -8,6 +8,7 @@ import { Minus, Plus } from 'lucide-react';
 import { type ComponentSize, useConfig } from '@repo/ui/providers';
 import { cn } from '@repo/ui/utils';
 
+import { useLocale } from '../../../providers/config';
 import Button from '../button';
 import Input from './input';
 
@@ -56,6 +57,7 @@ const Number = ({
   const generatedId = React.useId();
   const inputId = id ?? generatedId;
   const { componentSize } = useConfig();
+  const localeText = useLocale();
   const resolvedSize = size ?? componentSize ?? 'middle';
 
   return (
@@ -86,7 +88,7 @@ const Number = ({
         )}
       >
         <NumberField.Decrement
-          aria-label="Decrease value"
+          aria-label={localeText.InputNumber.decrease}
           render={
             <Button
               variant="text"
@@ -113,7 +115,7 @@ const Number = ({
           )}
         />
         <NumberField.Increment
-          aria-label="Increase value"
+          aria-label={localeText.InputNumber.increase}
           render={
             <Button
               variant="text"

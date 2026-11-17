@@ -17,6 +17,7 @@ import { cn } from '@repo/ui/utils';
 
 import { popover } from '../../core';
 import { OVERLAY_LAYER } from '../../lib/z-layers';
+import { formatLocale, useLocale } from '../../providers/config';
 import Button from '../atoms/button';
 
 export interface Step {
@@ -109,9 +110,6 @@ const StepTarget = ({
   return null;
 };
 
-const defaultFormatProgress = (current: number, total: number) =>
-  `Step ${current} of ${total}`;
-
 const Tour = ({
   steps,
   open: openProp,
@@ -123,15 +121,24 @@ const Tour = ({
   onClose,
   onFinish,
   scrollIntoView = true,
-  previousLabel = 'Previous',
-  nextLabel = 'Next',
-  finishLabel = 'Finish',
-  closeLabel = 'Close tour',
-  formatProgress = defaultFormatProgress,
+  previousLabel: previousLabelProp,
+  nextLabel: nextLabelProp,
+  finishLabel: finishLabelProp,
+  closeLabel: closeLabelProp,
+  formatProgress: formatProgressProp,
   className,
   classNames,
   ...props
 }: Props) => {
+  const localeText = useLocale();
+  const previousLabel = previousLabelProp ?? localeText.Tour.previous;
+  const nextLabel = nextLabelProp ?? localeText.Tour.next;
+  const finishLabel = finishLabelProp ?? localeText.Tour.finish;
+  const closeLabel = closeLabelProp ?? localeText.Tour.close;
+  const formatProgress =
+    formatProgressProp ??
+    ((current: number, total: number) =>
+      formatLocale(localeText.Tour.progress, { current, total }));
   const { getContainer, direction } = useConfig();
   const [open, setOpen] = useControllableState({
     value: openProp,

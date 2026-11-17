@@ -5,6 +5,7 @@ import type { ReactNode } from 'react';
 import { cn } from '@repo/ui/utils';
 
 import { tabs } from '../../core';
+import { useLocale } from '../../providers/config';
 
 const { Tabs: Core, TabsList, TabsTab, TabsPanel } = tabs;
 
@@ -47,7 +48,7 @@ export interface Props extends Omit<
 
 const Tabs = ({
   items,
-  listLabel = 'Tabs',
+  listLabel: listLabelProp,
   keepMounted = false,
   activateOnFocus = false,
   scrollable = false,
@@ -60,6 +61,8 @@ const Tabs = ({
   orientation = 'horizontal',
   ...props
 }: Props) => {
+  const localeText = useLocale();
+  const listLabel = listLabelProp ?? localeText.Tabs.list;
   const initialValue =
     defaultValue === undefined
       ? items.find(item => !item.disabled)?.key

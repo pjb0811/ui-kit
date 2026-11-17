@@ -8,6 +8,7 @@ import { DEFAULT_LOCALE, useConfig } from '@repo/ui/providers';
 import { cn } from '@repo/ui/utils';
 
 import { combobox, select } from '../../../core';
+import { useLocale } from '../../../providers/config';
 import Button from '../button';
 import Input from '../input';
 import SearchableOptions, {
@@ -68,9 +69,9 @@ export interface Props
 const MultipleSelect = ({
   label,
   options,
-  placeholder = 'Select options',
-  searchPlaceholder = 'Search...',
-  emptyText = 'No results found.',
+  placeholder: placeholderProp,
+  searchPlaceholder: searchPlaceholderProp,
+  emptyText: emptyTextProp,
   allowClear = true,
   chipDescription = 'Press Backspace or Delete to remove',
   inputDescription = count =>
@@ -87,6 +88,11 @@ const MultipleSelect = ({
   'aria-invalid': ariaInvalid,
   ...props
 }: Props) => {
+  const localeText = useLocale();
+  const placeholder = placeholderProp ?? localeText.Select.placeholder;
+  const searchPlaceholder =
+    searchPlaceholderProp ?? localeText.searchPlaceholder;
+  const emptyText = emptyTextProp ?? localeText.noResults;
   const { locale } = useConfig();
   const items = useSelectItems(options);
   const labels = useMemo(() => {

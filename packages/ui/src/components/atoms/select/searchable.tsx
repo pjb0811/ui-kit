@@ -8,6 +8,7 @@ import { DEFAULT_LOCALE, useConfig } from '@repo/ui/providers';
 import { cn } from '@repo/ui/utils';
 
 import { combobox, select } from '../../../core';
+import { useLocale } from '../../../providers/config';
 import Button from '../button';
 import Input from '../input';
 import SearchableOptions, {
@@ -60,8 +61,8 @@ const SearchableSelect = ({
   label,
   options,
   placeholder,
-  searchPlaceholder = 'Search...',
-  emptyText = 'No results found.',
+  searchPlaceholder: searchPlaceholderProp,
+  emptyText: emptyTextProp,
   allowClear = true,
   className,
   classNames,
@@ -75,6 +76,10 @@ const SearchableSelect = ({
   'aria-invalid': ariaInvalid,
   ...props
 }: Props) => {
+  const localeText = useLocale();
+  const searchPlaceholder =
+    searchPlaceholderProp ?? localeText.searchPlaceholder;
+  const emptyText = emptyTextProp ?? localeText.noResults;
   const { locale } = useConfig();
   const items = useSelectItems(options);
 

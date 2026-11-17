@@ -333,7 +333,7 @@ export const LazyLoading: Story = {
     flaky.focus();
     await userEvent.keyboard('{ArrowRight}');
     await waitFor(() =>
-      expect(flaky).toHaveAccessibleDescription(/불러오지 못함/),
+      expect(flaky).toHaveAccessibleDescription(/Failed to load/),
     );
     await userEvent.keyboard('{ArrowRight}');
     await waitFor(() =>

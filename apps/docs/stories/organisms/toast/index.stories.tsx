@@ -209,7 +209,7 @@ export const QueueWithMaxCount: Story = {
     const first = page.getByText('First').closest('[data-slot="toast"]')!;
 
     await userEvent.click(
-      within(first as HTMLElement).getByRole('button', { name: '닫기' }),
+      within(first as HTMLElement).getByRole('button', { name: 'Close' }),
     );
     await expect(args.onClose).toHaveBeenCalledTimes(1);
     await waitFor(() => expect(page.getByText('Third')).toBeVisible());
@@ -239,7 +239,7 @@ export const CloseOnce: Story = {
     reset();
     await userEvent.click(canvas.getByRole('button', { name: 'Show' }));
 
-    const close = await page.findByRole('button', { name: '닫기' });
+    const close = await page.findByRole('button', { name: 'Close' });
 
     close.click();
     close.click();

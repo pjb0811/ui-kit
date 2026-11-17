@@ -19,6 +19,7 @@ import {
   Undo2,
 } from 'lucide-react';
 
+import { type ResolvedLocale, formatLocale } from '../../../providers/config';
 import Button from '../button';
 import ColorPicker from '../color-picker';
 import Input from '../input';
@@ -26,6 +27,8 @@ import Popover from '../popover';
 import Select from '../select';
 import ToolbarButton from './toolbar-button';
 import type { ToolbarPreset } from './types';
+
+type Text = ResolvedLocale['RichTextEditor'];
 
 const FONT_SIZE_OPTIONS = [
   { label: '12', value: '12px' },
@@ -38,10 +41,10 @@ const FONT_SIZE_OPTIONS = [
 
 const HEADING_LEVELS = [1, 2, 3, 4] as const;
 
-const HEADING_OPTIONS = [
-  { label: 'Paragraph', value: 'paragraph' },
+const headingOptions = (text: Text) => [
+  { label: text.paragraph, value: 'paragraph' },
   ...HEADING_LEVELS.map(level => ({
-    label: `Heading ${level}`,
+    label: formatLocale(text.heading, { level }),
     value: String(level),
   })),
 ];
@@ -49,7 +52,7 @@ const HEADING_OPTIONS = [
 // Owns its own open/href state, so it has to be a real component (not a
 // plain render function like the other presets) for the hooks below to be
 // valid.
-const LinkControl = ({ editor }: { editor: Editor }) => {
+const LinkControl = ({ editor, text }: { editor: Editor; text: Text }) => {
   const [open, setOpen] = useState(false);
   const [href, setHref] = useState('');
 
@@ -94,14 +97,14 @@ const LinkControl = ({ editor }: { editor: Editor }) => {
             }}
           />
           <Button size="small" onClick={apply}>
-            Apply
+            {text.apply}
           </Button>
         </div>
       }
     >
       <ToolbarButton
         icon={<LinkIcon />}
-        aria-label="Link"
+        aria-label={text.link}
         active={editor.isActive('link')}
       />
     </Popover>
@@ -110,27 +113,27 @@ const LinkControl = ({ editor }: { editor: Editor }) => {
 
 export const TOOLBAR_PRESET_RENDERERS: Record<
   ToolbarPreset,
-  (editor: Editor) => ReactNode
+  (editor: Editor, text: Text) => ReactNode
 > = {
-  undo: editor => (
+  undo: (editor, text) => (
     <ToolbarButton
       key="undo"
       icon={<Undo2 />}
-      aria-label="Undo"
+      aria-label={text.undo}
       disabled={!editor.can().undo()}
       onClick={() => editor.chain().focus().undo().run()}
     />
   ),
-  redo: editor => (
+  redo: (editor, text) => (
     <ToolbarButton
       key="redo"
       icon={<Redo2 />}
-      aria-label="Redo"
+      aria-label={text.redo}
       disabled={!editor.can().redo()}
       onClick={() => editor.chain().focus().redo().run()}
     />
   ),
-  heading: editor => {
+  heading: (editor, text) => {
     const activeLevel = HEADING_LEVELS.find(level =>
       editor.isActive('heading', { level }),
     );
@@ -139,8 +142,8 @@ export const TOOLBAR_PRESET_RENDERERS: Record<
       <Select
         key="heading"
         className="h-6 w-28"
-        placeholder="Style"
-        options={HEADING_OPTIONS}
+        placeholder={text.style}
+        options={headingOptions(text)}
         value={activeLevel ? String(activeLevel) : 'paragraph'}
         // No `.focus()` here — the Select is still open when this fires,
         // and refocusing the editor mid-selection dismisses it early (same
@@ -156,101 +159,103 @@ export const TOOLBAR_PRESET_RENDERERS: Record<
       />
     );
   },
-  bold: editor => (
+  bold: (editor, text) => (
     <ToolbarButton
       key="bold"
       icon={<Bold />}
-      aria-label="Bold"
+      aria-label={text.bold}
       active={editor.isActive('bold')}
       onClick={() => editor.chain().focus().toggleBold().run()}
     />
   ),
-  italic: editor => (
+  italic: (editor, text) => (
     <ToolbarButton
       key="italic"
       icon={<Italic />}
-      aria-label="Italic"
+      aria-label={text.italic}
       active={editor.isActive('italic')}
       onClick={() => editor.chain().focus().toggleItalic().run()}
     />
   ),
-  underline: editor => (
+  underline: (editor, text) => (
     <ToolbarButton
       key="underline"
       icon={<Underline />}
-      aria-label="Underline"
+      aria-label={text.underline}
       active={editor.isActive('underline')}
       onClick={() => editor.chain().focus().toggleUnderline().run()}
     />
   ),
-  strike: editor => (
+  strike: (editor, text) => (
     <ToolbarButton
       key="strike"
       icon={<Strikethrough />}
-      aria-label="Strikethrough"
+      aria-label={text.strikethrough}
       active={editor.isActive('strike')}
       onClick={() => editor.chain().focus().toggleStrike().run()}
     />
   ),
-  code: editor => (
+  code: (editor, text) => (
     <ToolbarButton
       key="code"
       icon={<Code />}
-      aria-label="Inline code"
+      aria-label={text.inlineCode}
       active={editor.isActive('code')}
       onClick={() => editor.chain().focus().toggleCode().run()}
     />
   ),
-  bulletList: editor => (
+  bulletList: (editor, text) => (
     <ToolbarButton
       key="bulletList"
       icon={<List />}
-      aria-label="Bullet list"
+      aria-label={text.bulletList}
       active={editor.isActive('bulletList')}
       onClick={() => editor.chain().focus().toggleBulletList().run()}
     />
   ),
-  orderedList: editor => (
+  orderedList: (editor, text) => (
     <ToolbarButton
       key="orderedList"
       icon={<ListOrdered />}
-      aria-label="Ordered list"
+      aria-label={text.orderedList}
       active={editor.isActive('orderedList')}
       onClick={() => editor.chain().focus().toggleOrderedList().run()}
     />
   ),
-  blockquote: editor => (
+  blockquote: (editor, text) => (
     <ToolbarButton
       key="blockquote"
       icon={<Quote />}
-      aria-label="Blockquote"
+      aria-label={text.blockquote}
       active={editor.isActive('blockquote')}
       onClick={() => editor.chain().focus().toggleBlockquote().run()}
     />
   ),
-  codeBlock: editor => (
+  codeBlock: (editor, text) => (
     <ToolbarButton
       key="codeBlock"
       icon={<Code2 />}
-      aria-label="Code block"
+      aria-label={text.codeBlock}
       active={editor.isActive('codeBlock')}
       onClick={() => editor.chain().focus().toggleCodeBlock().run()}
     />
   ),
-  horizontalRule: editor => (
+  horizontalRule: (editor, text) => (
     <ToolbarButton
       key="horizontalRule"
       icon={<Minus />}
-      aria-label="Horizontal rule"
+      aria-label={text.horizontalRule}
       onClick={() => editor.chain().focus().setHorizontalRule().run()}
     />
   ),
-  link: editor => <LinkControl key="link" editor={editor} />,
-  fontSize: editor => (
+  link: (editor, text) => (
+    <LinkControl key="link" editor={editor} text={text} />
+  ),
+  fontSize: (editor, text) => (
     <Select
       key="fontSize"
       className="h-6 w-20"
-      placeholder="Size"
+      placeholder={text.fontSize}
       options={FONT_SIZE_OPTIONS}
       value={editor.getAttributes('textStyle').fontSize ?? undefined}
       // No `.focus()` — see the `heading` preset above.

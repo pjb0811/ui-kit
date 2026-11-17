@@ -5,6 +5,7 @@ import { Fragment } from 'react';
 import { useConfig } from '@repo/ui/providers';
 import { cn } from '@repo/ui/utils';
 
+import { useLocale } from '../../providers/config';
 import Button from '../atoms/button';
 import Popover from '../atoms/popover';
 
@@ -60,7 +61,7 @@ const Breadcrumb = ({
   maxItems = 8,
   itemsBeforeCollapse = 1,
   itemsAfterCollapse = 1,
-  expandText = 'Show path',
+  expandText: expandTextProp,
   itemRender,
   className,
   classNames,
@@ -68,6 +69,8 @@ const Breadcrumb = ({
   'aria-label': ariaLabel,
   ...props
 }: Props) => {
+  const localeText = useLocale();
+  const expandText = expandTextProp ?? localeText.Breadcrumb.expand;
   const { direction } = useConfig();
   const limit = safeCount(maxItems, 3);
   const before = Math.min(safeCount(itemsBeforeCollapse, 1), limit - 2);
@@ -184,7 +187,7 @@ const Breadcrumb = ({
       {...props}
       data-slot="breadcrumb"
       dir={dir ?? direction}
-      aria-label={ariaLabel ?? 'Breadcrumb'}
+      aria-label={ariaLabel ?? localeText.Breadcrumb.label}
       className={cn(
         'text-sm',
         className, //

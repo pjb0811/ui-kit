@@ -31,6 +31,7 @@ import {
 import { DEFAULT_LOCALE, useConfig } from '@repo/ui/providers';
 import { cn } from '@repo/ui/utils';
 
+import { useLocale } from '../../providers/config';
 import Button from '../atoms/button';
 import Checkbox from '../atoms/checkbox';
 
@@ -185,7 +186,7 @@ const Tree = ({
   defaultCheckedKeys = [],
   onCheck,
   disabled = false,
-  emptyText = 'No nodes',
+  emptyText: emptyTextProp,
   loadData,
   expandOnClick = false,
   virtual = false,
@@ -198,9 +199,12 @@ const Tree = ({
   style,
   dir,
   ref,
-  'aria-label': ariaLabel = 'Tree',
+  'aria-label': ariaLabelProp,
   ...props
 }: Props) => {
+  const localeText = useLocale();
+  const emptyText = emptyTextProp ?? localeText.Tree.empty;
+  const ariaLabel = ariaLabelProp ?? localeText.Tree.label;
   const { direction, locale } = useConfig();
   const id = useId();
   const [expanded, setExpanded] = useControllableState<readonly string[]>({
