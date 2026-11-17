@@ -40,3 +40,7 @@ import { Marquees } from '@jbpark/ui-kit';
 | `className`    | `string`             | -       |
 
 Each `ItemProps` is `{ key?; children; speed?; autoFill?; pauseOnHover?; gap? }` — per-row overrides fall back to the values set on `Marquees`. `autoFill` repeats each row enough to cover the container (pass a number to force a specific repeat count). `gap` is the space between those repeats — set it to match the spacing inside your row, otherwise the last element of one copy sits flush against the first element of the next. `Marquees.Item` is also exported for rendering a single track directly. `Marquees` forwards the rest of `React.ComponentProps<'div'>`.
+
+## Accessibility
+
+When the user has asked the system to reduce motion (`prefers-reduced-motion: reduce`), rows do not animate. Each row stays at its start and can be scrolled sideways instead, and it follows the setting if it changes while the page is open. The loop renders each row several times to stay seamless; only the first copy is exposed to assistive technology and the tab order, and the others are `aria-hidden` and `inert`.

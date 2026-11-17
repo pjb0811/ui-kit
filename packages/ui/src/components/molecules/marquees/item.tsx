@@ -3,8 +3,10 @@
 import { useEffect, useRef, useState } from 'react';
 
 import { useGSAP } from '@gsap/react';
-import { useHoverOrFocusWithin } from '@jbpark/use-hooks';
+import { useHoverOrFocusWithin, useMediaQuery } from '@jbpark/use-hooks';
 import { gsap } from 'gsap';
+
+import { cn } from '@repo/ui/utils';
 
 export interface ItemProps {
   key?: React.Key;
@@ -55,6 +57,10 @@ const Item = ({
   const { active: isHoverOrFocusPaused, handlers } = useHoverOrFocusWithin({
     enabled: pauseOnHover,
   });
+  // A reduced-motion preference replaces the loop with a scrollable track.
+  const prefersReducedMotion = useMediaQuery(
+    '(prefers-reduced-motion: reduce)',
+  );
   const [repeatCount, setRepeatCount] = useState(
     resolveInitialRepeatCount(autoFill),
   );
@@ -127,6 +133,15 @@ const Item = ({
 
       if (tweenRef.current) {
         tweenRef.current.kill();
+        tweenRef.current = null;
+      }
+
+      // No loop at all, rather than a paused one: the tween is recreated
+      // whenever the width changes, and a new tween starts playing.
+      if (prefersReducedMotion) {
+        gsap.set(containerRef.current, { x: 0 });
+
+        return;
       }
 
       tweenRef.current = gsap.fromTo(
@@ -146,7 +161,7 @@ const Item = ({
     },
     {
       scope: containerRef,
-      dependencies: [width, speed],
+      dependencies: [width, speed, prefersReducedMotion],
     },
   );
 
@@ -164,9 +179,12 @@ const Item = ({
 
   return (
     <div
-      className="flex overflow-hidden"
+      className={cn(
+        'flex',
+        prefersReducedMotion ? 'overflow-x-auto' : 'overflow-hidden',
+        //
+      )}
       {...handlers}
-      //
     >
       <div ref={containerRef} className="flex flex-nowrap">
         {[...Array(2)].map((_, index) => (
@@ -174,6 +192,10 @@ const Item = ({
             key={index}
             style={{ minWidth: width }}
             className="flex flex-nowrap"
+            // Only the first copy of the content is real. The loop copies
+            // are hidden from assistive technology and the tab order.
+            aria-hidden={index > 0 || undefined}
+            inert={index > 0 || undefined}
           >
             {/* Every copy carries the same trailing `gap`, so the spacing is
                 uniform at the seam between copies and between the two loop
@@ -191,7 +213,12 @@ const Item = ({
             {[
               ...Array(typeof autoFill === 'number' ? autoFill : repeatCount),
             ].map((_, i) => (
-              <div key={i} style={{ paddingRight: gap }}>
+              <div
+                key={i}
+                style={{ paddingRight: gap }}
+                aria-hidden={index === 0 || undefined}
+                inert={index === 0 || undefined}
+              >
                 {children}
               </div>
             ))}
