@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { expect, userEvent, waitFor } from 'storybook/test';
+import { expect, spyOn, userEvent, waitFor } from 'storybook/test';
 
 import { Button, Marquees, Typography } from '@repo/ui';
 import { cn } from '@repo/ui/utils';
@@ -209,5 +209,68 @@ export const PauseDisabled: Story = {
     await expectTrackMotion(track!, true);
     await userEvent.unhover(first);
     await expectTrackMotion(track!, true);
+  },
+};
+
+export const OneCopyForAssistiveTech: Story = {
+  ...HoverAndFocus,
+  args: { ...HoverAndFocus.args, autoFill: 2 },
+  play: async ({ canvas }) => {
+    const links = canvas.getAllByRole('link', { name: 'First link' });
+
+    // The loop renders several copies, but only one is exposed.
+    await expect(
+      canvas.getAllByText('First link', { selector: 'a' }).length,
+    ).toBeGreaterThan(1);
+    await expect(links).toHaveLength(1);
+
+    // Browsers skip `inert` subtrees when tabbing; user-event's `tab()` does
+    // not, so check the attribute instead.
+    const anchors = Array.from(
+      canvas.getByTestId('interactive-marquee').querySelectorAll('a'),
+    );
+    const live = anchors.filter(anchor => !anchor.closest('[inert]'));
+
+    await expect(live.map(anchor => anchor.textContent)).toEqual([
+      'First link',
+      'Second link',
+    ]);
+  },
+};
+
+export const ReducedMotion: Story = {
+  ...HoverAndFocus,
+  args: { ...HoverAndFocus.args, pauseOnHover: false },
+  beforeEach: () => {
+    const matchMedia = window.matchMedia.bind(window);
+    const spy = spyOn(window, 'matchMedia').mockImplementation(query =>
+      query === '(prefers-reduced-motion: reduce)'
+        ? ({
+            matches: true,
+            media: query,
+            onchange: null,
+            addEventListener: () => {},
+            removeEventListener: () => {},
+            addListener: () => {},
+            removeListener: () => {},
+            dispatchEvent: () => false,
+          } as MediaQueryList)
+        : matchMedia(query),
+    );
+
+    return () => spy.mockRestore();
+  },
+  play: async ({ canvas }) => {
+    const marquee = canvas.getByTestId('interactive-marquee');
+    const track = marquee.querySelector<HTMLElement>('.flex-nowrap')!;
+
+    // Give the measurement and the tween setup time to run.
+    await new Promise(resolve => setTimeout(resolve, 500));
+    await expectTrackMotion(track, false);
+    await expect(
+      new DOMMatrixReadOnly(getComputedStyle(track).transform).m41,
+    ).toBe(0);
+    // The content is still reachable by scrolling the row.
+    await expect(getComputedStyle(track.parentElement!).overflowX).toBe('auto');
   },
 };
