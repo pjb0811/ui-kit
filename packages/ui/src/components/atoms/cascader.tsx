@@ -8,6 +8,7 @@ import { ChevronDown, X } from 'lucide-react';
 import { useConfig } from '@repo/ui/providers';
 import { cn } from '@repo/ui/utils';
 
+import { useLocale } from '../../providers/config';
 import Button from './button';
 import Popover from './popover';
 import Select from './select';
@@ -72,10 +73,10 @@ const Cascader = ({
   onChange,
   disabled = false,
   allowClear = true,
-  placeholder = 'Choose a path',
-  backLabel = 'Back',
-  clearLabel = 'Clear selection',
-  emptyText = 'No options',
+  placeholder: placeholderProp,
+  backLabel: backLabelProp,
+  clearLabel: clearLabelProp,
+  emptyText: emptyTextProp,
   getLevelLabel = level => `Level ${level}`,
   className,
   classNames,
@@ -85,6 +86,11 @@ const Cascader = ({
   'aria-describedby': ariaDescribedBy,
   ...props
 }: Props) => {
+  const localeText = useLocale();
+  const placeholder = placeholderProp ?? localeText.Cascader.placeholder;
+  const backLabel = backLabelProp ?? localeText.back;
+  const clearLabel = clearLabelProp ?? localeText.Cascader.clear;
+  const emptyText = emptyTextProp ?? localeText.Cascader.empty;
   const [internalValue, setInternalValue] =
     useState<readonly string[]>(defaultValue);
   const [isOpen, setIsOpen] = useState(false);

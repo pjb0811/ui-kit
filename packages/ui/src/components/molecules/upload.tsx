@@ -11,6 +11,7 @@ import { Upload as UploadIcon, X } from 'lucide-react';
 
 import { cn } from '@repo/ui/utils';
 
+import { formatLocale, useLocale } from '../../providers/config';
 import Button from '../atoms/button';
 
 // Monotonic per-session counter used as a uniqueness tiebreaker for file
@@ -70,6 +71,7 @@ const Upload = ({
   onReject,
 }: Props) => {
   const inputId = useId();
+  const localeText = useLocale();
   const readAsDataUrl = useFileToDataUrl();
   const [files, setFiles] = useControllableState<UploadFile[]>({
     value: _value,
@@ -188,7 +190,9 @@ const Upload = ({
         )}
       >
         <UploadIcon className="size-6" />
-        <span>Click or drag file{multiple ? 's' : ''} to upload</span>
+        <span>
+          {multiple ? localeText.Upload.hintMultiple : localeText.Upload.hint}
+        </span>
         <input
           id={inputId}
           type="file"
@@ -242,7 +246,9 @@ const Upload = ({
                 disabled={disabled}
                 onClick={() => removeFile(file.uid)}
                 className="shrink-0 text-muted-foreground hover:text-foreground"
-                aria-label={`Remove ${file.name}`}
+                aria-label={formatLocale(localeText.Upload.remove, {
+                  name: file.name,
+                })}
               />
             </li>
           ))}

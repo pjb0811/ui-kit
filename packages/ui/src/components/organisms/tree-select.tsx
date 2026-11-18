@@ -15,6 +15,7 @@ import { DEFAULT_LOCALE, useConfig } from '@repo/ui/providers';
 import { cn } from '@repo/ui/utils';
 
 import { popover } from '../../core';
+import { useLocale } from '../../providers/config';
 import Button from '../atoms/button';
 import Tree, { type Node, type Props as TreeProps } from './tree';
 
@@ -64,9 +65,9 @@ const TreeSelect = ({
   onOpenChange,
   allowClear = true,
   clearLabel,
-  placeholder = 'Choose a node',
-  popupLabel = 'Choose a node',
-  emptyText = 'No nodes',
+  placeholder: placeholderProp,
+  popupLabel: popupLabelProp,
+  emptyText: emptyTextProp,
   container,
   name,
   form,
@@ -78,6 +79,10 @@ const TreeSelect = ({
   onKeyDown,
   ...props
 }: Props) => {
+  const localeText = useLocale();
+  const placeholder = placeholderProp ?? localeText.TreeSelect.placeholder;
+  const popupLabel = popupLabelProp ?? localeText.TreeSelect.popup;
+  const emptyText = emptyTextProp ?? localeText.TreeSelect.empty;
   const { direction, locale } = useConfig();
   const resolvedDirection = dir === 'ltr' || dir === 'rtl' ? dir : direction;
   const [internalValue, setInternalValue] = useState(defaultValue);

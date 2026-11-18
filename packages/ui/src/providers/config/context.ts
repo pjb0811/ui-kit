@@ -2,22 +2,12 @@
 
 import { createContext, useContext } from 'react';
 
-import type { ContextValue, Locale } from './types';
+import { enUS, mergeLocale } from './locales';
+import type { ContextValue, ResolvedLocale } from './types';
 
-export const DEFAULT_LOCALE: Required<Locale> = {
-  close: '닫기',
-  clear: '지우기',
-  backToTop: '맨 위로',
-  loading: '로딩 중',
-  expand: '펼치기',
-  collapse: '접기',
-  back: '뒤로가기',
-  ok: 'OK',
-  cancel: 'Cancel',
-  retry: '다시 시도',
-  loadFailed: '불러오지 못함',
-  preview: '미리보기',
-};
+// The text components fall back to. It is `enUS`; pass `koKR` (or your
+// own `Locale`) to `Config` for another language.
+export const DEFAULT_LOCALE: ResolvedLocale = enUS;
 
 export const Context = createContext<ContextValue>({
   theme: {},
@@ -27,3 +17,7 @@ export const Context = createContext<ContextValue>({
 });
 
 export const useConfig = () => useContext(Context);
+
+// The nearest Config's locale with every key filled in from `enUS`.
+export const useLocale = (): ResolvedLocale =>
+  mergeLocale(DEFAULT_LOCALE, useContext(Context).locale);

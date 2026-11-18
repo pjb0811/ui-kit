@@ -8,6 +8,7 @@ import { CircleX } from 'lucide-react';
 import { type ComponentSize, useConfig } from '@repo/ui/providers';
 import { cn } from '@repo/ui/utils';
 
+import { useLocale } from '../../providers/config';
 import Button from './button';
 import Input from './input';
 
@@ -49,7 +50,7 @@ const TimePicker = ({
   onChange,
   minuteStep = 1,
   allowClear = true,
-  clearLabel = 'Clear time',
+  clearLabel: clearLabelProp,
   size,
   disabled,
   readOnly,
@@ -57,6 +58,8 @@ const TimePicker = ({
   classNames,
   ...props
 }: Props) => {
+  const localeText = useLocale();
+  const clearLabel = clearLabelProp ?? localeText.TimePicker.clear;
   const generatedId = React.useId();
   const inputId = id ?? generatedId;
   const inputRef = React.useRef<HTMLInputElement>(null);

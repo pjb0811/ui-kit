@@ -1,3 +1,5 @@
+import type { Locale as DateFnsLocale } from 'date-fns';
+
 /**
  * Theme overrides applied as CSS custom properties on `Config`'s wrapper
  * element, inherited by everything inside it.
@@ -79,11 +81,13 @@ export interface ThemeConfig {
   dark?: 'light' | 'dark' | 'system';
 }
 
-// Every hardcoded Korean UI string in the library (Drawer's close button,
-// Search's clear button, BackTop, Spin/Skeleton's loading label, Sider's
-// collapse trigger) reads its label from here, falling back to its
-// existing Korean default when no Config wraps it — so this is purely
-// additive, not a breaking change to current behavior.
+// Built-in text that components render (visible labels and `aria-label`s).
+// Shared words sit at the top level; component-specific text is grouped by
+// component name. Every key is optional: a nested Config merges each group
+// key by key, and anything left out falls back to the parent Config and
+// finally to `enUS`. Component props (`nextLabel`, `labels`, ...) still win
+// over the locale. `{name}`-style placeholders are filled in by the
+// component.
 export interface Locale {
   close?: string;
   clear?: string;
@@ -97,7 +101,99 @@ export interface Locale {
   retry?: string;
   loadFailed?: string;
   preview?: string;
+  search?: string;
+  searchPlaceholder?: string;
+  noData?: string;
+  noResults?: string;
+  Anchor?: { label?: string };
+  AutoComplete?: { empty?: string };
+  Breadcrumb?: { label?: string; expand?: string };
+  Cascader?: { placeholder?: string; clear?: string; empty?: string };
+  DatePicker?: {
+    placeholder?: string;
+    time?: string;
+    /** A date-fns locale for the formatted date, e.g. `ko` from `date-fns/locale`. */
+    dateLocale?: DateFnsLocale;
+  };
+  InputNumber?: { decrease?: string; increase?: string };
+  Mentions?: { loading?: string; empty?: string };
+  Pagination?: {
+    navigation?: string;
+    /** `{page}` is the page number. */
+    page?: string;
+    previous?: string;
+    next?: string;
+    first?: string;
+    last?: string;
+    pageSize?: string;
+    /** `{size}` is the page size. */
+    pageSizeOption?: string;
+    jump?: string;
+    go?: string;
+  };
+  Popconfirm?: { confirm?: string; error?: string };
+  RichTextEditor?: {
+    placeholder?: string;
+    link?: string;
+    undo?: string;
+    redo?: string;
+    bold?: string;
+    italic?: string;
+    underline?: string;
+    strikethrough?: string;
+    inlineCode?: string;
+    bulletList?: string;
+    orderedList?: string;
+    blockquote?: string;
+    codeBlock?: string;
+    horizontalRule?: string;
+    style?: string;
+    paragraph?: string;
+    /** `{level}` is the heading level. */
+    heading?: string;
+    fontSize?: string;
+    apply?: string;
+  };
+  Select?: { placeholder?: string };
+  Steps?: { label?: string };
+  Tabs?: { list?: string };
+  TimePicker?: { clear?: string };
+  Tour?: {
+    previous?: string;
+    next?: string;
+    finish?: string;
+    close?: string;
+    /** `{current}` and `{total}` are one-based. */
+    progress?: string;
+  };
+  Transfer?: {
+    moveToChosen?: string;
+    moveToAvailable?: string;
+    selectAll?: string;
+    empty?: string;
+    /** `{visible}`, `{total}` and `{selected}` are item counts. */
+    count?: string;
+  };
+  Tree?: { label?: string; empty?: string };
+  TreeSelect?: { placeholder?: string; popup?: string; empty?: string };
+  Upload?: {
+    hint?: string;
+    hintMultiple?: string;
+    /** `{name}` is the file name. */
+    remove?: string;
+  };
 }
+
+// `Locale` with every key and every group key filled in, as `useLocale`
+// returns it.
+export type ResolvedLocale = {
+  [K in keyof Locale]-?: NonNullable<Locale[K]> extends string
+    ? string
+    : K extends 'DatePicker'
+      ? Required<Omit<NonNullable<Locale[K]>, 'dateLocale'>> &
+          Pick<NonNullable<Locale[K]>, 'dateLocale'>
+      : Required<NonNullable<Locale[K]>>;
+};
 
 // antd's componentSize equivalent — components with a `size` prop (e.g.
 // Button) read this as their fallback when the caller doesn't pass one

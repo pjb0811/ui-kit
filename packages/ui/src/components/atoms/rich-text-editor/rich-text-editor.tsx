@@ -9,6 +9,7 @@ import StarterKit from '@tiptap/starter-kit';
 
 import { cn } from '@repo/ui/utils';
 
+import { useLocale } from '../../../providers/config';
 import { RICH_TEXT_CONTENT_CLASSES } from './content-classes';
 import Toolbar from './toolbar';
 import { DEFAULT_TOOLBAR_PRESETS } from './toolbar-presets';
@@ -43,7 +44,7 @@ export interface Props extends Pick<
 
 const RichTextEditor = ({
   value = '',
-  placeholder = 'Enter text...',
+  placeholder: placeholderProp,
   className,
   classNames,
   toolbar = false,
@@ -53,6 +54,8 @@ const RichTextEditor = ({
   onChange,
   ...ariaProps
 }: Props) => {
+  const localeText = useLocale();
+  const placeholder = placeholderProp ?? localeText.RichTextEditor.placeholder;
   const presets = toolbar === true ? DEFAULT_TOOLBAR_PRESETS : toolbar || [];
   const showToolbar = presets.length > 0 || (toolbarItems?.length ?? 0) > 0;
 

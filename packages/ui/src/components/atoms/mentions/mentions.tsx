@@ -19,6 +19,7 @@ import { useConfig } from '@repo/ui/providers';
 import { cn } from '@repo/ui/utils';
 
 import { autocomplete } from '../../../core';
+import { useLocale } from '../../../providers/config';
 import Input from '../input';
 import { findToken, insertToken } from './token';
 
@@ -79,8 +80,8 @@ const Mentions = ({
   prefixes = DEFAULT_PREFIXES,
   filterOption,
   loading = false,
-  loadingText = 'Loading suggestions…',
-  emptyText = 'No suggestions',
+  loadingText: loadingTextProp,
+  emptyText: emptyTextProp,
   container,
   disabled,
   readOnly,
@@ -99,6 +100,9 @@ const Mentions = ({
   onCompositionEnd,
   ...props
 }: Props) => {
+  const localeText = useLocale();
+  const loadingText = loadingTextProp ?? localeText.Mentions.loading;
+  const emptyText = emptyTextProp ?? localeText.Mentions.empty;
   const { direction } = useConfig();
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const mergedRef = useMergedRef(ref, textareaRef);

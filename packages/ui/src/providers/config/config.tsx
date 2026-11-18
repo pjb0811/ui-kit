@@ -6,13 +6,15 @@ import { DirectionProvider } from '@base-ui/react/direction-provider';
 
 import { cn } from '@repo/ui/utils';
 
-import { Context, DEFAULT_LOCALE, useConfig } from './context';
+import { Context, DEFAULT_LOCALE, useConfig, useLocale } from './context';
 import { resolveDark, useSystemPrefersDark } from './dark-mode';
+import { enUS, formatLocale, koKR, mergeLocale } from './locales';
 import { registerRootConfig } from './registry';
 import type {
   ComponentSize,
   DefaultProps,
   Locale,
+  ResolvedLocale,
   ThemeConfig,
   ThemeToken,
 } from './types';
@@ -128,10 +130,7 @@ const Config = ({
   );
 
   const mergedLocale = useMemo<Locale>(
-    () => ({
-      ...parent.locale,
-      ...locale,
-    }),
+    () => mergeLocale(parent.locale, locale),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [parentLocaleKey, localeKey],
   );
@@ -265,12 +264,13 @@ const Config = ({
 };
 
 export default Config;
-export { useConfig, DEFAULT_LOCALE };
+export { useConfig, useLocale, DEFAULT_LOCALE, enUS, koKR, formatLocale };
 export type {
   Props,
   ComponentSize,
   DefaultProps,
   Locale,
+  ResolvedLocale,
   ThemeConfig,
   ThemeToken,
 };

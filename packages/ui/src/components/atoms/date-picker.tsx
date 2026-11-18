@@ -9,6 +9,7 @@ import { CalendarIcon } from 'lucide-react';
 import { cn } from '@repo/ui/utils';
 
 import { calendar } from '../../core';
+import { useLocale } from '../../providers/config';
 import Button from './button';
 import Popover from './popover';
 import TimePicker from './time-picker';
@@ -37,13 +38,15 @@ const toTimeValue = (date?: Date) =>
 const DatePicker = ({
   defaultValue,
   value: _value,
-  placeholder = 'Pick a date',
+  placeholder: placeholderProp,
   className,
   disabled,
   showTime = false,
   onChange: _onChange = () => {},
   ...triggerProps
 }: Props) => {
+  const localeText = useLocale();
+  const placeholder = placeholderProp ?? localeText.DatePicker.placeholder;
   const [value, onChange] = useControllableState<Date | undefined>({
     value: _value,
     defaultValue,
@@ -103,7 +106,7 @@ const DatePicker = ({
           {showTime && (
             <div className="flex flex-col gap-3 border-t border-border p-3">
               <TimePicker
-                label="Time"
+                label={localeText.DatePicker.time}
                 value={draftTime}
                 onChange={time => setDraftTime(time ?? '')}
                 minuteStep={minuteStep}
@@ -112,7 +115,7 @@ const DatePicker = ({
               />
               <div className="flex justify-end gap-2">
                 <Button size="small" onClick={() => setOpen(false)}>
-                  Cancel
+                  {localeText.cancel}
                 </Button>
                 <Button
                   type="primary"
@@ -120,7 +123,7 @@ const DatePicker = ({
                   disabled={!draftDate || !draftTime}
                   onClick={handleConfirm}
                 >
-                  OK
+                  {localeText.ok}
                 </Button>
               </div>
             </div>
@@ -140,7 +143,11 @@ const DatePicker = ({
           //
         )}
       >
-        {value ? format(value, showTime ? 'PPP HH:mm' : 'PPP') : placeholder}
+        {value
+          ? format(value, showTime ? 'PPP HH:mm' : 'PPP', {
+              locale: localeText.DatePicker.dateLocale,
+            })
+          : placeholder}
       </Button>
     </Popover>
   );

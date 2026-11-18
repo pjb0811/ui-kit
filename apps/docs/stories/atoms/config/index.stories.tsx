@@ -1,6 +1,16 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { expect, within } from 'storybook/test';
 
-import { Button, Config, Switch } from '@repo/ui';
+import {
+  Button,
+  Config,
+  DatePicker,
+  Empty,
+  Pagination,
+  Switch,
+  Upload,
+  koKR,
+} from '@repo/ui';
 import { cn } from '@repo/ui/utils';
 
 const meta: Meta<typeof Config> = {
@@ -124,4 +134,96 @@ export const FontToken: Story = {
       </p>
     </div>
   ),
+};
+
+const LocaleSample = () => (
+  <div className={cn('flex flex-col items-start gap-4')}>
+    <Pagination total={30} />
+    <Empty />
+    <Upload />
+    <DatePicker value={new Date(2026, 0, 5)} />
+  </div>
+);
+
+export const DefaultLocale: Story = {
+  render: () => <LocaleSample />,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    // Without a Config, built-in text is English.
+    await expect(
+      canvas.getByRole('navigation', { name: 'Pagination' }),
+    ).toBeVisible();
+    await expect(
+      canvas.getByRole('button', { name: 'Next page' }),
+    ).toBeVisible();
+    await expect(canvas.getByText('No data')).toBeVisible();
+    await expect(
+      canvas.getByText('Click or drag files to upload'),
+    ).toBeVisible();
+    await expect(canvas.getByText('January 5th, 2026')).toBeVisible();
+  },
+};
+
+export const KoreanLocale: Story = {
+  render: () => (
+    <Config locale={koKR}>
+      <LocaleSample />
+    </Config>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    await expect(
+      canvas.getByRole('navigation', { name: '페이지 탐색' }),
+    ).toBeVisible();
+    await expect(
+      canvas.getByRole('button', { name: '다음 페이지' }),
+    ).toBeVisible();
+    await expect(canvas.getByText('데이터 없음')).toBeVisible();
+    await expect(
+      canvas.getByText('클릭하거나 파일들을 끌어 놓아 업로드'),
+    ).toBeVisible();
+    // The date is formatted with koKR's date-fns locale.
+    await expect(canvas.getByText('2026년 1월 5일')).toBeVisible();
+  },
+};
+
+export const PartialLocaleGroup: Story = {
+  render: () => (
+    <Config locale={{ Pagination: { next: 'Forward' } }}>
+      <Config locale={{ Pagination: { previous: 'Backward' } }}>
+        <Pagination total={30} defaultPage={2} />
+      </Config>
+    </Config>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    // Nested Configs merge a group key by key; the rest stays English.
+    await expect(canvas.getByRole('button', { name: 'Forward' })).toBeVisible();
+    await expect(
+      canvas.getByRole('button', { name: 'Backward' }),
+    ).toBeVisible();
+    await expect(canvas.getByRole('button', { name: 'Page 1' })).toBeVisible();
+  },
+};
+
+export const PropOverridesLocale: Story = {
+  render: () => (
+    <Config locale={koKR}>
+      <Pagination total={30} labels={{ next: 'Custom next' }} />
+    </Config>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    // A component prop still wins over the locale.
+    await expect(
+      canvas.getByRole('button', { name: 'Custom next' }),
+    ).toBeVisible();
+    await expect(
+      canvas.getByRole('button', { name: '이전 페이지' }),
+    ).toBeVisible();
+  },
 };

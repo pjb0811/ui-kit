@@ -7,6 +7,8 @@ import { Check, TriangleAlert } from 'lucide-react';
 import { useConfig } from '@repo/ui/providers';
 import { cn } from '@repo/ui/utils';
 
+import { useLocale } from '../../providers/config';
+
 export interface Item {
   key?: React.Key;
   title: React.ReactNode;
@@ -44,6 +46,7 @@ const Steps = ({
   'aria-label': ariaLabel,
   ...props
 }: Props) => {
+  const localeText = useLocale();
   const { direction } = useConfig();
   const currentIndex = items.length
     ? Math.min(
@@ -58,7 +61,7 @@ const Steps = ({
       data-slot="steps"
       data-orientation={orientation}
       dir={dir ?? direction}
-      aria-label={ariaLabel ?? 'Progress'}
+      aria-label={ariaLabel ?? localeText.Steps.label}
       className={cn('w-full', className)}
     >
       <ol
