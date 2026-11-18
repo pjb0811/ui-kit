@@ -19,17 +19,28 @@ import { Upload } from '@jbpark/ui-kit';
 
 ## Props
 
-| Prop           | Type                                                    | Default     |
-| -------------- | ------------------------------------------------------- | ----------- |
-| `multiple`     | `boolean`                                               | `true`      |
-| `accept`       | `string` (input `accept`, e.g. `'image/*'`)             | `'image/*'` |
-| `maxCount`     | `number` (max files; omit for unlimited)                | -           |
-| `disabled`     | `boolean`                                               | -           |
-| `value`        | `UploadFile[]` (controlled)                             | -           |
-| `defaultValue` | `UploadFile[]`                                          | `[]`        |
-| `onChange`     | `(files: UploadFile[]) => void`                         | -           |
-| `onReject`     | `(info: { file: File; reason: 'max-count' \| 'read-error' }) => void` | - |
-| `classNames`   | `{ dropzone?: string; list?: string; item?: string }`   | -           |
-| `className`    | `string`                                                | -           |
+| Prop           | Type                                                                  | Default     |
+| -------------- | --------------------------------------------------------------------- | ----------- |
+| `multiple`     | `boolean`                                                             | `true`      |
+| `accept`       | `string` (input `accept`, e.g. `'image/*'`)                           | `'image/*'` |
+| `maxCount`     | `number` (max files; omit for unlimited)                              | -           |
+| `disabled`     | `boolean`                                                             | -           |
+| `value`        | `UploadFile[]` (controlled)                                           | -           |
+| `defaultValue` | `UploadFile[]`                                                        | `[]`        |
+| `onChange`     | `(files: UploadFile[]) => void`                                       | -           |
+| `onReject`     | `(info: { file: File; reason: 'max-count' \| 'read-error' }) => void` | -           |
+| `classNames`   | `{ dropzone?: string; list?: string; item?: string }`                 | -           |
+| `className`    | `string`                                                              | -           |
 
-`UploadFile` is `{ uid: string; name: string; url: string }`, where `url` is a data URL. Files exceeding `maxCount` or that fail to read are surfaced through `onReject` rather than being added.
+`UploadFile` is `{ uid: string; name: string; url: string; file?: File }`, where `url` is a data URL. `file` is the original `File` for entries created by picking or dropping a file, so it can be uploaded as is; entries you pass in through `value` or `defaultValue` (for example files uploaded earlier) can leave it out. Files exceeding `maxCount` or that fail to read are surfaced through `onReject` rather than being added.
+
+```tsx
+<Upload
+  onChange={files => {
+    const body = new FormData();
+
+    files.forEach(({ file }) => file && body.append('files', file));
+    fetch('/api/upload', { method: 'POST', body });
+  }}
+/>
+```

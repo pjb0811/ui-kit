@@ -25,6 +25,11 @@ export interface UploadFile {
   uid: string;
   name: string;
   url: string;
+  /**
+   * The picked or dropped file, for uploading it. Absent on entries the
+   * caller passes in through `value` or `defaultValue`.
+   */
+  file?: File;
 }
 
 export interface Props {
@@ -105,7 +110,7 @@ const Upload = ({
     pendingCount.current += accepted.length;
 
     const reads = Promise.all(
-      accepted.map(async file => {
+      accepted.map(async (file): Promise<UploadFile | null> => {
         try {
           return {
             // `nextUid()` guarantees uniqueness even for the same file
@@ -116,6 +121,7 @@ const Upload = ({
             uid: `${file.name}-${file.lastModified}-${file.size}-${nextUid()}`,
             name: file.name,
             url: await readAsDataUrl(file),
+            file,
           };
         } catch {
           onReject?.({ file, reason: 'read-error' });

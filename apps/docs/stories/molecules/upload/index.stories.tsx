@@ -184,3 +184,38 @@ export const Disabled: Story = {
     ).toBeDisabled();
   },
 };
+
+export const ExposesFile: Story = {
+  name: 'Entries carry the original File',
+  args: {
+    onChange: fn(),
+    defaultValue: [{ uid: 'existing', name: 'existing.png', url: '' }],
+  },
+  render: props => (
+    <div className={cn('w-96')}>
+      <Upload {...props} />
+    </div>
+  ),
+  play: async ({ args, canvasElement }) => {
+    const input =
+      canvasElement.querySelector<HTMLInputElement>('input[type="file"]')!;
+    const picked = pngFile('picked.png', 8);
+
+    addBatches(input, [[picked]]);
+    await waitFor(() => expect(args.onChange).toHaveBeenCalledTimes(1));
+
+    const [files] = (args.onChange as ReturnType<typeof fn>).mock.calls[0]!;
+
+    await expect(files).toHaveLength(2);
+    await expect(files[0].file).toBeUndefined();
+    await expect(files[1].file).toBe(picked);
+
+    // An entry without a file still renders and can be removed.
+    await userEvent.click(
+      within(canvasElement).getByRole('button', {
+        name: 'Remove existing.png',
+      }),
+    );
+    await expect(listedNames(canvasElement)).toEqual(['picked.png']);
+  },
+};
