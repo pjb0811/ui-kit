@@ -1,5 +1,27 @@
 # docs
 
+## 0.5.29
+
+### Patch Changes
+
+- Updated dependencies [2d6b884]
+- Updated dependencies [0f316e9]
+- Updated dependencies [7f2abd4]
+- Updated dependencies [d990954]
+- Updated dependencies [e3cb18a]
+- Updated dependencies [04c1097]
+- Updated dependencies [9b6b437]
+- Updated dependencies [9be1278]
+- Updated dependencies [b647f21]
+- Updated dependencies [2d41090]
+- Updated dependencies [d6bcb71]
+- Updated dependencies [c32ac9c]
+- Updated dependencies [fee862a]
+- Updated dependencies [a593f3c]
+- Updated dependencies [8847269]
+- Updated dependencies [c1361d8]
+  - @repo/ui@10.7.0
+
 ## 0.5.28
 
 ### Patch Changes
