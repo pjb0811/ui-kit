@@ -1,5 +1,36 @@
 # @repo/ui
 
+## 10.7.0
+
+### Minor Changes
+
+- d990954: Make English the default language and let `Config`'s `locale` set every built-in string.
+
+  - **Default text is now English.** The labels that used to default to Korean without a `Config` (close, clear, back to top, loading, expand, collapse, back, retry, load failed, preview) are English. To keep Korean, wrap the app in `<Config locale={koKR}>`.
+  - **New exports.** `enUS` (the default) and `koKR` locale objects. `koKR` includes the date-fns `ko` locale for DatePicker's formatted date.
+  - **More keys.** `Locale` gains shared keys (`search`, `searchPlaceholder`, `noData`, `noResults`) and per-component groups for Anchor, AutoComplete, Breadcrumb, Cascader, DatePicker, InputNumber, Mentions, Pagination, Popconfirm, RichTextEditor, Select, Steps, Tabs, TimePicker, Tour, Transfer, Tree, TreeSelect and Upload. Text that was hardcoded with no prop (DatePicker's time footer, InputNumber's step buttons, the RichTextEditor toolbar, Upload's hint and remove buttons, Pagination's page-size options) can now be changed through the locale.
+  - **Group merging.** A nested `Config` merges each locale group key by key, so overriding one key keeps the others.
+  - Component props (`nextLabel`, `labels`, `placeholder`, `emptyText`, ...) still take precedence over the locale.
+
+- 9be1278: Make Marquees respect reduced motion and expose its content once. With `prefers-reduced-motion: reduce`, rows no longer animate; they stay at the start and can be scrolled sideways. The copies the loop renders to stay seamless are now `aria-hidden` and `inert`, so screen readers read each row once and links or buttons inside it are reached by Tab once.
+- 8847269: Expose the original `File` on Upload entries. `UploadFile` gains an optional `file` field, set on every entry created by picking or dropping a file, so `onChange` handlers can upload it (for example with `FormData`) without turning the data URL back into a `Blob`. Entries passed in through `value` or `defaultValue` can leave it out.
+
+### Patch Changes
+
+- 2d6b884: Fix Anchor losing the clicked link. The scroll-position recalculation ran right after a click and replaced the link, so a short last section could never become current and a smooth scroll briefly highlighted the old section. A clicked link now stays current until its scroll ends (or the user scrolls by hand), at the end of the scroll range the last section in view is current, and `onChange` reports each change once.
+- 0f316e9: Keep keyboard focus on a Button while it is loading. A loading button now stays focusable with `aria-disabled="true"` instead of the native `disabled` attribute, so focus no longer drops to the page body when `loading` turns on. Clicks and key presses are still ignored while loading, and the button looks the same. `disabled` without `loading` still renders a natively disabled button.
+- 7f2abd4: Keep a disabled ColorPicker closed. Clicking it used to open the popover (the colour could not be changed, but the picker appeared and the trigger reported `aria-expanded="true"`). A disabled picker now stays closed even with a controlled `open`, and setting `disabled` closes a picker that is open.
+- e3cb18a: Fix a click-triggered Dropdown staying open. Selecting an item without children now closes the menu after `onClick` and `onSelect` run, and Escape closes the menu from inside it as well as from the trigger. Focus returns to the trigger in both cases. Hover-triggered dropdowns still close when the pointer leaves, as before.
+- 04c1097: Fix Input.Search running a search when Enter confirms an IME composition (Korean, Japanese, Chinese input). A search now also skips when the caller's `onKeyDown` calls `preventDefault()`.
+- 9b6b437: Apply List's `classNames.title` to the rendered title. It used to reach only the loading skeleton's wrapper, so the real heading could not be styled through `classNames`. It is applied last, so it overrides the default size and weight. Also remove the undefined `text-black-90` class from the title, which had no effect.
+- b647f21: Stop Menu from selecting a parent item. Clicking or pressing Enter on an item with `children` (expanding a group in `inline` mode, for example) used to call `onSelect` and replace the current selection with the group. It now only toggles or opens the submenu and calls `onClick`; `onSelect` fires for leaf items only. A parent is still shown as selected when one of its descendants is.
+- 2d41090: Improve keyboard focus in Menu. Each menu level keeps one Tab stop that follows the last focused item, so Tabbing out and back returns to where you left off. Arrow keys wrap at the ends, Home and End move to the first and last item, and Left/Right are mirrored in right-to-left layouts. Submenus move with Up/Down, including under a horizontal menu.
+- d6bcb71: Wrap Modal body text between words. The body used `word-break: break-all`, which split ordinary words wherever a line filled up (for example "ope" / "n" at a phone width). It now uses `overflow-wrap: anywhere`, which breaks inside a word only when that word is wider than the body on its own, such as a long URL.
+- c32ac9c: Keep the current page when Pagination's `total`, or Table's rows or server `total`, is briefly empty, for example while data is refetched. An uncontrolled page used to reset to 1 without calling `onChange`, and stayed there when the total came back; in Table's server mode the bar then showed page 1 while the rows were still page 5. A total that really shrinks still clamps the page as before.
+- fee862a: Fix the Steps error indicator's icon colour. It used `text-destructive-foreground`, which the theme does not define, so the icon fell back to the inherited colour on the red fill. It is now white, as on a danger Button. Also remove the undefined `text-black-70` class from Modal's imperative body, which had no effect.
+- a593f3c: Restart an uncontrolled Tour from `defaultCurrent` each time it opens. Reopening used to resume at the step the tour was closed on, so after Finish it showed only the last step. The reset calls `onChange` with `defaultCurrent`. A controlled `current` is unchanged; control it to resume where the user left off.
+- c1361d8: Fix Upload losing files. A batch added while an earlier one is still being read no longer overwrites it, files stay in the order they were added, overlapping additions respect `maxCount`, and removing a file during a read sticks. The dropzone can now be reached with Tab and opened with Enter or Space, and the remove buttons are disabled when `disabled` is set.
+
 ## 10.6.0
 
 ### Minor Changes
